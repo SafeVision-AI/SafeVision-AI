@@ -1,4 +1,4 @@
-﻿# SafeVisionAI â€” Data Sources
+# SafeVisionAI  Data Sources
 
 ## Overview
 
@@ -6,19 +6,19 @@ All data sources used in SafeVisionAI are free and open. This document lists eve
 
 ---
 
-## 1. PDFs â€” RAG Knowledge Base (Download Manually)
+## 1. PDFs  RAG Knowledge Base (Download Manually)
 
 | Document | Source URL | Save As | Purpose |
 |---|---|---|---|
-| Motor Vehicles Act 1988 | [indiacode.nic.in](https://www.indiacode.nic.in) â†’ search "Motor Vehicles Act 1988" | `backend/data/motor_vehicles_act_1988.pdf` | All base traffic law provisions + section numbers |
+| Motor Vehicles Act 1988 | [indiacode.nic.in](https://www.indiacode.nic.in)  search "Motor Vehicles Act 1988" | `backend/data/motor_vehicles_act_1988.pdf` | All base traffic law provisions + section numbers |
 | MV Amendment Act 2019 | [morth.nic.in](https://morth.nic.in/motor-vehicles-amendment-act-2019) | `backend/data/mv_amendment_act_2019.pdf` | Updated 2019 fine amounts (10x increase) |
-| WHO Trauma Care Guidelines | [who.int](https://www.who.int) â†’ search "emergency care systems for universal health coverage" | `backend/data/who_trauma_care_guidelines.pdf` | First-aid protocols: bleeding, fractures, burns, CPR |
+| WHO Trauma Care Guidelines | [who.int](https://www.who.int)  search "emergency care systems for universal health coverage" | `backend/data/who_trauma_care_guidelines.pdf` | First-aid protocols: bleeding, fractures, burns, CPR |
 | WHO Global Road Safety Report 2023 | [who.int](https://www.who.int/publications/i/item/9789240086517) | `backend/data/who_road_safety_2023.pdf` | Traffic laws for 100+ countries (speed limits, BAC limits, helmet laws) |
 | State Amendment PDFs | Each state transport department website | `backend/data/state_amendments/[state].pdf` | State-level fine overrides and additional rules |
 
 ---
 
-## 2. APIs â€” Live Data (No API Key Required)
+## 2. APIs  Live Data (No API Key Required)
 
 ### OpenStreetMap Overpass API
 - **URL**: `https://overpass-api.de/api/interpreter`
@@ -41,7 +41,7 @@ out body center;
 - **URL**: `https://nominatim.openstreetmap.org`
 - **Authentication**: None (User-Agent header required)
 - **Rate limit**: 1 request/second strictly enforced
-- **Use in SafeVisionAI**: GPS coordinates â†’ city/state name, address â†’ coordinates
+- **Use in SafeVisionAI**: GPS coordinates  city/state name, address  coordinates
 
 ```
 # Required header: User-Agent: SafeVisionAI/1.0 (hackathon@rbg.iitm.ac.in)
@@ -53,7 +53,7 @@ out body center;
 - **URL**: `https://api.groq.com/openai/v1`
 - **Authentication**: API key (gsk_...) from [console.groq.com](https://console.groq.com)
 - **Rate limit**: 6,000 tokens/minute free tier
-- **Use in SafeVisionAI**: Online AI chatbot â€” llama3-70b-8192 model
+- **Use in SafeVisionAI**: Online AI chatbot  llama3-70b-8192 model
 
 ### Overpass Turbo (Testing Only)
 - **URL**: [overpass-turbo.eu](https://overpass-turbo.eu)
@@ -61,7 +61,7 @@ out body center;
 
 ---
 
-## 3. APIs â€” Government Open Data (API Key Required)
+## 3. APIs  Government Open Data (API Key Required)
 
 ### data.gov.in
 - **URL**: [api.data.gov.in](https://api.data.gov.in)
@@ -74,7 +74,7 @@ out body center;
 
 ### PMGSY OMMAS
 - **URL**: [ommas.nic.in](https://ommas.nic.in)
-- **Authentication**: Public portal, no API â€” scrape or use exported data
+- **Authentication**: Public portal, no API  scrape or use exported data
 - **Use in SafeVisionAI**: Rural road infrastructure data (contractor, exec engineer, budget)
 
 ### National Health Facility Registry
@@ -84,7 +84,7 @@ out body center;
 
 ---
 
-## 4. OSM Seed Data â€” 25 Indian Cities
+## 4. OSM Seed Data  25 Indian Cities
 
 Seeded from Overpass API by `data/seed_emergency.py`. Stored in PostgreSQL + exported as GeoJSON.
 
@@ -118,7 +118,7 @@ Seeded from Overpass API by `data/seed_emergency.py`. Stored in PostgreSQL + exp
 
 ---
 
-## 5. Traffic Violations Data â€” violations_seed.csv
+## 5. Traffic Violations Data  violations_seed.csv
 
 Generated from official MV Amendment Act 2019 gazette notification. The CSV has these columns:
 
@@ -131,7 +131,7 @@ All 22+ sections from MVA 1988/2019 are pre-populated. See `docs/Database.md` fo
 
 ---
 
-## 6. State Override Data â€” state_overrides.csv
+## 6. State Override Data  state_overrides.csv
 
 State-specific fine amounts that override national MVA fines. Research from official state transport department notifications.
 
@@ -145,7 +145,7 @@ States covered: TN (Tamil Nadu), KA (Karnataka), MH (Maharashtra), DL (Delhi), A
 
 ---
 
-## 7. WebLLM Model Weights â€” Hugging Face Hub
+## 7. WebLLM Model Weights  Hugging Face Hub
 
 | Model | HF Repo | Size | Download |
 |---|---|---|---|
@@ -158,7 +158,7 @@ WebLLM fetches directly from Hugging Face CDN and caches in browser Cache Storag
 
 ---
 
-## 8. Government Portals (Deep Links Only â€” No Data Pull)
+## 8. Government Portals (Deep Links Only  No Data Pull)
 
 | Portal | URL | Used For |
 |---|---|---|

@@ -1,9 +1,9 @@
 # SafeVisionAI
 
-**AI Emergency Response + DriveLegal + RoadWatch — Three Problem Statements, One App**
+**AI Emergency Response + DriveLegal + RoadWatch  -  Three Problem Statements, One App**
 
 > IIT Madras Road Safety Hackathon 2026 | Team Submission
-> Total infrastructure cost: Rs. 0 — 100% free and open source
+> Total infrastructure cost: Rs. 0  -  100% free and open source
 
 ---
 
@@ -11,10 +11,10 @@
 
 | Module | What it does | Works Offline? |
 |---|---|---|
-| Emergency Locator | Find nearest hospital/police/ambulance using GPS | Yes — 25 Indian cities |
-| AI Chatbot | Answer traffic law + first aid questions | Yes — Phi-3 Mini in browser |
-| Challan Calculator | Exact MVA 2019 fines with state overrides | Yes — DuckDB-Wasm |
-| Road Reporter | Report potholes, auto-routes to NHAI/PWD/PMGSY | Yes — offline queue |
+| Emergency Locator | Find nearest hospital/police/ambulance using GPS | Yes  -  25 Indian cities |
+| AI Chatbot | Answer traffic law + first aid questions | Yes  -  Phi-3 Mini in browser |
+| Challan Calculator | Exact MVA 2019 fines with state overrides | Yes  -  DuckDB-Wasm |
+| Road Reporter | Report potholes, auto-routes to NHAI/PWD/PMGSY | Yes  -  offline queue |
 
 ---
 
@@ -57,13 +57,13 @@ Verify: http://localhost:3000
 
 ```
 SafeVisionAI/
-├── backend/          FastAPI Python 3.11 + PostgreSQL/PostGIS + ChromaDB
-├── frontend/         Next.js 14 TypeScript PWA + WebLLM + DuckDB-Wasm
-├── docs/             Complete technical documentation
-└── .github/          GitHub Actions CI/CD
+-- backend/          FastAPI Python 3.11 + PostgreSQL/PostGIS + ChromaDB
+-- frontend/         Next.js 14 TypeScript PWA + WebLLM + DuckDB-Wasm
+-- docs/             Complete technical documentation
+-- .github/          GitHub Actions CI/CD
 ```
 
-Read `docs/Agent.md` first — it gives a complete overview of the entire application.
+Read `docs/Agent.md` first  -  it gives a complete overview of the entire application.
 
 ---
 
@@ -73,7 +73,7 @@ Read `docs/Agent.md` first — it gives a complete overview of the entire applic
 
 **Frontend:** Next.js 14, TypeScript, Tailwind CSS, Leaflet.js, WebLLM, DuckDB-Wasm, Transformers.js
 
-**Infra:** Vercel, Render.com, Supabase, Upstash, GitHub Actions — all free tier
+**Infra:** Vercel, Render.com, Supabase, Upstash, GitHub Actions  -  all free tier
 
 ---
 
@@ -81,7 +81,7 @@ Read `docs/Agent.md` first — it gives a complete overview of the entire applic
 
 | File | Contents |
 |---|---|
-| [docs/Agent.md](docs/Agent.md) | START HERE — complete app overview for new developers |
+| [docs/Agent.md](docs/Agent.md) | START HERE  -  complete app overview for new developers |
 | [docs/PRD.md](docs/PRD.md) | Product requirements and evaluation criteria |
 | [docs/Features.md](docs/Features.md) | Every feature with technical details |
 | [docs/Architecture.md](docs/Architecture.md) | System diagrams and data flows |

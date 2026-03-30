@@ -1,6 +1,6 @@
-﻿# SafeVisionAI â€” Agent Guide
+# SafeVisionAI  Agent Guide
 
-> **READ THIS FIRST.** This document is written for any developer, AI agent, or team member who opens this codebase for the first time. After reading this, you should understand the complete application â€” what it does, how it works, which files do what, and where to start coding.
+> **READ THIS FIRST.** This document is written for any developer, AI agent, or team member who opens this codebase for the first time. After reading this, you should understand the complete application  what it does, how it works, which files do what, and where to start coding.
 
 ---
 
@@ -8,22 +8,22 @@
 
 **SafeVisionAI** is a full-stack, AI-powered road safety Progressive Web App (PWA) built for the IIT Madras Road Safety Hackathon 2026. It is one unified application that solves three problem statements:
 
-1. **Emergency Locator** â€” Find the nearest hospital, police station, ambulance, towing service using GPS. Works offline for 25 Indian cities.
-2. **AI Chatbot** â€” Answer questions about traffic laws (Motor Vehicles Act 2019) and first aid. Uses Groq llama3-70b online, Phi-3 Mini entirely in the browser when offline.
-3. **Challan Calculator** â€” Calculate exact traffic fines under MVA 2019 with state-specific overrides. Deterministic SQL â€” never hallucinates.
-4. **Road Reporter** â€” Let citizens report potholes, flooding, broken roads. Automatically routes the complaint to the correct government authority (NHAI, State PWD, District Collector, PMGSY).
+1. **Emergency Locator**  Find the nearest hospital, police station, ambulance, towing service using GPS. Works offline for 25 Indian cities.
+2. **AI Chatbot**  Answer questions about traffic laws (Motor Vehicles Act 2019) and first aid. Uses Groq llama3-70b online, Phi-3 Mini entirely in the browser when offline.
+3. **Challan Calculator**  Calculate exact traffic fines under MVA 2019 with state-specific overrides. Deterministic SQL  never hallucinates.
+4. **Road Reporter**  Let citizens report potholes, flooding, broken roads. Automatically routes the complaint to the correct government authority (NHAI, State PWD, District Collector, PMGSY).
 
-**Total infrastructure cost: â‚¹0.** Every tool is free/open source.
+**Total infrastructure cost: 0.** Every tool is free/open source.
 
 ---
 
 ## Who Is It For?
 
-- ðŸš— **Drivers** who had an accident and need help in 10 seconds
-- ðŸ›£ï¸ **Highway travelers** with no internet on remote roads
-- ðŸï¸ **Two-wheeler riders** who want to know their helmet fine
-- ðŸ•³ï¸ **Citizens** who want to report a pothole and know who is responsible
-- ðŸ‘® **Learner drivers** who want to understand traffic laws
+-  -  **Drivers** who had an accident and need help in 10 seconds
+-  **Highway travelers** with no internet on remote roads
+-  **Two-wheeler riders** who want to know their helmet fine
+-  **Citizens** who want to report a pothole and know who is responsible
+-  **Learner drivers** who want to understand traffic laws
 
 ---
 
@@ -39,127 +39,127 @@
 
 ```
 SafeVisionAI/
-â”‚
-â”œâ”€â”€ backend/                    â† FastAPI Python 3.11 application
-â”‚   â”œâ”€â”€ main.py                 â† App entry point â€” CORS, routers, health check
-â”‚   â”œâ”€â”€ requirements.txt        â† All pinned Python dependencies
-â”‚   â”œâ”€â”€ Dockerfile              â† For Render.com deployment
-â”‚   â”œâ”€â”€ .env.example            â† Copy â†’ .env, fill in values
-â”‚   â”‚
-â”‚   â”œâ”€â”€ api/v1/
-â”‚   â”‚   â”œâ”€â”€ emergency.py        â† /nearby, /sos, /numbers â€” GPS + hospital locator
-â”‚   â”‚   â”œâ”€â”€ chat.py             â† /message, WebSocket /stream â€” LangChain + Groq RAG
-â”‚   â”‚   â”œâ”€â”€ challan.py          â† /calculate, /violations, /states â€” MVA fine calculator
-â”‚   â”‚   â””â”€â”€ roadwatch.py        â† /report, /authority, /issues â€” road issue reporter
-â”‚   â”‚
-â”‚   â”œâ”€â”€ core/
-â”‚   â”‚   â”œâ”€â”€ config.py           â† Pydantic settings â€” reads all .env vars
-â”‚   â”‚   â”œâ”€â”€ database.py         â† Async SQLAlchemy engine + get_db dependency
-â”‚   â”‚   â””â”€â”€ redis_client.py     â† Async Redis pool + CacheHelper
-â”‚   â”‚
-â”‚   â”œâ”€â”€ services/
-â”‚   â”‚   â”œâ”€â”€ llm_service.py      â† â­ SafeVisionAIChatbot â€” the main AI brain
-â”‚   â”‚   â”œâ”€â”€ overpass_service.py â† Queries OSM for live emergency service locations
-â”‚   â”‚   â”œâ”€â”€ geocoding_service.pyâ† Nominatim: GPS â†’ city/state name
-â”‚   â”‚   â”œâ”€â”€ challan_service.py  â† DuckDB SQL fine calculation with state overrides
-â”‚   â”‚   â””â”€â”€ authority_router.py â† GPS â†’ road type â†’ NHAI/PWD/PMGSY authority
-â”‚   â”‚
-â”‚   â”œâ”€â”€ models/
-â”‚   â”‚   â”œâ”€â”€ emergency.py        â† emergency_services ORM (PostGIS geometry column)
-â”‚   â”‚   â”œâ”€â”€ challan.py          â† traffic_violations + state_fine_overrides ORM
-â”‚   â”‚   â”œâ”€â”€ road_issue.py       â† road_issues + road_infrastructure ORM
-â”‚   â”‚   â”œâ”€â”€ user.py             â† user profiles ORM
-â”‚   â”‚   â””â”€â”€ schemas.py          â† â­ ALL Pydantic request/response schemas
-â”‚   â”‚
-â”‚   â”œâ”€â”€ migrations/
-â”‚   â”‚   â””â”€â”€ versions/
-â”‚   â”‚       â””â”€â”€ 001_initial_schema.py  â† Creates all 6 DB tables with PostGIS
-â”‚   â”‚
-â”‚   â”œâ”€â”€ data/
-â”‚   â”‚   â”œâ”€â”€ motor_vehicles_act_1988.pdf    â† Download manually (indiacode.nic.in)
-â”‚   â”‚   â”œâ”€â”€ mv_amendment_act_2019.pdf      â† Download manually (morth.nic.in)
-â”‚   â”‚   â”œâ”€â”€ who_trauma_care_guidelines.pdf â† Download manually (who.int)
-â”‚   â”‚   â”œâ”€â”€ violations_seed.csv            â† 22+ MVA violations with fines
-â”‚   â”‚   â”œâ”€â”€ state_overrides.csv            â† State-specific fine overrides
-â”‚   â”‚   â”œâ”€â”€ seed_violations.py             â† Loads CSVs â†’ PostgreSQL
-â”‚   â”‚   â”œâ”€â”€ seed_emergency.py              â† Overpass API â†’ 25 cities â†’ PostgreSQL + GeoJSON
-â”‚   â”‚   â”œâ”€â”€ build_vectorstore.py           â† PDFs â†’ ChromaDB (run ONCE, takes 10 min)
-â”‚   â”‚   â””â”€â”€ chroma_db/                     â† âš ï¸ Never delete! Built by build_vectorstore.py
-â”‚   â”‚
-â”‚   â””â”€â”€ tests/
-â”‚       â”œâ”€â”€ conftest.py           â† pytest fixtures
-â”‚       â”œâ”€â”€ test_emergency.py     â† 8 tests for /nearby, /sos endpoints
-â”‚       â”œâ”€â”€ test_challan.py       â† 7 tests for fine calculation
-â”‚       â””â”€â”€ test_chatbot.py       â† 6 tests for AI responses
-â”‚
-â”œâ”€â”€ frontend/                   â† Next.js 14 TypeScript PWA
-â”‚   â”œâ”€â”€ app/
-â”‚   â”‚   â”œâ”€â”€ layout.tsx           â† Root: PWA meta, ConnectivityProvider, Toaster
-â”‚   â”‚   â”œâ”€â”€ page.tsx             â† Home: 4 module cards + emergency numbers bar
-â”‚   â”‚   â”œâ”€â”€ emergency/page.tsx   â† Map + service list + SOS button
-â”‚   â”‚   â”œâ”€â”€ chat/page.tsx        â† Online/Offline AI chat tabs
-â”‚   â”‚   â”œâ”€â”€ challan/page.tsx     â† Fine calculator + violations browser
-â”‚   â”‚   â”œâ”€â”€ report/page.tsx      â† Road issue report form
-â”‚   â”‚   â”œâ”€â”€ first-aid/page.tsx   â† 8 static offline first-aid cards
-â”‚   â”‚   â””â”€â”€ settings/page.tsx    â† Blood group, contacts, vehicle number
-â”‚   â”‚
-â”‚   â”œâ”€â”€ components/
-â”‚   â”‚   â”œâ”€â”€ EmergencyMap.tsx     â† â­ Leaflet map (dynamic, no-SSR)
-â”‚   â”‚   â”œâ”€â”€ SOSButton.tsx        â† Fixed red SOS â†’ WhatsApp deep link
-â”‚   â”‚   â”œâ”€â”€ EmergencyNumbers.tsx â† Fixed bottom bar: 112, 102, 100, 1033
-â”‚   â”‚   â”œâ”€â”€ ChatInterface.tsx    â† Online chat UI (Groq)
-â”‚   â”‚   â”œâ”€â”€ VoiceInput.tsx       â† Web Speech API microphone
-â”‚   â”‚   â”œâ”€â”€ OfflineChat.tsx      â† Offline WebLLM chat UI
-â”‚   â”‚   â”œâ”€â”€ ModelLoader.tsx      â† WebLLM 2GB download progress bar
-â”‚   â”‚   â”œâ”€â”€ ChallanCalculator.tsxâ† 4-step fine calculator form
-â”‚   â”‚   â”œâ”€â”€ ReportForm.tsx       â† 5-step road issue form
-â”‚   â”‚   â”œâ”€â”€ PotholeDetector.tsx  â† â­ YOLOv8n in-browser pothole detection
-â”‚   â”‚   â”œâ”€â”€ AuthorityCard.tsx    â† Auto-routed authority display (NHAI/PWD/etc.)
-â”‚   â”‚   â””â”€â”€ ConnectivityProvider.tsx â† React context for online/offline state
-â”‚   â”‚
-â”‚   â”œâ”€â”€ lib/
-â”‚   â”‚   â”œâ”€â”€ store.ts             â† â­ Zustand global state (GPS, services, AI mode)
-â”‚   â”‚   â”œâ”€â”€ api.ts               â† Axios instance + SWR hooks for all endpoints
-â”‚   â”‚   â”œâ”€â”€ geolocation.ts       â† GPS + crash detection (DeviceMotion API)
-â”‚   â”‚   â”œâ”€â”€ edge-ai.ts           â† â­ WebLLM init, model selection, chatOffline()
-â”‚   â”‚   â”œâ”€â”€ offline-rag.ts       â† HNSWlib.js + IndexedDB offline vector search
-â”‚   â”‚   â”œâ”€â”€ offline-pois.ts      â† GeoJSON + Turf.js for offline emergency services
-â”‚   â”‚   â”œâ”€â”€ duckdb-challan.ts    â† DuckDB-Wasm offline challan calculation
-â”‚   â”‚   â”œâ”€â”€ sos-share.ts         â† WhatsApp SOS message generator
-â”‚   â”‚   â””â”€â”€ user-profile.ts      â† IndexedDB: blood group, contacts, vehicle number
-â”‚   â”‚
-â”‚   â”œâ”€â”€ public/
-â”‚   â”‚   â”œâ”€â”€ manifest.json        â† PWA manifest (standalone mode, app shortcuts)
-â”‚   â”‚   â”œâ”€â”€ icons/               â† PWA icons (192px, 512px)
-â”‚   â”‚   â”œâ”€â”€ leaflet/             â† Leaflet marker icons (webpack workaround)
-â”‚   â”‚   â””â”€â”€ offline-data/
-â”‚   â”‚       â”œâ”€â”€ india-emergency.geojson  â† 25-city POI bundle (generated by seed_emergency.py)
-â”‚   â”‚       â”œâ”€â”€ violations.csv           â† Challan data for DuckDB-Wasm
-â”‚   â”‚       â”œâ”€â”€ state_overrides.csv      â† State overrides for DuckDB-Wasm
-â”‚   â”‚       â””â”€â”€ first-aid.json           â† 20 WHO first-aid articles for offline RAG
-â”‚   â”‚
-â”‚   â”œâ”€â”€ next.config.js           â† next-pwa config, WebAssembly, runtime caching
-â”‚   â”œâ”€â”€ tailwind.config.ts       â† Dark navy theme, custom colors
-â”‚   â””â”€â”€ package.json             â† All npm dependencies (pinned)
-â”‚
-â”œâ”€â”€ docs/                       â† â­ This folder â€” read all docs before coding
-â”‚   â”œâ”€â”€ Agent.md                â† YOU ARE HERE â€” complete app overview
-â”‚   â”œâ”€â”€ PRD.md                  â† Product requirements and evaluation criteria
-â”‚   â”œâ”€â”€ Features.md             â† Every feature defined with technical detail
-â”‚   â”œâ”€â”€ TechStack.md            â† All technologies with versions and purposes
-â”‚   â”œâ”€â”€ Architecture.md         â† System diagrams and data flow
-â”‚   â”œâ”€â”€ Database.md             â† All 7 tables with column definitions + SQL
-â”‚   â”œâ”€â”€ API.md                  â† All 17 endpoints with request/response examples
-â”‚   â”œâ”€â”€ UIUX.md                 â† Design system, colors, components spec
-â”‚   â”œâ”€â”€ Security.md             â† Auth, privacy, API security
-â”‚   â”œâ”€â”€ Deployment.md           â† Step-by-step setup and deployment
-â”‚   â”œâ”€â”€ AI_Instructions.md      â† How each AI layer works with code examples
-â”‚   â””â”€â”€ DataSources.md          â† Where all data comes from
-â”‚
-â”œâ”€â”€ .github/workflows/ci.yml   â† GitHub Actions: test backend + build frontend
-â”œâ”€â”€ render.yaml                â† Render.com deployment config
-â”œâ”€â”€ .gitignore                 â† Excludes .env, venv, node_modules, chroma_db, PDFs
-â””â”€â”€ README.md                  â† Quick start for team members
+
+ backend/                     FastAPI Python 3.11 application
+    main.py                  App entry point  CORS, routers, health check
+    requirements.txt         All pinned Python dependencies
+    Dockerfile               For Render.com deployment
+    .env.example             Copy  .env, fill in values
+   
+    api/v1/
+       emergency.py         /nearby, /sos, /numbers  GPS + hospital locator
+       chat.py              /message, WebSocket /stream  LangChain + Groq RAG
+       challan.py           /calculate, /violations, /states  MVA fine calculator
+       roadwatch.py         /report, /authority, /issues  road issue reporter
+   
+    core/
+       config.py            Pydantic settings  reads all .env vars
+       database.py          Async SQLAlchemy engine + get_db dependency
+       redis_client.py      Async Redis pool + CacheHelper
+   
+    services/
+       llm_service.py        SafeVisionAIChatbot  the main AI brain
+       overpass_service.py  Queries OSM for live emergency service locations
+       geocoding_service.py Nominatim: GPS  city/state name
+       challan_service.py   DuckDB SQL fine calculation with state overrides
+       authority_router.py  GPS  road type  NHAI/PWD/PMGSY authority
+   
+    models/
+       emergency.py         emergency_services ORM (PostGIS geometry column)
+       challan.py           traffic_violations + state_fine_overrides ORM
+       road_issue.py        road_issues + road_infrastructure ORM
+       user.py              user profiles ORM
+       schemas.py            ALL Pydantic request/response schemas
+   
+    migrations/
+       versions/
+           001_initial_schema.py   Creates all 6 DB tables with PostGIS
+   
+    data/
+       motor_vehicles_act_1988.pdf     Download manually (indiacode.nic.in)
+       mv_amendment_act_2019.pdf       Download manually (morth.nic.in)
+       who_trauma_care_guidelines.pdf  Download manually (who.int)
+       violations_seed.csv             22+ MVA violations with fines
+       state_overrides.csv             State-specific fine overrides
+       seed_violations.py              Loads CSVs  PostgreSQL
+       seed_emergency.py               Overpass API  25 cities  PostgreSQL + GeoJSON
+       build_vectorstore.py            PDFs  ChromaDB (run ONCE, takes 10 min)
+       chroma_db/                       Never delete! Built by build_vectorstore.py
+   
+    tests/
+        conftest.py            pytest fixtures
+        test_emergency.py      8 tests for /nearby, /sos endpoints
+        test_challan.py        7 tests for fine calculation
+        test_chatbot.py        6 tests for AI responses
+
+ frontend/                    Next.js 14 TypeScript PWA
+    app/
+       layout.tsx            Root: PWA meta, ConnectivityProvider, Toaster
+       page.tsx              Home: 4 module cards + emergency numbers bar
+       emergency/page.tsx    Map + service list + SOS button
+       chat/page.tsx         Online/Offline AI chat tabs
+       challan/page.tsx      Fine calculator + violations browser
+       report/page.tsx       Road issue report form
+       first-aid/page.tsx    8 static offline first-aid cards
+       settings/page.tsx     Blood group, contacts, vehicle number
+   
+    components/
+       EmergencyMap.tsx       Leaflet map (dynamic, no-SSR)
+       SOSButton.tsx         Fixed red SOS  WhatsApp deep link
+       EmergencyNumbers.tsx  Fixed bottom bar: 112, 102, 100, 1033
+       ChatInterface.tsx     Online chat UI (Groq)
+       VoiceInput.tsx        Web Speech API microphone
+       OfflineChat.tsx       Offline WebLLM chat UI
+       ModelLoader.tsx       WebLLM 2GB download progress bar
+       ChallanCalculator.tsx 4-step fine calculator form
+       ReportForm.tsx        5-step road issue form
+       PotholeDetector.tsx    YOLOv8n in-browser pothole detection
+       AuthorityCard.tsx     Auto-routed authority display (NHAI/PWD/etc.)
+       ConnectivityProvider.tsx  React context for online/offline state
+   
+    lib/
+       store.ts               Zustand global state (GPS, services, AI mode)
+       api.ts                Axios instance + SWR hooks for all endpoints
+       geolocation.ts        GPS + crash detection (DeviceMotion API)
+       edge-ai.ts             WebLLM init, model selection, chatOffline()
+       offline-rag.ts        HNSWlib.js + IndexedDB offline vector search
+       offline-pois.ts       GeoJSON + Turf.js for offline emergency services
+       duckdb-challan.ts     DuckDB-Wasm offline challan calculation
+       sos-share.ts          WhatsApp SOS message generator
+       user-profile.ts       IndexedDB: blood group, contacts, vehicle number
+   
+    public/
+       manifest.json         PWA manifest (standalone mode, app shortcuts)
+       icons/                PWA icons (192px, 512px)
+       leaflet/              Leaflet marker icons (webpack workaround)
+       offline-data/
+           india-emergency.geojson   25-city POI bundle (generated by seed_emergency.py)
+           violations.csv            Challan data for DuckDB-Wasm
+           state_overrides.csv       State overrides for DuckDB-Wasm
+           first-aid.json            20 WHO first-aid articles for offline RAG
+   
+    next.config.js            next-pwa config, WebAssembly, runtime caching
+    tailwind.config.ts        Dark navy theme, custom colors
+    package.json              All npm dependencies (pinned)
+
+ docs/                         This folder  read all docs before coding
+    Agent.md                 YOU ARE HERE  complete app overview
+    PRD.md                   Product requirements and evaluation criteria
+    Features.md              Every feature defined with technical detail
+    TechStack.md             All technologies with versions and purposes
+    Architecture.md          System diagrams and data flow
+    Database.md              All 7 tables with column definitions + SQL
+    API.md                   All 17 endpoints with request/response examples
+    UIUX.md                  Design system, colors, components spec
+    Security.md              Auth, privacy, API security
+    Deployment.md            Step-by-step setup and deployment
+    AI_Instructions.md       How each AI layer works with code examples
+    DataSources.md           Where all data comes from
+
+ .github/workflows/ci.yml    GitHub Actions: test backend + build frontend
+ render.yaml                 Render.com deployment config
+ .gitignore                  Excludes .env, venv, node_modules, chroma_db, PDFs
+ README.md                   Quick start for team members
 ```
 
 ---
@@ -167,9 +167,9 @@ SafeVisionAI/
 ## Critical Things to Know Before Coding
 
 ### 1. The Map Has 3 Separate Components (Don't Confuse Them)
-- **Tile Images** (visual map background) â†’ OpenStreetMap CDN via Leaflet TileLayer
-- **Marker Locations** (hospital/police dots) â†’ PostGIS database OR Overpass API OR GeoJSON
-- **Address Text** (city/state labels) â†’ Nominatim geocoder
+- **Tile Images** (visual map background)  OpenStreetMap CDN via Leaflet TileLayer
+- **Marker Locations** (hospital/police dots)  PostGIS database OR Overpass API OR GeoJSON
+- **Address Text** (city/state labels)  Nominatim geocoder
 
 ### 2. PostGIS Gotchas
 - `ST_MakePoint` takes **longitude FIRST, latitude SECOND** (opposite of common convention)
@@ -184,7 +184,7 @@ SafeVisionAI/
 ### 4. ChromaDB Must Be Built Before Server Starts
 - Run `python data/build_vectorstore.py` once after downloading the PDFs
 - The `data/chroma_db/` directory must exist before `uvicorn` starts
-- Never delete this directory â€” rebuilding takes 10 minutes
+- Never delete this directory  rebuilding takes 10 minutes
 
 ### 5. WebLLM Downloads On-Demand Only
 - The 2.2GB Phi-3 Mini model is only downloaded when user clicks "Use Offline AI"
@@ -196,7 +196,7 @@ SafeVisionAI/
 - Browser-side: `@duckdb/duckdb-wasm` npm package in `lib/duckdb-challan.ts` (offline)
 
 ### 7. Safety Rule (Never Remove)
-Any chat response about injuries must start with "Call 112 immediately." â€” check `services/llm_service.py` for the safety check function.
+Any chat response about injuries must start with "Call 112 immediately."  check `services/llm_service.py` for the safety check function.
 
 ---
 
@@ -259,8 +259,8 @@ npm run dev
 | GET | `/api/v1/roads/authority` | Road authority at GPS |
 | GET | `/api/v1/roads/issues` | Community issues near GPS |
 | GET | `/api/v1/roads/infrastructure` | Contractor/budget data |
-| GET | `/api/v1/geocode/search` | Address â†’ GPS |
-| GET | `/api/v1/geocode/reverse` | GPS â†’ city/state |
+| GET | `/api/v1/geocode/search` | Address  GPS |
+| GET | `/api/v1/geocode/reverse` | GPS  city/state |
 | GET | `/api/v1/offline/bundle/{city}` | GeoJSON for offline |
 
 ---
@@ -269,15 +269,15 @@ npm run dev
 
 | Decision | Reason |
 |---|---|
-| FastAPI over Django/Flask | Async by default â€” critical for concurrent GPS + LLM calls |
+| FastAPI over Django/Flask | Async by default  critical for concurrent GPS + LLM calls |
 | PostGIS over MongoDB geo | ST_DWithin with GIST index < 50ms; Mongo is much slower for radius queries |
-| Groq over OpenAI | Free 6000 tok/min; OpenAI would cost â‚¹ at scale |
+| Groq over OpenAI | Free 6000 tok/min; OpenAI would cost  at scale |
 | WebLLM Phi-3 over Gemma | Better legal reasoning per parameter; best offline model for law Q&A |
 | DuckDB for challan | Deterministic SQL; LLM would hallucinate fine amounts |
-| OSM/Overpass over Google Maps | Google Maps API costs â‚¹; OSM is free and global |
-| CartoDB Dark tiles | Free, no API key, dark theme matches app, red markers stand å‡º dramatically |
+| OSM/Overpass over Google Maps | Google Maps API costs ; OSM is free and global |
+| CartoDB Dark tiles | Free, no API key, dark theme matches app, red markers stand  dramatically |
 | Zustand over Redux | 90% less boilerplate; sufficient for this app's state complexity |
-| IndexedDB for user profile | Blood group never leaves device â€” privacy by architecture |
+| IndexedDB for user profile | Blood group never leaves device  privacy by architecture |
 
 ---
 
@@ -285,10 +285,10 @@ npm run dev
 
 | Mistake | Correct Approach |
 |---|---|
-| `ST_MakePoint(lat, lon)` | `ST_MakePoint(lon, lat)` â€” longitude FIRST |
-| Using `::geometry` in ST_DWithin | Use `::geography` â€” gives distances in meters |
+| `ST_MakePoint(lat, lon)` | `ST_MakePoint(lon, lat)`  longitude FIRST |
+| Using `::geometry` in ST_DWithin | Use `::geography`  gives distances in meters |
 | Importing Leaflet in layout.tsx | Import only in components with `dynamic({ssr:false})` |
-| Deleting `data/chroma_db/` | Never delete â€” rebuild = 10 minutes |
+| Deleting `data/chroma_db/` | Never delete  rebuild = 10 minutes |
 | Testing PWA offline with `npm run dev` | Run `npm run build && npm start` for Service Worker |
 | Calling Nominatim without User-Agent | Always set `User-Agent: SafeVisionAI/1.0` header |
 | Hardcoding API keys in code | Always use environment variables |
@@ -298,15 +298,15 @@ npm run dev
 
 ## Reading Order for New Team Members
 
-1. `docs/Agent.md` â† You are here
-2. `docs/PRD.md` â† Understand the goal
-3. `docs/Architecture.md` â† Understand the system
-4. `docs/Features.md` â† Understand what to build
-5. `docs/TechStack.md` â† Understand the tools
-6. `docs/Database.md` â† Understand the data model
-7. `docs/API.md` â† Understand the API contracts
-8. `docs/AI_Instructions.md` â† Understand the AI layers
-9. `docs/Deployment.md` â† Get your local environment running
+1. `docs/Agent.md`  You are here
+2. `docs/PRD.md`  Understand the goal
+3. `docs/Architecture.md`  Understand the system
+4. `docs/Features.md`  Understand what to build
+5. `docs/TechStack.md`  Understand the tools
+6. `docs/Database.md`  Understand the data model
+7. `docs/API.md`  Understand the API contracts
+8. `docs/AI_Instructions.md`  Understand the AI layers
+9. `docs/Deployment.md`  Get your local environment running
 10. Start coding!
 
 ---

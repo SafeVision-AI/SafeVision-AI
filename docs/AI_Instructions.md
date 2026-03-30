@@ -1,26 +1,26 @@
-﻿# SafeVisionAI â€” AI Instructions
+# SafeVisionAI  AI Instructions
 
 ## Overview of AI Components
 
-SafeVisionAI uses AI at **five distinct layers** â€” each with a specific purpose and technical implementation. This document explains how each AI component works, why it was chosen, and how to implement or extend it.
+SafeVisionAI uses AI at **five distinct layers**  each with a specific purpose and technical implementation. This document explains how each AI component works, why it was chosen, and how to implement or extend it.
 
 ---
 
-## AI Layer 1: Online LLM â€” Groq llama3-70b (Server-Side RAG)
+## AI Layer 1: Online LLM  Groq llama3-70b (Server-Side RAG)
 
 ### What It Does
-Answers user questions about traffic laws, first aid, and emergency services using retrieval-augmented generation. Every answer is grounded in actual documents â€” not model training data.
+Answers user questions about traffic laws, first aid, and emergency services using retrieval-augmented generation. Every answer is grounded in actual documents  not model training data.
 
 ### Why Groq + llama3-70b?
-- **Free tier**: 6,000 tokens/minute â€” sufficient for hackathon
-- **Speed**: 1-2 second first token â€” fastest available free LLM
-- **Quality**: 70B parameters â€” better reasoning than smaller models
+- **Free tier**: 6,000 tokens/minute  sufficient for hackathon
+- **Speed**: 1-2 second first token  fastest available free LLM
+- **Quality**: 70B parameters  better reasoning than smaller models
 - **Multilingual**: Native support for 10+ Indian languages
 
 ### System Prompt (Do Not Change Without Testing)
 
 ```python
-SYSTEM_PROMPT = """You are SafeVisionAI AI â€” an emergency road safety assistant for India.
+SYSTEM_PROMPT = """You are SafeVisionAI AI  an emergency road safety assistant for India.
 Your capabilities:
 - Find nearest hospitals, police stations, ambulances (using provided location data)
 - Explain Indian traffic laws with exact Motor Vehicles Act section numbers
@@ -31,10 +31,10 @@ Your capabilities:
 Rules you MUST follow:
 1. If ANY injury is mentioned, start with "Call 112 immediately."
 2. Always cite the MVA section number when mentioning a fine (e.g., "Section 185, Rs 10,000")
-3. Answer ONLY from the provided context â€” never from training memory for legal/medical facts
-4. If context doesn't cover the question, say "I don't have specific data on this â€” please call 112"
+3. Answer ONLY from the provided context  never from training memory for legal/medical facts
+4. If context doesn't cover the question, say "I don't have specific data on this  please call 112"
 5. Respond in the SAME LANGUAGE the user wrote in (do not switch to English)
-6. For location queries, use the GPS data provided â€” never ask the user for their location
+6. For location queries, use the GPS data provided  never ask the user for their location
 """
 ```
 
@@ -43,20 +43,20 @@ Rules you MUST follow:
 ```
 1. User asks: "what is the fine for drunk driving in Tamil Nadu?"
 
-2. detect_intent(message) â†’ "CHALLAN_QUERY"
-   â†’ Groq classifies into one of 9 labels (JSON response)
+2. detect_intent(message)  "CHALLAN_QUERY"
+    Groq classifies into one of 9 labels (JSON response)
 
 3. ChromaDB MMR search with user's question as query
-   â†’ Returns 5 most relevant, diverse chunks from indexed PDFs
-   â†’ Example chunk: "Section 185 â€” Whoever drives or attempts to drive a motor vehicle
+    Returns 5 most relevant, diverse chunks from indexed PDFs
+    Example chunk: "Section 185  Whoever drives or attempts to drive a motor vehicle
       while under the influence of alcohol... shall be punishable with imprisonment
       for a term which may extend to six months and with fine which may extend to ten
       thousand rupees..."
 
-4. If CHALLAN_QUERY â†’ also query DuckDB:
+4. If CHALLAN_QUERY  also query DuckDB:
    SELECT * FROM violations WHERE violation_code='MVA_185'
    LEFT JOIN state_overrides WHERE state_code='TN'
-   â†’ Returns: base_fine=10000, state_override=null, imprisonment='6 months'
+    Returns: base_fine=10000, state_override=null, imprisonment='6 months'
 
 5. Build final prompt:
    [SYSTEM_PROMPT]
@@ -70,7 +70,7 @@ Rules you MUST follow:
    
    DuckDB result:
    Section 185, First offence: Rs 10,000, Repeat: Rs 15,000, Imprisonment: 6 months
-   No Tamil Nadu state override found â€” national amount applies.
+   No Tamil Nadu state override found  national amount applies.
    
    Chat history: [last 6 turns]
    
@@ -85,7 +85,7 @@ Rules you MUST follow:
 
 ---
 
-## AI Layer 2: Offline LLM â€” WebLLM Phi-3 Mini (Browser-Side)
+## AI Layer 2: Offline LLM  WebLLM Phi-3 Mini (Browser-Side)
 
 ### What It Does
 Runs a complete large language model on the user's device via WebGPU. Answers questions about first aid and traffic laws when there is no internet connection.
@@ -93,7 +93,7 @@ Runs a complete large language model on the user's device via WebGPU. Answers qu
 ### Why Phi-3 Mini?
 - **Best reasoning per parameter**: 3.8B params but outperforms models twice its size on legal/factual Q&A
 - **4-bit quantized**: ~2.2GB fits in browser Cache Storage
-- **Microsoft**: Trained on high-quality synthetic textbook data â€” good for dense legal reasoning
+- **Microsoft**: Trained on high-quality synthetic textbook data  good for dense legal reasoning
 - **WebGPU acceleration**: 3-5s response on modern Android Chrome
 
 ### Model Selection Logic
@@ -106,10 +106,10 @@ async function selectModel(): Promise<string> {
   const hasGPU = 'gpu' in navigator && await navigator.gpu?.requestAdapter()
   
   if (hasGPU) {
-    // Phi-3 Mini â€” best quality, requires WebGPU
+    // Phi-3 Mini  best quality, requires WebGPU
     return "Phi-3-mini-4k-instruct-q4f16_1-MLC"
   } else {
-    // Gemma-2B â€” lighter, runs on WebAssembly CPU
+    // Gemma-2B  lighter, runs on WebAssembly CPU
     return "gemma-2b-it-q4f16_1-MLC"
   }
 }
@@ -126,14 +126,14 @@ async function selectModel(): Promise<string> {
    - This setup takes ~30 seconds on first use, milliseconds after
 
 2. Each offline chat message:
-   - Embed user query â†’ 384-dim vector
-   - HNSWlib.js ANN search â†’ top-3 most similar first-aid articles
+   - Embed user query  384-dim vector
+   - HNSWlib.js ANN search  top-3 most similar first-aid articles
    - Inject article text as context into Phi-3 Mini prompt
    - Phi-3 Mini generates response (~3-15 seconds)
 ```
 
 ### Key Offline Limitation
-The offline LLM **cannot** search for hospitals in real-time â€” it only has access to the 20 pre-bundled first-aid articles and the static GeoJSON POI bundle. Make this clear to users via the `ConnectivityBadge` component.
+The offline LLM **cannot** search for hospitals in real-time  it only has access to the 20 pre-bundled first-aid articles and the static GeoJSON POI bundle. Make this clear to users via the `ConnectivityBadge` component.
 
 ---
 
@@ -170,7 +170,7 @@ Without intent detection, every message would trigger a full RAG search. With in
 
 ---
 
-## AI Layer 4: In-Browser Computer Vision â€” YOLOv8n
+## AI Layer 4: In-Browser Computer Vision  YOLOv8n
 
 ### What It Does
 Detects potholes and road damage in uploaded photos using a 15MB ONNX model running entirely in the browser. No server, no API, works offline.
@@ -195,13 +195,13 @@ const detections = await detector(imageElement, { threshold: 0.3 })
 ```
 
 ### Important Note on Accuracy
-YOLOv8n is trained on the **COCO dataset** â€” not specifically Indian road potholes. It will detect general objects (cars, people, holes) but may miss some road-specific damage patterns.
+YOLOv8n is trained on the **COCO dataset**  not specifically Indian road potholes. It will detect general objects (cars, people, holes) but may miss some road-specific damage patterns.
 
-For production: fine-tune on Indian pothole dataset from Kaggle. For hackathon: the live demo of computer vision in the browser is the impressive part â€” the capability demonstration matters more than perfect accuracy.
+For production: fine-tune on Indian pothole dataset from Kaggle. For hackathon: the live demo of computer vision in the browser is the impressive part  the capability demonstration matters more than perfect accuracy.
 
 ### Confidence Display
 ```
-< 50%: "Low confidence â€” road damage may be present"
+< 50%: "Low confidence  road damage may be present"
 50-75%: "Possible road damage detected (X% confidence)"
 75-90%: "Road damage detected (X% confidence)" [yellow badge]
 > 90%: "Pothole confirmed (X% confidence)" [green badge]
@@ -209,7 +209,7 @@ For production: fine-tune on Indian pothole dataset from Kaggle. For hackathon: 
 
 ---
 
-## AI Layer 5: RAG Knowledge Base â€” ChromaDB
+## AI Layer 5: RAG Knowledge Base  ChromaDB
 
 ### What's Indexed
 
@@ -224,7 +224,7 @@ For production: fine-tune on Indian pothole dataset from Kaggle. For hackathon: 
 ### Building the Index
 
 ```python
-# data/build_vectorstore.py â€” run once, takes 5-10 minutes
+# data/build_vectorstore.py  run once, takes 5-10 minutes
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -255,7 +255,7 @@ vectorstore = Chroma.from_documents(
 )
 ```
 
-### âš ï¸ Never delete `data/chroma_db/`
+###  Never delete `data/chroma_db/`
 This directory contains the vectorized knowledge base. Rebuilding it takes 5-10 minutes. Add it to `.gitignore` (it's too large for git) but never delete it locally.
 
 ---

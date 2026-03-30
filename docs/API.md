@@ -1,4 +1,4 @@
-﻿# SafeVisionAI â€” API Reference
+# SafeVisionAI  API Reference
 
 ## Base URLs
 
@@ -119,11 +119,11 @@ Send a message to the AI chatbot.
 ```
 
 #### `WebSocket /api/v1/chat/stream`
-Streaming chat response â€” tokens delivered as they are generated.
+Streaming chat response  tokens delivered as they are generated.
 
 **Send:** `{"message": "...", "session_id": "...", "lat": 0.0, "lon": 0.0}`
 
-**Receive:** `{"token": "The ", "done": false}` â€¦ `{"token": "", "done": true, "intent": "LEGAL_INFO"}`
+**Receive:** `{"token": "The ", "done": false}`  `{"token": "", "done": true, "intent": "LEGAL_INFO"}`
 
 #### `GET /api/v1/chat/history/{session_id}`
 Returns last 20 message pairs for a session (from Redis).
@@ -148,7 +148,7 @@ Calculate fine for a specific traffic violation.
 {
   "violation_code": "MVA_185",
   "section": "185",
-  "description_en": "Drunk driving â€” first offence",
+  "description_en": "Drunk driving  first offence",
   "base_fine_inr": 10000,
   "state_override_fine": null,
   "final_fine_inr": 10000,
@@ -225,12 +225,12 @@ Get road infrastructure data (contractor, budget, engineer) at coordinates.
 ### Geocoding (`/api/v1/geocode`)
 
 #### `GET /api/v1/geocode/search`
-Forward geocoding: text address â†’ GPS coordinates.
+Forward geocoding: text address  GPS coordinates.
 
 **Query Params:** `q` (address string)
 
 #### `GET /api/v1/geocode/reverse`
-Reverse geocoding: GPS â†’ address, city, state, country.
+Reverse geocoding: GPS  address, city, state, country.
 
 **Query Params:** `lat`, `lon`
 
@@ -267,7 +267,7 @@ Returns GeoJSON bundle of emergency services for a specific city (for offline pr
 | 422 | Validation error (e.g., lat out of range -90 to 90) |
 | 429 | Rate limited (Nominatim 1 req/sec) |
 | 500 | Internal server error |
-| 503 | LLM service unavailable (Groq down â€” use offline fallback) |
+| 503 | LLM service unavailable (Groq down  use offline fallback) |
 
 ---
 

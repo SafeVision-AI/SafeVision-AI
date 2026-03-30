@@ -1,4 +1,4 @@
-﻿# SafeVisionAI â€” Security
+# SafeVisionAI  Security
 
 ## Security Overview
 
@@ -9,7 +9,7 @@ SafeVisionAI handles sensitive user data (GPS location, blood group, emergency c
 ## 1. Authentication & Authorization
 
 ### Current (Hackathon MVP)
-- Most endpoints are **public** â€” no auth required for emergency features
+- Most endpoints are **public**  no auth required for emergency features
 - Road issue reports optionally associate a Supabase Auth `user_id`
 - Supabase anon key used for frontend DB access (read-only via RLS)
 - Supabase service role key used only on backend (never exposed to browser)
@@ -34,7 +34,7 @@ WITH CHECK (reporter_id = auth.uid() OR reporter_id IS NULL);
 
 ### CORS Configuration
 ```python
-# main.py â€” Restrict to known origins in production
+# main.py  Restrict to known origins in production
 from fastapi.middleware.cors import CORSMiddleware
 
 ALLOWED_ORIGINS = [
@@ -53,9 +53,9 @@ app.add_middleware(
 
 ### Input Validation
 - All request parameters validated via **Pydantic** schemas
-- GPS coordinates validated: lat âˆˆ [-90, 90], lon âˆˆ [-180, 180]
+- GPS coordinates validated: lat  [-90, 90], lon  [-180, 180]
 - Photo uploads: filetype validation, 10MB max size limit via `python-multipart`
-- SQL injection: **impossible** â€” SQLAlchemy parameterized queries only
+- SQL injection: **impossible**  SQLAlchemy parameterized queries only
 - Violation codes: validated against whitelist pattern `^MVA_[A-Z0-9_]+$`
 
 ### Rate Limiting
@@ -124,13 +124,13 @@ crash_event = {
 ### Environment Variables (Never Hardcode)
 
 ```bash
-# backend/.env â€” never commit this file
+# backend/.env  never commit this file
 DATABASE_URL=postgresql+asyncpg://...    # Supabase connection string
 GROQ_API_KEY=gsk_...                     # Groq API key
 REDIS_URL=rediss://...                   # Upstash Redis TLS URL
-SUPABASE_SERVICE_ROLE_KEY=eyJ...        # Admin key â€” backend only
+SUPABASE_SERVICE_ROLE_KEY=eyJ...        # Admin key  backend only
 
-# frontend/.env.local â€” never commit this file
+# frontend/.env.local  never commit this file
 NEXT_PUBLIC_API_URL=https://...         # Backend URL (public)
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...   # Anon key only (read-only)
 ```
@@ -147,12 +147,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...   # Anon key only (read-only)
 ### Photo Upload Safety
 - Filetype validated by MIME type AND file extension
 - Image resized server-side before storing (prevents polyglot attacks)
-- Supabase Storage serves from CDN â€” isolated from application server
+- Supabase Storage serves from CDN  isolated from application server
 - Virus scanning: TODO for production (not required for hackathon)
 
 ### AI Output Safety
 ```python
-# Chatbot safety check â€” always prepend emergency numbers for injury queries
+# Chatbot safety check  always prepend emergency numbers for injury queries
 SAFETY_OVERRIDE = {
     "keywords": ["bleeding", "unconscious", "accident", "injury", "crash"],
     "prepend": "Call 112 immediately for emergency services. ",
@@ -165,7 +165,7 @@ def apply_safety_check(message: str, response: str) -> str:
 ```
 
 ### Prompt Injection Defense
-- System prompt is immutable â€” user cannot override it
+- System prompt is immutable  user cannot override it
 - Intent detection runs before RAG to prevent jailbreak attempts
 - Groq model temperature set to 0.3 (low creativity, high factual grounding)
 - RAG context explicitly instructed: "Answer ONLY from the provided text"

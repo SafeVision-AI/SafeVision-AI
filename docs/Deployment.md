@@ -1,4 +1,4 @@
-﻿# SafeVisionAI â€” Deployment Guide
+# SafeVisionAI  Deployment Guide
 
 ## Infrastructure Overview (All Free Tier)
 
@@ -10,18 +10,18 @@
 | Cache | Upstash | `[host].upstash.io` | Redis, 10K commands/day |
 | LLM API | Groq | `api.groq.com` | llama3-70b, 6000 tok/min |
 | Model CDN | Hugging Face | `huggingface.co` | WebLLM weights |
-| CI/CD | GitHub Actions | â€” | Auto-deploy on push |
+| CI/CD | GitHub Actions |  | Auto-deploy on push |
 
 ---
 
 ## Step 1: Create Free Accounts
 
-1. **Groq** â†’ [console.groq.com](https://console.groq.com) â€” Create account â†’ API Keys â†’ Create Key (starts with `gsk_`)
-2. **Supabase** â†’ [supabase.com](https://supabase.com) â€” New project â†’ Region: Singapore (closest to India) â†’ Save password
-3. **Upstash** â†’ [upstash.com](https://upstash.com) â€” New Redis Database â†’ Global â†’ Copy `REDIS_URL`
-4. **Vercel** â†’ [vercel.com](https://vercel.com) â€” Connect GitHub account
-5. **Render.com** â†’ [render.com](https://render.com) â€” Connect GitHub account
-6. **data.gov.in** â†’ [data.gov.in](https://data.gov.in) â€” Register â†’ Get API key (for NHAI data)
+1. **Groq**  [console.groq.com](https://console.groq.com)  Create account  API Keys  Create Key (starts with `gsk_`)
+2. **Supabase**  [supabase.com](https://supabase.com)  New project  Region: Singapore (closest to India)  Save password
+3. **Upstash**  [upstash.com](https://upstash.com)  New Redis Database  Global  Copy `REDIS_URL`
+4. **Vercel**  [vercel.com](https://vercel.com)  Connect GitHub account
+5. **Render.com**  [render.com](https://render.com)  Connect GitHub account
+6. **data.gov.in**  [data.gov.in](https://data.gov.in)  Register  Get API key (for NHAI data)
 
 ---
 
@@ -36,7 +36,7 @@ SELECT PostGIS_version(); -- verify: should return version string
 ```
 
 ### Get Connection String
-Supabase â†’ Settings â†’ Database â†’ Connection string â†’ URI
+Supabase  Settings  Database  Connection string  URI
 
 Change `postgresql://` to `postgresql+asyncpg://` for async driver.
 
@@ -66,16 +66,16 @@ cp .env.example .env
 alembic upgrade head
 
 # 6. Verify tables were created
-# Check Supabase Table Editor â€” should see 6 tables
+# Check Supabase Table Editor  should see 6 tables
 ```
 
 ### Download Required PDFs (for RAG)
 
 ```
 Download to backend/data/:
-- motor_vehicles_act_1988.pdf    â†’ indiacode.nic.in
-- mv_amendment_act_2019.pdf      â†’ morth.nic.in
-- who_trauma_care_guidelines.pdf â†’ who.int
+- motor_vehicles_act_1988.pdf     indiacode.nic.in
+- mv_amendment_act_2019.pdf       morth.nic.in
+- who_trauma_care_guidelines.pdf  who.int
 ```
 
 ### Seed the Database
@@ -88,7 +88,7 @@ python data/seed_violations.py
 # Also creates: frontend/public/offline-data/india-emergency.geojson
 python data/seed_emergency.py
 
-# Build ChromaDB vector store from PDFs â€” RUN ONCE, takes 5-10 minutes
+# Build ChromaDB vector store from PDFs  RUN ONCE, takes 5-10 minutes
 # Creates: data/chroma_db/ directory (never delete this!)
 python data/build_vectorstore.py
 ```
@@ -134,9 +134,9 @@ npm run dev
 npm run build && npm start
 
 # Then in Chrome:
-# 1. DevTools â†’ Application â†’ Service Workers â†’ verify registered
-# 2. DevTools â†’ Network â†’ check "Offline"
-# 3. Navigate to /emergency â€” hospitals should still show
+# 1. DevTools  Application  Service Workers  verify registered
+# 2. DevTools  Network  check "Offline"
+# 3. Navigate to /emergency  hospitals should still show
 ```
 
 ---
@@ -147,7 +147,7 @@ npm run build && npm start
 
 The `render.yaml` at the project root configures automatic deployment.
 
-1. Go to Render.com â†’ New â†’ Blueprint
+1. Go to Render.com  New  Blueprint
 2. Connect GitHub repository
 3. Render detects `render.yaml` automatically
 4. Set environment variables (from Render dashboard):
@@ -159,7 +159,7 @@ The `render.yaml` at the project root configures automatic deployment.
 
 ### Manual Setup (Alternative)
 
-Render.com â†’ New â†’ Web Service:
+Render.com  New  Web Service:
 - **Name:** `safevisionai-api`
 - **Root Directory:** `backend`
 - **Runtime:** Python 3.11
@@ -183,7 +183,7 @@ python data/build_vectorstore.py  # 10 minutes
 
 ### Via GitHub Integration (Recommended)
 
-1. Vercel Dashboard â†’ New Project â†’ Import from GitHub
+1. Vercel Dashboard  New Project  Import from GitHub
 2. Select `SafeVisionAI` repository
 3. **Framework Preset:** Next.js (auto-detected)
 4. **Root Directory:** `frontend`
@@ -219,7 +219,7 @@ curl "https://safevisionai-api.onrender.com/api/v1/challan/calculate?violation_c
 # Expected: {"final_fine_inr":10000,"section":"185"}
 
 # Frontend PWA check
-# Chrome â†’ visit safevisionai.vercel.app â†’ check "Add to Home Screen" prompt
+# Chrome  visit safevisionai.vercel.app  check "Add to Home Screen" prompt
 ```
 
 ---
@@ -273,9 +273,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 
 ## Render.com Free Tier Limitations
 
-- **512MB RAM** â€” sufficient for FastAPI + ChromaDB reads (build vectorstore before deploy)
-- **750 hrs/month** â€” one service runs 24/7 for a month
-- **Cold starts** â€” first request after inactivity takes ~30s (free tier sleeps after 15min)
+- **512MB RAM**  sufficient for FastAPI + ChromaDB reads (build vectorstore before deploy)
+- **750 hrs/month**  one service runs 24/7 for a month
+- **Cold starts**  first request after inactivity takes ~30s (free tier sleeps after 15min)
   - Mitigation: Set up a `/health` ping every 14 minutes via UptimeRobot (free)
 
 ---

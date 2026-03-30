@@ -1,4 +1,4 @@
-﻿# SafeVisionAI â€” Setup & Installation Guide
+# SafeVisionAI  Setup & Installation Guide
 
 Step-by-step guide to install dependencies and run both backend and frontend locally.
 
@@ -18,11 +18,11 @@ Make sure you have these installed before starting:
 
 ---
 
-## Step 1 â€” Create Project Folder & Clone the Repository
+## Step 1  Create Project Folder & Clone the Repository
 
-> ðŸ’¡ **Note:** `git clone` automatically initializes the git repo for you â€” you do **NOT** need to run `git init` before cloning.
+>  **Note:** `git clone` automatically initializes the git repo for you  you do **NOT** need to run `git init` before cloning.
 
-### Option A â€” Clone directly (if repo already exists on GitHub)
+### Option A  Clone directly (if repo already exists on GitHub)
 
 ```bash
 # 1. Go to the folder where you want the project
@@ -36,7 +36,7 @@ git clone https://github.com/SafeVision-AI/SafeVision-AI.git
 cd SafeVisionAI
 ```
 
-### Option B â€” Create folder first, then clone into it
+### Option B  Create folder first, then clone into it
 
 ```bash
 # 1. Create the project folder
@@ -49,7 +49,7 @@ cd SafeVisionAI
 git clone https://github.com/SafeVision-AI/SafeVision-AI.git .
 ```
 
-### Option C â€” Fresh start (no GitHub yet)
+### Option C  Fresh start (no GitHub yet)
 
 ```bash
 # 1. Create the folder
@@ -62,7 +62,7 @@ git init
 # 3. Create the folder structure manually or copy files in
 ```
 
-âœ… After cloning, verify you can see the project files:
+ After cloning, verify you can see the project files:
 
 ```bash
 # Windows
@@ -76,11 +76,11 @@ You should see: `backend/`, `frontend/`, `docs/`, `README.md`, `SETUP.md`
 
 ---
 
-# ðŸ BACKEND SETUP
+#  BACKEND SETUP
 
 ---
 
-## Step 2 â€” Create a Python Virtual Environment
+## Step 2  Create a Python Virtual Environment
 
 > A virtual environment keeps project dependencies isolated from your global Python.
 
@@ -109,11 +109,11 @@ python -m venv .venv
 source .venv/bin/activate
 ```
 
-âœ… You should see `(.venv)` at the start of your terminal line after activation.
+ You should see `(.venv)` at the start of your terminal line after activation.
 
 ---
 
-## Step 3 â€” Install Backend Dependencies
+## Step 3  Install Backend Dependencies
 
 ```bash
 # Make sure venv is activated (see above)
@@ -121,20 +121,20 @@ pip install -r requirements.txt
 ```
 
 This installs all packages listed in `requirements.txt`:
-- **FastAPI + Uvicorn** â€” web framework and server
-- **LangChain + Groq** â€” AI chatbot pipeline
-- **ChromaDB** â€” vector store for RAG
-- **SQLAlchemy + asyncpg** â€” async database ORM
-- **GeoAlchemy2** â€” PostGIS geometry support
-- **sentence-transformers** â€” embeddings (runs locally, no API)
-- **DuckDB** â€” SQL engine for challan calculator
-- **Redis (hiredis)** â€” cache client
-- **httpx** â€” async HTTP for Overpass/Nominatim
-- **Pydantic** â€” request/response validation
-- **Alembic** â€” database migrations
-- **pypdf, aiofiles, Pillow** â€” document and file handling
+- **FastAPI + Uvicorn**  web framework and server
+- **LangChain + Groq**  AI chatbot pipeline
+- **ChromaDB**  vector store for RAG
+- **SQLAlchemy + asyncpg**  async database ORM
+- **GeoAlchemy2**  PostGIS geometry support
+- **sentence-transformers**  embeddings (runs locally, no API)
+- **DuckDB**  SQL engine for challan calculator
+- **Redis (hiredis)**  cache client
+- **httpx**  async HTTP for Overpass/Nominatim
+- **Pydantic**  request/response validation
+- **Alembic**  database migrations
+- **pypdf, aiofiles, Pillow**  document and file handling
 
-> â± First install takes 3â€“5 minutes (sentence-transformers is large).
+>  First install takes 35 minutes (sentence-transformers is large).
 
 Verify installation:
 ```bash
@@ -143,7 +143,7 @@ python -c "import fastapi, langchain, chromadb; print('All packages OK')"
 
 ---
 
-## Step 4 â€” Configure Environment Variables
+## Step 4  Configure Environment Variables
 
 ```bash
 # Copy the template
@@ -154,7 +154,7 @@ Create `.env` file in the `backend/` folder and fill in all the required values.
 
 ---
 
-## Step 5 â€” Run the Backend
+## Step 5  Run the Backend
 
 ```bash
 # Make sure venv is activated and you are in backend/
@@ -163,7 +163,7 @@ uvicorn main:app --reload --port 8000
 
 The `--reload` flag auto-restarts the server when you save a file.
 
-âœ… **Verify it's running:**
+ **Verify it's running:**
 - Health check: [http://localhost:8000/health](http://localhost:8000/health)
 - Swagger API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
@@ -178,11 +178,11 @@ Expected response at `/health`:
 
 ---
 
-# âš›ï¸ FRONTEND SETUP
+#  FRONTEND SETUP
 
 ---
 
-## Step 9 â€” Install Frontend Dependencies
+## Step 9  Install Frontend Dependencies
 
 Open a **new terminal** (keep backend running in the other one):
 
@@ -195,20 +195,20 @@ npm install
 ```
 
 This installs all packages in `package.json`:
-- **Next.js 14** â€” React framework with App Router
-- **TypeScript** â€” type-safe JavaScript
-- **Tailwind CSS** â€” utility-first CSS
-- **Leaflet.js + react-leaflet** â€” interactive maps
-- **@mlc-ai/web-llm** â€” Phi-3 Mini offline AI in browser
-- **@huggingface/transformers** â€” YOLOv8n pothole detection in browser
-- **@duckdb/duckdb-wasm** â€” SQL in browser for offline challan calc
-- **idb** â€” IndexedDB wrapper for offline storage
-- **zustand** â€” global state management
-- **swr** â€” data fetching with caching
-- **framer-motion** â€” animations
-- **next-pwa + workbox** â€” Progressive Web App / Service Worker
+- **Next.js 14**  React framework with App Router
+- **TypeScript**  type-safe JavaScript
+- **Tailwind CSS**  utility-first CSS
+- **Leaflet.js + react-leaflet**  interactive maps
+- **@mlc-ai/web-llm**  Phi-3 Mini offline AI in browser
+- **@huggingface/transformers**  YOLOv8n pothole detection in browser
+- **@duckdb/duckdb-wasm**  SQL in browser for offline challan calc
+- **idb**  IndexedDB wrapper for offline storage
+- **zustand**  global state management
+- **swr**  data fetching with caching
+- **framer-motion**  animations
+- **next-pwa + workbox**  Progressive Web App / Service Worker
 
-> â± First install takes 2â€“4 minutes (web-llm package is large).
+>  First install takes 24 minutes (web-llm package is large).
 
 Verify installation:
 ```bash
@@ -218,7 +218,7 @@ npx next --version
 
 ---
 
-## Step 10 â€” Configure Frontend Environment Variables
+## Step 10  Configure Frontend Environment Variables
 
 ```bash
 # From inside the frontend/ folder
@@ -229,20 +229,20 @@ Create `.env.local` file in the `frontend/` folder and fill in all the required 
 
 ---
 
-## Step 11 â€” Run the Frontend
+## Step 11  Run the Frontend
 
 ```bash
 # Make sure you are in frontend/
 npm run dev
 ```
 
-âœ… App opens at: [http://localhost:3000](http://localhost:3000)
+ App opens at: [http://localhost:3000](http://localhost:3000)
 
 You should see the SafeVisionAI home page with the 4 module cards.
 
 ---
 
-## Step 12 â€” Test Offline / PWA Mode
+## Step 12  Test Offline / PWA Mode
 
 > **Important**: The Service Worker (offline mode) only works in a production build. `npm run dev` skips it.
 
@@ -254,29 +254,29 @@ npm run build
 npm start
 
 # Now visit http://localhost:3000 in Chrome
-# Then: DevTools â†’ Application â†’ Service Workers â†’ verify "Activated"
-# Then: DevTools â†’ Network â†’ check "Offline"
-# Navigate to /emergency â€” hospital markers should still appear from cache
+# Then: DevTools  Application  Service Workers  verify "Activated"
+# Then: DevTools  Network  check "Offline"
+# Navigate to /emergency  hospital markers should still appear from cache
 ```
 
 ---
 
-# ðŸ—‚ï¸ Daily Quick-Start
+#  -  Daily Quick-Start
 
 Once everything is installed, these are the only two commands you need each day:
 
 ```bash
-# â”€â”€ Terminal 1: Backend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Terminal 1: Backend 
 cd SafeVisionAI/backend
 .venv\Scripts\activate         # Windows
 # source .venv/bin/activate    # Linux/Mac
 uvicorn main:app --reload --port 8000
 
-# â”€â”€ Terminal 2: Frontend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Terminal 2: Frontend 
 cd SafeVisionAI/frontend
 npm run dev
 
-# â”€â”€ Both running â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Both running 
 # Backend:  http://localhost:8000
 # API Docs: http://localhost:8000/docs
 # Frontend: http://localhost:3000
@@ -284,25 +284,25 @@ npm run dev
 
 ---
 
-# ðŸ“‹ All Useful Commands
+#  All Useful Commands
 
 ## Backend Commands
 
 ```bash
-# â”€â”€ Run the server â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Run the server 
 uvicorn main:app --reload --port 8000
 
-# â”€â”€ Testing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Testing 
 pytest tests/ -v                                         # Run all tests
 pytest tests/test_challan.py -v                          # Run one test file
 pytest tests/test_challan.py::test_drunk_driving_fine -v # Run single test
 
-# â”€â”€ Test API endpoints â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Test API endpoints 
 curl "http://localhost:8000/api/v1/emergency/nearby?lat=13.0827&lon=80.2707"
 curl "http://localhost:8000/api/v1/challan/calculate?violation_code=MVA_185"
 curl "http://localhost:8000/health"
 
-# â”€â”€ Venv â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Venv 
 .venv\Scripts\activate                                   # Activate (Windows PS / CMD)
 source .venv/bin/activate                                # Activate (Linux/Mac)
 deactivate                                               # Deactivate
@@ -311,19 +311,19 @@ deactivate                                               # Deactivate
 ## Frontend Commands
 
 ```bash
-# â”€â”€ Run â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Run 
 npm run dev                                              # Start dev server (hot reload)
 npm run build                                            # Build for production
 npm start                                                # Run production build locally
 
-# â”€â”€ Code quality â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Code quality 
 npm run lint                                             # Run ESLint
 
-# â”€â”€ Testing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Testing 
 npm test                                                 # Run all Vitest tests
 npm run test:watch                                       # Run tests in watch mode
 
-# â”€â”€ Packages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+#  Packages 
 npm install                                              # Install all dependencies
 npm install [package-name]                               # Add a new package
 npm uninstall [package-name]                             # Remove a package
@@ -332,17 +332,17 @@ npx npm-check-updates -u && npm install                  # Upgrade all packages
 
 ---
 
-# â“ Troubleshooting
+#  Troubleshooting
 
 ### `ModuleNotFoundError` in backend
 ```bash
-# Make sure .venv is activated â€” check for (.venv) in terminal
+# Make sure .venv is activated  check for (.venv) in terminal
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
 ### `Map not displaying` in browser
-- Leaflet requires `dynamic(() => import(...), { ssr: false })` â€” check `components/EmergencyMap.tsx`
+- Leaflet requires `dynamic(() => import(...), { ssr: false })`  check `components/EmergencyMap.tsx`
 - Make sure Leaflet CSS is imported inside the component, not in `layout.tsx`
 
 ### `Cannot find module 'leaflet'` build error
@@ -353,12 +353,12 @@ npm install leaflet @types/leaflet react-leaflet
 
 ### `GROQ_API_KEY` missing error
 - Create a free account at [console.groq.com](https://console.groq.com)
-- Go to API Keys â†’ Create Key
+- Go to API Keys  Create Key
 - Copy the `gsk_...` key into `backend/.env`
 
 ### Port 8000 already in use
 ```bash
-# Windows â€” find and kill the process
+# Windows  find and kill the process
 netstat -ano | findstr :8000
 taskkill /PID [PID_NUMBER] /F
 ```

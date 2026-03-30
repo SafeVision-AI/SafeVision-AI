@@ -1,12 +1,12 @@
-﻿# SafeVisionAI â€” UI/UX Design Guide
+# SafeVisionAI  UI/UX Design Guide
 
 ## Design Philosophy
 
 SafeVisionAI is an emergency app. Every design decision must prioritize:
-1. **Speed** â€” information in 1 tap, not 3
-2. **Clarity** â€” readable in sunlight, readable with shaking hands
-3. **Trust** â€” no fake data, no spinner loops, always show what's real
-4. **Offline-first** â€” design for zero signal, treat internet as an enhancement
+1. **Speed**  information in 1 tap, not 3
+2. **Clarity**  readable in sunlight, readable with shaking hands
+3. **Trust**  no fake data, no spinner loops, always show what's real
+4. **Offline-first**  design for zero signal, treat internet as an enhancement
 
 ---
 
@@ -16,7 +16,7 @@ SafeVisionAI is an emergency app. Every design decision must prioritize:
 
 | Token | Hex | Usage |
 |---|---|---|
-| `bg-primary` | `#0A1628` | Main background â€” deep navy |
+| `bg-primary` | `#0A1628` | Main background  deep navy |
 | `bg-secondary` | `#132035` | Card backgrounds |
 | `bg-tertiary` | `#1C2D4A` | Input backgrounds, borders |
 | `accent-green` | `#00C896` | Primary CTA, success states |
@@ -69,7 +69,7 @@ SafeVisionAI is an emergency app. Every design decision must prioritize:
 ## Components
 
 ### SOS Button
-- Size: 64Ã—64px, position: fixed bottom-right, z-index: 50
+- Size: 64 - 64px, position: fixed bottom-right, z-index: 50
 - Color: `#E53E3E` (accent-red) with glow shadow
 - Animation: pulse ring on idle (draws attention without being annoying)
 - Long-press alternative for accessibility: 2-second halo fill animation
@@ -91,7 +91,7 @@ SafeVisionAI is an emergency app. Every design decision must prioritize:
 - Each: min-width 25%, text center, font-weight 700
 
 ### Map Container
-- Height: 55vh (mobile) â€” enough to show 3-4 markers without scrolling
+- Height: 55vh (mobile)  enough to show 3-4 markers without scrolling
 - Border radius: 16px
 - Background while loading: `#1C2D4A` with pulse animation
 - Attribution: always visible (OSM license requirement)
@@ -116,7 +116,7 @@ SafeVisionAI is an emergency app. Every design decision must prioritize:
 - Title: 18px semibold
 - Steps: numbered list, 14px, line-height 1.6
 - Background: `#132035`, border-left: 4px solid accent-red
-- No internet required badge: "âœ“ Works Offline" chip
+- No internet required badge: " Works Offline" chip
 
 ---
 
@@ -127,7 +127,7 @@ SafeVisionAI is an emergency app. Every design decision must prioritize:
 // Always use CartoDB Dark, never default OSM blue
 <TileLayer
   url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
-  attribution='Â© OpenStreetMap contributors Â© CartoDB'
+  attribution=' OpenStreetMap contributors  CartoDB'
   maxZoom={19}
 />
 ```
@@ -146,11 +146,11 @@ const MARKER_COLORS = {
 ```
 
 ### Critical Rules
-1. `import dynamic from 'next/dynamic'` + `ssr: false` â€” Leaflet needs browser
+1. `import dynamic from 'next/dynamic'` + `ssr: false`  Leaflet needs browser
 2. Import `leaflet/dist/leaflet.css` inside the component (not layout.tsx)
-3. Copy marker icons to `public/leaflet/` â€” webpack breaks default icon paths
-4. Add `key={lat+lon}` to MapContainer â€” prevents "map already initialized" error
-5. Set explicit height on MapContainer â€” invisible without it
+3. Copy marker icons to `public/leaflet/`  webpack breaks default icon paths
+4. Add `key={lat+lon}` to MapContainer  prevents "map already initialized" error
+5. Set explicit height on MapContainer  invisible without it
 
 ---
 
@@ -158,66 +158,66 @@ const MARKER_COLORS = {
 
 ### Home Page (`/`)
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  SafeVisionAI Logo + Tagline â”‚
-â”‚  Connectivity Badge     â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚  [Emergency Locator]    â”‚  â† Red card, largest
-â”‚  Find hospitals & help  â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚  [AI Assistant]  [Fine] â”‚  â† Two equal cards
-â”‚  Chat about laws  Calc  â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚  [Report Road Issue]    â”‚  â† Green card
-â”‚  Pothole, Missing sign  â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚  â”€ Emergency Numbers â”€  â”‚  â† Fixed bottom bar
-â”‚  112  102  100  1033   â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+  SafeVisionAI Logo + Tagline 
+  Connectivity Badge     
+
+  [Emergency Locator]       Red card, largest
+  Find hospitals & help  
+
+  [AI Assistant]  [Fine]    Two equal cards
+  Chat about laws  Calc  
+
+  [Report Road Issue]       Green card
+  Pothole, Missing sign  
+
+   Emergency Numbers      Fixed bottom bar
+  112  102  100  1033   
+
 ```
 
 ### Emergency Page (`/emergency`)
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ Location: Chennai, TN   â”‚
-â”‚ Showing within: 5km     â”‚
-â”‚ [Connectivity Badge]    â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚                         â”‚
-â”‚   [LEAFLET MAP 55vh]    â”‚
-â”‚   CartoDB Dark tiles    â”‚
-â”‚   Color-coded markers   â”‚
-â”‚                         â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚ [Filter chips: All/Hosp/â”‚
-â”‚  Police/Ambulance/Tow]  â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚ [Service Card 1]  2.1km â”‚
-â”‚ [Service Card 2]  3.4km â”‚
-â”‚ [Service Card 3]  5.2km â”‚
-â”‚          ...             â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚  â”€ 112  102  100  1033 â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                    [SOS]  â† Fixed, bottom-right
+
+ Location: Chennai, TN   
+ Showing within: 5km     
+ [Connectivity Badge]    
+
+                         
+   [LEAFLET MAP 55vh]    
+   CartoDB Dark tiles    
+   Color-coded markers   
+                         
+
+ [Filter chips: All/Hosp/
+  Police/Ambulance/Tow]  
+
+ [Service Card 1]  2.1km 
+ [Service Card 2]  3.4km 
+ [Service Card 3]  5.2km 
+          ...             
+
+   112  102  100  1033 
+
+                    [SOS]   Fixed, bottom-right
 ```
 
 ### Chat Page (`/chat`)
 ```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ AI Assistant            â”‚
-â”‚ [Online][Offline] tabs  â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚ [Bot msg: Welcome...]   â”‚
-â”‚                         â”‚
-â”‚         [User msg ----] â”‚
-â”‚ [Bot msg: Here are...]  â”‚
-â”‚         [Source: MV Act]â”‚
-â”‚                         â”‚
-â”‚       ...               â”‚
-â”œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¤
-â”‚ [ðŸŽ¤] [Type message...] [â†’]â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+
+ AI Assistant            
+ [Online][Offline] tabs  
+
+ [Bot msg: Welcome...]   
+                         
+         [User msg ----] 
+ [Bot msg: Here are...]  
+         [Source: MV Act]
+                         
+       ...               
+
+ [] [Type message...] []
+
 ```
 
 ---
@@ -226,12 +226,12 @@ const MARKER_COLORS = {
 
 | Requirement | Implementation |
 |---|---|
-| Minimum touch target | 44Ã—44px for all interactive elements |
-| Contrast ratio | WCAG AA â€” all text > 4.5:1 against background |
-| Font scaling | All sizes in `rem` â€” scales with browser font-size preference |
+| Minimum touch target | 44 - 44px for all interactive elements |
+| Contrast ratio | WCAG AA  all text > 4.5:1 against background |
+| Font scaling | All sizes in `rem`  scales with browser font-size preference |
 | Screen reader | `aria-label` on all icon buttons, `role="status"` on connectivity badge |
 | Keyboard nav | All interactive elements reachable via Tab key |
-| Error states | Never silent â€” always show toast or inline error |
+| Error states | Never silent  always show toast or inline error |
 | Loading states | Skeleton screens instead of blank states |
 | Multilingual | HTML `lang` attribute updated on language change |
 
@@ -243,7 +243,7 @@ const MARKER_COLORS = {
 |---|---|---|---|
 | SOS pulse ring | 2s infinite | ease-out | Draw attention without alarming |
 | Crash countdown circle | 10s linear | linear | Clear urgency, predictable progress |
-| Model download progress | â€” | linear | Exact progress, no fake smoothing |
+| Model download progress |  | linear | Exact progress, no fake smoothing |
 | Connectivity badge | 300ms | ease | Subtle dot color change |
 | Card hover | 150ms | ease | Touch feedback replacement for desktop |
 | Toast notification | 200ms in, 300ms out | ease | Informative, not distracting |
@@ -253,12 +253,12 @@ const MARKER_COLORS = {
 
 ## Mobile-Specific Rules
 
-1. **Never rely on hover** â€” design for touch first, desktop second
-2. **Bottom navigation** is more reachable than top â€” keep emergency numbers at bottom
-3. **Large critical buttons** â€” SOS is always 64px diameter minimum
-4. **One primary action per screen** â€” emergency page = find services (not chat, not settings)
-5. **Portrait-primary** â€” lock orientation in PWA manifest
-6. **Safe area insets** â€” add padding-bottom for iPhone home indicator
+1. **Never rely on hover**  design for touch first, desktop second
+2. **Bottom navigation** is more reachable than top  keep emergency numbers at bottom
+3. **Large critical buttons**  SOS is always 64px diameter minimum
+4. **One primary action per screen**  emergency page = find services (not chat, not settings)
+5. **Portrait-primary**  lock orientation in PWA manifest
+6. **Safe area insets**  add padding-bottom for iPhone home indicator
 
 ---
 
@@ -268,9 +268,9 @@ const MARKER_COLORS = {
 |---|---|
 | Online (fresh data) | Green dot: "Live" |
 | Online (from cache) | Yellow dot: "Cached" with timestamp |
-| Offline (first visit) | Orange dot: "Offline â€” 25-city coverage" |
+| Offline (first visit) | Orange dot: "Offline  25-city coverage" |
 | Offline AI active | Blue chip: "Using Phi-3 Mini (on your device)" |
-| Report queued offline | Info toast: "Saved â€” will submit when connected" |
+| Report queued offline | Info toast: "Saved  will submit when connected" |
 | Model downloading | Full-screen progress with MB + estimated time |
 
 ---

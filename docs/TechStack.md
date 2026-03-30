@@ -1,12 +1,12 @@
-﻿# SafeVisionAI â€” Tech Stack
+# SafeVisionAI  Tech Stack
 
 ## Overview
 
-SafeVisionAI uses a **dual-layer AI architecture** â€” the only road safety app globally with in-browser LLM inference as a fallback for offline use.
+SafeVisionAI uses a **dual-layer AI architecture**  the only road safety app globally with in-browser LLM inference as a fallback for offline use.
 
 ```
 Layer            Technology                          Cost
-â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
 Frontend         Next.js 14 + TypeScript + Tailwind  Free (Vercel)
 Backend          FastAPI + Python 3.11 + Uvicorn     Free (Render.com)
 Online LLM       Groq llama3-70b-8192 (LangChain)   Free (6000 tok/min)
@@ -22,7 +22,7 @@ Edge SQL         DuckDB-Wasm (browser)               Free (device compute)
 Edge Vector      HNSWlib.js (browser)                Free (device compute)
 Edge Vision      Transformers.js + YOLOv8n ONNX      Free (device compute)
 CI/CD            GitHub Actions                      Free (2000 min/mo)
-Total                                                â‚¹0
+Total                                                0
 ```
 
 ---
@@ -35,7 +35,7 @@ Total                                                â‚¹0
 | **React** | 18.3.1 | UI component framework |
 | **TypeScript** | 5.5.3 | Type safety across entire frontend |
 | **Tailwind CSS** | 3.4.10 | Utility-first styling, dark navy theme |
-| **Leaflet.js** | 1.9.4 | Interactive map â€” dynamic import (no SSR) |
+| **Leaflet.js** | 1.9.4 | Interactive map  dynamic import (no SSR) |
 | **react-leaflet** | 4.2.1 | React wrapper for Leaflet |
 | **@mlc-ai/web-llm** | 0.2.73 | Phi-3 Mini inference in browser via WebGPU/Wasm |
 | **@huggingface/transformers** | 3.0.0 | YOLOv8n ONNX pothole detection + embeddings |
@@ -92,9 +92,9 @@ Total                                                â‚¹0
 
 | Model | Parameters | Size | Runtime | Use Case |
 |---|---|---|---|---|
-| `Groq llama3-70b-8192` | 70B | Cloud | Groq API | Online chatbot â€” max intelligence |
-| `Phi-3-mini-4k-instruct-q4f16_1-MLC` | 3.8B | ~2.2GB | WebGPU | Offline chatbot â€” primary |
-| `gemma-2b-it-q4f16_1-MLC` | 2B | ~1.4GB | WebAssembly | Offline chatbot â€” CPU fallback |
+| `Groq llama3-70b-8192` | 70B | Cloud | Groq API | Online chatbot  max intelligence |
+| `Phi-3-mini-4k-instruct-q4f16_1-MLC` | 3.8B | ~2.2GB | WebGPU | Offline chatbot  primary |
+| `gemma-2b-it-q4f16_1-MLC` | 2B | ~1.4GB | WebAssembly | Offline chatbot  CPU fallback |
 | `sentence-transformers/all-MiniLM-L6-v2` | 22M | ~90MB | Server CPU | Server-side embeddings for ChromaDB |
 | `Xenova/all-MiniLM-L6-v2` | 22M | ~25MB | Browser Wasm | Browser-side embeddings for offline RAG |
 | `Xenova/yolov8n` | ~6M | ~15MB | Browser Wasm | In-browser pothole detection from photos |
