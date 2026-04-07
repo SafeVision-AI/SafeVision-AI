@@ -1,1 +1,90 @@
-# FastAPI application entry point — registers all routers, CORS, lifespan events, and health check endpoint
+﻿from __future__ import annotations
+
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
+from api.v1 import api_router
+from core.config import get_settings
+from core.database import check_database
+from core.redis_client import create_cache
+from models.schemas import HealthResponse
+from services.authority_router import AuthorityRouter
+from services.emergency_locator import EmergencyLocatorService
+from services.geocoding_service import GeocodingService
+from services.overpass_service import OverpassService
+from services.roadwatch_service import RoadWatchService
+from services.routing_service import RoutingService
+
+
+def create_app() -> FastAPI:
+    settings = get_settings()
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        cache = create_cache(settings.redis_url)
+        overpass_service = OverpassService(settings)
+        geocoding_service = GeocodingService(settings, cache)
+        authority_router = AuthorityRouter(settings, overpass_service, cache)
+        emergency_service = EmergencyLocatorService(settings=settings, cache=cache, overpass_service=overpass_service)
+        routing_service = RoutingService(settings=settings, cache=cache)
+        roadwatch_service = RoadWatchService(
+            settings=settings,
+            cache=cache,
+            geocoding_service=geocoding_service,
+            authority_router=authority_router,
+        )
+
+        app.state.cache = cache
+        app.state.overpass_service = overpass_service
+        app.state.geocoding_service = geocoding_service
+        app.state.authority_router = authority_router
+        app.state.emergency_service = emergency_service
+        app.state.routing_service = routing_service
+        app.state.roadwatch_service = roadwatch_service
+
+        try:
+            yield
+        finally:
+            await routing_service.aclose()
+            await geocoding_service.aclose()
+            await overpass_service.aclose()
+            await cache.close()
+
+    app = FastAPI(title=settings.app_name, version=settings.version, lifespan=lifespan)
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=['*'],
+        allow_headers=['*'],
+    )
+    app.mount('/uploads', StaticFiles(directory=settings.upload_dir), name='uploads')
+
+    @app.get('/health', response_model=HealthResponse, tags=['System'])
+    async def health() -> HealthResponse:
+        database_available = await check_database()
+        cache_available = False
+        cache_backend = 'disabled'
+        cache = getattr(app.state, 'cache', None)
+        if cache is not None:
+            cache_available = await cache.ping()
+            cache_backend = getattr(cache, 'backend_name', 'unknown')
+        return HealthResponse(
+            status='ok' if database_available else 'degraded',
+            database_available=database_available,
+            chatbot_ready=settings.chatbot_ready,
+            chatbot_mode=settings.chatbot_mode,
+            cache_available=cache_available,
+            cache_backend=cache_backend,
+            environment=settings.environment,
+            version=settings.version,
+        )
+
+    app.include_router(api_router)
+    return app
+
+
+app = create_app()
