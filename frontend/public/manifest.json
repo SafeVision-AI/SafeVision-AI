@@ -1,1 +1,36 @@
-﻿// PWA manifest — app name SafeVisionAI, shortcuts for Emergency/Chat/Challan, standalone display mode
+{
+  "name": "SafeVisionAI",
+  "short_name": "SafeVisionAI",
+  "description": "AI-Powered Emergency Navigator PWA for Road Safety.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#071325",
+  "theme_color": "#071325",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Emergency Locator",
+      "url": "/locator",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "First Aid",
+      "url": "/first-aid",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
