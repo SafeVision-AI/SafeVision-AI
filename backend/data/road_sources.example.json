@@ -1,0 +1,68 @@
+[
+  {
+    "name": "tn_data_gov_roads",
+    "path": "./datasets/tamil_nadu_roads.geojson",
+    "format": "json",
+    "default_state_code": "TN",
+    "default_project_source": "data.gov.in",
+    "default_data_source_url": "https://www.data.gov.in/"
+  },
+  {
+    "name": "ka_data_gov_roads",
+    "path": "./datasets/karnataka_roads.geojson",
+    "format": "json",
+    "default_state_code": "KA",
+    "default_project_source": "data.gov.in",
+    "default_data_source_url": "https://www.data.gov.in/"
+  },
+  {
+    "name": "mh_state_highways",
+    "path": "./datasets/maharashtra_highways.geojson",
+    "format": "json",
+    "default_state_code": "MH",
+    "default_project_source": "State highways portal",
+    "default_data_source_url": "https://www.maharashtra.gov.in/"
+  },
+  {
+    "name": "pmgsy_tn_rural_roads",
+    "url": "https://pmgsy.dord.gov.in/example-rural-roads-tn.zip",
+    "format": "csv",
+    "extract_member": "roads_tn.csv",
+    "default_state_code": "TN",
+    "default_project_source": "PMGSY/OMMAS",
+    "default_data_source_url": "https://pmgsy.dord.gov.in"
+  },
+  {
+    "name": "pmgsy_ka_rural_roads",
+    "url": "https://pmgsy.dord.gov.in/example-rural-roads-ka.zip",
+    "format": "csv",
+    "extract_member": "roads_ka.csv",
+    "default_state_code": "KA",
+    "default_project_source": "PMGSY/OMMAS",
+    "default_data_source_url": "https://pmgsy.dord.gov.in"
+  },
+  {
+    "name": "nhai_corridors_south",
+    "url": "https://nhai.gov.in/example-highways-south.geojson",
+    "format": "json",
+    "default_state_code": "TN",
+    "default_project_source": "NHAI",
+    "default_data_source_url": "https://nhai.gov.in"
+  },
+  {
+    "name": "nhai_corridors_west",
+    "url": "https://nhai.gov.in/example-highways-west.geojson",
+    "format": "json",
+    "default_state_code": "MH",
+    "default_project_source": "NHAI",
+    "default_data_source_url": "https://nhai.gov.in"
+  },
+  {
+    "name": "urban_local_body_streets",
+    "path": "./datasets/city_corporation_streets.csv",
+    "format": "csv",
+    "default_state_code": "TN",
+    "default_project_source": "Urban local body",
+    "default_data_source_url": "https://www.india.gov.in/"
+  }
+]
