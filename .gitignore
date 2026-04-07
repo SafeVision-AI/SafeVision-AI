@@ -97,6 +97,11 @@ frontend/.npm-cache/
 # Generated local map artifacts
 backend/chennai.json
 backend/data/offline_bundles/
+frontend/public/leaflet/
 
 # TypeScript build cache
 *.tsbuildinfo
+
+# Local prototypes and skill notes
+ui_design/
+SKILL.md
