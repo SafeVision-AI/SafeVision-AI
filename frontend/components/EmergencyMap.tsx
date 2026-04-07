@@ -1,1 +1,57 @@
-﻿// Leaflet map component — dynamic import no-SSR, OSM tiles, color-coded markers, popup with call/directions
+'use client';
+
+import dynamic from 'next/dynamic';
+import { Loader2 } from 'lucide-react';
+
+import type { MapInnerProps } from '@/components/EmergencyMapInner';
+import type { MapLibreCurrentLocation, MapLibreRoute } from '@/components/maps/MapLibreCanvas';
+
+// Load the browser-only map renderer dynamically so SSR stays stable.
+const EmergencyMapInner = dynamic<MapInnerProps>(
+  () => import('@/components/EmergencyMapInner'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full relative isolate rounded-2xl overflow-hidden border border-[var(--outline-variant)] bg-[var(--bg-card)] flex flex-col items-center justify-center gap-3">
+        <Loader2 size={24} className="animate-spin text-[var(--icon-primary)] opacity-50" />
+        <span className="text-xs font-bold uppercase tracking-widest text-[var(--text-secondary)]">
+          Initializing Map Subsystem...
+        </span>
+      </div>
+    ),
+  }
+);
+
+export function EmergencyMap({
+  center,
+  facilities,
+  route = null,
+  alternativeRoutes = [],
+  currentLocation = null,
+  selectedFacilityId = null,
+}: {
+  center: [number, number];
+  facilities: Array<{
+    id: string;
+    name: string;
+    type: string;
+    coords: [number, number] | null;
+    accentColor: string;
+    distance: string;
+  }>;
+  route?: MapLibreRoute | null;
+  alternativeRoutes?: MapLibreRoute[];
+  currentLocation?: MapLibreCurrentLocation | null;
+  selectedFacilityId?: string | null;
+}) {
+  return (
+    <EmergencyMapInner
+      center={center}
+      facilities={facilities}
+      route={route}
+      alternativeRoutes={alternativeRoutes}
+      currentLocation={currentLocation}
+      selectedFacilityId={selectedFacilityId}
+    />
+  );
+}
