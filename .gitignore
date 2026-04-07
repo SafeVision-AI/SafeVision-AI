@@ -1,7 +1,7 @@
-﻿# SafeVisionAI â€” Project-wide .gitignore
+# SafeVisionAI - Project-wide .gitignore
 
 # ============================================================
-# ENVIRONMENT & SECRETS â€” never commit these
+# ENVIRONMENT & SECRETS - never commit these
 # ============================================================
 .env
 .env.local
@@ -28,7 +28,7 @@ dist/
 build/
 .eggs/
 
-# ChromaDB vector store â€” built locally via build_vectorstore.py (never commit ~100MB)
+# ChromaDB - vector store built locally via build_vectorstore.py (never commit ~100MB)
 backend/data/chroma_db/
 
 # Downloaded PDF source documents (too large for git, download manually)
@@ -43,6 +43,8 @@ backend/migrations/versions/*.pyc
 # ============================================================
 node_modules/
 frontend/node_modules/
+.node_modules/
+frontend/.node_modules/
 .next/
 frontend/.next/
 out/
@@ -83,3 +85,18 @@ htmlcov/
 
 # Extracted temp files (used during setup)
 doc_text.txt
+
+# Local debug and CLI tool logs
+frontend/lint_output.txt
+frontend/ts-errors.txt
+frontend/log.txt
+frontend/ls_recursive.txt
+frontend/eslint.json
+frontend/.npm-cache/
+
+# Generated local map artifacts
+backend/chennai.json
+backend/data/offline_bundles/
+
+# TypeScript build cache
+*.tsbuildinfo
