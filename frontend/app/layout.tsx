@@ -1,9 +1,10 @@
-﻿import 'maplibre-gl/dist/maplibre-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ConnectivityProvider } from '@/components/ConnectivityProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { PageShell } from '@/components/PageShell';
+import { TwentyFirstToolbar } from '@21st-extension/toolbar-next';
 
 export const metadata: Metadata = {
   title: 'SafeVisionAI - AI-Powered Road Safety',
@@ -69,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <TwentyFirstToolbar />
         <ThemeProvider>
           <ConnectivityProvider>
             <PageShell>{children}</PageShell>

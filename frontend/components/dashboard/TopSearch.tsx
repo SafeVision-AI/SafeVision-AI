@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, memo } from 'react';
-import { Menu, Mic, MapPin, Moon, Sun, Monitor } from 'lucide-react';
+import Link from 'next/link';
+import { Menu, Mic, MapPin, Moon, Sun, Monitor, Search, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatAccuracyLabel, formatLocationLabel, isApproximateLocation } from '@/lib/location-utils';
 import { useAppStore } from '@/lib/store';
@@ -10,6 +11,8 @@ import { useTheme } from '@/components/ThemeProvider';
 interface TopSearchProps {
   isMapPage?: boolean;
   forceShow?: boolean;
+  showBack?: boolean;
+  backHref?: string;
 }
 
 const MAP_FILTER_CHIPS: Array<{
@@ -27,7 +30,12 @@ const MAP_FILTER_CHIPS: Array<{
   { label: 'Pharmacy', value: 'pharmacy', icon: 'medication', color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10' },
 ];
 
-const TopSearch = memo(function TopSearch({ isMapPage = false, forceShow = false }: TopSearchProps) {
+const TopSearch = memo(function TopSearch({ 
+  isMapPage = false, 
+  forceShow = false,
+  showBack = false,
+  backHref = '/'
+}: TopSearchProps) {
   const { gpsError, gpsLocation, serviceCategory, setServiceCategory, setSystemSidebarOpen } = useAppStore((state) => ({
     gpsError: state.gpsError,
     gpsLocation: state.gpsLocation,
@@ -87,6 +95,12 @@ const TopSearch = memo(function TopSearch({ isMapPage = false, forceShow = false
         {/* Floating Pill Search Bar (Google Maps Style) */}
         <div className={`w-full sm:max-w-md md:max-w-none md:flex-1 lg:flex-none lg:w-full lg:max-w-xl pointer-events-auto flex items-center h-[52px] bg-white/95 dark:bg-[#1a2133]/95 backdrop-blur-2xl rounded-full px-4 transition-all duration-300 border ${isFocused ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]'}`}>
           
+          {showBack && (
+            <Link href={backHref} className="p-2 mr-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all text-slate-700 dark:text-slate-300 lg:hidden group flex items-center justify-center">
+              <ArrowLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+            </Link>
+          )}
+
           <button 
             onClick={() => setSystemSidebarOpen(true)}
             className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all text-slate-700 dark:text-slate-300 lg:hidden mr-1"
