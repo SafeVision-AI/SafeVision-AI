@@ -105,3 +105,6 @@ frontend/public/leaflet/
 # Local prototypes and skill notes
 ui_design/
 SKILL.md
+
+# Frontend uses npm lockfile as source of truth
+frontend/pnpm-lock.yaml
