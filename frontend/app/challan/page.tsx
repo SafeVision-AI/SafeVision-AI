@@ -1,10 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { 
+  Shield, Car, Truck, Bike, Bus, AlertTriangle, 
+  ChevronRight, Scale, History, MapPin, 
+  ArrowRight, Activity, Zap, FileText, Info
+} from 'lucide-react';
 import BottomNav from '@/components/dashboard/BottomNav';
+import TopSearch from '@/components/dashboard/TopSearch';
+import SystemHeader from '@/components/dashboard/SystemHeader';
+import SystemSidebar from '@/components/dashboard/SystemSidebar';
+import { useTheme } from '@/components/ThemeProvider';
 
 const STATES = [
+  'Tamil Nadu (TN)',
   'Delhi (DL)',
   'Maharashtra (MH)',
   'Karnataka (KA)',
@@ -15,179 +26,240 @@ const STATES = [
 const VIOLATIONS = [
   { id: 'speeding', label: 'Speeding (>20km/h Limit)', mva: '§112/183', fine2w: 1000, fine4w: 2000, max: '4000' },
   { id: 'redlight', label: 'Red Light Violation', mva: '§119/177', fine2w: 1000, fine4w: 1000, max: '5000' },
-  { id: 'dui', label: 'Drunk Driving', mva: '§185', fine2w: 10000, fine4w: 10000, max: '25000 + Imprisonment' },
+  { id: 'dui', label: 'Section 185 — Drunk driving', mva: '§185', fine2w: 10000, fine4w: 10000, max: '25000 + Imprisonment', danger: 'Up to 6 months imprisonment' },
   { id: 'nolicense', label: 'Driving Without License', mva: '§3/181', fine2w: 5000, fine4w: 5000, max: '5000 + 3 Months' },
   { id: 'helmet_seatbelt', label: 'No Seatbelt/Helmet', mva: '§129/194D', fine2w: 1000, fine4w: 1000, max: '1000 + Disqualification' },
 ];
 
 const VEHICLE_CLASSES = [
-  { id: '4w', icon: 'directions_car', title: 'LMV', subtitle: 'Light Motor Vehicle' },
-  { id: 'htv', icon: 'local_shipping', title: 'HGV', subtitle: 'Heavy Goods Vehicle' },
-  { id: '2w', icon: 'two_wheeler', title: 'MC', subtitle: 'Motorcycle' },
-  { id: 'lcv', icon: 'airport_shuttle', title: 'COMM', subtitle: 'Passenger Bus' },
+  { id: '2w', icon: <Bike size={28} />, title: '2-Wheeler', subtitle: 'Motorcycle / Scooter' },
+  { id: '4w', icon: <Car size={28} />, title: 'Car/LMV', subtitle: 'Light Motor Vehicle' },
+  { id: 'htv', icon: <Truck size={28} />, title: 'Truck', subtitle: 'Heavy Goods Vehicle' },
+  { id: 'bus', icon: <Bus size={28} />, title: 'Bus/COMM', subtitle: 'Public Transport' },
 ];
 
 export default function ChallanPage() {
-  const [violation, setViolation] = useState(VIOLATIONS[0].id);
+  const { theme } = useTheme();
+  const [violation, setViolation] = useState(VIOLATIONS[2].id); // Default to Drunk Driving per user ref
   const [vehicle, setVehicle] = useState('4w');
   const [jurisdiction, setJurisdiction] = useState(STATES[0]);
+  const [isRepeat, setIsRepeat] = useState(false);
 
   const activeViolation = VIOLATIONS.find(v => v.id === violation) || VIOLATIONS[0];
   
   let baseFine = (vehicle === '2w') ? activeViolation.fine2w : activeViolation.fine4w;
-  if (['lcv', 'htv'].includes(vehicle)) baseFine = Math.round(baseFine * 1.5);
+  if (['htv', 'bus'].includes(vehicle)) baseFine = Math.round(baseFine * 2.5);
+  
+  // Repeat offence logic: doubling the fine per standard MVA 2019 amendments
+  const finalFine = isRepeat ? baseFine * 2 : baseFine;
 
   return (
-    <div className="bg-[#071325] text-[#d7e3fc] min-h-dvh pb-32 font-['Inter'] selection:bg-[#b0c6ff] selection:text-[#001945]">
+    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
+      
+      {/* ── Unified Tactical Navigation Header ── */}
+      <SystemHeader title="Challan Terminal" showBack={false} />
+      
+      <div className="lg:hidden relative z-[100]">
+        <TopSearch isMapPage={false} forceShow={true} showBack={false} />
+      </div>
 
-      {/* ── TopAppBar ── */}
-      <header className="fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 bg-[#071325] shadow-[0_4px_20px_rgba(176,198,255,0.05)]">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="p-2 text-[#b0c6ff] hover:bg-[#2e394d]/50 transition-colors active:scale-95 duration-200 rounded-full flex items-center justify-center">
-            <span className="material-symbols-outlined">arrow_back</span>
-          </Link>
-          <h1 className="text-[#b0c6ff] tracking-tight font-bold text-xl uppercase">Fines & Violations</h1>
-        </div>
-        <button className="p-2 text-[#b0c6ff] hover:bg-[#2e394d]/50 transition-colors active:scale-95 duration-200 rounded-full flex items-center justify-center">
-          <span className="material-symbols-outlined">search</span>
-        </button>
-        <div className="bg-gradient-to-b from-[#142032] to-transparent h-px w-full absolute bottom-0 left-0"></div>
-      </header>
+      <SystemSidebar />
 
-      <main className="pt-24 px-6 max-w-2xl mx-auto space-y-8 relative z-10">
-        {/* Welcome & Context */}
-        <div className="space-y-2">
-          <p className="text-[#c5c6cd] font-bold text-[10px] uppercase tracking-[0.2em]">System Terminal // Calculator</p>
-          <h2 className="text-3xl font-extrabold tracking-tighter text-[#b0c6ff]">Precision Estimation</h2>
-        </div>
-
-        {/* ── Calculator Stepper Card ── */}
-        <section className="bg-[#142032] rounded-lg p-8 space-y-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-[#b0c6ff]/5 blur-[60px] rounded-full -mr-16 -mt-16"></div>
-          
-          {/* Step 1: Violation Type */}
-          <div className="space-y-6 relative z-10">
-            <div className="flex items-center justify-between">
-              <label className="text-[0.6875rem] font-bold text-[#c5c6cd] uppercase tracking-widest">01. Violation Type</label>
-              <span className="bg-[#b0c6ff]/10 text-[#b0c6ff] px-3 py-1 rounded-full text-[10px] font-bold">REQUIRED</span>
+      <main className="flex-1 w-full max-w-7xl mx-auto pt-28 lg:pt-24 pb-32 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start transition-all duration-500">
+        
+        {/* ── Left Column: System Summary & Real-time Quote ── */}
+        <aside className="lg:sticky lg:top-28 flex flex-col gap-8 order-2 lg:order-1 mt-10 lg:mt-0">
+          <section className="flex flex-col gap-2">
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] font-space leading-none">Terminal Active</span>
             </div>
-            <div className="relative group">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b0c6ff] pointer-events-none">
-                <span className="material-symbols-outlined">speed</span>
-              </div>
-              <select 
-                value={violation}
-                onChange={(e) => setViolation(e.target.value)}
-                className="w-full bg-[#030e20] border-none rounded-lg py-4 pl-12 pr-4 text-[#d7e3fc] font-medium appearance-none focus:ring-0 focus:bg-[#2a3549] transition-colors outline-none cursor-pointer"
-              >
-                {VIOLATIONS.map(v => (
-                  <option key={v.id} value={v.id}>{v.label}</option>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#c5c6cd]">
-                <span className="material-symbols-outlined">expand_more</span>
-              </div>
-              <div className="absolute left-0 top-0 h-full w-0.5 bg-[#b0c6ff] rounded-full"></div>
+            <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white uppercase font-space leading-tight">
+              Estimation<br />Terminal
+            </h1>
+          </section>
+
+          {/* ── Big Result Card (The "Star" of the UI) ── */}
+          <motion.section 
+            layout
+            className="relative p-8 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-200/50 dark:shadow-none overflow-hidden group"
+          >
+            {/* Background Glow */}
+            <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-emerald-500/10 blur-[80px] rounded-full group-hover:scale-150 transition-transform duration-700" />
+            
+            <div className="relative z-10 flex flex-col gap-6">
+               <div className="flex flex-col gap-1">
+                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-space">Total Liability</p>
+                 <motion.h2 
+                   key={finalFine}
+                   initial={{ opacity: 0, scale: 0.9 }}
+                   animate={{ opacity: 1, scale: 1 }}
+                   className="text-7xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter"
+                 >
+                   ₹{finalFine.toLocaleString('en-IN')}
+                 </motion.h2>
+               </div>
+
+               <div className="flex flex-col gap-3">
+                 <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                    <Scale size={16} className="text-emerald-500" />
+                    <div className="flex flex-col">
+                      <span className="text-[11px] font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">{activeViolation.mva}</span>
+                      <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">{isRepeat ? 'Repeat Offence (2x)' : 'First Occurrence'}</span>
+                    </div>
+                 </div>
+
+                 <AnimatePresence mode="wait">
+                   {activeViolation.danger && (
+                     <motion.div 
+                       initial={{ opacity: 0, y: 10 }}
+                       animate={{ opacity: 1, y: 0 }}
+                       exit={{ opacity: 0, y: -10 }}
+                       className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20"
+                     >
+                       <AlertTriangle size={12} className="text-red-500" />
+                       <span className="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-wider">{activeViolation.danger}</span>
+                     </motion.div>
+                   )}
+                 </AnimatePresence>
+               </div>
+
+               <button className="w-full h-16 bg-slate-900 dark:bg-emerald-500 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all group/btn">
+                  <span className="text-white dark:text-slate-900 font-black text-sm tracking-[0.2em] uppercase font-space">DETAILED REPORT</span>
+                  <ArrowRight size={18} className="text-white dark:text-slate-900 group-hover/btn:translate-x-1 transition-transform" />
+               </button>
             </div>
+          </motion.section>
+
+          {/* Quick Meta */}
+          <div className="grid grid-cols-2 gap-4">
+             <div className="p-4 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Max Penalty</p>
+                <p className="text-xs font-black text-slate-900 dark:text-white">₹{activeViolation.max}</p>
+             </div>
+             <div className="p-4 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Act Sync</p>
+                <p className="text-xs font-black text-emerald-500">MVA_ACT_2019</p>
+             </div>
           </div>
+        </aside>
 
-          {/* Step 2: Vehicle Class */}
-          <div className="space-y-6 relative z-10">
-            <label className="text-[0.6875rem] font-bold text-[#c5c6cd] uppercase tracking-widest">02. Vehicle Class</label>
-            <div className="grid grid-cols-2 gap-4">
-              {VEHICLE_CLASSES.map(cls => (
+        {/* ── Right Column: Input Portfolio ("Big & Simple") ── */}
+        <div className="flex flex-col gap-10 order-1 lg:order-2">
+           {/* Section 1: Violation */}
+           <section className="flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
+                  <Activity size={14} className="text-emerald-500" />
+                  01. Violation Protocol
+                </h3>
+                <div className="px-3 py-1 rounded-full bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-900 text-[9px] font-black uppercase tracking-widest">
+                  {jurisdiction.split(' ')[0]}
+                </div>
+              </div>
+
+              <div className="relative group">
+                <select 
+                  value={violation}
+                  onChange={(e) => setViolation(e.target.value)}
+                  className="w-full bg-white dark:bg-white/5 border-2 border-slate-200 dark:border-white/10 rounded-3xl p-6 text-lg font-black text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
+                >
+                  {VIOLATIONS.map(v => (
+                    <option key={v.id} value={v.id} className="bg-white dark:bg-[#071325]">{v.label}</option>
+                  ))}
+                </select>
+                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                  <ArrowRight size={24} className="rotate-90" />
+                </div>
+              </div>
+           </section>
+
+           {/* Section 2: Vehicle Selection (The "Big" UI) */}
+           <section className="flex flex-col gap-6">
+              <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
+                <Car size={14} className="text-emerald-500" />
+                02. Vehicle Identification
+              </h3>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                 {VEHICLE_CLASSES.map(cls => (
+                   <button 
+                     key={cls.id}
+                     onClick={() => setVehicle(cls.id)}
+                     className={`flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] border-2 transition-all duration-300 active:scale-95 ${
+                       vehicle === cls.id 
+                        ? 'bg-emerald-500 border-white/20 text-slate-900 shadow-xl shadow-emerald-500/20' 
+                        : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 text-slate-400 hover:border-slate-300 dark:hover:border-white/10'
+                     }`}
+                   >
+                     <div className={`p-4 rounded-2xl ${vehicle === cls.id ? 'bg-white/30' : 'bg-slate-100 dark:bg-white/5'}`}>
+                       {cls.icon}
+                     </div>
+                     <div className="flex flex-col items-center">
+                       <span className={`text-xs font-black uppercase tracking-widest ${vehicle === cls.id ? 'text-slate-900' : 'text-slate-900 dark:text-white'}`}>
+                         {cls.title}
+                       </span>
+                       <span className={`text-[8px] font-bold uppercase mt-1 opacity-60 ${vehicle === cls.id ? 'text-slate-900' : 'text-slate-400'}`}>
+                         {cls.id === 'htv' ? 'Heavy' : cls.id === '2w' ? 'Light' : 'Standard'}
+                       </span>
+                     </div>
+                   </button>
+                 ))}
+              </div>
+           </section>
+
+           {/* Section 3: Parameters & Jurisdiction */}
+           <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex flex-col gap-4">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space">03. Jurisdiction</h3>
+                <div className="relative">
+                  <select 
+                    value={jurisdiction}
+                    onChange={(e) => setJurisdiction(e.target.value)}
+                    className="w-full bg-white dark:bg-white/5 border-2 border-slate-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-bold text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
+                  >
+                    {STATES.map(s => (
+                      <option key={s} value={s} className="bg-white dark:bg-[#071325]">{s}</option>
+                    ))}
+                  </select>
+                  <MapPin size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space">04. History</h3>
                 <button 
-                  key={cls.id}
-                  onClick={() => setVehicle(cls.id)}
-                  className={`flex flex-col items-start gap-4 p-5 rounded-lg transition-all group border-l-2 ${
-                    vehicle === cls.id 
-                      ? 'bg-[#2a3549] border-[#b0c6ff] shadow-[0_0_15px_rgba(176,198,255,0.05)]' 
-                      : 'bg-[#030e20] border-transparent hover:border-[#b0c6ff]/50 hover:bg-[#2a3549]/50'
+                  onClick={() => setIsRepeat(!isRepeat)}
+                  className={`w-full h-[58px] rounded-2xl border-2 flex items-center justify-between px-6 transition-all ${
+                    isRepeat 
+                    ? 'bg-red-500/10 border-red-500/20 text-red-600' 
+                    : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400'
                   }`}
                 >
-                  <span className={`material-symbols-outlined transition-colors ${vehicle === cls.id ? 'text-[#b0c6ff]' : 'text-[#c5c6cd] group-hover:text-[#b0c6ff]/80'}`}>
-                    {cls.icon}
-                  </span>
-                  <div className="text-left">
-                    <p className={`font-bold ${vehicle === cls.id ? 'text-[#b0c6ff]' : 'text-[#d7e3fc]'}`}>{cls.title}</p>
-                    <p className={`text-[10px] uppercase ${vehicle === cls.id ? 'text-[#d7e3fc]/80' : 'text-[#c5c6cd]'}`}>{cls.subtitle}</p>
+                  <span className="text-[10px] font-black uppercase tracking-widest">Repeat Offender?</span>
+                  <div className={`w-10 h-5 rounded-full relative transition-colors ${isRepeat ? 'bg-red-500' : 'bg-slate-200 dark:bg-white/10'}`}>
+                    <motion.div 
+                      animate={{ x: isRepeat ? 22 : 2 }}
+                      className="absolute top-1 w-3 h-3 rounded-full bg-white shadow-sm" 
+                    />
                   </div>
                 </button>
-              ))}
-            </div>
-          </div>
+              </div>
+           </section>
 
-          {/* Step 3: State & Location */}
-          <div className="space-y-6 relative z-10">
-            <div className="flex items-center justify-between">
-              <label className="text-[0.6875rem] font-bold text-[#c5c6cd] uppercase tracking-widest">03. Jurisdiction</label>
-              <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#40e56c]/10 border-none">
-                <span className="w-1.5 h-1.5 bg-[#40e56c] rounded-full animate-pulse"></span>
-                <span className="text-[10px] font-bold text-[#40e56c] uppercase tracking-tight">Active</span>
+           {/* AI Insight Footer */}
+           <div className="p-6 rounded-[2rem] bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 flex gap-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                <Zap size={20} className="text-emerald-500" />
               </div>
-            </div>
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#b0c6ff] pointer-events-none">
-                <span className="material-symbols-outlined">map</span>
+              <div className="flex flex-col gap-1">
+                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">AI Tactical Insight</p>
+                <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
+                  Based on recent MVA amendments, high-risk offences like DUI ({activeViolation.mva}) have immediate license disqualification protocols active in {jurisdiction.split(' ')[0]}.
+                </p>
               </div>
-              <select 
-                value={jurisdiction}
-                onChange={(e) => setJurisdiction(e.target.value)}
-                className="w-full bg-[#030e20] border-none rounded-lg py-4 pl-12 pr-4 text-[#d7e3fc] font-medium appearance-none focus:ring-0 focus:bg-[#2a3549] transition-colors outline-none cursor-pointer"
-              >
-                {STATES.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#c5c6cd]">
-                <span className="material-symbols-outlined">expand_more</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── Result Card: Floating Glassmorphism ── */}
-        {baseFine !== null && (
-          <section className="bg-[#142032]/70 backdrop-blur-md rounded-lg p-8 shadow-[0_0_20px_rgba(176,198,255,0.05)] relative overflow-hidden border-none animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-[#b0c6ff]/10 blur-[80px] rounded-full"></div>
-            
-            <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <div className="space-y-1">
-                <p className="text-[0.6875rem] font-bold text-[#c5c6cd] uppercase tracking-[0.3em]">Estimated Liability</p>
-                <div className="flex items-baseline gap-2">
-                  <h3 className="text-6xl font-black text-white tracking-tighter">
-                    ₹{baseFine.toLocaleString('en-IN')}
-                  </h3>
-                </div>
-                <div className="flex items-center gap-2 mt-2 pt-2">
-                  <span className="bg-[#ed3800] text-white px-2 py-0.5 rounded text-[10px] font-black tracking-tighter">{activeViolation.mva} MVA</span>
-                  <span className="text-[#c5c6cd] text-[10px] font-medium italic">Amended Act 2019</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                <button className="bg-[#b0c6ff] text-[#002d6f] px-8 py-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(176,198,255,0.3)] hover:scale-105 active:scale-95 transition-all">
-                  <span>DETAILED REPORT</span>
-                  <span className="material-symbols-outlined text-sm">receipt_long</span>
-                </button>
-                <button className="bg-[#2a3549]/40 text-[#c5c6cd] px-8 py-3 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-[#2a3549] transition-colors">
-                  Save to History
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-white/5 grid grid-cols-2 gap-4 relative z-10">
-              <div>
-                <p className="text-[9px] uppercase tracking-widest text-[#c5c6cd] mb-1">Max Penalty</p>
-                <p className="text-sm font-bold text-[#ffb4ab]">₹{activeViolation.max}</p>
-              </div>
-              <div>
-                <p className="text-[9px] uppercase tracking-widest text-[#c5c6cd] mb-1">Processing Time</p>
-                <p className="text-sm font-bold text-[#40e56c]">Instant Settlement</p>
-              </div>
-            </div>
-          </section>
-        )}
+           </div>
+        </div>
       </main>
 
       <BottomNav />
