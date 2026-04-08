@@ -1,10 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { useAppStore } from '@/lib/store';
 import { generateSosWhatsAppLink, generateSosSmsLink } from '@/lib/sos-share';
+import TopSearch from '@/components/dashboard/TopSearch';
+import BottomNav from '@/components/dashboard/BottomNav';
+import SystemSidebar from '@/components/dashboard/SystemSidebar';
+import SystemHeader from '@/components/dashboard/SystemHeader';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function EmergencyPage() {
   const { crashDetectionEnabled } = useAppStore();
@@ -72,24 +76,19 @@ export default function EmergencyPage() {
   const smsLink = generateSosSmsLink(null, gpsLoc);
 
   return (
-    <div className="bg-[#071325] text-[#d7e3fc] font-['Inter'] selection:bg-[#ff5545] selection:text-[#5c0002] min-h-dvh pb-32">
-      {/* ── TopAppBar ── */}
-      <nav className="fixed top-0 w-full z-50 bg-[#071325]/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 shadow-[0_0_15px_rgba(230,57,70,0.1)]">
-        <Link href="/" className="flex items-center gap-2 cursor-pointer">
-          <span className="material-symbols-outlined text-[#E63946]">security</span>
-          <span className="font-['Inter'] tracking-tight uppercase text-sm text-[#E63946] font-black tracking-tighter">
-            SAFEVISION AI
-          </span>
-        </Link>
-        <div className="flex items-center gap-3">
-          <span className="text-slate-400 font-['Inter'] font-bold tracking-tight uppercase text-[10px] bg-[#142032] px-2 py-1 rounded">
-            GPS • 100% • LTE
-          </span>
-        </div>
-      </nav>
+    <div className="bg-[#071325] text-[#d7e3fc] font-['Inter'] selection:bg-[#ff5545] selection:text-[#5c0002] min-h-dvh flex flex-col relative overflow-x-hidden transition-colors duration-500">
+      
+      {/* ── Unified Tactical Navigation Header ── */}
+      <SystemHeader title="Emergency SOS Terminal" showBack={false} />
+      
+      <div className="lg:hidden relative z-[100]">
+        <TopSearch isMapPage={false} forceShow={true} showBack={false} />
+      </div>
+
+      <SystemSidebar />
 
       {/* ── Main Tactical HUD Canvas ── */}
-      <main className="pt-24 px-6 max-w-2xl mx-auto space-y-8">
+      <main className="flex-1 w-full max-w-2xl mx-auto pt-28 lg:pt-24 pb-48 px-6 space-y-8 relative z-10 transition-all duration-500">
         
         {/* ── TOP: SOS PULSING BUTTON ── */}
         <section className="flex flex-col items-center justify-center space-y-6">
@@ -249,6 +248,8 @@ export default function EmergencyPage() {
           </div>
         </section>
       </main>
+
+      <BottomNav />
     </div>
   );
 }

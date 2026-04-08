@@ -12,6 +12,7 @@ import { useAppStore } from '@/lib/store';
 import TopSearch from '@/components/dashboard/TopSearch';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
+import SystemHeader from '@/components/dashboard/SystemHeader';
 import PureMultimodalInput, { Attachment } from '@/components/chat/multimodal-ai-chat-input';
 import { useTheme } from '@/components/ThemeProvider';
 import { Sun, Moon, Monitor } from 'lucide-react';
@@ -82,15 +83,11 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    setMounted(true);
     // Initialize welcome message only on client to avoid hydration mismatch
     const welcomeMsg: Message = {
       id: 'ai-1',
@@ -146,10 +143,6 @@ export default function ChatPage() {
     <div className="flex flex-col h-[100dvh] w-full relative overflow-hidden bg-slate-50/50 dark:bg-[#0B1121]">
       {/* ── Background Decorative Lines (SafeVision Pro Aesthetic) ── */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Vertical Framing Lines */}
-        <div className="absolute left-[5%] top-0 w-px h-full bg-slate-200/50 dark:bg-white/5" />
-        <div className="absolute right-[5%] top-0 w-px h-full bg-slate-200/50 dark:bg-white/5" />
-
         {/* Subtle Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
           style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
@@ -159,147 +152,18 @@ export default function ChatPage() {
         <div className="absolute bottom-[-5%] left-[-5%] w-[40%] h-[40%] rounded-full bg-emerald-400/5 dark:bg-emerald-500/10 blur-[100px] hidden dark:block" />
       </div>
 
-      {/* ── System Sidebar (Menu Drawer) ── */}
+      {/* ── Unified Tactical Navigation Header ── */}
+      <SystemHeader title="AI Assistant HUD" showBack={false} />
+
+      <div className="lg:hidden relative z-40">
+        <TopSearch isMapPage={false} forceShow={true} showBack={false} />
+      </div>
+
       <SystemSidebar />
-
-      {/* ── Mobile General UI Elements ── */}
-      <div className="lg:hidden">
-        {/* Top Fade Overlay for smoother scrolling mask like ChatGPT */}
-        <div className="absolute top-0 w-full h-[160px] z-30 bg-gradient-to-b from-slate-50 dark:from-[#0B1121] via-slate-50/80 dark:via-[#0B1121]/80 to-transparent pointer-events-none" />
-
-        <div className="relative z-40">
-          <TopSearch />
-        </div>
-        <BottomNav />
-
-        {/* Fixed Mobile Page Header (With Online/Offline Toggle) */}
-        <div className="absolute top-[84px] w-full z-40 px-5 flex items-center justify-between pointer-events-none hide-on-short-screen">
-          <h2 className="text-slate-800 dark:text-slate-200 font-extrabold tracking-tight text-lg drop-shadow-sm">SafeVision AI</h2>
-          <div className="flex bg-white/90 dark:bg-[#1a2133]/90 rounded-xl p-1 border border-slate-200 dark:border-white/5 shadow-sm pointer-events-auto backdrop-blur-md">
-            <button
-              onClick={() => setIsOnline(true)}
-              className={`px-3 py-1 text-xs rounded-lg font-bold transition-all duration-200 ${isOnline ? 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-            >
-              Online
-            </button>
-            <button
-              onClick={() => setIsOnline(false)}
-              className={`px-3 py-1 text-xs rounded-lg font-bold transition-all duration-200 ${!isOnline ? 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-            >
-              Offline
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Global Fixed SOS Button (Positioned to avoid header in landscape) */}
-      <div className="fixed right-4 sm:right-6 bottom-[110px] sm:bottom-[120px] lg:bottom-12 z-[70] pointer-events-auto">
-        <Link href="/sos">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.8 }}
-            onClick={() => {
-              try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { }
-            }}
-            className="relative w-14 h-14 sm:w-16 sm:h-16 bg-[#ff5545] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,85,69,0.4)] group overflow-hidden"
-          >
-            <motion.div
-              animate={{ scale: [1, 2, 2.5], opacity: [0.5, 0.2, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full border-2 border-white/30"
-            />
-            <motion.div
-              animate={{ scale: [1, 1.8, 2], opacity: [0.3, 0.1, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeOut", delay: 0.5 }}
-              className="absolute inset-0 rounded-full border-2 border-white/20"
-            />
-            <span className="text-white text-base sm:text-lg font-black tracking-[0.1em] relative z-10 drop-shadow-md">
-              SOS
-            </span>
-          </motion.button>
-        </Link>
-      </div>
-
-      {/* ── Refined System Header ── */}
-      <header className="hidden lg:flex sticky top-0 z-50 w-full bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-2xl border-b border-slate-200 dark:border-white/5 shadow-sm px-4 sm:px-6 h-16 sm:h-18 items-center justify-between shrink-0 transition-colors duration-500">
-        <div className="flex items-center gap-3 sm:gap-4 flex-1">
-          {/* Menu Trigger (Mobile only, replaces it being hidden in search) */}
-          <button
-            onClick={() => setSystemSidebarOpen(true)}
-            className="sm:hidden p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/5 text-slate-600 dark:text-slate-400 transition-colors active:scale-95 duration-200"
-          >
-            <Menu size={20} />
-          </button>
-
-          <Link href="/" className="hidden sm:flex text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors active:scale-95 duration-200 p-2 rounded-full items-center justify-center">
-            <ArrowLeft size={20} />
-          </Link>
-          <div className="flex flex-col">
-            <h1 className="text-slate-800 dark:text-slate-200 font-black tracking-tight text-sm sm:text-base leading-tight font-space uppercase">SafeVision AI</h1>
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
-              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[8px] sm:text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Sentinel Active</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop/Tablet Search Bar (Google Maps Style) */}
-        <div className="flex-1 max-w-md mx-8 hidden lg:flex h-10 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-4 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(59,130,246,0.15)] focus-within:bg-white dark:focus-within:bg-[#1f283d]">
-          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
-          <input
-            type="text"
-            placeholder="Ask Maps or Search"
-            className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 px-3 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-500 font-medium h-full"
-          />
-          <button className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 dark:text-slate-500 transition-colors">
-            <Mic className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-3 min-w-[240px] justify-end">
-          {/* Desktop Online/Offline Toggle */}
-          <div className="flex bg-white dark:bg-[#1a2133] rounded-xl p-1 border border-slate-200 dark:border-white/5 shadow-sm pointer-events-auto backdrop-blur-md">
-            <button
-              onClick={() => setIsOnline(true)}
-              className={`px-3 py-1 text-[11px] sm:text-xs rounded-lg font-bold transition-all duration-200 ${isOnline ? 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-            >
-              Online
-            </button>
-            <button
-              onClick={() => setIsOnline(false)}
-              className={`px-3 py-1 text-[11px] sm:text-xs rounded-lg font-bold transition-all duration-200 ${!isOnline ? 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
-            >
-              Offline
-            </button>
-          </div>
-
-          {/* New Desktop Theme Switcher */}
-          {mounted && (
-            <div className="flex items-center gap-1 bg-white dark:bg-[#1a2133] rounded-xl p-1 border border-slate-200 dark:border-white/5 shadow-sm">
-              <button
-                onClick={() => setTheme('light')}
-                className={`p-1.5 rounded-lg transition-all ${theme === 'light' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-              >
-                <Sun size={14} />
-              </button>
-              <button
-                onClick={() => setTheme('dark')}
-                className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-              >
-                <Moon size={14} />
-              </button>
-            </div>
-          )}
-
-          <div className="hidden xl:flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-500/20">
-            <ShieldCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
-            <span className="text-[10px] uppercase tracking-widest font-bold text-emerald-700 dark:text-emerald-400">Secure</span>
-          </div>
-        </div>
-      </header>
+      <BottomNav />
 
       {/* ── Chat Canvas ── */}
-      <main ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-6 overflow-x-hidden pt-[132px] lg:pt-24 pb-48 lg:pb-36 flex flex-col max-w-4xl mx-auto w-full relative z-10 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <main ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-6 overflow-x-hidden pt-28 lg:pt-24 pb-48 lg:pb-36 flex flex-col max-w-4xl mx-auto w-full relative z-10 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="space-y-8 flex flex-col w-full pb-8">
           <AnimatePresence initial={false}>
             {messages.map((msg) => {

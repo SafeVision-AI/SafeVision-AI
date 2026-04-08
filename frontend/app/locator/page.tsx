@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -29,6 +29,7 @@ import BottomNav from '@/components/dashboard/BottomNav';
 import DashboardMapBootstrap from '@/components/dashboard/DashboardMapBootstrap';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import TopSearch from '@/components/dashboard/TopSearch';
+import SystemHeader from '@/components/dashboard/SystemHeader';
 import { fetchRoutePreview, RouteOption, RoutePreviewResponse } from '@/lib/api';
 import { formatLocationSubtitle } from '@/lib/location-utils';
 import { FALLBACK_MAP_CENTER } from '@/lib/map-defaults';
@@ -487,19 +488,22 @@ function MobileLocator({
 
   return (
     <div className="min-h-dvh pb-48 bg-slate-50 dark:bg-[#0B1121] text-slate-900 dark:text-[#d7e3fc] font-['Inter'] selection:bg-blue-500/30 relative overflow-x-hidden w-full">
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-40 dark:opacity-100">
-        <div className="absolute left-[5%] top-0 w-px h-full bg-slate-200 dark:bg-white/5" />
-        <div className="absolute right-[5%] top-0 w-px h-full bg-slate-200 dark:bg-white/5" />
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Subtle Grid Pattern */}
         <div
           className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
           style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }}
         />
       </div>
 
-      <TopSearch isMapPage={true} />
+      <SystemHeader title="Emergency Resource Dispatch" showBack={false} />
+      
+      <div className="lg:hidden relative z-[100]">
+        <TopSearch isMapPage={true} forceShow={true} showBack={false} />
+      </div>
       <BottomNav />
 
-      <div className="pt-[84px] px-5 flex items-center justify-between relative z-10 hide-on-short-screen">
+      <div className="pt-24 lg:pt-0 px-5 flex items-center justify-between relative z-10 hide-on-short-screen">
         <div>
           <h1 className="text-slate-900 dark:text-slate-100 font-black tracking-tight text-xl font-space uppercase">
             Emergency Locator
@@ -772,78 +776,11 @@ function DesktopLocator({
 
   return (
     <div className="w-full h-dvh bg-slate-50 dark:bg-[#0B1121] text-slate-900 dark:text-[#dae6ff] font-['Inter'] relative overflow-hidden flex flex-col">
-      <header className="absolute top-0 w-full z-50 bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 shadow-sm flex items-center justify-between px-6 h-16">
-        <div className="flex items-center gap-4 min-w-[240px]">
-          <Link href="/" className="text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors active:scale-95 duration-200 p-2 rounded-full flex items-center justify-center">
-            <ArrowLeft size={20} />
-          </Link>
-          <div className="flex flex-col">
-            <h1 className="text-slate-800 dark:text-slate-200 font-black tracking-tight text-base leading-tight font-space uppercase">
-              SafeVision AI
-            </h1>
-            <span className="text-[10px] text-blue-600 dark:text-blue-400 font-black tracking-[0.2em] uppercase opacity-90">
-              Locator Subsystem
-            </span>
-          </div>
-        </div>
+      <SystemHeader title="Emergency Resource Dispatch" showBack={false} />
 
-        <div className="flex-1 max-w-md mx-8 flex h-10 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-2 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(59,130,246,0.15)] focus-within:bg-white dark:focus-within:bg-[#1f283d]">
-          <button
-            onClick={() => setSystemSidebarOpen(true)}
-            className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 transition-colors mr-1"
-            title="Global Navigation"
-          >
-            <Menu size={18} />
-          </button>
-
-          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
-          <input
-            type="text"
-            placeholder="Search priority facilities..."
-            className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 px-2 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-500 font-medium h-full"
-          />
-          <button className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 dark:text-slate-500 transition-colors">
-            <Mic className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-4 min-w-[200px] lg:min-w-[240px] justify-end">
-          <div className="flex items-center gap-2.5 bg-slate-100 dark:bg-white/5 px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 shrink-0">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <div className="flex flex-col">
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-0.5">Vector Origin</span>
-              <span className="text-[11px] font-bold text-slate-700 dark:text-blue-300 line-clamp-1">{address}</span>
-              <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500">{coverageSummary}</span>
-            </div>
-          </div>
-
-          {mounted && (
-            <div className="flex bg-white dark:bg-[#1a2133] rounded-xl p-1 border border-slate-200 dark:border-white/5 shadow-sm ml-2">
-              <button
-                onClick={() => setTheme('light')}
-                className={`p-1.5 rounded-lg transition-all ${theme === 'light' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-              >
-                <Sun size={14} />
-              </button>
-              <button
-                onClick={() => setTheme('dark')}
-                className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-              >
-                <Moon size={14} />
-              </button>
-            </div>
-          )}
-
-          <div className="hidden xl:flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-500/20 shrink-0">
-            <ShieldCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
-            <span className="text-[10px] uppercase tracking-widest font-black text-emerald-700 dark:text-emerald-400">Secure</span>
-          </div>
-        </div>
-      </header>
-
-      <main className="flex-1 flex w-full relative z-0 overflow-hidden mt-16">
+      <main className="flex-1 flex w-full relative z-0 overflow-hidden lg:mt-0">
         <section className="flex-1 h-full relative overflow-hidden bg-slate-200 dark:bg-[#061327] border-r border-slate-200 dark:border-white/5">
-          <div className="absolute top-6 left-6 right-6 z-20 flex justify-center">
+          <div className="absolute top-20 left-6 right-6 z-20 flex justify-center">
             <div className="flex gap-1 bg-white/90 dark:bg-[#071325]/80 backdrop-blur-2xl p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-x-auto [scrollbar-width:none]">
               {FILTER_CHIPS.map((chip) => (
                 <button

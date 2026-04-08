@@ -22,6 +22,7 @@ import {
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import TopSearch from '@/components/dashboard/TopSearch';
+import SystemHeader from '@/components/dashboard/SystemHeader';
 import HazardViewfinder from '@/components/report/HazardViewfinder';
 import {
   type AuthorityPreviewResponse,
@@ -267,7 +268,6 @@ export default function ReportPage() {
   return (
     <div className="relative min-h-dvh overflow-x-hidden bg-slate-50 text-slate-900 dark:bg-[#020817] dark:text-[#d7e3fc]">
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         <div className="absolute right-[-10%] top-[-12%] hidden h-[38rem] w-[38rem] rounded-full bg-cyan-500/10 blur-[150px] dark:block" />
         <div className="absolute left-[22%] top-[4%] hidden h-[20rem] w-[20rem] rounded-full bg-violet-500/8 blur-[120px] dark:block" />
         <div className="absolute bottom-[-16%] left-[-8%] hidden h-[28rem] w-[28rem] rounded-full bg-blue-500/12 blur-[140px] dark:block" />
@@ -275,14 +275,14 @@ export default function ReportPage() {
 
       <SystemSidebar />
 
-      {/* ── Top Search Header (Floating Pill) ── */}
-      <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none">
-        <div className="pointer-events-auto">
-          <TopSearch isMapPage={false} forceShow={true} />
-        </div>
+      {/* ── Unified Tactical Navigation Header ── */}
+      <SystemHeader title="Hazard Dispatch Terminal" showBack={false} />
+      
+      <div className="lg:hidden relative z-[100]">
+        <TopSearch isMapPage={false} forceShow={true} showBack={false} />
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-32 pt-28 sm:px-6 lg:px-8 lg:pb-10">
+      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-32 pt-28 lg:pt-24 sm:px-6 lg:px-8 lg:pb-10">
         
         {/* ── Dispatch Hero Section ── */}
         <section className="mt-4 flex flex-col gap-2">

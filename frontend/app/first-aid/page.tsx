@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/components/ThemeProvider';
 import TopSearch from '@/components/dashboard/TopSearch';
+import SystemHeader from '@/components/dashboard/SystemHeader';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import { useAppStore } from '@/lib/store';
@@ -225,63 +226,11 @@ export default function FirstAidPage() {
 
   return (
     <div className="relative w-full h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-hidden flex flex-col">
-      {/* ── Refined System Header (Desktop/Tablet) ── */}
-      <header className="hidden lg:flex sticky top-0 z-50 w-full bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-2xl border-b border-slate-200 dark:border-white/5 shadow-sm px-4 sm:px-6 h-16 sm:h-18 items-center justify-between shrink-0 transition-colors duration-500">
-        <div className="flex items-center gap-3 sm:gap-4 flex-1">
-          <Link href="/" className="text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 transition-colors active:scale-95 duration-200 p-2 rounded-full flex items-center justify-center">
-            <ArrowLeft size={20} />
-          </Link>
-          <div className="flex flex-col">
-            <h1 className="text-slate-800 dark:text-slate-200 font-black tracking-tight text-sm sm:text-base leading-tight font-space uppercase">SafeVision AI</h1>
-            <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
-              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[8px] sm:text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Sentinel Active</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop/Tablet Search Bar */}
-        <div className="flex-1 max-w-md mx-8 hidden lg:flex h-10 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-4 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(59,130,246,0.15)] focus-within:bg-white dark:focus-within:bg-[#1f283d]">
-          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
-          <input
-            type="text"
-            placeholder="Search Protocols..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 px-3 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-500 font-medium h-full"
-          />
-          <Mic className="w-4 h-4 text-slate-400 dark:text-slate-500" />
-        </div>
-
-        <div className="flex items-center gap-3 min-w-[240px] justify-end">
-          {/* Desktop Theme Switcher */}
-          {mounted && (
-            <div className="flex items-center gap-1 bg-white dark:bg-[#1a2133] rounded-xl p-1 border border-slate-200 dark:border-white/5 shadow-sm">
-              <button 
-                onClick={() => setTheme('light')}
-                className={`p-1.5 rounded-lg transition-all ${theme === 'light' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-              >
-                <Sun size={14} />
-              </button>
-              <button 
-                onClick={() => setTheme('dark')}
-                className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
-              >
-                <Moon size={14} />
-              </button>
-            </div>
-          )}
-
-          <div className="hidden lg:flex items-center gap-2 bg-emerald-50 dark:bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-200 dark:border-emerald-500/20">
-            <ShieldCheck size={14} className="text-emerald-600 dark:text-emerald-400" />
-            <span className="text-[10px] uppercase tracking-widest font-bold text-emerald-700 dark:text-emerald-400">Secure</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Mobile Top Search (Preserved) */}
-      <div className="lg:hidden">
-        <TopSearch isMapPage={false} />
+      {/* ── Unified Tactical Navigation Header ── */}
+      <SystemHeader title="First Aid Dispatch HUD" showBack={false} />
+      
+      <div className="lg:hidden relative z-[100]">
+        <TopSearch isMapPage={false} forceShow={true} showBack={false} />
       </div>
 
       <SystemSidebar />

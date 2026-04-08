@@ -12,6 +12,7 @@ import { useTheme } from '@/components/ThemeProvider';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import TopSearch from '@/components/dashboard/TopSearch';
+import SystemHeader from '@/components/dashboard/SystemHeader';
 
 const CATEGORIES = ['All', 'Medical', 'Fire', 'Accident', 'Criminal'] as const;
 type Category = typeof CATEGORIES[number];
@@ -131,17 +132,17 @@ export default function EmergencyProtocolsPage() {
   return (
     <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500">
       
-      {/* ── Top Search Header (Floating Pill) ── */}
-      <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none">
-        <div className="pointer-events-auto">
-          <TopSearch isMapPage={false} forceShow={true} />
-        </div>
+      {/* ── Unified Tactical Navigation Header ── */}
+      <SystemHeader title="Emergency Protocol Terminal" showBack={false} />
+      
+      <div className="lg:hidden relative z-[100]">
+        <TopSearch isMapPage={false} forceShow={true} showBack={false} />
       </div>
 
       <SystemSidebar />
 
       {/* ── Main Protocol Hub ── */}
-      <main className="flex-1 w-full max-w-7xl mx-auto pt-28 pb-32 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start transition-all duration-500">
+      <main className="flex-1 w-full max-w-7xl mx-auto pt-28 lg:pt-24 pb-32 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start transition-all duration-500">
         
         {/* ── Left Column: Tactical Control & SOS (Sticky) ── */}
         <aside className="lg:sticky lg:top-28 flex flex-col gap-8">
