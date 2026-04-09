@@ -1,0 +1,1 @@
+# Sentence-transformers embedding wrapper

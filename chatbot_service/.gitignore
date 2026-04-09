@@ -1,0 +1,86 @@
+# SafeVisionAI chatbot service- Project-wide .gitignore
+
+# ============================================================
+# ENVIRONMENT & SECRETS - never commit these
+# ============================================================
+.env
+.env.local
+.env.production
+.env.*.local
+backend/.env
+
+# ============================================================
+# PYTHON / BACKEND
+# ============================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ChromaDB vector store â€” built locally via build_vectorstore.py (never commit ~100MB)
+backend/data/chroma_db/
+
+# Downloaded PDF source documents (too large for git, download manually)
+backend/data/*.pdf
+backend/data/state_amendments/*.pdf
+
+# Alembic temp files
+backend/migrations/versions/*.pyc
+
+# ============================================================
+# NODE / FRONTEND
+# ============================================================
+node_modules/
+frontend/node_modules/
+.node_modules/
+frontend/.node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+
+# Next.js build output
+frontend/.next/static/
+frontend/public/sw.js
+frontend/public/workbox-*.js
+frontend/public/worker-*.js
+frontend/public/fallback-*.js
+
+# Generated PWA cache files
+frontend/public/sw.js.map
+
+# ============================================================
+# EDITORS & OS
+# ============================================================
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*.orig
+
+# ============================================================
+# MISC
+# ============================================================
+*.log
+*.tmp
+coverage/
+.nyc_output/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+
+# Extracted temp files (used during setup)
+doc_text.txt

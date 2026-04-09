@@ -1,0 +1,1 @@
+# TypedDict for agent state
