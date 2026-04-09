@@ -1,0 +1,528 @@
+
+IIT MADRAS  ·  ROAD SAFETY HACKATHON 2026
+
+
+
+RoadSoS
+AI Chatbot — Complete End-to-End Guide
+Architecture  ·  Real-Time Data  ·  Fine-Tuning  ·  Tools  ·  Voice  ·  Agents  ·  Deployment
+
+
+1. THE BIG QUESTION — FINE-TUNING OR RAG OR AGENT?
+This is the most important architectural decision for the chatbot. Most teams immediately think fine-tuning. That is almost always the wrong choice. This section explains why, and what the right approach is for RoadSoS.
+
+1.1 What Fine-Tuning Actually Is
+Fine-tuning means taking a pre-trained language model and training it further on your own dataset. The model's weights are updated. It becomes permanently better at your specific task. This sounds ideal — until you understand the tradeoffs.
+
+⚠️  Fine-tuning changes what the model has memorized. It does NOT give the model access to live data. A fine-tuned model trained on Motor Vehicles Act 2019 data will not know about 2024 state amendments unless you fine-tune it again. This makes fine-tuning a poor choice for any data that changes over time.
+
+Fine-Tuning — When It Actually Makes Sense
+The data is completely static and will NEVER change — for example, fixed grammar patterns or a closed vocabulary
+You need the model to output in a very specific format every single time — structured JSON, a fixed template
+You have at least 1000 high-quality question-answer pairs to train on
+You have GPU compute to run the training — at minimum an A100 or equivalent (costs money)
+You can afford to re-train every time the underlying data changes
+
+Fine-Tuning — Why It Is Wrong for RoadSoS
+Motor Vehicles Act fines change — state governments issue new compounding notifications regularly
+OSM hospital and road data updates daily — fine-tuned weights cannot reflect this
+You have 9 team members and zero GPU budget — fine-tuning Llama-3 8B requires hours on an A100
+RAG gives better legal accuracy than fine-tuning because it quotes the actual document, not memorized text
+If you fine-tune on wrong data, the model confidently gives wrong answers. RAG fails gracefully — it says it cannot find the information
+
+🏆  The verdict: Do NOT fine-tune for RoadSoS. Use RAG + Agent architecture. This is what production legal AI systems (Harvey, Casetext) use. It is faster to build, cheaper to run, and more accurate on factual queries.
+
+1.2 RAG — What It Is and Why It Works
+RAG stands for Retrieval Augmented Generation. Instead of the model memorizing facts, you store facts in a searchable database. When the user asks a question, you find the relevant facts, put them in front of the model, and ask the model to answer using only those facts. The section number appears in the answer because the section number is in the retrieved text — not because the model memorized it.
+
+
+1.3 Agent Architecture — The Right Approach for Real-Time
+An agent is a chatbot that does not just answer — it takes actions. When you ask an agent 'nearest hospital', it does not just respond from memory. It calls your emergency API, gets live data, and reports back. This is the key difference between a chatbot and an agent.
+
+💡  For RoadSoS, the chatbot must be an Agent because it needs to call the emergency services API, query real-time road data, and trigger SOS actions. A pure RAG chatbot cannot do this. The architecture is: Agent brain (Groq llama3-70b) + RAG tools (legal documents) + API tools (live emergency data) + Action tools (report submission, SOS trigger).
+
+2. REAL-TIME DATA — HOW THE CHATBOT STAYS CURRENT
+This is the biggest concern bro — how does the chatbot know about what is happening on roads right now? How does it know about a road closure, a new pothole report, or an updated traffic fine? This section explains every layer of real-time data in the system.
+
+2.1 The Four Types of Data the Chatbot Needs
+
+2.2 How Real-Time Context Enters Every Chatbot Message
+Every message the user sends to the chatbot is enriched with real-time context before it reaches the LLM. This is not fine-tuning — it is context injection. The model sees fresh data on every single request.
+
+What Gets Injected Into Every Chat Request
+User GPS coordinates (lat, lon) — from navigator.geolocation, updated every 30 seconds while the app is open.
+Reverse-geocoded address — Tambaram, Chennai, Tamil Nadu — so the model can name the location in responses.
+Nearest 3 hospitals, 2 police stations, 1 ambulance station — from your PostGIS emergency_services query, fetched fresh on every chat session open.
+Recent road issues within 5km — from your road_issues PostgreSQL table, filtered to last 30 days. This includes potholes and issues other users reported.
+Current detected intent from the previous message — so the model has conversational continuity.
+Session memory — last 6 conversation turns from Redis.
+
+⚡  REAL-TIME: The chatbot does not know about 'what just happened on the road' from some external news source. It knows because YOUR users are reporting road issues in real-time via RoadWatch, and those reports go straight into your PostgreSQL database, which the chatbot queries on every message. Your own users make the chatbot smarter in real-time.
+
+2.3 WebSocket — How Map Changes Reach the Chatbot Live
+When a user is looking at the emergency map and something changes — another user reports a road closure nearby, a new hospital marker appears, or a community incident is flagged — the chatbot should be aware of this context. WebSocket enables bidirectional real-time communication between the browser and server.
+
+The Real-Time Update Flow
+User A reports a road pothole via RoadWatch. The report is saved to PostgreSQL road_issues table.
+PostgreSQL NOTIFY trigger fires, publishing the new record to a Redis Pub/Sub channel.
+FastAPI WebSocket endpoint subscribed to that channel receives the notification.
+WebSocket pushes the new road issue to all connected clients in the same geographic area (within 5km).
+The frontend updates the map layer to show the new pothole marker in real-time.
+If User B is actively chatting, the chat context is refreshed to include this new road issue.
+Next time User B sends a message, the injected context includes: 'Warning: 2 new road issues reported within 3km in the last hour'.
+
+2.4 Live Emergency Service Validation
+Overpass API returns OpenStreetMap data which is community-maintained and typically 12-24 hours behind real-world changes. For emergency services like hospitals, this is acceptable — hospitals do not close and reopen daily. For more dynamic data, the strategy is different.
+
+Data Freshness Strategy by Category
+💡  Add a 'Is this information correct?' button on every service card. When users tap No, it triggers a flag in the database. If 3 flags are received for the same service within 30 days, it is automatically removed from results and queued for manual verification. This crowdsourced validation is more effective than any automated approach.
+
+2.5 Traffic Law Updates — Handling Regulation Changes
+When the government issues a new gazette notification changing fine amounts or traffic rules, the chatbot must reflect this. The RAG approach makes this straightforward — you add the new document to ChromaDB and the chatbot immediately starts using the new information. No retraining required.
+
+Regulation Update Process
+Monitor MoRTH website (morth.nic.in) and state transport portals for new notifications. Assign this to one team member as a monthly task.
+Download the new gazette PDF. Add it to the data/ directory on the server.
+Run build_vectorstore.py with the force_rebuild=True flag. This re-indexes all documents including the new one. Takes 5-10 minutes.
+The FastAPI server automatically reloads the ChromaDB collection on next startup, or an admin endpoint triggers a reload without restart.
+Also update violations_seed.csv with the new fine amounts and re-run seed_violations.py.
+Test by asking the chatbot the specific changed query. Verify it cites the new document.
+
+🎯  IDEA: Build an admin page (password protected) that shows the current ChromaDB document count, the date each document was indexed, and has a one-click 'Add new regulation PDF' button. This makes regulation updates a 2-minute task instead of a server SSH session.
+
+3. TOOLS AND PLATFORMS — WHAT TO USE AND WHY
+You asked about 21st.dev, GitHub models, Hugging Face, and other platforms. This section covers every option honestly — what it is good for, what it is not good for, and the exact recommendation for RoadSoS.
+
+3.1 21st.dev — What It Is and Whether to Use It
+21st.dev is a platform for building AI-powered UI components. It provides pre-built React and Next.js component templates that include AI interactions baked in. Think of it as Shadcn/UI but with AI hooks built in. It generates production-quality component code with AI input/output patterns already wired.
+
+✅  ADVICE: Use 21st.dev specifically for the frontend chat component — ChatInterface.tsx, VoiceInput.tsx, ModelLoader.tsx. Copy the component templates, then wire them to your own FastAPI backend. Do not use 21st.dev for anything backend — it is a UI tool only.
+
+3.2 LangChain — The Core Agent Framework
+LangChain is the orchestration layer that connects your LLM to your tools, databases, and APIs. It is the most mature and production-tested agent framework available. The LangChain team specifically built it for RAG pipelines and agent architectures like what RoadSoS needs.
+
+What LangChain Provides for RoadSoS
+ConversationalRetrievalChain — the RAG pipeline that retrieves Motor Vehicles Act sections and injects them into every chat message
+Tool calling — define custom tools (call_emergency_api, calculate_fine, submit_road_report) that the LLM can decide to invoke based on user intent
+Memory — ConversationBufferWindowMemory stores the last 6 turns in Redis automatically
+Agent executor — orchestrates: receive message → detect intent → select tools → call tools → synthesize response → return to user
+LangChain Hub — pre-built prompt templates for legal Q&A, emergency response, and multilingual assistants
+
+💡  LangChain has two versions: the original LangChain and LangGraph. For RoadSoS, use LangGraph. It provides a state machine approach to agent orchestration — each step in the conversation is a node in a graph. This makes it much easier to debug, test, and extend compared to the original chain-based approach.
+
+3.3 Model Providers — Groq vs Others
+You asked about API providers. Here is a complete comparison of every major provider that matters for RoadSoS.
+
+
+✅  ADVICE: Primary: Groq llama3-70b-8192 for all online responses. It is the fastest free LLM API in the world — 300+ tokens per second. Backup: Google Gemini 1.5 Flash when Groq rate limit is hit (6000 tokens/min). The LangChain router can automatically switch between providers when one hits its rate limit. Offline: WebLLM Phi-3 Mini in browser. This three-layer setup gives you zero downtime and zero cost.
+
+3.4 Hugging Face — What to Use It For
+Hugging Face is a model hub, dataset hub, and inference platform. For RoadSoS, it serves two specific and important purposes.
+
+Hugging Face Use Cases for RoadSoS
+sentence-transformers/all-MiniLM-L6-v2 — download this model for local CPU embeddings. It runs on your server without any API calls. This is what indexes your documents into ChromaDB.
+Xenova/all-MiniLM-L6-v2 — the same model but compiled for Transformers.js. This runs in the browser for offline semantic search in the offline RAG pipeline.
+mlc-ai/Phi-3-mini-4k-instruct-q4f16_1-MLC — WebLLM's Phi-3 model weights hosted on Hugging Face Hub. Downloaded by WebLLM automatically.
+Datasets — search 'Indian road safety' or 'Motor Vehicles Act QA' on Hugging Face Datasets to find pre-built training data if you ever do decide to fine-tune.
+Spaces — deploy a demo of your chatbot on Hugging Face Spaces (free) for jury evaluation if needed as a backup URL.
+
+💡  Do NOT use Hugging Face Inference API as your main chatbot backend. It is slow (3-5 seconds per response) and limited (29,000 tokens/day free). Use it only for testing new models before deciding to use them in production.
+
+3.5 GitHub Models — The Hidden Gem for Students
+GitHub Models is Microsoft's free LLM API available to GitHub users. As of 2024-2025, it provides free access to GPT-4o, Llama-3, Phi-3, Mistral, and others. For a student hackathon team with a GitHub account, this is an excellent backup provider.
+
+Access: GitHub.com → Marketplace → Models. Available to all GitHub users with a verified account.
+Models available: GPT-4o mini (free, fast), Llama-3.1 70B (free), Phi-3.5 Mini (free), Mistral Large (free)
+Rate limits: 15 requests/min, 150 requests/day for most models in the free tier
+API format: OpenAI-compatible API — your LangChain code works without changes, just swap the endpoint URL
+Best use: Configure as a third fallback after Groq and Gemini. Three free providers means virtually zero downtime.
+
+3.6 The Provider Routing Strategy
+The right approach is not to pick one provider — it is to build a fallback chain that tries providers in order. LangChain makes this easy with its LLM routing feature.
+
+Primary attempt: Groq llama3-70b-8192. If response arrives within 5 seconds, use it.
+First fallback: If Groq returns a rate limit error (429), switch to Google Gemini 1.5 Flash automatically.
+Second fallback: If Gemini also fails (rare), switch to GitHub Models Llama-3.1 70B.
+Offline fallback: If all APIs fail (no internet), switch to WebLLM Phi-3 Mini running in the browser.
+
+✅  ADVICE: Build a simple provider health check that runs every 60 seconds. Store the results in Redis. When the chatbot service starts, it reads from Redis to know which providers are currently healthy. This prevents wasted requests to a provider that is down.
+
+4. AGENT ARCHITECTURE — HOW THE CHATBOT BECOMES AN AGENT
+The difference between a chatbot and an agent is tool use. An agent does not just generate text — it decides which tools to call, calls them, gets results, and synthesizes a final response. This is what makes RoadSoS chatbot truly useful in an emergency.
+
+4.1 The Nine Tools Your Agent Has
+Every capability the chatbot needs is defined as a tool. LangChain's agent executor decides which tools to call based on the user's message and intent. Tools can be called in parallel when multiple are needed.
+
+
+4.2 The Agent Decision Loop — Step by Step
+This is the exact sequence of operations from the moment a user sends a message to when they see the response.
+
+Message arrives at FastAPI POST /api/v1/chat/message. Session ID, GPS coordinates, and user message are extracted.
+Redis is checked for conversation history for this session ID. Last 6 turns are loaded.
+The intent detector runs first — a fast, cheap LLM call (Groq llama3-8b, not the 70B) that classifies the message into one of 10 intents in under 0.5 seconds.
+Based on intent, the agent executor selects which tools to pre-call. FIND_HOSPITAL pre-calls find_nearby_services. CHALLAN_QUERY pre-calls calculate_fine AND search_legal_docs simultaneously.
+Tool results are collected and formatted as context strings.
+The full prompt is assembled: system prompt + conversation history + injected context (GPS, nearby services, tool results) + user message.
+Groq llama3-70b-8192 generates the response. Streaming is used — tokens appear in the chat UI as they are generated.
+Response is streamed back to frontend via WebSocket or server-sent events.
+After response is complete: save the turn to Redis conversation history. Log intent, latency, and model used to chat_logs table.
+
+4.3 Parallel Tool Calling — Speed Optimization
+For complex queries that need multiple tools, calling them sequentially is slow. The LangGraph agent can call multiple tools in parallel using asyncio. This is critical for the SOS response which needs hospitals, police, and ambulances simultaneously.
+
+Example: User Says 'I had an accident on NH-44'
+Tool 1 (parallel): find_nearby_services called with categories=[hospital, ambulance] — finds trauma centres
+Tool 2 (parallel): find_nearby_services called with categories=[police] — finds police stations
+Tool 3 (parallel): get_road_infrastructure called with GPS coords — identifies it is NH-44, gets NHAI contact
+Tool 4 (parallel): search_road_issues called — checks if this road segment has recent community reports
+All four results arrive in roughly 200ms combined because they run simultaneously
+LLM synthesizes: 'Call 112 immediately. Apollo Hospital (1.2km, trauma centre) is closest. Tambaram Police are 3.1km away. This is NH-44 managed by NHAI — helpline 1033.'
+
+💡  Parallel tool calling reduces response time from 2-3 seconds (sequential) to under 1 second for complex multi-tool queries. This matters enormously in an emergency where seconds count.
+
+4.4 LangGraph State Machine — The Right Way to Build Complex Agents
+LangGraph is the newer, more powerful way to build agents in LangChain. It models the agent as a state machine — a graph where each node is a processing step. This is better than the older chain-based approach for RoadSoS because the conversation has complex branching logic.
+
+The RoadSoS LangGraph State Nodes
+Input node: Receives message, session ID, GPS, and enriches with location context
+Intent node: Classifies message into one of 10 intents using fast model
+Tool router node: Based on intent, determines which tools to call in parallel
+Tool execution node: Runs all selected tools asynchronously, collects results
+Context assembly node: Combines tool results, conversation history, and system prompt
+LLM generation node: Calls Groq to generate response with assembled context
+Safety check node: Checks if response contains correct emergency numbers for life-threatening queries
+Output node: Streams response to WebSocket, saves to Redis, logs to database
+
+🎯  IDEA: The safety check node is important: if the user's message contains words like 'accident', 'injury', 'bleeding', or 'unconscious', the safety check node verifies that the response includes 112 and the nearest hospital phone number before allowing it to be sent. This is a hard rule — not an LLM decision.
+
+5. VOICE — INPUT, OUTPUT, AND THE BOT'S OWN VOICE
+You asked specifically about voice input, voice output, and whether the chatbot can respond in its own voice. This section covers all three completely.
+
+5.1 Voice Input — How the Chatbot Listens
+Voice input converts the user's speech into text that the chatbot can process. Two approaches exist: browser-native (free) and server-side (better quality but costs money or compute).
+
+Browser-Native: Web Speech API
+The Web Speech API is built into Chrome, Edge, and Samsung Internet browsers. It uses Google's speech recognition servers transparently. The user gets high-quality transcription at zero cost. This is the recommended approach for RoadSoS.
+Availability: Chrome on Android (full support), Chrome desktop (full support), Edge (full support), Safari (partial), Firefox (not supported)
+Languages: Works for all Indian languages that Google supports — Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Marathi, Gujarati, Punjabi
+Accuracy: Very high for clear speech — comparable to Whisper for common phrases
+Cost: Zero — uses Google's servers but no API key needed
+Offline: Does NOT work offline — requires internet for transcription even on Chrome
+
+Server-Side: OpenAI Whisper (for offline or better accuracy)
+Whisper is OpenAI's speech recognition model. It is open source and can run on your server. For the offline use case where Web Speech API does not work, Whisper provides server-side transcription.
+whisper.cpp — a fast C++ port of Whisper that runs on CPU in your FastAPI server
+Whisper Tiny or Base model (39MB to 74MB) — fast enough for real-time transcription
+Cost: Compute on your server only — no API fees
+Offline: YES — this is the key advantage. Works when the device has no internet if running server-side
+In-browser Whisper: Transformers.js also has a Whisper implementation that runs in the browser — large download (300MB+) but works completely offline
+
+💡  For the hackathon demo, use Web Speech API only. It works on any Android Chrome device and requires zero setup. Add server-side Whisper only if your jury demo device is an older device that does not support Web Speech API well.
+
+5.2 Voice Output — The Chatbot Speaking Back
+Voice output means the chatbot reads its response aloud. Two approaches: browser-native (free, robotic voice) and neural TTS (high quality, sounds natural but costs money or compute).
+
+Browser-Native: Web Speech Synthesis API
+Just like Web Speech API for input, the browser also has a built-in speech synthesis API. It uses the device's built-in voice engine — the same voice your phone uses for accessibility features.
+Cost: Zero — completely free, no API needed
+Quality: Robotic but intelligible — fine for emergency information
+Languages: Works for Hindi, Tamil, and other Indian languages on Android devices
+Implementation: One line of code — window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+Control: Speed, pitch, and volume controllable. Can pause and resume.
+Offline: YES — uses device's built-in voice engine, no internet needed
+
+Neural TTS: ElevenLabs, Azure TTS, Google TTS (Not Recommended for Hackathon)
+Neural TTS models produce human-quality voice but require API calls and typically cost money. For a hackathon, the Web Speech Synthesis API is sufficient. If you want to explore neural TTS:
+ElevenLabs: Most natural-sounding. Free tier gives 10,000 characters/month. Good for demo.
+Azure TTS: Neural voices in 70+ languages. Free 500,000 characters/month. Indian language voices available.
+Google Cloud TTS: 1 million characters/month free. Very good Hindi and Tamil voices.
+Kokoro TTS: Open source neural TTS that runs locally — no API cost, good quality, runs on CPU
+
+✅  ADVICE: For the Stage 2 jury demo, use browser Web Speech Synthesis with a slight speed reduction (rate: 0.9). It sounds natural enough and requires zero setup. After the hackathon, if you develop RoadSoS further, replace with Azure TTS for Hindi and Tamil — the quality difference is dramatic and Azure's free tier is generous.
+
+5.3 The Chatbot's Own Voice — Giving It a Personality
+You asked specifically about the chatbot having its own voice. This is a UI and UX question as much as a technical one. The 'own voice' means: consistent personality, consistent speaking style, and a voice profile that users associate with RoadSoS.
+
+Text Personality — How the Chatbot Should Sound
+In emergencies: Direct, urgent, action-first. 'Call 112 immediately. Apollo Hospital is 1.2km away — call 044-28293333 right now.'
+In legal queries: Professional, precise, confident. 'Under Section 185 of the Motor Vehicles Act 2019, the fine is Rs 10,000 for first offence.'
+In conversational queries: Warm, helpful, clear. 'Good question. Speed limits vary by road type in India — here is a breakdown.'
+Always: Cites sources. Never says 'I think' on factual matters. Always adds '— call 112 if this is a life-threatening emergency' when injuries are mentioned.
+
+Voice Profile — TTS Settings for RoadSoS
+Voice: en-IN (English India) or hi-IN (Hindi India) as default. Auto-switch based on user's language.
+Rate: 0.9 (slightly slower than default) — clearer in noisy environments like inside a car
+Pitch: 1.0 (neutral) — not too high, not too low
+Volume: 1.0 (maximum) — emergencies require loud and clear
+Pause between sentences: Brief 300ms pause — gives the listener time to process emergency information
+
+Auto-Read for Emergency Responses
+When the chatbot detects an emergency response (contains hospital phone number, 112, or first-aid instructions), it should automatically start reading the response aloud without the user needing to tap the speaker button. This is critical for eyes-busy situations — driving, tending to an injury, or helping someone else.
+Detect emergency response: Check if response text contains '112' or 'ambulance' or 'immediately'
+If detected: Automatically invoke speechSynthesis.speak() after a 500ms delay
+Show a visual indicator: 'Reading aloud...' with a stop button
+Allow interruption: Tap anywhere to stop speech synthesis
+🎯  IDEA: Add a hands-free mode toggle in Settings. When enabled, ALL chatbot responses are automatically read aloud — not just emergency ones. This makes the entire app usable without looking at the screen. Drivers can ask questions and hear answers safely.
+
+6. THREE CHATBOT PERSONALITIES — ONE FOR EACH MODULE
+The three problem statements — RoadSoS, DriveLegal, RoadWatch — each require a different chatbot persona and knowledge focus. The same underlying LLM handles all three, but the system prompt, tools, and knowledge base differ.
+
+6.1 RoadSoS Chatbot — Emergency Navigator
+This is the primary chatbot. Its sole purpose in an emergency is to save time. Every response should be actionable in under 10 words. Emergency information comes first, context comes second.
+
+Knowledge Base
+WHO Trauma Care Guidelines — first aid procedures indexed in ChromaDB
+National emergency numbers — static data injected directly in system prompt
+Nearby services — live from PostGIS query, injected as context on every message
+First aid articles — 20 articles from first-aid.json, indexed in ChromaDB
+
+Tools Available
+find_nearby_services(categories, radius) — primary tool for all FIND_* intents
+trigger_sos() — generates WhatsApp emergency message
+get_first_aid(scenario) — retrieves relevant WHO first aid steps
+get_weather(lat, lon) — checks for flood or visibility warnings
+
+System Prompt Rules
+Rule 1: For any injury mentioned, the first sentence of the response must be 'Call 112 immediately.'
+Rule 2: Always include the phone number of the nearest hospital in emergency responses
+Rule 3: Respond in under 3 sentences for emergency queries — verbosity wastes time
+Rule 4: Respond in the user's language automatically
+Rule 5: Never use medical jargon — use plain language that anyone can follow
+
+6.2 DriveLegal Chatbot — Traffic Law Expert
+This chatbot is a legal information assistant. It should be authoritative, precise, and always cite exact section numbers. It should never estimate or approximate legal information.
+
+Knowledge Base
+Motor Vehicles Act 1988 — full text, all 217 sections indexed in ChromaDB
+Motor Vehicles Amendment Act 2019 — complete gazette notification indexed
+State-specific amendment PDFs — indexed with state metadata for geo-fenced queries
+WHO Global Status Report 2023 — international traffic law data for global coverage
+violations_seed.csv — exact fine amounts accessible via DuckDB for zero-hallucination calculation
+
+Tools Available
+calculate_fine(violation_code, vehicle_type, state_code, is_repeat) — DuckDB SQL, deterministic
+search_legal_docs(query) — MMR search over ChromaDB MV Act index
+get_state_overrides(state_code) — returns state-specific fine variations
+detect_state_from_gps(lat, lon) — reverse geocodes to state code for automatic geo-fencing
+
+System Prompt Rules
+Rule 1: Always cite the exact Motor Vehicles Act section number in every legal answer
+Rule 2: For fine amounts, always use the calculate_fine tool — never estimate from memory
+Rule 3: Always mention both first offence and repeat offence amounts
+Rule 4: When a state is detected from GPS, automatically apply state override without asking
+Rule 5: Add disclaimer: 'This is informational. Verify with official sources for legal proceedings.'
+
+6.3 RoadWatch Chatbot — Infrastructure Transparency Guide
+This chatbot helps citizens understand, monitor, and report road infrastructure. It should feel like a knowledgeable public servant — helpful, factual, and empowering the user to hold authorities accountable.
+
+Knowledge Base
+PMGSY OMMAS data — rural road contractor, budget, last maintenance indexed
+NHAI project data — national highway project details from data.gov.in
+Government complaint procedures — how to file RTI, CPGRAMS complaint, NHAI complaint
+Road authority matrix — which authority handles which road type
+
+Tools Available
+get_road_infrastructure(lat, lon) — PostGIS query for contractor, budget, last relaying at GPS
+detect_road_authority(lat, lon) — Overpass API to identify road type and map to authority
+submit_road_report(details) — POST to /api/v1/roads/report, returns reference number
+search_road_issues(lat, lon, radius) — PostGIS query for community reports near location
+get_complaint_portal(authority) — returns complaint URL, email, and phone for the authority
+
+System Prompt Rules
+Rule 1: Always show budget data with source URL when providing infrastructure information
+Rule 2: When last_relayed_date is overdue, explicitly flag it: 'This road was due for maintenance N months ago'
+Rule 3: Always provide the complaint portal link and reference number template
+Rule 4: When filing a complaint, confirm the correct authority before submitting
+Rule 5: Show contractor accountability data when available — name the responsible contractor
+
+7. INTENT DETECTION — THE CHATBOT'S BRAIN
+Intent detection is what separates a smart emergency assistant from a generic chatbot. Before generating any response, the chatbot must understand what the user is actually trying to accomplish. This section defines all 10 intents, how they are detected, and exactly what happens when each is triggered.
+
+7.1 The 10 Intent Labels
+
+7.2 How Intent Detection Works
+Intent detection uses a lightweight LLM call — not the full 70B model. Groq llama3-8b (the smaller, faster version) classifies the message in under 200ms. This is faster and cheaper than using the full model for classification.
+
+Intent Detection Architecture
+User message arrives. Before calling the main LLM, the intent detector runs.
+Groq llama3-8b receives the message with a structured classification prompt.
+The prompt asks for a JSON response: {intent: 'FIND_HOSPITAL', confidence: 0.95, language: 'en'}
+The response is parsed in under 200ms.
+Intent is used to determine: which tools to pre-call, which system prompt variant to use, which knowledge base to search.
+If confidence is below 0.7, intent defaults to OTHER and the main LLM decides in full context.
+
+💡  Using llama3-8b (not 70b) for intent classification saves approximately 10x compute. The 8B model is accurate enough for classification even if it would not be good enough for complex reasoning. Save the 70B model for response generation.
+
+7.3 Multilingual Intent Detection
+Users will type in Hindi, Tamil, Telugu, and other Indian languages. Intent detection must work across all these languages. LLama3-70b and llama3-8b are both multilingual — they understand and classify messages in Indian languages correctly without any additional training.
+
+Hindi: 'नजदीकी अस्पताल कहाँ है?' → FIND_HOSPITAL (confidence: 0.98)
+Tamil: 'அருகில் உள்ள மருத்துவமனை எங்கே?' → FIND_HOSPITAL (confidence: 0.96)
+Telugu: 'తాగిన తర్వాత డ్రైవింగ్ జరిమానా ఎంత?' → CHALLAN_QUERY (confidence: 0.94)
+Mixed (Hinglish): 'Nearest hospital batao yaar' → FIND_HOSPITAL (confidence: 0.97)
+The language detected by the intent classifier is passed to the response generator, which then responds in the same language
+🎯  IDEA: Store the user's detected language in their session. If the last 3 messages were all in Tamil, default to Tamil for the session even if an occasional message is in English. This prevents jarring language switches during a conversation.
+
+8. FINE-TUNING — IF YOU STILL WANT TO DO IT
+After reading Section 1, if you still want to fine-tune for specific aspects of RoadSoS, this section explains exactly how. Fine-tuning is appropriate for two specific narrow use cases in RoadSoS — not the main chatbot.
+
+8.1 The Two Cases Where Fine-Tuning Makes Sense
+Case 1: Intent Classifier Fine-Tuning
+Instead of using a general LLM for intent classification, you can fine-tune a tiny model (BERT or DistilBERT, 66MB) specifically to classify the 10 RoadSoS intents. A fine-tuned classifier is 10x faster and uses far less compute than an LLM for classification.
+Model to fine-tune: google/mobilebert-uncased or ai4bharat/indic-bert (supports Indian languages)
+Training data needed: 500-1000 labeled examples per intent = 5000-10000 total examples
+Training time: 30-60 minutes on a free Google Colab T4 GPU
+Result: 99%+ accuracy on the 10 intents, response in under 50ms
+When to do this: After the hackathon, when scaling to real users. Not needed for the hackathon demo.
+
+Case 2: Emergency Response Style Fine-Tuning
+Fine-tune a small model (Phi-3 Mini or Llama-3.2 3B) to always respond in the RoadSoS emergency style — action-first, cite sources, include emergency numbers. This is the offline model, so fine-tuning it means the offline experience matches the online experience.
+Model to fine-tune: Microsoft/Phi-3-mini-4k-instruct (the same model used in WebLLM)
+Training data needed: 500-1000 RoadSoS-specific Q&A pairs — emergency scenarios, first aid questions, fine queries
+Training infrastructure: Google Colab free tier (T4 GPU, 15GB VRAM) for fine-tuning Phi-3 Mini
+Fine-tuning method: LoRA (Low-Rank Adaptation) — modifies only 1-2% of model parameters, requires far less memory
+Output: A LoRA adapter file (50-100MB) that is loaded on top of the base Phi-3 Mini weights
+When to do this: Sprint 7 or 8, only if you have time. Not critical for hackathon.
+
+8.2 The Fine-Tuning Data Pipeline
+The hardest part of fine-tuning is the training data — not the training itself. You need high-quality question-answer pairs specific to RoadSoS.
+
+Where to Get Training Data
+Generate synthetically: Use Groq llama3-70b to generate 1000 Q&A pairs from your Motor Vehicles Act PDFs. This is called synthetic data generation and is the standard industry approach for domain-specific fine-tuning.
+Use Hugging Face Datasets: Search for 'Indian traffic laws', 'motor vehicles act QA', 'road safety Hindi' on huggingface.co/datasets
+Collect from real users: After deployment, with user consent, collect anonymised real conversations. These become your best training data.
+Create manually: Each of your 9 team members writes 50 Q&A pairs in their area — medical (first aid), legal (MV Act), geographic (emergency services). 450 pairs in total.
+
+Training Data Format
+Every fine-tuning example must follow this structure — a system prompt, a user message, and the ideal assistant response. This is called the instruction-following format and is what all modern LLMs are trained on.
+
+8.3 Free Fine-Tuning Infrastructure
+💡  For the hackathon, the Google Colab free T4 is sufficient for fine-tuning Phi-3 Mini with LoRA. Set up the training job, let it run for 2-3 hours, download the LoRA adapter, and serve it with the base model. The entire process costs zero rupees.
+
+9. END-TO-END BUILD SEQUENCE — HOW TO BUILD THE CHATBOT
+This section tells you exactly what to build, in what order, and why that order matters. Each phase builds on the previous one. Do not skip phases.
+
+Phase 1: Foundation — Basic RAG Chatbot (Week 1-2)
+Build the simplest possible working chatbot first. No agents, no tools, no streaming. Just: user asks question, RAG finds relevant act text, LLM answers. Prove the core intelligence works before adding complexity.
+
+Download Motor Vehicles Act 1988 PDF and MV Amendment Act 2019 PDF to data/ directory.
+Run build_vectorstore.py to index both PDFs into ChromaDB. Verify the collection has 500+ chunks.
+Create the basic LangChain ConversationalRetrievalChain with Groq llama3-70b.
+Create POST /api/v1/chat/message endpoint that takes a message and returns a response.
+Test: Ask 'What is the fine for drunk driving?' — verify response cites Section 185 and correct amount.
+Test: Ask 'nearest hospital' — verify it responds (even if the answer is incomplete without GPS yet).
+
+Phase 2: Context Injection — GPS and Live Data (Week 2-3)
+Add real-time context to every message. The chatbot now knows where the user is and what is nearby.
+
+Add lat/lon parameters to the chat endpoint. If not provided, respond as if no location is known.
+On every chat request with GPS, call PostGIS nearby query and inject top 3 results as context.
+Add reverse geocoding — convert GPS to city and state name, inject into context.
+Test: Ask 'nearest hospital' with Chennai GPS coordinates. Verify response includes real hospital names and phone numbers from your database.
+Test: Ask 'fine for no helmet in Tamil Nadu' with Chennai GPS. Verify state auto-detected and response shows Tamil Nadu specific fine.
+
+Phase 3: Intent Detection and Tool Routing (Week 3-4)
+Add the intent classifier and tool routing. The chatbot now knows what the user wants and calls the right tool.
+
+Build the intent detector using llama3-8b — fast classification into 10 intents.
+Create the find_nearby_services tool that calls your emergency API.
+Create the calculate_fine tool that calls your DuckDB challan service.
+Create the search_legal_docs tool that queries ChromaDB.
+Wire tools to intents: FIND_* calls find_nearby_services, CHALLAN_QUERY calls calculate_fine AND search_legal_docs.
+Test all 10 intent categories with example messages. Verify correct tool is called each time.
+
+Phase 4: Memory and Conversation Continuity (Week 4)
+Add conversation memory so the chatbot remembers context within a session.
+
+Implement session_id generation — UUID created once per browser session, stored in localStorage.
+Connect ConversationBufferWindowMemory to Redis with session_id as key.
+Test multi-turn conversations: 'I had an accident' → 'the person is bleeding' — verify the second message understands context from the first.
+Test session persistence: close the chat, reopen it, send a message. Verify the previous context is remembered for 24 hours.
+
+Phase 5: Streaming and WebSocket (Week 5)
+Add streaming so responses appear token by token instead of all at once. Critical for user experience.
+
+Convert the POST /chat/message endpoint to support server-sent events (SSE) for streaming.
+Create WebSocket /chat/stream endpoint for the streaming chat interface.
+Update the frontend ChatInterface.tsx to render tokens as they arrive.
+Add typing indicator (3 animated dots) that shows while waiting for the first token.
+Test: Long legal query should show tokens appearing progressively. Short emergency query should feel instant.
+
+Phase 6: Voice Input and Output (Week 6)
+Add voice input and automatic speech output for emergency responses.
+
+Build VoiceInput.tsx using Web Speech API — mic button, live transcript, auto-stop on silence.
+Test on Android Chrome: Does it transcribe Hindi correctly? Tamil? English?
+Add auto-read logic: if response contains '112' or injury keywords, automatically invoke speechSynthesis.
+Add speaker button to each bot message for manual playback.
+Build hands-free mode toggle in settings.
+Test the full voice loop: speak 'nearest hospital', hear the response read back aloud.
+
+Phase 7: Offline AI and Edge Deployment (Week 6-7)
+Add the WebLLM offline layer. This is the most technically impressive feature.
+
+Integrate WebLLM with Phi-3 Mini model in edge-ai.ts.
+Build ModelLoader.tsx with download progress bar and size warning.
+Index first-aid.json into HNSWlib.js + IndexedDB for offline RAG.
+Build OfflineChat.tsx component that uses WebLLM instead of FastAPI.
+Test: Turn off WiFi. Open Offline Chat. Ask 'how to stop bleeding'. Verify response comes from local model.
+Test: Download the model while on WiFi. Disconnect. Restart browser. Verify model loads from cache.
+
+Phase 8: Real-Time Updates and WebSocket Push (Week 7-8)
+Add real-time data push from server to client. New road reports appear on map and in chat context automatically.
+
+Set up Redis Pub/Sub channel for road issue events.
+Configure PostgreSQL NOTIFY trigger on road_issues INSERT.
+Build FastAPI WebSocket endpoint that subscribes to Redis channel and pushes to connected clients.
+Update frontend to receive WebSocket events and update the map layer.
+Inject new nearby road issues into chat context automatically when new events arrive.
+Test: Submit a road issue from one browser tab. Verify the other tab's map updates within 2 seconds.
+
+Phase 9: Safety Checks and Production Hardening (Week 8-9)
+Add the safety layer and prepare for production. This is non-negotiable for an emergency app.
+
+Build safety check node: verify all injury-related responses include 112 and nearest hospital phone.
+Add rate limiting: 30 messages per session per hour to prevent abuse.
+Add provider health check: automatically switch to Gemini if Groq is down.
+Add response length limits: emergency responses capped at 3 sentences, legal responses at 8 sentences.
+Add content filtering: responses must not provide harmful medical advice beyond WHO guidelines.
+Load test with 10 concurrent sessions. Verify Redis memory usage and FastAPI response times.
+
+10. MY SUGGESTIONS — THINGS YOU MIGHT HAVE MISSED
+Based on everything you have described and all the reference apps we analyzed, here are the most important things that are missing or could be significantly better.
+
+10.1 The Most Important Missing Feature — Proactive Alerts
+Every chatbot we have discussed is reactive — the user asks, the chatbot answers. But the most valuable thing an emergency AI can do is act proactively. If something dangerous is happening near the user, the chatbot should tell them without being asked.
+
+🎯  IDEA: Implement a proactive alert system. When a new road issue is reported within 2km of the user's current GPS location, push a notification: 'Road issue reported 800m ahead on NH-44 — proceed with caution.' This transforms the chatbot from reactive to genuinely life-saving. Use browser Notification API (free) combined with the WebSocket push system from Phase 8.
+
+10.2 Chatbot Should Remember Past Accidents
+If a user had an accident at a specific location before and logged it, the chatbot should remember this context. 'You reported an incident near Tambaram flyover last month — be careful near that area.'
+
+🎯  IDEA: Add a trip history feature. Store anonymised GPS tracks (no personal data, just location and timestamp) in IndexedDB. The chatbot can use this to give personalised warnings: 'You frequently travel on NH-44 where 3 potholes have been reported this week.'
+
+10.3 Bystander Mode — Help Starts Before Ambulance Arrives
+When an accident is detected or reported, there are minutes before professional help arrives. The chatbot should guide bystanders through first aid with step-by-step voice instructions, adapting in real time.
+🎯  IDEA: Build a Bystander Guide mode. User says 'I found an accident victim'. Chatbot switches to step-by-step voice-guided first aid mode. Keeps the person calm with short, numbered instructions. Periodically reminds them that ambulance is on the way and estimated time. Guides them through until professional help arrives.
+
+10.4 The Chatbot Should Learn From Failures
+Every time a user gives a thumbs down or does not engage with a response, that is training signal. Over time, this data makes the chatbot better for Indian users and Indian road conditions specifically.
+🎯  IDEA: Add a simple feedback mechanism: thumbs up/down on every chat response. Store in chat_logs table with the original message, response, and rating. After collecting 500+ negative examples, use these for fine-tuning the offline Phi-3 model (Section 8). Bad responses become training data for better responses.
+
+10.5 Multilingual Voice Should Be Indian-Accent Aware
+Standard Web Speech Synthesis sounds robotic in Indian languages. For a hackathon this is fine, but it matters for real users.
+✅  ADVICE: For post-hackathon production: Azure Neural TTS has specific Indian English, Hindi, Tamil, Telugu voices that sound genuinely natural. The Niral Hindi voice and Pallavi Tamil voice are excellent. Azure's free tier gives 500,000 characters per month which is more than enough for early users. The improvement in user trust and engagement when the chatbot sounds natural rather than robotic is measurable.
+
+10.6 The Chatbot Does Not Need to Know Everything
+A critical design principle: when the chatbot does not know something, it must say so clearly and route to a human. Do not let it hallucinate just to appear helpful.
+✅  ADVICE: Build explicit fallback responses for queries the chatbot cannot reliably handle. If confidence in the retrieved RAG context is below 0.5, respond: 'I do not have reliable information about this specific situation. Please call 112 for emergency assistance or 1033 for highway emergencies.' A well-defined fallback is safer than a confident wrong answer in an emergency context.
+
+10.7 Build the Chatbot for the Cheapest Phone in India
+The users who need RoadSoS most — truck drivers, rural highway users — have the cheapest Android phones. These devices have 2GB RAM, no WebGPU, and slow processors.
+✅  ADVICE: Test everything on a Redmi 10C or similar budget device. If the offline WebLLM model crashes the browser tab on low-RAM devices (it will on devices under 3GB RAM), disable the offline AI feature gracefully and fall back to offline static first aid content instead. The 20 pre-bundled first-aid cards work on any device, no AI required. Do not sacrifice basic emergency functionality for advanced AI features.
+
+11. COMPLETE CHATBOT TECH STACK SUMMARY
+11.1 All Components and Their Role
+
+RoadSoS AI Chatbot — Built to Save Lives. Total Cost: Rs 0.
+IIT Madras Road Safety Hackathon 2026  |  LangGraph + Groq + WebLLM + Voice I/O + Real-Time

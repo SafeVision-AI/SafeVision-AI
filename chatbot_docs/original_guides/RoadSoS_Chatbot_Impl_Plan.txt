@@ -1,0 +1,580 @@
+
+IIT MADRAS  ·  ROAD SAFETY HACKATHON 2026
+
+
+
+RoadSoS
+AI Chatbot — Complete Implementation Plan
+For the chatbot team  ·  Step-by-step  ·  No conflicts  ·  Separate deployment  ·  All providers  ·  GitHub workflow
+
+
+1. READ THIS FIRST — WHAT THIS DOCUMENT IS AND HOW TO USE IT
+This document is for the team members building the RoadSoS AI chatbot. It is a step-by-step implementation plan — what to build, why you are building it, where it goes, and in what order. Every section explains the purpose behind each decision so that when something goes wrong, you understand why it was built that way and can fix it.
+
+🎯  PURPOSE: The chatbot is the intelligence layer of RoadSoS. It connects the user's question to live emergency data, legal documents, real-time road conditions, and actions like SOS and complaint filing. Without the chatbot, RoadSoS is just a map app. With the chatbot, it is a full AI emergency assistant.
+
+1.1 The Most Important Decision — Separate Service
+The chatbot service is built and deployed separately from the main FastAPI backend. This is not optional — it is a hard architectural requirement. Here is exactly why.
+
+📌  WHY: The chatbot loads large AI models into memory — sentence-transformers (500MB), ChromaDB (variable, depends on documents), LangGraph agent runtime, and connections to multiple LLM APIs. If these are loaded inside the main FastAPI backend, every server restart takes 3-5 minutes and the backend becomes too heavy to run on Render.com free tier. A separate chatbot service lets the main backend stay fast (under 30 seconds restart) while the chatbot service can take as long as it needs to initialize.
+
+
+1.2 How This Document Is Structured
+Section 1 (this section): What you are building and why the architecture decisions were made
+Section 2: All accounts and API keys to get before writing a single line
+Section 3: The IDE setup — Cursor AI, Windsurf, and why we use them
+Section 4: GitHub branch strategy so 9 people can work without conflicts
+Section 5: The chatbot service folder structure — exactly where every file goes
+Section 6: All LLM providers — Groq, Gemini, GitHub Models, NVIDIA NIM, Mistral — how to set up each
+Section 7: Phase-by-phase implementation — 9 phases, what to build in each
+Section 8: Real-time data connections — WebSocket, Redis Pub/Sub, GPS injection
+Section 9: Voice input and output — complete implementation
+Section 10: Testing the chatbot — what to test and how to know it works
+Section 11: Deployment — chatbot service on its own Render instance
+Section 12: Folder structure — complete annotated tree of every file
+
+1.3 Team Assignment — Who Builds What
+To prevent conflicts, assign ownership before anyone writes a line. These are clear boundaries — the chatbot team owns these files, nobody else touches them.
+
+
+2. ACCOUNTS AND API KEYS — GET THESE BEFORE ANYTHING ELSE
+Every team member building the chatbot service needs these accounts. Do this on Day 1 before any implementation work begins. Store all keys in a shared password manager — not in Git, never in code, never in Slack messages.
+
+2.1 Primary LLM Providers — All Free
+
+⚠️  Never put API keys in your code files, never in Git commits, never share in Slack or WhatsApp. Put all keys in a .env file only. Add .env to .gitignore immediately. Share keys through a password manager like Bitwarden (free) or as encrypted notes.
+
+💡  NVIDIA NIM is specifically valuable because it gives you access to Llama-3.1 70B through NVIDIA's optimized inference infrastructure. The responses are faster than standard Hugging Face inference. It is an excellent third fallback after Groq and Gemini.
+
+2.2 Infrastructure Accounts
+
+2.3 The .env File Structure — Chatbot Service
+The chatbot service has its own .env file separate from the main backend. This is critical — the chatbot service must be independently configurable.
+
+
+3. IDE SETUP — CURSOR AI, WINDSURF, AND HOW TO USE THEM
+You mentioned Cursor and also 'antigravity' — you likely mean Windsurf (formerly Codeium), which is one of the best AI IDEs alongside Cursor. This section explains both and when to use each.
+
+3.1 Cursor AI — Primary IDE
+Cursor is VS Code with AI built in. It understands your entire codebase and can generate multi-file implementations. Download from cursor.sh. It is free for basic use and has a Pro tier at $20/month that is not needed for this project.
+
+Cursor Modes and When to Use Each
+
+💡  The single most important Cursor habit: always start every Cursor session by telling it the project context. Paste the master context from the chatbot guide before asking anything. Cursor with context gives 10x better output than Cursor without context.
+
+3.2 Windsurf — Alternative / Second Opinion IDE
+Windsurf (windsurf.ai — formerly Codeium) is another AI IDE with a different approach. Where Cursor is best at multi-file generation, Windsurf's Cascade agent is better at understanding an existing codebase and making targeted changes. Both are free.
+
+Download from windsurf.ai — free plan gives full AI features with generous daily limits
+Windsurf Cascade: An agent mode that reads your entire repo, understands context deeply, then makes coordinated changes across files
+Best use in RoadSoS: When you have a bug that spans multiple files — use Windsurf Cascade to find and fix it across the entire chatbot_service folder
+Works as a VS Code extension as well — install from VS Code marketplace as 'Windsurf' if you prefer to stay in VS Code
+
+Which IDE for Which Task
+
+3.3 IDE Setup Steps for the Chatbot Team
+Install Cursor from cursor.sh. Sign up with GitHub account for free Pro features as a student.
+Install Windsurf from windsurf.ai as a backup. Sign in with GitHub.
+Open the chatbot_service folder in Cursor — not the entire monorepo, just the chatbot_service folder. This gives Cursor better context for chatbot-specific questions.
+Create a .cursorrules file in chatbot_service/ root. This file tells Cursor the project rules — Python 3.11, async/await everywhere, LangGraph for agent, Groq as primary provider.
+Install these VS Code extensions in Cursor: Python, Pylance, Ruff (linter), Black (formatter), REST Client (for testing APIs directly in the editor).
+Set up the Python interpreter in Cursor to point to your virtualenv — this enables proper autocomplete for LangChain, LangGraph, and other dependencies.
+
+4. GITHUB BRANCH STRATEGY — HOW 9 PEOPLE BUILD WITHOUT CONFLICTS
+With 9 team members touching the same repository, branch management is what prevents your work from destroying someone else's. This section defines the exact branching rules for the chatbot service build. Follow these rules without exception.
+
+4.1 Repository Structure
+The project uses a monorepo on GitHub Organization. The chatbot service lives in the chatbot_service/ folder. All chatbot work happens in branches prefixed with chatbot/.
+
+
+4.2 Chatbot Branch Naming Convention
+Every chatbot branch must follow this naming pattern. This prevents confusion and makes it clear what each branch is about.
+
+
+4.3 Daily Workflow — What Every Team Member Does Every Day
+Morning: git pull origin develop to get latest changes from everyone else.
+Before starting work: git checkout -b chatbot/your-feature-name to create your branch from current develop.
+During work: commit small and often. Commit every time something works, not just when everything works. 'Add Groq provider wrapper with health check' is a good commit message.
+When your feature works: git push origin chatbot/your-feature-name — push to GitHub.
+Create a Pull Request from your branch to develop. Add a description: what you built, how to test it, what it depends on.
+Tag the team lead for review. Lead merges to develop after review.
+Never merge your own PR. Always have someone else review. This catches bugs before they reach develop.
+
+4.4 Conflict Prevention Rules
+Rule 1: Never edit a file that is not in your assigned ownership area (see Section 1.3 team assignment table)
+Rule 2: If you need to change a file owned by someone else, open a conversation in GitHub Issues first
+Rule 3: The chatbot_service/ folder is owned by chatbot team — backend team must not touch it
+Rule 4: The main backend's api/v1/ folder is owned by backend team — chatbot team calls it via HTTP, does not edit it
+Rule 5: Before creating a PR, always rebase your branch on latest develop: git rebase develop
+Rule 6: Keep PRs small — one feature per PR. Large PRs have more conflicts and harder reviews
+
+⚠️  The most common conflict scenario: two people both edit chatbot_service/config.py to add their own settings. Prevent this by having one person own config.py (Member A) and everyone else creates an issue asking them to add a new setting. The config owner does it within 24 hours.
+
+5. CHATBOT SERVICE FOLDER STRUCTURE — WHERE EVERYTHING GOES
+The chatbot service is a completely separate Python application living in the chatbot_service/ folder of the monorepo. It has its own dependencies, its own environment variables, its own Docker container, and its own Render deployment. It communicates with the main backend only through HTTP API calls.
+
+🎯  PURPOSE: The separation means the chatbot team can build, test, and deploy independently without waiting for the backend team. The backend team can update emergency service data without worrying about breaking the chatbot. Clean separation prevents cascading failures.
+
+5.1 Complete Annotated Folder Structure
+Every file is listed with its purpose. When you are asked to build something, you know exactly where it goes.
+
+ 
+chatbot_service/                          # Root of the chatbot service — separate from main backend
+│
+├── main.py                               # FastAPI app entry point for chatbot service
+│                                         # Runs on port 8001 (not 8000 — avoids conflict)
+│                                         # Initializes the LangGraph agent on startup
+│
+├── requirements.txt                      # Chatbot-specific Python packages
+│                                         # Separate from main backend requirements.txt
+│                                         # Includes: langgraph, langchain, chromadb,
+│                                         # sentence-transformers, groq, google-generativeai,
+│                                         # openai (for GitHub Models / NVIDIA NIM compatibility)
+│
+├── Dockerfile                            # Container for chatbot service
+│                                         # Base: python:3.11-slim
+│                                         # Pre-downloads embedding model on build
+│
+├── .env.example                          # Template — team copies to .env and fills in all keys
+├── .gitignore                            # Must include: .env, data/chroma_db/, __pycache__/
+├── render.yaml                           # Render.com deployment config for chatbot service
+│
+├── config.py                             # OWNED BY MEMBER A — all configuration
+│                                         # Reads all .env variables
+│                                         # Defines: PROVIDER_PRIORITY list, FALLBACK_ORDER,
+│                                         # RATE_LIMITS, CACHE_TTL values, INTENT_LABELS
+│
+├── providers/                            # OWNED BY MEMBER A — all LLM provider integrations
+│   ├── __init__.py
+│   ├── base.py                           # Abstract base class that all providers implement
+│   │                                     # Methods: generate(prompt), stream(prompt), health_check()
+│   ├── groq_provider.py                  # Groq API wrapper — primary provider
+│   │                                     # Model: llama3-70b-8192 for generation
+│   │                                     # Model: llama3-8b-8192 for intent classification
+│   ├── gemini_provider.py                # Google Gemini API wrapper — first fallback
+│   │                                     # Model: gemini-1.5-flash
+│   ├── github_models_provider.py         # GitHub Models — second fallback
+│   │                                     # OpenAI-compatible endpoint: api.github.com/models
+│   │                                     # Model: meta-llama-3.1-70b-instruct
+│   ├── nvidia_nim_provider.py            # NVIDIA NIM — third fallback
+│   │                                     # OpenAI-compatible endpoint: integrate.api.nvidia.com
+│   │                                     # Model: meta/llama-3.1-70b-instruct
+│   ├── mistral_provider.py               # Mistral AI — fourth fallback
+│   │                                     # Model: mistral-large-latest
+│   ├── together_provider.py              # Together AI — fifth fallback
+│   │                                     # Model: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+│   └── router.py                         # Provider router — tries providers in priority order
+│                                         # Checks Redis for provider health before routing
+│                                         # Implements circuit breaker pattern
+│
+├── rag/                                  # OWNED BY MEMBER B — RAG pipeline
+│   ├── __init__.py
+│   ├── vectorstore.py                    # ChromaDB connection and collection management
+│   │                                     # load_or_build(): loads from disk or builds from PDFs
+│   │                                     # admin_rebuild(): rebuilds when new documents added
+│   ├── embeddings.py                     # sentence-transformers/all-MiniLM-L6-v2 wrapper
+│   │                                     # Runs on CPU — no API cost
+│   │                                     # Used by both vectorstore.py and retriever.py
+│   ├── retriever.py                      # MMR search over ChromaDB
+│   │                                     # retrieve(query, k=5): returns relevant document chunks
+│   │                                     # Adds source metadata to each chunk
+│   └── document_loader.py                # PDF loading and chunking
+│                                         # RecursiveCharacterTextSplitter: 1000 chars, 150 overlap
+│
+├── agent/                                # OWNED BY MEMBER B — LangGraph agent
+│   ├── __init__.py
+│   ├── graph.py                          # LangGraph StateGraph definition
+│   │                                     # Nodes: input → intent → tool_router →
+│   │                                     #        tool_executor → context_assembler →
+│   │                                     #        llm_generator → safety_check → output
+│   ├── state.py                          # TypedDict for agent state
+│   │                                     # Contains: message, intent, tool_results,
+│   │                                     #           context, session_id, gps, language
+│   ├── intent_detector.py                # Fast intent classification using llama3-8b
+│   │                                     # Returns: intent label + confidence + language
+│   ├── context_assembler.py              # Builds the final prompt context
+│   │                                     # Combines: GPS data, nearby services, tool results,
+│   │                                     #           conversation history, system prompt
+│   └── safety_checker.py                 # Post-generation safety validation
+│                                         # Ensures injury responses include 112
+│
+├── tools/                                # OWNED BY MEMBER B — agent tools
+│   ├── __init__.py
+│   ├── emergency_tool.py                 # Calls main backend GET /api/v1/emergency/nearby
+│   │                                     # Input: lat, lon, categories, radius
+│   │                                     # Output: list of services with distance and phone
+│   ├── challan_tool.py                   # Calls main backend GET /api/v1/challan/calculate
+│   │                                     # Input: violation_code, vehicle_type, state_code
+│   │                                     # Output: fine amount, section, imprisonment
+│   ├── legal_search_tool.py              # MMR search over ChromaDB Motor Vehicles Act index
+│   │                                     # Input: user query
+│   │                                     # Output: top 5 relevant act sections as text
+│   ├── road_infra_tool.py                # Calls main backend GET /api/v1/roads/infrastructure
+│   │                                     # Input: lat, lon
+│   │                                     # Output: contractor, budget, last_relayed, authority
+│   ├── road_issues_tool.py               # Calls main backend GET /api/v1/roads/issues
+│   │                                     # Input: lat, lon, radius
+│   │                                     # Output: community-reported potholes and issues
+│   ├── first_aid_tool.py                 # Searches first_aid_articles in PostgreSQL
+│   │                                     # Input: emergency scenario description
+│   │                                     # Output: WHO-based step-by-step guidance
+│   ├── weather_tool.py                   # OpenWeatherMap API call
+│   │                                     # Input: lat, lon
+│   │                                     # Output: current conditions, flood warnings
+│   ├── sos_tool.py                       # Generates WhatsApp SOS deep link
+│   │                                     # Input: GPS, nearest_hospital, nearest_police
+│   │                                     # Output: wa.me deep link with pre-filled message
+│   └── submit_report_tool.py             # Calls main backend POST /api/v1/roads/report
+│                                         # Input: issue_type, severity, lat, lon, description
+│                                         # Output: complaint UUID, authority details
+│
+├── memory/                               # OWNED BY MEMBER A — conversation memory
+│   ├── __init__.py
+│   └── redis_memory.py                   # Redis-backed conversation history
+│                                         # get_history(session_id): returns last 6 turns
+│                                         # save_turn(session_id, user_msg, bot_response)
+│                                         # TTL: 24 hours — conversations expire automatically
+│
+├── api/                                  # OWNED BY MEMBER A — HTTP endpoints
+│   ├── __init__.py
+│   ├── chat.py                           # POST /chat/message — main chat endpoint
+│   │                                     # WebSocket /chat/stream — streaming endpoint
+│   │                                     # GET /chat/history/{session_id}
+│   └── admin.py                          # POST /admin/rebuild-vectorstore
+│                                         # GET /admin/provider-health
+│                                         # GET /admin/stats — message count, latency averages
+│
+├── data/                                 # OWNED BY MEMBER B — all AI training data
+│   ├── motor_vehicles_act_1988.pdf        # Download from indiacode.nic.in
+│   ├── mv_amendment_act_2019.pdf          # Download from morth.nic.in
+│   ├── who_trauma_care_guidelines.pdf     # Download from who.int
+│   ├── state_amendments/                 # Folder for state-specific amendment PDFs
+│   ├── chroma_db/                        # Created by vectorstore.py — never delete
+│   │                                     # Add to .gitignore — too large for Git
+│   ├── first_aid.json                    # 20 WHO first-aid articles for offline RAG
+│   └── build_vectorstore.py              # Script to index PDFs into ChromaDB
+│                                         # Run: python data/build_vectorstore.py
+│                                         # Takes 5-10 minutes on first run
+│
+└── tests/                                # SHARED OWNERSHIP — all team members add tests
+    ├── test_providers.py                 # Tests all 6 LLM providers respond correctly
+    ├── test_intent.py                    # Tests all 10 intent labels with example messages
+    ├── test_tools.py                     # Tests all 9 agent tools return expected format
+    ├── test_rag.py                       # Tests ChromaDB retrieval returns relevant chunks
+    ├── test_voice.py                     # Tests voice input transcription (manual browser test)
+    └── test_e2e.py                       # End-to-end: full message → agent → response
+ 
+
+6. ALL LLM PROVIDERS — SETUP AND ROUTING
+RoadSoS chatbot uses six LLM providers in a priority chain. The router tries them in order, automatically falling back when one is unavailable or rate-limited. This gives the chatbot near-100% uptime at zero cost. All six providers have free tiers.
+
+6.1 Why Six Providers Instead of One
+📌  WHY: A single provider has three failure modes: rate limits (too many requests), downtime (rare but happens), and context window limits (long conversations hit token limits). With six providers in a fallback chain, any one of them being unavailable does not affect the user. The router switches to the next provider transparently within 500ms. The user sees a slightly slower response — they never see an error.
+
+6.2 Provider Details — Complete Reference
+
+6.3 The Provider Router — How Fallback Works
+The router in chatbot_service/providers/router.py implements a circuit breaker pattern. If a provider returns a rate limit error (HTTP 429) or is down (HTTP 500), the circuit opens for 60 seconds and all requests skip that provider. After 60 seconds, one test request is sent. If it succeeds, the circuit closes and the provider returns to rotation.
+
+Provider Health Check System
+Every 60 seconds, a background task in main.py runs a health check against all 6 providers.
+Each health check sends a minimal test message: 'Reply with the word OK only.'
+If the provider responds within 3 seconds with any response, it is marked healthy in Redis.
+The router reads health status from Redis before every request and skips unhealthy providers.
+Health status is cached for 60 seconds to avoid hammering rate-limited providers.
+The admin endpoint GET /admin/provider-health shows current status of all 6 providers.
+
+6.4 Intent Detection — Separate Cheap Model
+Intent classification uses Groq llama3-8b-8192, not the 70B model. The 8B model is 10x cheaper per token and responds in under 200ms. It is accurate enough for classification even though it is not as capable as the 70B for complex reasoning. Every message is classified before the expensive 70B model is called.
+
+📌  WHY: Classifying intent with an 8B model first means 30% of messages can be answered without calling the 70B at all — simple queries like 'hello', 'thank you', or queries where the intent is so clear that pre-fetched tool data is enough. This reduces Groq token usage by roughly 30% and speeds up responses for simple queries.
+
+6.5 NVIDIA NIM — Special Setup
+NVIDIA NIM (Neural Interface Models) provides access to optimized large language models through an OpenAI-compatible API. The setup is slightly different from other providers because it uses a different base URL.
+
+Sign up at build.nvidia.com and generate an API key
+The base URL is https://integrate.api.nvidia.com/v1 — not api.openai.com
+All other parameters (model name format, messages array, max_tokens) follow the OpenAI API format
+Use model name: meta/llama-3.1-70b-instruct — note the forward slash, different from Groq's format
+Free tier: 1000 API calls. After that, pay-per-use at very low rates. For a hackathon, 1000 calls is more than enough as fallback
+NVIDIA also offers: mistralai/mixtral-8x7b-instruct, google/gemma-2-27b-it, and many others — all accessible with the same API key
+
+7. PHASE-BY-PHASE IMPLEMENTATION — WHAT TO BUILD AND WHY
+Nine implementation phases. Each phase has a clear entry condition (what must be done before you start), exit condition (how you know you are done), and a purpose explaining why this order matters. Do not start Phase N+1 until Phase N passes its exit condition.
+
+Phase 1 — Foundation Setup (Days 1-3)
+🎯  PURPOSE: Create the chatbot_service folder, install dependencies, verify all 6 provider API keys work, and confirm the folder structure is in place. Nothing intelligent yet — just scaffolding. This phase exists so every team member starts from a working baseline.
+
+Entry Condition
+All team members have their GitHub accounts added to the organization. All API keys from Section 2 are obtained and stored in .env.
+
+What to Build
+Create chatbot_service/ folder in the monorepo root alongside backend/ and frontend/.
+Create requirements.txt with all dependencies listed — langgraph, langchain, langchain-groq, langchain-google-genai, chromadb, sentence-transformers, fastapi, uvicorn, httpx, redis, pydantic, python-dotenv.
+Create config.py reading all .env variables with defaults and validation — fail fast if required keys are missing.
+Create providers/base.py with the abstract provider interface.
+Create each of the six provider files (groq, gemini, github_models, nvidia_nim, mistral, together) — each with a simple generate() method that calls the respective API.
+Create providers/router.py with the fallback chain — tries providers in order until one succeeds.
+Create a simple main.py that starts FastAPI on port 8001 and has a GET /health endpoint.
+Create tests/test_providers.py that calls each provider with 'Reply with OK' and verifies a response.
+
+Exit Condition
+python -m pytest tests/test_providers.py passes. All 6 providers return a response. GET /health returns 200. The chatbot_service folder is committed to a chatbot/phase-1-foundation branch and a PR is open.
+
+Phase 2 — RAG Pipeline (Days 4-7)
+🎯  PURPOSE: Index the Motor Vehicles Act and other documents into ChromaDB. Build the retrieval system that the agent will use to answer legal questions. This is the knowledge base — without it, the chatbot has no legal facts to draw from.
+
+Entry Condition
+Phase 1 PR is merged to develop. The three PDF documents are downloaded to chatbot_service/data/.
+
+What to Build
+Build rag/embeddings.py — loads sentence-transformers/all-MiniLM-L6-v2 from Hugging Face (downloads ~90MB once).
+Build rag/document_loader.py — loads PDFs using PyPDFLoader, splits into 1000-char chunks with 150 overlap, adds source metadata.
+Build rag/vectorstore.py — ChromaDB connection, load_or_build() that checks if chroma_db/ exists and loads it, or builds it from PDFs if not.
+Build rag/retriever.py — MMR search that takes a query string and returns top 5 most relevant, diverse chunks.
+Build data/build_vectorstore.py — standalone script that builds the vectorstore from scratch. Run this once after cloning the repo.
+Run build_vectorstore.py. Verify the ChromaDB collection has at least 500 document chunks.
+Build tests/test_rag.py — test that querying 'fine for drunk driving' returns chunks containing 'Section 185'.
+
+Exit Condition
+pytest tests/test_rag.py passes. Querying 'helmet fine India' returns chunks from the Motor Vehicles Act with section numbers visible. chroma_db/ folder exists and is in .gitignore.
+
+Phase 3 — Intent Detection (Days 8-10)
+🎯  PURPOSE: Build the fast intent classifier that categorises every user message before the expensive 70B model is called. Getting intent right is what makes the agent call the correct tools. Without accurate intent detection, the agent wastes time and tokens calling irrelevant tools.
+
+What to Build
+Build agent/intent_detector.py — calls Groq llama3-8b with a structured classification prompt, returns {intent, confidence, language} as JSON.
+Define all 10 intent labels as constants in config.py.
+Build agent/state.py — the TypedDict that carries all agent state through the LangGraph nodes.
+Build tests/test_intent.py — test every intent with at least 3 example messages in English. Test 2 messages in Hindi and 2 in Tamil.
+
+Exit Condition
+pytest tests/test_intent.py passes with at least 90% accuracy across all 10 intents. Hindi and Tamil messages are classified correctly. Intent detection completes in under 300ms.
+
+Phase 4 — Agent Tools (Days 11-15)
+🎯  PURPOSE: Build the nine tools the agent can call. Each tool is a Python function that calls either the main backend API or an external service and returns structured data. Tools are the hands of the agent — without them, it can only talk, not act.
+
+What to Build
+Build tools/emergency_tool.py — HTTP GET to MAIN_BACKEND_URL + /api/v1/emergency/nearby. Parse response into list of service dicts.
+Build tools/challan_tool.py — HTTP GET to MAIN_BACKEND_URL + /api/v1/challan/calculate. Returns fine amount and section.
+Build tools/legal_search_tool.py — calls rag/retriever.py directly. Returns top 5 chunks as formatted text.
+Build tools/road_infra_tool.py — HTTP GET to MAIN_BACKEND_URL + /api/v1/roads/infrastructure. Returns contractor and budget data.
+Build tools/road_issues_tool.py — HTTP GET to MAIN_BACKEND_URL + /api/v1/roads/issues. Returns recent community reports.
+Build tools/first_aid_tool.py — searches first_aid.json file for relevant scenarios. Returns step-by-step guidance.
+Build tools/weather_tool.py — calls OpenWeatherMap API with lat/lon. Returns current conditions.
+Build tools/sos_tool.py — generates WhatsApp wa.me deep link with emergency message.
+Build tools/submit_report_tool.py — HTTP POST to MAIN_BACKEND_URL + /api/v1/roads/report.
+Build tests/test_tools.py — test each tool with mock responses. Verify output format is consistent.
+
+Exit Condition
+All 9 tools return correctly formatted responses in tests. The emergency tool returns real hospital data from the database when called with Chennai coordinates. The challan tool returns Rs 10000 for MVA_185 drunk driving query.
+
+Phase 5 — LangGraph Agent Assembly (Days 16-19)
+🎯  PURPOSE: Wire everything together into the LangGraph state machine. This is the central nervous system — it receives a message, routes to the right tools, assembles context, and calls the LLM. Building this phase correctly means all previous components work together.
+
+What to Build
+Build agent/context_assembler.py — takes GPS data, tool results, conversation history, and system prompt and formats them into a single context string.
+Build agent/safety_checker.py — validates that injury-related responses include 112 and a hospital phone number.
+Build agent/graph.py — the LangGraph StateGraph with all 8 nodes wired in sequence.
+Build memory/redis_memory.py — Redis-backed get_history() and save_turn() functions.
+Build api/chat.py — POST /chat/message endpoint that runs the full agent graph and returns response.
+Build tests/test_e2e.py — 5 end-to-end tests covering all major intent types.
+
+Exit Condition
+POST /chat/message with {message: 'nearest hospital', lat: 13.08, lon: 80.27, session_id: test} returns a response containing a hospital name, phone number, and distance. Latency is under 3 seconds.
+
+Phase 6 — Streaming and WebSocket (Days 20-22)
+🎯  PURPOSE: Add token streaming so the chat UI shows responses appearing word by word instead of all at once. This dramatically improves perceived responsiveness — users see the chatbot thinking and responding, rather than a blank wait followed by a wall of text. Critical for emergency scenarios where every second of perceived delay increases stress.
+
+What to Build
+Modify api/chat.py to support server-sent events streaming — tokens are yielded as they are generated by Groq.
+Add WebSocket endpoint /chat/stream to api/chat.py.
+Update the frontend ChatInterface.tsx to connect to the WebSocket endpoint and render tokens as they arrive.
+Add a typing indicator component — 3 animated dots that appear while waiting for the first token.
+
+Exit Condition
+Opening the chat UI and sending a message shows tokens appearing progressively. The typing indicator shows before the first token arrives. The response to a long legal query takes 3+ seconds but feels fast because content starts appearing within 1 second.
+
+Phase 7 — Real-Time Data Push (Days 23-26)
+🎯  PURPOSE: Connect the chatbot to the live road issue database so that when another user reports a pothole nearby, the chatbot knows about it in real-time. This is what makes RoadSoS more than a static information system — it is a living picture of road conditions updated by its own user community.
+
+What to Build
+Set up PostgreSQL LISTEN/NOTIFY trigger on the road_issues table INSERT operation. This fires every time a new report is submitted.
+Set up Redis Pub/Sub channel for road_events. The PostgreSQL NOTIFY handler publishes to this channel.
+Build a background task in chatbot service main.py that subscribes to the Redis channel.
+When a new road issue event arrives, store it in a Redis key scoped to the GPS grid cell (rounded to 3 decimal places, approximately 100m grid).
+Modify context_assembler.py to check for recent road events in the user's GPS grid cell and include them in context.
+Add WebSocket push from chatbot service to connected frontend clients when new events arrive in their area.
+
+Exit Condition
+Submit a road issue report from one browser tab. Within 2 seconds, the other browser tab's map updates and the chat context for that session includes the new road issue. Test by asking 'any road issues near me' immediately after the submission.
+
+Phase 8 — Voice Input and Output (Days 27-30)
+🎯  PURPOSE: Add voice input so users can speak instead of type — critical for injury scenarios. Add voice output so the chatbot reads emergency responses aloud — critical for drivers and for users helping injured people. Voice transforms the chatbot from a screen-based tool to a hands-free emergency assistant.
+
+What to Build — Frontend (Member C owns this)
+Build VoiceInput.tsx — mic button using Web Speech API. Red pulsing animation when recording. Live transcript display. Auto-stop after 5 seconds of silence. Graceful fallback with tooltip when browser does not support it.
+Build VoiceOutput.tsx — speaker icon button on each bot message. Calls window.speechSynthesis with the message text. Rate 0.9, Indian English voice. Auto-read logic when response contains '112' or injury keywords.
+Add hands-free mode toggle to Settings page. When enabled, all bot responses auto-read.
+Add language-aware voice: if the response is in Tamil, use a Tamil TTS voice. If Hindi, use Hindi voice.
+
+Exit Condition
+On Android Chrome, tapping the mic button and saying 'nearest hospital' in English, then Hindi, then Tamil results in correct transcription each time. The emergency response is read aloud automatically. Hands-free mode toggle works.
+
+Phase 9 — Production Hardening (Days 31-35)
+🎯  PURPOSE: Before deployment, add the safety and reliability features that prevent the chatbot from failing under real user load or giving dangerous responses. An emergency app that gives wrong information or crashes when needed most is worse than no app.
+
+What to Build
+Add rate limiting in api/chat.py — maximum 30 messages per session per hour. Return a friendly message when limit is hit rather than an error.
+Add the provider health check background task to main.py — runs every 60 seconds, updates Redis with each provider's status.
+Add response content validation — responses for emergency intents must contain at least one phone number. If not, retry with a different provider.
+Add request logging to chat_logs PostgreSQL table — message, response, intent, latency_ms, provider_used, session_id.
+Add admin endpoints — GET /admin/provider-health shows all 6 providers' current status. POST /admin/rebuild-vectorstore triggers a ChromaDB rebuild.
+Load test the chatbot service — use locust or wrk to simulate 20 concurrent chat sessions and verify response time stays under 5 seconds.
+
+Exit Condition
+20 concurrent chat sessions all receive responses within 5 seconds. Provider health dashboard shows correct status for all 6 providers. Rate limiting correctly blocks a session that sends 31 messages in an hour. The chat_logs table has entries for every test message.
+
+8. REAL-TIME DATA CONNECTIONS — DETAILED IMPLEMENTATION
+This section goes deeper on the three real-time data systems: GPS context injection, WebSocket map push, and the Redis Pub/Sub event pipeline. Each one must be working before the chatbot feels genuinely live.
+
+8.1 GPS Context Injection — Making Every Message Location-Aware
+Every chat message from the frontend must include the user's current GPS coordinates. This is how the chatbot knows which hospitals, which police stations, and which roads to talk about. Without GPS, the chatbot can only give generic answers — with GPS, it gives specific actionable responses.
+
+The Context Injection Pipeline
+Frontend reads GPS every 30 seconds using navigator.geolocation.watchPosition.
+GPS coordinates are stored in Zustand global state.
+Every POST /chat/message request includes lat and lon from Zustand state.
+Chatbot service receives lat/lon. Before calling any LLM, it calls the emergency tool to get nearby services.
+It also calls the road issues tool to check for recent community reports in the area.
+All results are formatted into a context string: 'User is in Tambaram, Chennai, TN. Nearest hospital: Apollo (1.2km, 044-28293333, trauma centre). Nearest police: Tambaram Police (3.1km). Recent road issues: 1 pothole reported on NH-44 2 hours ago.'
+This context string is prepended to the conversation history in the prompt.
+The LLM responds with specific, accurate local information rather than generic advice.
+
+8.2 Redis Pub/Sub — The Real-Time Event Pipeline
+When a user submits a road issue report, that information should reach all other users in the area within seconds. The pipeline from report submission to chat context update goes through three systems: PostgreSQL triggers, Redis Pub/Sub, and WebSocket push.
+
+Setting Up PostgreSQL NOTIFY Trigger
+In Supabase SQL Editor, run the following logic to set up the trigger. This happens in your Supabase project, not in application code.
+Create a trigger function that calls pg_notify with the new road issue data as JSON
+The channel name: road_events — must match what Redis subscriber listens to
+The payload: JSON containing uuid, issue_type, severity, lat, lon, created_at
+Create a TRIGGER on road_issues table AFTER INSERT FOR EACH ROW that calls the trigger function
+Test by inserting a row and checking that pg_notify fires — use psql LISTEN road_events to verify
+
+The Redis Subscriber in Chatbot Service
+A background asyncio task in the chatbot service main.py subscribes to the Redis channel that receives PostgreSQL notifications. When a new event arrives:
+Parse the JSON payload from the notification.
+Calculate the GPS grid cell (round lat and lon to 3 decimal places) for the reported location.
+Store the event in Redis with key format: road_events:{grid_lat}:{grid_lon} with a 1-hour TTL.
+Look up all WebSocket connections that are currently monitoring that grid cell area.
+Push the new event to those connections as a JSON message: {type: road_issue, data: {issue details}}.
+Frontend receives the WebSocket message and updates the map layer to show the new marker.
+
+8.3 Session Context Refresh
+When a new road event arrives for a user's area and that user is actively in a chat session, their next message should automatically have the new event in its context. This happens through the context_assembler.
+
+context_assembler.py checks Redis for road_events:{user_grid_lat}:{user_grid_lon} on every message
+If new events are found (created in last 30 minutes), they are included in the context string
+The LLM then proactively mentions the new information if relevant: 'Also, a pothole was just reported 800m ahead on your current road'
+Events older than 30 minutes are included but marked as older: '2 hours ago: pothole reported near Tambaram'
+
+9. VOICE IMPLEMENTATION — INPUT AND OUTPUT IN DETAIL
+Voice is one of the most important accessibility features in RoadSoS. An injured user cannot type. A driver cannot look at a screen. Voice makes the app usable in the most critical scenarios. This section covers exactly how to implement both voice input and voice output.
+
+9.1 Voice Input — Web Speech API Implementation
+Browser Compatibility
+
+Voice Input Behaviour Specification
+Mic button default state: grey microphone icon. Tap to start recording.
+Recording state: red pulsing circle behind the microphone icon. This tells the user the app is listening.
+Live transcript: Text appears in the chat input field as the user speaks. This provides real-time feedback.
+Auto-stop condition: 5 seconds of silence after the user stops speaking. The timeout is reset every time new speech is detected.
+Manual stop: Tapping the mic button again stops recording immediately.
+On stop: The transcript is automatically submitted as a chat message — no need to tap Send.
+Error handling: If the browser does not support Web Speech API, the mic button is disabled and shows a tooltip 'Use Chrome or Edge for voice input'.
+Language detection: Web Speech API accepts a language hint. Default to the user's browser language. If Tamil or Hindi speakers are likely, set recognition language to the most recently detected intent language.
+
+9.2 Voice Output — Web Speech Synthesis
+Auto-Read Logic
+Not every chatbot response should be read aloud automatically — that would be annoying for normal queries. But emergency responses must be read aloud because the user may not be looking at the screen.
+
+Auto-read trigger conditions: Response contains '112', or 'ambulance', or 'trauma', or 'unconscious', or any first-aid keywords
+Auto-read trigger conditions: User's intent was FIND_HOSPITAL, FIND_AMBULANCE, or FIRST_AID_INFO
+Auto-read trigger conditions: Crash detection fired in the last 60 seconds
+Manual read: Speaker icon button on every bot message — user can tap to hear any response
+Stop reading: Tapping anywhere on the screen stops the current speech synthesis
+Hands-free mode: When enabled in Settings, ALL responses are auto-read regardless of content
+
+Voice Settings
+Rate: 0.9 — slightly slower than default. Important because emergency information needs to be processed clearly.
+Pitch: 1.0 — neutral. Not artificially high or low.
+Volume: 1.0 — maximum. Emergency information must be audible over road noise.
+Language: Matches the detected language of the chatbot's response. Hindi response uses hi-IN voice. Tamil response uses ta-IN voice. English default is en-IN.
+Voice selection: On Android, the device's default voice engine provides language-specific voices. The speechSynthesis.getVoices() call returns available voices — select the one matching the response language.
+
+9.3 The Complete Hands-Free Experience
+When hands-free mode is on and the user speaks a query, the complete flow is:
+User taps the mic button once to activate hands-free session OR hands-free auto-activates when crash detection fires.
+User speaks the query. Transcript appears in real time in the input field.
+After 5 seconds of silence, transcript is submitted automatically.
+Typing indicator shows while the agent processes the query.
+Response appears as text in the chat bubble.
+Voice synthesis immediately reads the response aloud.
+After reading, the mic button automatically activates again — ready for the next question.
+User can continue the entire conversation without ever touching the screen.
+💡  This hands-free loop is the most technically impressive demo moment after the offline map. Demonstrate it at Stage 2: put the phone face-down on a table, speak 'nearest hospital near Tambaram', and hear the chatbot respond with hospital names and phone numbers. Completely hands-free.
+
+10. TESTING — HOW TO KNOW THE CHATBOT WORKS
+Testing the chatbot has two components: automated tests that run in CI/CD and manual tests that require a human to evaluate response quality. Both are required. Automated tests catch technical failures. Manual tests catch AI quality failures.
+
+10.1 Automated Tests — Pytest Suite
+
+10.2 Manual Quality Tests — Conversation Evaluation
+Run these manually before each demo or deployment. These test AI quality, not just technical correctness.
+
+
+10.3 Performance Benchmarks — What Good Looks Like
+
+11. DEPLOYMENT — CHATBOT SERVICE ON ITS OWN RENDER INSTANCE
+The chatbot service deploys to a separate Render.com web service. This is the most important deployment decision. The main backend and the chatbot service are completely independent deployments. If the chatbot crashes, the emergency map still works. If the main backend updates, the chatbot does not need to redeploy.
+
+🎯  PURPOSE: Independent deployment also means the chatbot can be updated without downtime on the main backend. This is critical for a live app where users rely on the emergency features. Update the legal knowledge base, rebuild ChromaDB, and redeploy the chatbot — the main map keeps working throughout.
+
+11.1 Render.com Setup for Chatbot Service
+Creating the Chatbot Service Instance
+Log in to render.com. Click New → Web Service.
+Connect your GitHub organization repository.
+Set Root Directory to chatbot_service/ — this is critical. Without it, Render uses the monorepo root.
+Build Command: pip install -r requirements.txt
+Start Command: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
+Instance Type: Free tier (512MB RAM, shared CPU) is sufficient for the chatbot service.
+Set all environment variables from Section 2 in the Render environment variables panel.
+Set the health check path to /health — Render uses this to determine if the service is running.
+
+Environment Variables in Render Dashboard
+Set every variable from Section 2.3 in the Render Environment panel. Important: the MAIN_BACKEND_URL must point to your main backend's Render URL — this is how the chatbot calls the emergency data API.
+
+11.2 ChromaDB in Production — The Critical Decision
+ChromaDB stores vector embeddings on disk. In production on Render, disk storage is ephemeral — it resets every time the service restarts. This means you cannot store ChromaDB on the local filesystem in production.
+
+Three Options for Production ChromaDB
+💡  For the hackathon, option 1 is correct — build ChromaDB during Docker image build. The Dockerfile runs build_vectorstore.py during the build step. This means the built Docker image already has the vector index. When Render starts the container, ChromaDB loads from the baked-in index in under 5 seconds.
+
+11.3 The Chatbot Service URL
+After deployment, the chatbot service is accessible at https://roadsos-chatbot.onrender.com (or whatever name you choose in Render). The frontend NextJS app must be updated to call this URL for chat requests, not the main backend URL.
+
+
+11.4 GitHub Actions CI/CD for Chatbot Service
+The CI/CD pipeline runs tests and deploys automatically when code is merged to develop (staging) or main (production).
+
+Trigger on push to develop: Run all pytest tests in chatbot_service/tests/. If all pass, deploy to staging Render instance.
+Trigger on push to main: Run all tests. If all pass, deploy to production Render instance.
+Trigger on PR to develop: Run all tests. Post pass/fail status as a PR check. Merging blocked if tests fail.
+The workflow file goes in .github/workflows/chatbot-ci.yml — separate from the main backend CI/CD workflow.
+
+12. FINAL SUMMARY — THE COMPLETE CHATBOT STACK AT A GLANCE
+12.1 Everything in One Table
+
+RoadSoS AI Chatbot Implementation Plan — For the Team. Build Confidently.
+IIT Madras Road Safety Hackathon 2026  |  Separate service · 6 LLM providers · 9 agent tools · Voice I/O · Real-time
