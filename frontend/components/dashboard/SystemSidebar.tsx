@@ -18,10 +18,12 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const SystemSidebar = memo(function SystemSidebar() {
   const isOpen = useAppStore((state) => state.isSystemSidebarOpen);
   const setOpen = useAppStore((state) => state.setSystemSidebarOpen);
+  const pathname = usePathname();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -117,12 +119,20 @@ const SystemSidebar = memo(function SystemSidebar() {
                       <Link
                         href={item.href}
                         onClick={() => setOpen(false)}
-                        className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-all group shadow-sm hover:shadow-md h-24"
+                        className={`flex flex-col items-center justify-center gap-2 p-3 rounded-2xl border transition-all group shadow-sm hover:shadow-md h-24 ${
+                          pathname === item.href
+                            ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20 ring-2 ring-blue-500/20'
+                            : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10'
+                        }`}
                       >
-                        <div className={`${item.color} group-hover:scale-110 transition-transform`}>
+                        <div className={`${item.color} ${pathname === item.href ? 'scale-110' : ''} group-hover:scale-110 transition-transform`}>
                           {item.icon}
                         </div>
-                        <span className="text-[10px] font-bold text-center text-slate-700 dark:text-slate-300 leading-tight">
+                        <span className={`text-[10px] font-bold text-center leading-tight ${
+                          pathname === item.href
+                            ? 'text-blue-700 dark:text-blue-300'
+                            : 'text-slate-700 dark:text-slate-300'
+                        }`}>
                           {item.label}
                         </span>
                       </Link>
