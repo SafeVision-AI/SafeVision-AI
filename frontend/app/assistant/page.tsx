@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowLeft, ShieldCheck, Gavel, BookOpen, Copy,
   HelpCircle, Mic, Paperclip, Send, ThumbsUp, ThumbsDown, RotateCcw,
@@ -86,9 +86,13 @@ export default function ChatPage() {
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const welcomeAdded = useRef(false);
 
   useEffect(() => {
-    // Initialize welcome message only on client to avoid hydration mismatch
+    // Guard against React StrictMode double-mount
+    if (welcomeAdded.current) return;
+    welcomeAdded.current = true;
+    document.title = 'AI Assistant | SafeVisionAI';
     const welcomeMsg: Message = {
       id: 'ai-1',
       role: 'ai',
@@ -216,7 +220,7 @@ export default function ChatPage() {
                           <div className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
                             <Gavel size={16} />
                           </div>
-                          <span className="text-blue-600 dark:text-blue-400 text-[11px] font-black uppercase tracking-[0.15em] font-space animate-pulse">Analysis Active</span>
+                          <span className="text-blue-600 dark:text-blue-400 text-[11px] font-black uppercase tracking-[0.15em] font-space">Analysis Complete</span>
                         </div>
                         <p className="text-slate-700 dark:text-slate-200 text-[15px] leading-relaxed font-medium">
                           <TypingText text={msg.text} />

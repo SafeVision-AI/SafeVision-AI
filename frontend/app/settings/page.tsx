@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -22,6 +22,9 @@ export default function SettingsPage() {
   const [communityReports, setCommunityReports] = useState(true);
   const [satelliteView, setSatelliteView] = useState(false);
   const [themePreference, setThemePreference] = useState<'system'|'light'|'dark'>('system');
+  const [purgeNotice, setPurgeNotice] = useState(false);
+
+  useEffect(() => { document.title = 'Settings | SafeVisionAI'; }, []);
 
   return (
     <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
@@ -63,7 +66,7 @@ export default function SettingsPage() {
 
               <div className="text-center">
                 <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase font-space">Marcus Thorne</h3>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Verified Tactical Responder</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Demo Mode — Verified Tactical Responder</p>
               </div>
               
               <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -135,10 +138,13 @@ export default function SettingsPage() {
                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">2.4 GB Occupied</p>
                </div>
                <button 
-                 onClick={() => alert("Matrix Purged")}
+                 onClick={() => {
+                   setPurgeNotice(true);
+                   setTimeout(() => setPurgeNotice(false), 3000);
+                 }}
                  className="px-6 py-3 bg-red-500/10 text-red-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-red-500/20 active:scale-95 transition-all"
                >
-                 Purge Data
+                 {purgeNotice ? '✓ Cache Purged' : 'Purge Data'}
                </button>
             </div>
             <div className="pt-6 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">

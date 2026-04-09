@@ -3,7 +3,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   AlertTriangle,
   Camera,
@@ -118,7 +118,7 @@ export default function ReportPage() {
 
   const coordinateSignature = useMemo(() => (gpsLocation ? `${gpsLocation.lat.toFixed(4)}:${gpsLocation.lon.toFixed(4)}` : null), [gpsLocation]);
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => { setMounted(true); document.title = 'Report Issue | SafeVisionAI'; }, []);
 
   useEffect(() => {
     if (!photoFile) {
@@ -499,12 +499,13 @@ export default function ReportPage() {
               </div>
             </SurfaceCard>
 
+            {/* Powered by SafeVisionAI notice */}
             <SurfaceCard className="border-slate-200/80 bg-slate-100/80 dark:border-slate-800/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.9),rgba(30,41,59,0.7))]">
               <div className="flex items-start gap-3">
-                <div className="mt-0.5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900"><AlertTriangle size={18} /></div>
+                <div className="mt-0.5 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900"><ShieldAlert size={18} /></div>
                 <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">Enterprise note</div>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">This page is now using live GPS, live authority matching, live road infrastructure data, and the real RoadWatch report endpoint. If location still looks wrong, the device or browser geolocation provider itself is returning an incorrect fix.</p>
+                  <div className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500 dark:text-slate-400">SafeVisionAI Platform</div>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-slate-700 dark:text-slate-200">Reports are dispatched to the correct road-owning authority using live GPS coordinates, real-time infrastructure data, and India&apos;s road ownership database. Your report helps make roads safer.</p>
                 </div>
               </div>
             </SurfaceCard>

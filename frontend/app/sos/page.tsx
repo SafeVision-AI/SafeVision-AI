@@ -8,7 +8,7 @@ import TopSearch from '@/components/dashboard/TopSearch';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import SystemHeader from '@/components/dashboard/SystemHeader';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function EmergencyPage() {
   const { crashDetectionEnabled } = useAppStore();
@@ -21,6 +21,7 @@ export default function EmergencyPage() {
   const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
+    document.title = 'SOS Emergency | SafeVisionAI';
     setIsOnline(navigator.onLine);
     const up = () => setIsOnline(true);
     const dn = () => setIsOnline(false);

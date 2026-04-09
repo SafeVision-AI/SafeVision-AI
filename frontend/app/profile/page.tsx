@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -20,6 +20,8 @@ export default function ProfilePage() {
   const { crashDetectionEnabled, setCrashDetectionEnabled } = useAppStore();
   const [offlineMode, setOfflineMode] = useState(false);
   const [pushNotifs, setPushNotifs] = useState(true);
+
+  useEffect(() => { document.title = 'Profile | SafeVisionAI'; }, []);
 
   return (
     <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
@@ -131,13 +133,13 @@ export default function ProfilePage() {
            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 font-space px-2">Tactical Awards</h3>
            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-6 px-6">
               {[
-                { title: 'Zero Citation', score: '365 Days', color: 'emerald' },
-                { title: 'First Responder', score: 'Level 14', color: 'amber' },
-                { title: 'AI Master', score: '1K Queries', color: 'indigo' },
+                { title: 'Zero Citation', score: '365 Days', bgColor: 'bg-emerald-500/10', iconColor: 'text-emerald-500' },
+                { title: 'First Responder', score: 'Level 14', bgColor: 'bg-amber-500/10', iconColor: 'text-amber-500' },
+                { title: 'AI Master', score: '1K Queries', bgColor: 'bg-indigo-500/10', iconColor: 'text-indigo-500' },
               ].map(badge => (
                 <div key={badge.title} className="flex-shrink-0 w-40 p-6 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col items-center gap-3">
-                   <div className={`p-4 rounded-3xl bg-${badge.color}-500/10`}>
-                      <Star size={24} className={`text-${badge.color}-500`} />
+                   <div className={`p-4 rounded-3xl ${badge.bgColor}`}>
+                      <Star size={24} className={badge.iconColor} />
                    </div>
                    <div className="text-center">
                      <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{badge.title}</p>

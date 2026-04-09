@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import { 
   Shield, Car, Truck, Bike, Bus, AlertTriangle, 
@@ -44,6 +44,8 @@ export default function ChallanPage() {
   const [vehicle, setVehicle] = useState('4w');
   const [jurisdiction, setJurisdiction] = useState(STATES[0]);
   const [isRepeat, setIsRepeat] = useState(false);
+
+  useEffect(() => { document.title = 'Challan Calculator | SafeVisionAI'; }, []);
 
   const activeViolation = VIOLATIONS.find(v => v.id === violation) || VIOLATIONS[0];
   

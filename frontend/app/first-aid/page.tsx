@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   HeartPulse, Activity, Flame, Bone, Droplets, 
   Search, Play, ArrowLeft, X, CheckCircle2, 
@@ -208,6 +208,7 @@ export default function FirstAidPage() {
 
   useEffect(() => {
     setMounted(true);
+    document.title = 'First Aid Guide | SafeVisionAI';
   }, []);
 
   const toggleStep = (idx: number) => {

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import {
   Shield, ArrowLeft, ChevronDown, ChevronUp,
@@ -114,6 +114,7 @@ export default function EmergencyProtocolsPage() {
 
   useEffect(() => {
     setMounted(true);
+    document.title = 'Emergency Protocols | SafeVisionAI';
   }, []);
 
   const filtered = PROTOCOLS.filter(
@@ -187,7 +188,7 @@ export default function EmergencyProtocolsPage() {
                     <Shield size={32} className="text-white" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-100/70 mb-1 font-space">Hazard Override Alpha</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-100/70 mb-1 font-space">Emergency Override</span>
                     <h2 className="text-2xl font-black text-white tracking-tighter uppercase font-space leading-none mb-2">Emergency SOS</h2>
                     <div className="flex items-center gap-2">
                        <span className="w-2 h-2 rounded-full bg-white animate-ping" />
@@ -197,13 +198,13 @@ export default function EmergencyProtocolsPage() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                   <a href="tel:112" className="group/btn relative w-full h-16 px-8 bg-white rounded-2xl flex items-center justify-center gap-3 shadow-xl overflow-hidden active:scale-95 transition-all">
+                   <a href="tel:112" className="group/btn relative w-full h-16 px-8 bg-white rounded-2xl flex items-center justify-center gap-3 shadow-xl overflow-hidden active:scale-95 transition-all ring-2 ring-white/30 animate-pulse">
                      <span className="text-red-700 font-black text-sm tracking-[0.2em] uppercase font-space relative z-10">CALL 112 NOW</span>
                      <ArrowRight size={18} className="text-red-700 relative z-10 transition-transform group-hover/btn:translate-x-1" />
                    </a>
                    <div className="flex items-center justify-between px-2 text-[10px] font-black uppercase text-red-200/60 tracking-[0.2em]">
-                      <span>Ready for dispatch</span>
-                      <span>Encrypted Loop</span>
+                      <span>Armed & Ready</span>
+                      <span>Secure Connection</span>
                    </div>
                 </div>
               </div>
@@ -226,7 +227,7 @@ export default function EmergencyProtocolsPage() {
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
               <Activity size={14} className="text-red-500" />
-              Strategic Filters
+              Filter by Category
             </h3>
             <span className="text-[10px] font-bold text-slate-400 font-mono italic">SVA_V4.2_INTEL</span>
           </div>
