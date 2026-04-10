@@ -1,1 +1,42 @@
-{}
+{
+  "bleeding": {
+    "title": "Severe bleeding",
+    "keywords": ["bleeding", "blood loss", "hemorrhage", "cut"],
+    "steps": [
+      "Apply firm direct pressure with a clean cloth or bandage.",
+      "Keep the injured area elevated if this does not worsen pain.",
+      "Do not remove soaked dressings; add more layers over them.",
+      "Call 112 or arrange urgent medical transport for heavy bleeding."
+    ]
+  },
+  "burn": {
+    "title": "Burns",
+    "keywords": ["burn", "scald", "hot water", "chemical burn"],
+    "steps": [
+      "Cool the burn under cool running water for 20 minutes.",
+      "Remove jewelry or tight items near the burn if they are not stuck.",
+      "Cover loosely with a clean, non-fluffy dressing.",
+      "Do not apply ice, toothpaste, butter, or oily home remedies."
+    ]
+  },
+  "fracture": {
+    "title": "Suspected fracture",
+    "keywords": ["fracture", "broken bone", "sprain", "dislocated"],
+    "steps": [
+      "Keep the injured part still and supported.",
+      "Do not try to force the bone back into place.",
+      "Apply a cold pack wrapped in cloth to reduce swelling.",
+      "Seek urgent medical care for severe pain, deformity, or numbness."
+    ]
+  },
+  "cpr": {
+    "title": "CPR",
+    "keywords": ["cpr", "not breathing", "cardiac arrest", "unconscious"],
+    "steps": [
+      "Call 112 and ask for an ambulance immediately.",
+      "Start hard, fast chest compressions in the center of the chest.",
+      "If trained, give 30 compressions and 2 rescue breaths.",
+      "Continue until trained responders arrive or the person breathes normally."
+    ]
+  }
+}
