@@ -34,6 +34,8 @@ backend/data/chroma_db/
 # Downloaded PDF source documents (too large for git, download manually)
 backend/data/*.pdf
 backend/data/state_amendments/*.pdf
+chatbot_service/data/legal/state_amendments/*.pdf
+chatbot_service/data/legal/indian_kanoon/*.pdf
 
 # Alembic temp files
 backend/migrations/versions/*.pyc
