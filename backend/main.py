@@ -12,8 +12,10 @@ from core.database import check_database
 from core.redis_client import create_cache
 from models.schemas import HealthResponse
 from services.authority_router import AuthorityRouter
+from services.challan_service import ChallanService
 from services.emergency_locator import EmergencyLocatorService
 from services.geocoding_service import GeocodingService
+from services.llm_service import LLMService
 from services.overpass_service import OverpassService
 from services.roadwatch_service import RoadWatchService
 from services.routing_service import RoutingService
@@ -30,6 +32,8 @@ def create_app() -> FastAPI:
         authority_router = AuthorityRouter(settings, overpass_service, cache)
         emergency_service = EmergencyLocatorService(settings=settings, cache=cache, overpass_service=overpass_service)
         routing_service = RoutingService(settings=settings, cache=cache)
+        challan_service = ChallanService(settings=settings)
+        llm_service = LLMService(settings=settings)
         roadwatch_service = RoadWatchService(
             settings=settings,
             cache=cache,
@@ -43,11 +47,14 @@ def create_app() -> FastAPI:
         app.state.authority_router = authority_router
         app.state.emergency_service = emergency_service
         app.state.routing_service = routing_service
+        app.state.challan_service = challan_service
+        app.state.llm_service = llm_service
         app.state.roadwatch_service = roadwatch_service
 
         try:
             yield
         finally:
+            await llm_service.aclose()
             await routing_service.aclose()
             await geocoding_service.aclose()
             await overpass_service.aclose()

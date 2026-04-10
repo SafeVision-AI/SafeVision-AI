@@ -221,3 +221,36 @@ class ServiceCandidate(BaseModel):
     address: str | None = None
     phone: str | None = None
     source: str
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=4000)
+    session_id: str | None = Field(default=None, min_length=1, max_length=128)
+    lat: float | None = Field(default=None, ge=-90, le=90)
+    lon: float | None = Field(default=None, ge=-180, le=180)
+
+
+class ChatResponse(BaseModel):
+    response: str
+    intent: str | None = None
+    sources: list[str] = Field(default_factory=list)
+    session_id: str
+
+
+class ChallanQuery(BaseModel):
+    violation_code: str = Field(min_length=1, max_length=32)
+    vehicle_class: str = Field(min_length=1, max_length=32)
+    state_code: str = Field(min_length=1, max_length=64)
+    is_repeat: bool = False
+
+
+class ChallanResponse(BaseModel):
+    violation_code: str
+    vehicle_class: str
+    state_code: str
+    base_fine: int
+    repeat_fine: int | None = None
+    amount_due: int
+    section: str
+    description: str
+    state_override: str | None = None

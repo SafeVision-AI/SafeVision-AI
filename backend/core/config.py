@@ -48,6 +48,8 @@ class Settings(BaseSettings):
 
     chatbot_mode: str = 'external_service'
     chatbot_ready: bool = False
+    chatbot_service_url: str = 'http://localhost:8010'
+    chatbot_request_timeout_seconds: float = 20.0
 
     data_dir: Path = Field(default_factory=lambda: Path(__file__).resolve().parents[1] / 'data')
     upload_dir: Path = Field(default_factory=lambda: Path(__file__).resolve().parents[1] / 'data' / 'uploads')
@@ -146,6 +148,18 @@ class Settings(BaseSettings):
                 return default
             return Path(normalized)
         raise ValueError('offline_bundle_dir must be a path-like string')
+
+    @field_validator('chatbot_service_url', mode='before')
+    @classmethod
+    def normalize_chatbot_service_url(cls, value: Any) -> str:
+        if value is None:
+            return 'http://localhost:8010'
+        if not isinstance(value, str):
+            raise ValueError('chatbot_service_url must be a string')
+        normalized = value.strip()
+        if not normalized:
+            return 'http://localhost:8010'
+        return normalized.rstrip('/')
 
 
 @lru_cache
