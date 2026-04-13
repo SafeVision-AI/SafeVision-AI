@@ -36,6 +36,11 @@ backend/data/*.pdf
 backend/data/state_amendments/*.pdf
 chatbot_service/data/legal/state_amendments/*.pdf
 chatbot_service/data/legal/indian_kanoon/*.pdf
+chatbot_service/data/legal/*.pdf
+chatbot_service/data/legal/indian_kanoon/*.zip
+chatbot_service/data/qa_pairs/*.zip
+chatbot_service/data/accidents/*/*.pdf
+chatbot_service/data/accidents/_raw_manugupta/
 
 # Alembic temp files
 backend/migrations/versions/*.pyc
@@ -100,6 +105,24 @@ frontend/.npm-cache/
 backend/chennai.json
 backend/data/offline_bundles/
 frontend/public/leaflet/
+
+# Local dataset drops and generated offline bundles
+backend/datasets/
+chatbot_service/data/accidents/*.csv
+chatbot_service/data/accidents/*/*.csv
+chatbot_service/data/boundaries/*.csv
+chatbot_service/data/boundaries/*.geojson
+chatbot_service/data/boundaries/*.json
+chatbot_service/data/hospitals/*.csv
+chatbot_service/data/legal/*.csv
+chatbot_service/data/medical/*.csv
+chatbot_service/data/medical/*.pdf
+chatbot_service/data/pothole_training/
+chatbot_service/data/roads/*.csv
+chatbot_service/data/roads/*.geojson
+chatbot_service/data/roads/*.zip
+frontend/public/offline-data/city-bundles/
+frontend/public/offline-data/translations/
 
 # TypeScript build cache
 *.tsbuildinfo
