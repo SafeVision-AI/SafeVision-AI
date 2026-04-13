@@ -1,1 +1,387 @@
-﻿// 20 first-aid articles from WHO Trauma Guidelines — used by HNSWlib.js offline RAG pipeline
+[
+  {
+    "id": "general-emergency-approach",
+    "title": "General Emergency First Response",
+    "category": "general",
+    "steps": [
+      "1. Make sure the scene is safe for you, the injured person and bystanders before you go closer.",
+      "2. Call emergency services early if the person is unconscious, not breathing normally, severely injured or getting worse.",
+      "3. Use a simple ABCDE check: open the airway, look for breathing problems, look for major bleeding or shock, check mental status, then expose injuries while preventing heat loss.",
+      "4. If the person is unconscious and there is no trauma concern, place them in the recovery position and keep the airway clear.",
+      "5. Control any life-threatening external bleeding, keep the person still, reassure them and protect them from getting too hot or too cold.",
+      "6. Stay with the person, re-check breathing and responsiveness often, and hand over clearly when professional help arrives."
+    ],
+    "warning": "Do not move the person unless there is immediate danger or you must move them to open the airway or perform lifesaving care.",
+    "call_ambulance_if": [
+      "the person is unconscious, confused or hard to wake",
+      "breathing is absent, slow, noisy or difficult",
+      "there is major bleeding, severe pain or obvious serious injury",
+      "the condition is worsening or you are unsure the person is safe to leave"
+    ]
+  },
+  {
+    "id": "severe-bleeding-control",
+    "title": "Severe Bleeding",
+    "category": "bleeding",
+    "steps": [
+      "1. Ensure the area is safe, then expose the wound and look for the source of bleeding.",
+      "2. Apply firm direct pressure with a clean cloth, dressing or gloved hand and keep pressure in place.",
+      "3. If bleeding is deep and severe, pack the wound firmly if you can do so safely, then continue direct pressure.",
+      "4. If there is uncontrolled life-threatening bleeding from an arm or leg, apply a tourniquet above the wound if one is available and you know how to use it.",
+      "5. Keep the person lying still, prevent heat loss and watch for signs of shock such as pale skin, fast breathing or confusion.",
+      "6. Do not stop monitoring until professional care has taken over."
+    ],
+    "warning": "Do not remove a tourniquet once applied, and do not keep lifting dressings to check the wound if bleeding is still active.",
+    "call_ambulance_if": [
+      "bleeding is heavy, spurting or does not stop with pressure",
+      "a tourniquet was needed",
+      "the person shows signs of shock",
+      "the wound is large, deep or caused by a major crash, machinery or animal bite"
+    ]
+  },
+  {
+    "id": "suspected-fracture-care",
+    "title": "Suspected Fracture",
+    "category": "fracture",
+    "steps": [
+      "1. Ask the person not to move the injured area and support the limb in the position found.",
+      "2. Control any bleeding around the injury with gentle direct pressure, avoiding pressure directly over protruding bone.",
+      "3. Immobilize the injured area with a splint or sling if available, supporting the joints above and below the fracture.",
+      "4. Check fingers or toes beyond the injury for colour, warmth, feeling and movement before and after splinting.",
+      "5. Apply a wrapped cold pack if available to help reduce swelling.",
+      "6. Keep the person still and arrange medical assessment."
+    ],
+    "warning": "Do not try to force a deformed limb straight unless there is no pulse or the limb is clearly losing blood flow and trained help is not immediately available.",
+    "call_ambulance_if": [
+      "the fracture is open or bone is visible",
+      "there is severe deformity, loss of pulse, numbness or increasing pain",
+      "the injury involves the hip, pelvis, thigh, multiple bones or follows major trauma",
+      "the person cannot be moved safely"
+    ]
+  },
+  {
+    "id": "burn-first-aid",
+    "title": "Burns",
+    "category": "burns",
+    "steps": [
+      "1. Stop the burning process and make the area safe before starting first aid.",
+      "2. Remove smouldering clothing and any tight jewellery or watches near the burn unless they are stuck to the skin.",
+      "3. Cool the burn with cool running water as soon as possible, without over-cooling the whole person.",
+      "4. For chemical burns, remove the chemical if safe and irrigate with large amounts of water.",
+      "5. Cover the burn with a clean cloth or sheet and keep the person warm during transport.",
+      "6. Arrange prompt medical care."
+    ],
+    "warning": "Do not apply ice, paste, oil, turmeric, toothpaste, raw cotton or other home remedies, and do not break blisters.",
+    "call_ambulance_if": [
+      "the burn is large or deep",
+      "the burn affects the face, airway, hands, feet, genitals or major joints",
+      "there are electrical, chemical or inhalation burns",
+      "the person has trouble breathing or signs of shock"
+    ]
+  },
+  {
+    "id": "airway-foreign-body-choking",
+    "title": "Choking",
+    "category": "choking",
+    "steps": [
+      "1. Ask if the person is choking and encourage coughing if they can still cough or speak.",
+      "2. If the person cannot cough effectively or make sounds, remove any visible object from the mouth only if it is easy to reach.",
+      "3. Give age-appropriate back blows and chest or abdominal thrusts until the object comes out or the person becomes unconscious.",
+      "4. If the person becomes unconscious, start CPR and re-check the mouth for visible obstruction between cycles.",
+      "5. Keep the person calm and monitor breathing closely even after the object is expelled."
+    ],
+    "warning": "Do not perform blind finger sweeps inside the mouth.",
+    "call_ambulance_if": [
+      "the airway does not clear quickly",
+      "the person becomes unconscious",
+      "breathing remains noisy, difficult or abnormal after the event",
+      "the choking episode happened in a small child, older adult or frail person"
+    ]
+  },
+  {
+    "id": "suspected-heart-attack",
+    "title": "Suspected Heart Attack",
+    "category": "cardiac",
+    "steps": [
+      "1. Treat sudden chest pressure, chest pain, breathlessness, cold sweat, nausea, faintness or pain spreading to the arm, jaw or back as an emergency.",
+      "2. Call emergency services immediately and have the person stop activity and rest in a comfortable position.",
+      "3. Loosen tight clothing, reassure the person and monitor breathing and mental status closely.",
+      "4. If the person is conscious, not allergic to aspirin and not actively bleeding, give one 300 mg aspirin to chew while waiting for the ambulance.",
+      "5. If the person becomes unresponsive and is not breathing normally, start CPR."
+    ],
+    "warning": "Do not let the person walk around or delay transport to see if the pain passes.",
+    "call_ambulance_if": [
+      "chest pain or pressure lasts more than a few minutes",
+      "there is shortness of breath, collapse, confusion or severe weakness",
+      "the person has a history of heart disease, diabetes or stroke and new chest symptoms",
+      "the person becomes unresponsive"
+    ]
+  },
+  {
+    "id": "shock-first-aid",
+    "title": "Shock",
+    "category": "shock",
+    "steps": [
+      "1. Look for signs of shock such as cold hands or feet, weak fast pulse, capillary refill over 3 seconds, pale skin, fast breathing, confusion or lethargy.",
+      "2. Treat the cause immediately if you can: control external bleeding, remove the allergen, or cool severe heat illness while arranging urgent transport.",
+      "3. Lay the person flat if possible, unless breathing is easier sitting up or there is an injury that prevents this.",
+      "4. Keep the person warm, calm and still, and do not give food or drink if surgery or loss of consciousness is possible.",
+      "5. Monitor breathing, mental status and skin colour continuously until advanced help arrives."
+    ],
+    "warning": "Shock is a life-threatening emergency even if the person is still awake and talking.",
+    "call_ambulance_if": [
+      "there are signs of poor perfusion or collapse",
+      "shock follows bleeding, trauma, burns, severe infection, allergy or chest pain",
+      "the person is getting more confused, drowsy or breathless",
+      "you cannot quickly reverse the cause"
+    ]
+  },
+  {
+    "id": "head-injury-first-aid",
+    "title": "Head Injury",
+    "category": "head_injury",
+    "steps": [
+      "1. Keep the person still and assume there may also be a neck injury after a crash, fall or blow to the head.",
+      "2. Check airway and breathing first and be ready to support the airway while keeping the head and neck aligned.",
+      "3. Control scalp bleeding with gentle pressure unless you suspect a depressed skull fracture or there is something embedded.",
+      "4. Do not give food or drink, and keep observing for worsening headache, vomiting, confusion, unequal pupils or increasing sleepiness.",
+      "5. If vomiting occurs and you must turn the person, roll the whole body together while keeping the neck straight."
+    ],
+    "warning": "Blood or clear fluid from the ears or nose after head trauma can mean a serious skull injury.",
+    "call_ambulance_if": [
+      "the person was unconscious, confused or has memory loss",
+      "there is repeated vomiting, seizure, worsening headache or unequal pupils",
+      "there is bleeding or fluid from the ears or nose",
+      "the injury followed a high-risk crash, fall or assault"
+    ]
+  },
+  {
+    "id": "spinal-injury-protection",
+    "title": "Suspected Spinal Injury",
+    "category": "spinal",
+    "steps": [
+      "1. Suspect spinal injury after major trauma, neck pain, back pain, numbness, weakness or paralysis.",
+      "2. Tell the person not to move and manually stabilize the head and neck in the position found.",
+      "3. Only move the person if there is immediate danger or if you must move them to open the airway and save life.",
+      "4. If you need to turn the person, use a log-roll with the head, neck and body moving together.",
+      "5. Keep monitoring breathing, circulation and limb sensation while waiting for advanced help."
+    ],
+    "warning": "Do not twist, sit up or pull on the person unless there is no safer option.",
+    "call_ambulance_if": [
+      "there is neck or back pain after trauma",
+      "the person has numbness, tingling, weakness or limb paralysis",
+      "the person has altered mental status after an injury",
+      "the mechanism was high-risk, such as a road crash, fall from height or diving injury"
+    ]
+  },
+  {
+    "id": "drowning-first-response",
+    "title": "Drowning",
+    "category": "drowning",
+    "steps": [
+      "1. Remove the person from the water only if it is safe for you to do so.",
+      "2. Open the airway, check breathing immediately and start rescue breathing and CPR if the person is not breathing normally.",
+      "3. If the person is breathing, place them where the airway stays clear and monitor closely.",
+      "4. Remove wet clothing, dry the person and protect them from hypothermia.",
+      "5. Arrange urgent medical assessment even if the person seems to recover, because breathing problems can appear later after immersion."
+    ],
+    "warning": "Do not leave a person alone after a drowning episode, even if they are awake and talking.",
+    "call_ambulance_if": [
+      "the person was unconscious, needed rescue breaths or CPR, or inhaled water",
+      "breathing is fast, difficult, noisy or worsening",
+      "there is cough, chest discomfort, confusion or extreme tiredness after rescue",
+      "the person is a child, older adult or has any other injury"
+    ]
+  },
+  {
+    "id": "poisoning-first-aid",
+    "title": "Poisoning",
+    "category": "poisoning",
+    "steps": [
+      "1. Remove the person from the toxic source if this can be done safely, and protect yourself from the exposure.",
+      "2. Check airway, breathing and mental status; if the person is very drowsy or unconscious, place them in the recovery position if there is no trauma concern.",
+      "3. If the poison is on the skin or clothing, remove contaminated clothing and wash exposed skin with plenty of water.",
+      "4. If the poison is in the eyes, rinse continuously with clean water.",
+      "5. Keep the product container, plant sample or medication pack to show health professionals or a poison centre.",
+      "6. Arrange urgent medical advice and transport."
+    ],
+    "warning": "Do not induce vomiting unless specifically directed by a poison specialist or clinician.",
+    "call_ambulance_if": [
+      "the person has trouble breathing, seizure, confusion or collapse",
+      "there was pesticide, chemical, unknown substance or large-dose exposure",
+      "the person is a child, pregnant, or has significant symptoms",
+      "there are burns in the mouth, drooling or repeated vomiting"
+    ]
+  },
+  {
+    "id": "eye-injury-first-aid",
+    "title": "Eye Injury",
+    "category": "eye_injury",
+    "steps": [
+      "1. If there is chemical exposure, remove contact lenses if easy and irrigate the eye immediately with clean water for a prolonged rinse.",
+      "2. If there is an object stuck in the eye or a penetrating injury, do not remove it and do not press on the eye.",
+      "3. Ask the person to keep both eyes as still as possible and avoid rubbing.",
+      "4. Lightly protect the injured eye without pressure while arranging urgent transport.",
+      "5. Keep the head elevated if tolerated and continue monitoring for pain, vision loss or worsening swelling."
+    ],
+    "warning": "Avoid pressure on an injured eye, especially if there is a penetrating object or obvious severe trauma.",
+    "call_ambulance_if": [
+      "there is penetrating eye injury or something embedded",
+      "vision is reduced, double or absent",
+      "pain is severe or chemical exposure occurred",
+      "there was a high-speed injury, explosion or major facial trauma"
+    ]
+  },
+  {
+    "id": "animal-bite-care",
+    "title": "Animal Bite",
+    "category": "animal_bite",
+    "steps": [
+      "1. Move the person away from the animal and make the area safe.",
+      "2. For dog, cat, monkey, bat or other mammal bites, irrigate and cleanse the wound thoroughly with soap and running water for about 15 minutes.",
+      "3. For suspected venomous snake bite, remove rings or tight items, reassure the person and keep the whole person and the bitten limb still.",
+      "4. Cover the wound with a clean dressing and arrange prompt medical care for rabies, tetanus, infection risk or antivenom assessment as needed.",
+      "5. If safe, gather information about the animal and the time and location of the bite."
+    ],
+    "warning": "Do not cut, suck, burn or tightly tourniquet a snake bite, and do not use herbal or traditional first-aid methods.",
+    "call_ambulance_if": [
+      "the bite is from a venomous or unknown snake",
+      "there is facial bite, deep wound, uncontrolled bleeding or rapid swelling",
+      "the person has trouble breathing, weakness or signs of allergic reaction",
+      "rabies exposure is possible or the person is a child"
+    ]
+  },
+  {
+    "id": "heat-stroke-first-aid",
+    "title": "Heat Stroke",
+    "category": "heat_stroke",
+    "steps": [
+      "1. Treat confusion, collapse, very hot skin or loss of consciousness in a hot environment as heat stroke.",
+      "2. Move the person to shade or a cool place immediately and remove excess clothing.",
+      "3. Start rapid cooling using cool water, wet cloths, fanning or cool bathing if available.",
+      "4. If the person is fully awake and not confused, offer sips of water; if confused, vomiting or unconscious, give nothing by mouth.",
+      "5. Keep monitoring breathing and mental status while waiting for emergency transport."
+    ],
+    "warning": "Heat stroke is a medical emergency with a high fatality risk; cool first and transport urgently.",
+    "call_ambulance_if": [
+      "there is confusion, collapse, seizure or unconsciousness",
+      "the person has very hot skin or stops sweating in severe heat",
+      "cooling does not lead to quick improvement",
+      "the person is elderly, very young, pregnant or has chronic disease"
+    ]
+  },
+  {
+    "id": "hypothermia-first-aid",
+    "title": "Hypothermia",
+    "category": "hypothermia",
+    "steps": [
+      "1. Move the person indoors or to shelter as soon as it is safe.",
+      "2. Remove wet clothing, dry the skin and wrap the person in dry blankets or towels, covering the head as well.",
+      "3. Give a warm sweet drink only if the person is fully awake and able to swallow safely.",
+      "4. Keep the person still, talk to them to keep them awake and stay with them until help arrives.",
+      "5. Monitor breathing closely and be ready to start CPR if normal breathing stops."
+    ],
+    "warning": "Do not use very hot water, direct heaters or vigorous rubbing to warm the person.",
+    "call_ambulance_if": [
+      "the person is confused, unusually sleepy or hard to wake",
+      "shivering stops or breathing becomes slow",
+      "there are signs of frostbite",
+      "the person is an infant, older adult or has other injuries"
+    ]
+  },
+  {
+    "id": "electric-shock-first-aid",
+    "title": "Electric Shock",
+    "category": "electric_shock",
+    "steps": [
+      "1. Do not touch the person until the power source is switched off or the person is safely separated from the current.",
+      "2. Once safe, check responsiveness and breathing immediately.",
+      "3. Start CPR if the person is unresponsive and not breathing normally.",
+      "4. Look for burns or trauma from a fall, cool obvious burns with cool water and cover them with a clean cloth.",
+      "5. Keep the person still and arrange urgent medical evaluation because internal injuries or heart rhythm problems may not be obvious."
+    ],
+    "warning": "Your safety comes first; never become a second casualty by grabbing a person who is still in contact with electricity.",
+    "call_ambulance_if": [
+      "the shock was from high voltage or lightning",
+      "the person lost consciousness, has chest pain or abnormal breathing",
+      "there are burns, muscle pain, weakness or fall injuries",
+      "the person is pregnant or a child"
+    ]
+  },
+  {
+    "id": "severe-allergic-reaction",
+    "title": "Severe Allergic Reaction",
+    "category": "allergic_reaction",
+    "steps": [
+      "1. Suspect a severe allergic reaction if there is facial swelling, wheeze, stridor, rash with breathing trouble, collapse or shock after food, medicine, bite or sting exposure.",
+      "2. Remove the trigger if this can be done safely, and call emergency services immediately.",
+      "3. If an adrenaline auto-injector or other IM adrenaline is available, give it promptly according to the device or local instructions.",
+      "4. Keep the person calm and in the position that helps breathing best; if they faint, lay them flat unless breathing is worse that way.",
+      "5. Monitor closely because symptoms can recur and further doses may be needed while waiting for advanced care."
+    ],
+    "warning": "Do not wait for a rash to appear before treating breathing difficulty or collapse as anaphylaxis.",
+    "call_ambulance_if": [
+      "there is any breathing difficulty, facial swelling or collapse",
+      "adrenaline was used",
+      "symptoms are returning or worsening",
+      "the reaction followed a bite, sting, medicine or food exposure"
+    ]
+  },
+  {
+    "id": "diabetic-emergency-first-aid",
+    "title": "Diabetic Emergency",
+    "category": "diabetic_emergency",
+    "steps": [
+      "1. Suspect a diabetic emergency if a person with diabetes has confusion, unusual behaviour, sweating, weakness, deep breathing, vomiting, dehydration or reduced consciousness.",
+      "2. Check blood glucose if a meter is available; if you cannot check and low blood sugar is possible, treat promptly.",
+      "3. If the person is awake and can swallow safely, give oral glucose, a sugary drink or other fast sugar.",
+      "4. If the person is drowsy, vomiting or unconscious, give nothing by mouth and place them in the recovery position if there is no trauma concern.",
+      "5. Monitor mental status and breathing closely and arrange urgent medical care, especially if high blood sugar or ketoacidosis is suspected."
+    ],
+    "warning": "Do not force food or drink into the mouth of anyone with reduced consciousness.",
+    "call_ambulance_if": [
+      "the person is unconscious, has a seizure or is not improving quickly after sugar",
+      "there is deep or rapid breathing, repeated vomiting or severe dehydration",
+      "blood glucose is very high or very low",
+      "you are unsure whether the problem is low sugar or diabetic ketoacidosis"
+    ]
+  },
+  {
+    "id": "seizure-first-aid",
+    "title": "Seizure",
+    "category": "seizure",
+    "steps": [
+      "1. Protect the person from injury by clearing nearby hazards and cushioning the head.",
+      "2. Do not hold the person down and do not put anything in their mouth.",
+      "3. Time the seizure and watch for breathing problems or repeated convulsions.",
+      "4. After the convulsion stops, place the person in the recovery position if there is no trauma concern and keep the airway clear.",
+      "5. Stay with the person until they are fully awake and continue to monitor because prolonged altered mental status needs urgent assessment."
+    ],
+    "warning": "Repeated seizures or prolonged confusion after a seizure require urgent medical evaluation.",
+    "call_ambulance_if": [
+      "the seizure lasts more than 5 minutes",
+      "multiple seizures occur without full recovery between them",
+      "the person was injured, pregnant, in water, or this is a first seizure",
+      "breathing is difficult or consciousness does not improve"
+    ]
+  },
+  {
+    "id": "suspected-stroke",
+    "title": "Suspected Stroke",
+    "category": "stroke",
+    "steps": [
+      "1. Use the stroke warning signs: sudden balance loss, sudden vision change, facial droop, arm weakness and speech difficulty.",
+      "2. Treat suspected stroke as a medical emergency and call emergency services immediately.",
+      "3. Note the exact time the person was last known well, because rapid treatment is critical.",
+      "4. Keep the person safe and resting, and do not give food, drink or oral medicines.",
+      "5. Monitor breathing and mental status closely and be ready to start CPR if the person stops breathing normally."
+    ],
+    "warning": "Do not wait to see if symptoms go away; rapid transfer can determine whether time-sensitive stroke treatment is possible.",
+    "call_ambulance_if": [
+      "there is sudden facial droop, arm weakness or speech difficulty",
+      "there is sudden severe headache, collapse, confusion or one-sided numbness",
+      "vision suddenly changes or balance is lost without explanation",
+      "the person becomes drowsy or unresponsive"
+    ]
+  }
+]

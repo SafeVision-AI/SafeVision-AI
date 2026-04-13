@@ -1,1 +1,7 @@
-﻿# State-specific fine overrides for TN, KA, MH, DL, AP, TS, KL, RJ — LEFT JOIN with violations
+state_code,violation_code,vehicle_class,base_fine,repeat_fine,section,description,note
+DL,194E,,10000,,,,Delhi Traffic Police published penalty schedule; effective 2019-09-01
+GJ,183,,1000,,,,Transport Department Gujarat baseline schedule; effective 2019-09-01
+KA,194D,,500,,,,Bengaluru Traffic Police published FAQ schedule; effective 2019-09-01
+KL,194D,,1000,,,,Motor Vehicles Department Kerala baseline schedule; effective 2019-09-01
+MH,181,,500,,,,Transport Department Maharashtra public compounding schedule; effective 2019-09-01
+TN,194D,,1000,,,,Transport and Road Safety Wing Tamil Nadu; effective 2019-09-01
