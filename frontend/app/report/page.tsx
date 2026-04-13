@@ -87,7 +87,7 @@ function SurfaceCard({ children, className }: { children: ReactNode; className?:
   return (
     <div
       className={cx(
-        'rounded-[2rem] border border-slate-200/70 bg-white/82 p-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl',
+        'rounded-[2rem] border border-slate-300 bg-white/82 p-5 shadow-[0_20px_80px_rgba(15,23,42,0.08)] backdrop-blur-xl',
         'dark:border-slate-800/80 dark:bg-[linear-gradient(180deg,rgba(15,23,42,0.92),rgba(2,6,23,0.9))] dark:shadow-[0_30px_120px_rgba(2,6,23,0.52)]',
         className
       )}
@@ -99,7 +99,7 @@ function SurfaceCard({ children, className }: { children: ReactNode; className?:
 
 export default function ReportPage() {
   const [mounted, setMounted] = useState(false);
-  const [selectedType, setSelectedType] = useState<(typeof ISSUE_OPTIONS)[number][0]>('pothole');
+  const [selectedType, setSelectedType] = useState<(typeof ISSUE_OPTIONS)[number][0] | null>(null);
   const [severity, setSeverity] = useState<number>(3);
   const [notes, setNotes] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
@@ -212,6 +212,12 @@ export default function ReportPage() {
   const locationLabel = formatLocationLabel(gpsLocation, gpsError);
   const locationSubtitle = gpsLocation ? locationDisplay ?? formatLocationSubtitle(gpsLocation) : 'Enable location to match the exact road-owning authority.';
   const accuracyLabel = formatAccuracyLabel(gpsLocation);
+  const accuracyMeters = gpsLocation?.accuracy ?? 15;
+  const accuracyColor = accuracyMeters < 10 
+    ? 'text-emerald-500 dark:text-emerald-400' 
+    : accuracyMeters < 30 
+      ? 'text-amber-500 dark:text-amber-400' 
+      : 'text-red-500 dark:text-red-400';
   const approximateLocation = isApproximateLocation(gpsLocation);
   const photoHint = photoFile ? `${photoFile.name} - ${(photoFile.size / (1024 * 1024)).toFixed(2)} MB` : 'JPG, PNG, or WEBP. Optional, but it speeds up verification.';
 
@@ -224,8 +230,8 @@ export default function ReportPage() {
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!gpsLocation) {
-      setSubmitError('Enable location before submitting a road issue.');
+    if (!gpsLocation || !selectedType) {
+      setSubmitError('Please select a hazard type and enable location before submitting.');
       return;
     }
 
@@ -255,7 +261,7 @@ export default function ReportPage() {
   }
 
   function resetForm() {
-    setSelectedType('pothole');
+    setSelectedType(null);
     setSeverity(3);
     setNotes('');
     setPhotoFile(null);
@@ -282,7 +288,7 @@ export default function ReportPage() {
         <TopSearch isMapPage={false} forceShow={true} showBack={false} />
       </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 pb-32 pt-28 lg:pt-24 sm:px-6 lg:px-8 lg:pb-10">
+      <main className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pb-44 pt-28 lg:pt-24 sm:px-6 lg:pb-10">
         
         {/* ── Dispatch Hero Section ── */}
         <section className="mt-4 flex flex-col gap-2">
@@ -307,7 +313,7 @@ export default function ReportPage() {
             </p>
           </div>
         </section>
-        <div className="grid gap-6 xl:grid-cols-[1.08fr,0.92fr]">
+        <div className="grid gap-6">
           <section className="space-y-6">
             <SurfaceCard className="overflow-hidden p-0">
               <div className="min-h-[360px] sm:min-h-[420px]">
@@ -330,7 +336,7 @@ export default function ReportPage() {
                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800/80 dark:bg-slate-950/45">
                     <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Accuracy</div>
-                    <div className="mt-2 text-sm font-semibold text-slate-800 dark:text-slate-100">{accuracyLabel ?? 'Pending device fix'}</div>
+                    <div className={cx("mt-2 text-sm font-semibold", gpsLocation ? accuracyColor : "text-slate-800 dark:text-slate-100")}>{accuracyLabel ?? 'Pending device fix'}</div>
                   </div>
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800/80 dark:bg-slate-950/45">
                     <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Coordinates</div>
@@ -348,10 +354,18 @@ export default function ReportPage() {
                   </div>
                   <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-600 dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-200"><Camera size={18} /></div>
                 </div>
-                <label htmlFor="hazard-photo" className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/70 dark:border-slate-800/80 dark:bg-slate-950/45 dark:hover:border-blue-400/20 dark:hover:bg-blue-500/10">
-                  <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 dark:bg-blue-500/16 dark:text-blue-100"><Upload size={22} /></div>
-                  <div className="mt-4 text-sm font-black uppercase tracking-[0.18em] text-slate-800 dark:text-slate-100">{photoFile ? 'Replace photo' : 'Attach road image'}</div>
-                  <p className="mt-2 max-w-xs text-sm text-slate-500 dark:text-slate-400">{photoHint}</p>
+                <label htmlFor="hazard-photo" className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/70 dark:border-slate-800/80 dark:bg-slate-950/45 dark:hover:border-blue-400/20 dark:hover:bg-blue-500/10 relative overflow-hidden group">
+                  {photoPreviewUrl && (
+                    <div className="absolute inset-0 w-full h-full bg-black/60 z-0">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={photoPreviewUrl} alt="Preview" className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition" />
+                    </div>
+                  )}
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 dark:bg-blue-500/16 dark:text-blue-100 shadow-sm"><Upload size={22} /></div>
+                    <div className={`mt-4 text-sm font-black uppercase tracking-[0.18em] ${photoPreviewUrl ? 'text-white' : 'text-slate-800 dark:text-slate-100'}`}>{photoFile ? 'Replace photo' : 'Attach road image'}</div>
+                    <p className={`mt-2 max-w-xs text-sm ${photoPreviewUrl ? 'text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>{photoHint}</p>
+                  </div>
                 </label>
                 <input id="hazard-photo" type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handlePhotoChange} />
               </SurfaceCard>
@@ -368,68 +382,78 @@ export default function ReportPage() {
                 <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-700 dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-100"><Send size={18} /></div>
               </div>
 
-              <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
-                <div>
-                  <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Hazard type</div>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    {ISSUE_OPTIONS.map(([value, label, detail], index) => {
-                      const active = value === selectedType;
-                      const activeAccent = [
-                        'border-amber-200 bg-amber-50 text-amber-950 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-50',
-                        'border-orange-200 bg-orange-50 text-orange-950 dark:border-orange-400/20 dark:bg-orange-500/10 dark:text-orange-50',
-                        'border-cyan-200 bg-cyan-50 text-cyan-950 dark:border-cyan-400/20 dark:bg-cyan-500/10 dark:text-cyan-50',
-                        'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-400/20 dark:bg-blue-500/10 dark:text-blue-50',
-                        'border-violet-200 bg-violet-50 text-violet-950 dark:border-violet-400/20 dark:bg-violet-500/10 dark:text-violet-50',
-                        'border-rose-200 bg-rose-50 text-rose-950 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-50',
-                      ][index];
-                      return (
-                        <button key={value} type="button" onClick={() => setSelectedType(value)} className={cx('rounded-[1.5rem] border px-4 py-4 text-left transition', active ? activeAccent : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-white dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-950/80')}>
-                          <div className="text-sm font-black uppercase tracking-[0.16em]">{label}</div>
-                          <p className="mt-2 text-sm font-medium opacity-80">{detail}</p>
-                        </button>
-                      );
-                    })}
+              {!submittedReport ? (
+                <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
+                  <div>
+                    <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Hazard type</div>
+                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                      {ISSUE_OPTIONS.map(([value, label, detail], index) => {
+                        const active = value === selectedType;
+                        const activeAccent = [
+                          'border-amber-200 bg-amber-50 text-amber-950 dark:border-amber-400/20 dark:bg-amber-500/10 dark:text-amber-50',
+                          'border-orange-200 bg-orange-50 text-orange-950 dark:border-orange-400/20 dark:bg-orange-500/10 dark:text-orange-50',
+                          'border-cyan-200 bg-cyan-50 text-cyan-950 dark:border-cyan-400/20 dark:bg-cyan-500/10 dark:text-cyan-50',
+                          'border-blue-200 bg-blue-50 text-blue-950 dark:border-blue-400/20 dark:bg-blue-500/10 dark:text-blue-50',
+                          'border-violet-200 bg-violet-50 text-violet-950 dark:border-violet-400/20 dark:bg-violet-500/10 dark:text-violet-50',
+                          'border-rose-200 bg-rose-50 text-rose-950 dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-50',
+                        ][index];
+                        return (
+                          <button key={value} type="button" onClick={() => setSelectedType(value)} className={cx('rounded-[1.5rem] border px-4 py-4 text-left transition', active ? activeAccent : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 hover:bg-white dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-950/80')}>
+                            <div className="text-sm font-black uppercase tracking-[0.16em]">{label}</div>
+                            <p className="mt-2 text-sm font-medium opacity-80">{detail}</p>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Severity</div>
-                    <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">{severityMeta[1]} - {severityMeta[2]}</div>
+                  <div>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Severity</div>
+                      <div className="text-sm font-semibold text-slate-600 dark:text-slate-300">{severityMeta[1]} - {severityMeta[2]}</div>
+                    </div>
+                    <div className="mt-3 grid grid-cols-5 gap-2">
+                      {SEVERITY_OPTIONS.map(([value, label]) => {
+                        const active = value === severity;
+                        return (
+                          <button key={value} type="button" onClick={() => setSeverity(value)} className={cx('rounded-2xl border px-3 py-4 text-center transition', active ? value >= 4 ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'border-blue-500 bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-100')}>
+                            <div className="text-lg font-black leading-none">{value}</div>
+                            <div className="mt-2 text-[10px] font-black uppercase tracking-[0.18em]">{label}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <div className="mt-3 grid grid-cols-5 gap-2">
-                    {SEVERITY_OPTIONS.map(([value, label]) => {
-                      const active = value === severity;
-                      return (
-                        <button key={value} type="button" onClick={() => setSeverity(value)} className={cx('rounded-2xl border px-3 py-4 text-center transition', active ? value >= 4 ? 'border-red-500 bg-red-500 text-white shadow-lg shadow-red-500/20' : 'border-blue-500 bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-slate-300 dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-100')}>
-                          <div className="text-lg font-black leading-none">{value}</div>
-                          <div className="mt-2 text-[10px] font-black uppercase tracking-[0.18em]">{label}</div>
-                        </button>
-                      );
-                    })}
+
+                  <div>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Notes for the authority desk</div>
+                      <div className="text-xs font-semibold text-slate-400 dark:text-slate-500">{notes.trim().length}/480</div>
+                    </div>
+                    <textarea value={notes} onChange={(event) => setNotes(event.target.value.slice(0, 480))} placeholder="Describe lane blockage, vehicle risk, traffic density, or how the hazard presents on the road." className="mt-3 min-h-[140px] w-full rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-4 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white dark:border-slate-800/80 dark:bg-slate-950/45 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400/40 dark:focus:bg-slate-950/75" />
                   </div>
-                </div>
 
-                <div>
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">Notes for the authority desk</div>
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500">{notes.trim().length}/480</div>
+                  {submitError ? <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-900 dark:border-red-400/20 dark:bg-red-500/10 dark:text-red-100">{submitError}</div> : null}
+
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <button type="submit" disabled={submitting || !gpsLocation || !selectedType} className="inline-flex flex-1 items-center justify-center gap-3 rounded-[1.6rem] bg-gradient-to-r from-orange-500 via-rose-500 to-red-500 px-5 py-4 text-sm font-black uppercase tracking-[0.22em] text-white shadow-[0_24px_80px_rgba(239,68,68,0.24)] transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0">
+                      {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                      {submitting ? 'Submitting...' : 'Submit live report'}
+                    </button>
+                    <button type="button" onClick={resetForm} className="inline-flex items-center justify-center gap-3 rounded-[1.6rem] border border-slate-200 bg-slate-100 px-5 py-4 text-sm font-black uppercase tracking-[0.18em] text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-950/80">
+                      <RefreshCcw size={18} />Reset
+                    </button>
                   </div>
-                  <textarea value={notes} onChange={(event) => setNotes(event.target.value.slice(0, 480))} placeholder="Describe lane blockage, vehicle risk, traffic density, or how the hazard presents on the road." className="mt-3 min-h-[140px] w-full rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-4 text-sm font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:bg-white dark:border-slate-800/80 dark:bg-slate-950/45 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400/40 dark:focus:bg-slate-950/75" />
-                </div>
-
-                {submitError ? <div className="rounded-[1.5rem] border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-900 dark:border-red-400/20 dark:bg-red-500/10 dark:text-red-100">{submitError}</div> : null}
-
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <button type="submit" disabled={submitting || !gpsLocation} className="inline-flex flex-1 items-center justify-center gap-3 rounded-[1.6rem] bg-gradient-to-r from-orange-500 via-rose-500 to-red-500 px-5 py-4 text-sm font-black uppercase tracking-[0.22em] text-white shadow-[0_24px_80px_rgba(239,68,68,0.24)] transition hover:translate-y-[-1px] disabled:cursor-not-allowed disabled:opacity-50">
-                    {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
-                    {submitting ? 'Submitting...' : 'Submit live report'}
-                  </button>
-                  <button type="button" onClick={resetForm} className="inline-flex items-center justify-center gap-3 rounded-[1.6rem] border border-slate-200 bg-slate-100 px-5 py-4 text-sm font-black uppercase tracking-[0.18em] text-slate-700 transition hover:border-slate-300 hover:bg-white dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-200 dark:hover:border-slate-700 dark:hover:bg-slate-950/80">
-                    <RefreshCcw size={18} />Reset
-                  </button>
-                </div>
-              </form>
+                </form>
+              ) : (
+                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mt-8 flex flex-col items-center justify-center text-center py-10">
+                  <div className="w-24 h-24 rounded-full bg-emerald-500/20 flex items-center justify-center animate-pulse mb-6">
+                    <CheckCircle2 size={48} className="text-emerald-500" />
+                  </div>
+                  <h3 className="text-3xl font-black text-slate-900 dark:text-white font-space tracking-tight">Report Uplinked</h3>
+                  <p className="mt-3 text-slate-500 max-w-sm">Your hazard report has been successfully dispatched to the regional authority dashboard.</p>
+                </motion.div>
+              )}
             </SurfaceCard>
             <AnimatePresence initial={false}>
               {submittedReport ? (

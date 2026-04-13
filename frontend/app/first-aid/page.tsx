@@ -29,19 +29,24 @@ interface Message {
 
 const TypingText = ({ text, onComplete }: { text: string; onComplete?: () => void }) => {
   const [displayedText, setDisplayedText] = useState("");
-  const [index, setIndex] = useState(0);
+  const index = useRef(0);
 
   useEffect(() => {
-    if (index < text.length) {
+    index.current = 0;
+    setDisplayedText("");
+  }, [text]);
+
+  useEffect(() => {
+    if (index.current < text.length) {
       const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + text[index]);
-        setIndex((prev) => prev + 1);
+        setDisplayedText((prev) => prev + text[index.current]);
+        index.current += 1;
       }, 10);
       return () => clearTimeout(timeout);
     } else if (onComplete) {
       onComplete();
     }
-  }, [index, text, onComplete]);
+  }, [displayedText, text, onComplete]);
 
   return <span>{displayedText}</span>;
 };
@@ -68,9 +73,10 @@ const CameraViewport = ({ onError }: { onError: (err: string | null) => void }) 
       }
     }
     startCamera();
+    const currentVideo = videoRef.current;
     return () => {
-      if (videoRef.current?.srcObject) {
-        (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+      if (currentVideo?.srcObject) {
+        (currentVideo.srcObject as MediaStream).getTracks().forEach(track => track.stop());
       }
     };
   }, [onError]);
@@ -206,10 +212,30 @@ export default function FirstAidPage() {
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
   const { theme, setTheme } = useTheme();
 
+  const [isScanning, setIsScanning] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const modalScrollRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     setMounted(true);
     document.title = 'First Aid Guide | SafeVisionAI';
   }, []);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setActiveGuide(null);
+    };
+    window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
+
+  const handleModalScroll = () => {
+    if (modalScrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = modalScrollRef.current;
+      const progress = (scrollTop / (scrollHeight - clientHeight)) * 100;
+      setScrollProgress(progress);
+    }
+  };
 
   const toggleStep = (idx: number) => {
     const newSteps = new Set(completedSteps);
@@ -236,7 +262,7 @@ export default function FirstAidPage() {
 
       <SystemSidebar />
 
-      <main className="flex-1 overflow-y-auto px-4 sm:px-6 pt-32 lg:pt-28 pb-32">
+      <main className="flex-1 overflow-y-auto px-4 sm:px-6 pt-32 lg:pt-28 pb-44">
         <div className="max-w-7xl mx-auto">
           {/* ── Premium HUD Header ── */}
           <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
@@ -275,7 +301,7 @@ export default function FirstAidPage() {
                 </div>
               </div>
               <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 rounded-2xl blur opacity-20 transition duration-500 group-hover:opacity-40"></div>
-              <div className="relative bg-white/60 dark:bg-[#1a2133]/40 backdrop-blur-xl p-3 sm:p-4 rounded-2xl flex items-center gap-4 border border-slate-200/50 dark:border-white/5 focus-within:border-blue-500/30 transition-all duration-300">
+              <div className="relative bg-white/60 dark:bg-[#1a2133]/40 backdrop-blur-xl p-3 sm:p-4 rounded-2xl flex items-center gap-4 border border-slate-300/80 dark:border-white/5 focus-within:border-blue-500/30 transition-all duration-300">
                 <Search className="text-slate-400 dark:text-slate-500 shrink-0" size={18} />
                 <input 
                   className="bg-transparent border-none text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-500/40 focus:ring-0 w-full text-base focus:outline-none font-medium" 
@@ -333,7 +359,7 @@ export default function FirstAidPage() {
                     className={`group cursor-pointer relative overflow-hidden rounded-3xl p-6 sm:p-8 transition-all duration-300 border ${
                       isCritical 
                         ? 'bg-white dark:bg-[#1a2133] border-red-500/20 shadow-[0_20px_50px_rgba(239,68,68,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)]' 
-                        : 'bg-white/60 dark:bg-[#101c2e]/40 backdrop-blur-md border-slate-200/50 dark:border-white/5 hover:border-blue-500/30'
+                        : 'bg-white/60 dark:bg-[#101c2e]/40 backdrop-blur-md border-slate-300/80 dark:border-white/5 hover:border-blue-500/30'
                     } ${emergencyMode && key === 'cpr' ? 'md:col-span-2 lg:col-span-3 py-12' : ''}`}
                   >
                     {/* Status Badge */}
@@ -420,7 +446,7 @@ export default function FirstAidPage() {
         </motion.div>
 
         {/* ── AI Vision Assessment: Live Simulation ── */}
-        <section className="mt-12 mb-20 bg-white/30 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5 rounded-[2.5rem] p-6 sm:p-10 shadow-sm">
+        <section className="mt-12 mb-20 bg-white/30 dark:bg-white/[0.02] border border-slate-300 dark:border-white/5 rounded-[2.5rem] p-6 sm:p-10 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
             <div>
               <div className="flex items-center gap-2 mb-3">
@@ -432,7 +458,7 @@ export default function FirstAidPage() {
             </div>
             
             <button 
-              onClick={() => {/* Trigger modal or full screen scan */}}
+              onClick={() => setIsScanning(true)}
               className="bg-blue-600 hover:bg-blue-700 shadow-[0_8px_25px_rgba(37,99,235,0.2)] px-8 py-4 rounded-2xl text-white font-black uppercase tracking-widest text-[10px] flex items-center gap-3 active:scale-95 transition-all w-fit"
             >
               <Camera size={18} />
@@ -440,12 +466,19 @@ export default function FirstAidPage() {
             </button>
           </div>
           
-          <div className="relative rounded-[2rem] overflow-hidden group border border-slate-200 dark:border-white/10 bg-slate-950 aspect-video sm:aspect-[16/9] sm:h-auto max-h-[500px] shadow-2xl">
+          <div className="relative rounded-[2rem] overflow-hidden group border border-slate-300 dark:border-white/10 bg-slate-950 aspect-video sm:aspect-[16/9] sm:h-auto max-h-[500px] shadow-2xl">
             {/* Camera Viewport */}
-            <CameraViewport onError={setCameraError} />
+            {isScanning ? (
+              <CameraViewport onError={setCameraError} />
+            ) : (
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500 gap-4 bg-slate-900/40">
+                <Camera size={48} className="opacity-20" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Scanner Offline. Invoke full scan to initialize.</span>
+              </div>
+            )}
 
-            {/* HUD Overlay - Only show if camera is NOT errored */}
-            {!cameraError && (
+            {/* HUD Overlay - Only show if camera is NOT errored and is scanning */}
+            {!cameraError && isScanning && (
               <div className="absolute inset-0 pointer-events-none z-10 p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start">
                   <div className="flex gap-2">
@@ -483,34 +516,6 @@ export default function FirstAidPage() {
     </main>
 
       <BottomNav />
-
-      {/* Global Fixed SOS Button - Matches Assistant/Locator Style */}
-      <div className="fixed right-4 sm:right-6 bottom-[110px] sm:bottom-[120px] lg:bottom-12 z-[70] pointer-events-auto">
-        <Link href="/sos">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.8 }}
-            onClick={() => {
-              try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { }
-            }}
-            className="relative w-14 h-14 sm:w-16 sm:h-16 bg-[#ff5545] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,85,69,0.4)] group overflow-hidden"
-          >
-            <motion.div
-              animate={{ scale: [1, 2, 2.5], opacity: [0.5, 0.2, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeOut" }}
-              className="absolute inset-0 rounded-full border-2 border-white/30"
-            />
-            <motion.div
-              animate={{ scale: [1, 1.8, 2], opacity: [0.3, 0.1, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: "easeOut", delay: 0.5 }}
-              className="absolute inset-0 rounded-full border-2 border-white/20"
-            />
-            <span className="text-white text-base sm:text-lg font-black tracking-[0.1em] relative z-10 drop-shadow-md">
-              SOS
-            </span>
-          </motion.button>
-        </Link>
-      </div>
 
       {/* ── Active Guide Modal: Survival HUD ── */}
       <AnimatePresence>
@@ -558,10 +563,23 @@ export default function FirstAidPage() {
               </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-8">
+            {/* Progress Bar */}
+            <div className="h-1 bg-red-500/20 w-full relative">
+               <motion.div 
+                 className="absolute inset-y-0 left-0 bg-red-500" 
+                 initial={{ width: 0 }}
+                 animate={{ width: `${scrollProgress}%` }}
+               />
+            </div>
+            
+            <div 
+              ref={modalScrollRef}
+              onScroll={handleModalScroll}
+              className="flex-1 overflow-y-auto px-4 sm:px-6 py-8"
+            >
               <div className="max-w-3xl mx-auto space-y-8">
                 {/* Protocol Header Card */}
-                <div className="bg-white dark:bg-[#1a2133] rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-white/5 shadow-xl">
+                <div className="bg-white dark:bg-[#1a2133] rounded-3xl p-6 sm:p-8 border border-slate-300 dark:border-white/5 shadow-xl">
                   <div className="flex items-start gap-6">
                     <div className="p-5 rounded-2xl bg-red-500/10 text-red-500 hidden sm:block">
                       <HeartPulse size={40} />

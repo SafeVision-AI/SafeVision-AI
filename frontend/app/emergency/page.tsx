@@ -128,7 +128,28 @@ export default function EmergencyProtocolsPage() {
     Criminal: '#d4a8ff',
   };
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col">
+        <SystemHeader title="Emergency Protocol Terminal" showBack={false} />
+        <main className="flex-1 w-full max-w-7xl mx-auto pt-28 lg:pt-24 pb-44 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start animate-pulse">
+          <aside className="lg:sticky lg:top-28 flex flex-col gap-8">
+            <div className="h-20 bg-slate-200 dark:bg-[#1a2133] rounded-2xl w-3/4"></div>
+            <div className="h-64 bg-slate-200 dark:bg-[#1a2133] rounded-[2.5rem] w-full"></div>
+          </aside>
+          <div className="flex flex-col gap-8 pt-8 lg:pt-0">
+            <div className="h-12 bg-slate-200 dark:bg-[#1a2133] rounded-2xl w-full"></div>
+            <div className="grid gap-4">
+              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-3xl w-full"></div>
+              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-3xl w-full"></div>
+              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-3xl w-full"></div>
+            </div>
+          </div>
+        </main>
+        <BottomNav />
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500">
@@ -143,7 +164,7 @@ export default function EmergencyProtocolsPage() {
       <SystemSidebar />
 
       {/* ── Main Protocol Hub ── */}
-      <main className="flex-1 w-full max-w-7xl mx-auto pt-28 lg:pt-24 pb-32 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start transition-all duration-500">
+      <main className="flex-1 w-full max-w-7xl mx-auto pt-28 lg:pt-24 pb-52 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start transition-all duration-500">
         
         {/* ── Left Column: Tactical Control & SOS (Sticky) ── */}
         <aside className="lg:sticky lg:top-28 flex flex-col gap-8">
@@ -242,7 +263,7 @@ export default function EmergencyProtocolsPage() {
                   onClick={() => setActiveCategory(cat)} 
                   className={`group relative flex-shrink-0 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-90 border-2 ${
                     isActive 
-                      ? 'text-white border-transparent bg-transparent shadow-lg dark:text-slate-900' 
+                      ? (cat === 'All' ? 'text-white dark:text-slate-900 border-transparent bg-transparent shadow-lg' : 'text-slate-900 dark:text-slate-950 border-transparent bg-transparent shadow-lg')
                       : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/10'
                   }`}
                 >
@@ -315,7 +336,7 @@ export default function EmergencyProtocolsPage() {
                     </button>
 
                     {/* Content: Active Guidance HUD */}
-                    <AnimatePresence>
+                    <AnimatePresence initial={false}>
                       {isExpanded && (
                         <motion.div 
                            initial={{ height: 0, opacity: 0 }}

@@ -9,6 +9,7 @@ import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import { motion, AnimatePresence } from 'motion/react';
+import { Loader2 } from 'lucide-react';
 
 export default function EmergencyPage() {
   const { crashDetectionEnabled } = useAppStore();
@@ -17,8 +18,9 @@ export default function EmergencyPage() {
   const [activated, setActivated] = useState(false);
   const [gForce, setGForce] = useState(1.0);
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [geoError, setGeoError] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(true);
-  const holdTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     document.title = 'SOS Emergency | SafeVisionAI';
@@ -30,9 +32,14 @@ export default function EmergencyPage() {
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        p => setCoords({ lat: p.coords.latitude, lng: p.coords.longitude }),
-        () => {}
+        p => {
+          setCoords({ lat: p.coords.latitude, lng: p.coords.longitude });
+          setGeoError(null);
+        },
+        err => setGeoError(err.message)
       );
+    } else {
+      setGeoError('Geolocation not supported by this browser.');
     }
 
     const handler = (e: DeviceMotionEvent) => {
@@ -46,6 +53,7 @@ export default function EmergencyPage() {
       window.removeEventListener('online', up);
       window.removeEventListener('offline', dn);
       window.removeEventListener('devicemotion', handler);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
@@ -53,23 +61,37 @@ export default function EmergencyPage() {
     if (activated) return;
     setHolding(true);
     setHoldProgress(0);
-    holdTimer.current = setInterval(() => {
-      setHoldProgress(p => {
-        if (p >= 100) {
-          clearInterval(holdTimer.current!);
-          setHolding(false);
-          setActivated(true);
-          return 100;
-        }
-        return p + 4;
-      });
-    }, 100);
+
+    const startTime = performance.now();
+    const duration = 2000; // 2 seconds
+
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const progress = Math.min((elapsed / duration) * 100, 100);
+      setHoldProgress(progress);
+
+      if (progress < 100) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        setHolding(false);
+        setActivated(true);
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      }
+    };
+    rafRef.current = requestAnimationFrame(animate);
   };
 
   const cancelHold = () => {
-    setHolding(false);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    if (!activated) {
+      setHolding(false);
+      setHoldProgress(0);
+    }
+  };
+
+  const cancelDispatch = () => {
+    setActivated(false);
     setHoldProgress(0);
-    if (holdTimer.current) clearInterval(holdTimer.current);
   };
 
   const gpsLoc = coords ? { lat: coords.lat, lon: coords.lng, accuracy: 10, timestamp: Date.now() } : null;
@@ -77,7 +99,7 @@ export default function EmergencyPage() {
   const smsLink = generateSosSmsLink(null, gpsLoc);
 
   return (
-    <div className="bg-[#071325] text-[#d7e3fc] font-['Inter'] selection:bg-[#ff5545] selection:text-[#5c0002] min-h-dvh flex flex-col relative overflow-x-hidden transition-colors duration-500">
+    <div className="bg-slate-50 dark:bg-[#0B1121] text-slate-900 dark:text-[#d7e3fc] font-['Inter'] selection:bg-red-500/30 selection:text-red-900 dark:selection:text-[#5c0002] min-h-dvh flex flex-col relative overflow-x-hidden transition-colors duration-500">
       
       {/* ── Unified Tactical Navigation Header ── */}
       <SystemHeader title="Emergency SOS Terminal" showBack={false} />
@@ -89,15 +111,15 @@ export default function EmergencyPage() {
       <SystemSidebar />
 
       {/* ── Main Tactical HUD Canvas ── */}
-      <main className="flex-1 w-full max-w-2xl mx-auto pt-28 lg:pt-24 pb-48 px-6 space-y-8 relative z-10 transition-all duration-500">
+      <main className="flex-1 w-full max-w-2xl mx-auto pt-28 lg:pt-24 pb-52 px-6 space-y-8 relative z-10 transition-all duration-500">
         
         {/* ── TOP: SOS PULSING BUTTON ── */}
         <section className="flex flex-col items-center justify-center space-y-6">
           <div className="relative group">
             {/* G-Force Badge */}
-            <div className="absolute -top-4 -right-4 z-10 bg-[#2a3548]/80 backdrop-blur-md px-4 py-1.5 rounded-full border border-[#5b403f]/15 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#53e16f] animate-pulse"></span>
-              <span className="text-[10px] font-black tracking-widest text-[#d7e3fc] uppercase">
+            <div className="absolute -top-4 -right-4 z-10 bg-white/90 dark:bg-[#2a3548]/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-slate-200 dark:border-[#5b403f]/15 shadow-sm flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span className="text-[10px] font-black tracking-widest text-slate-800 dark:text-[#d7e3fc] uppercase">
                 {gForce.toFixed(1)}G IMPACT
               </span>
             </div>
@@ -108,7 +130,7 @@ export default function EmergencyPage() {
               onPointerUp={cancelHold}
               onPointerLeave={cancelHold}
               onContextMenu={e => e.preventDefault()}
-              className={`relative ${!activated ? 'animate-[pulse_2s_infinite]' : ''} w-56 h-56 rounded-full bg-gradient-to-br from-[#ff5545] to-[#93000a] flex flex-col items-center justify-center text-white active:scale-90 transition-transform duration-150 overflow-hidden shadow-[0_0_0_0_rgba(230,57,70,0.7)]`}
+              className={`relative ${!activated ? 'animate-[pulse_2s_infinite]' : ''} w-56 h-56 rounded-full bg-gradient-to-br from-[#ff5545] to-[#93000a] flex flex-col items-center justify-center text-white active:scale-90 transition-transform duration-150 overflow-hidden outline-none`}
               style={{
                 boxShadow: !activated ? '0 0 0 0 rgba(230, 57, 70, 0.7)' : '0 0 40px rgba(255, 85, 69, 0.8)',
               }}
@@ -116,7 +138,7 @@ export default function EmergencyPage() {
               {/* Hold Progress Background Layer */}
               {holding && !activated && (
                 <div 
-                  className="absolute bottom-0 left-0 right-0 bg-white/20 transition-all duration-100"
+                  className="absolute bottom-0 left-0 right-0 bg-white/20 transition-all duration-75"
                   style={{ height: `${holdProgress}%` }}
                 />
               )}
@@ -130,50 +152,53 @@ export default function EmergencyPage() {
             </button>
           </div>
           
-          <div className="text-center">
+          <div className="text-center min-h-[80px]">
             {activated ? (
-              <>
-                <span className="text-[#53e16f] font-black tracking-[0.2em] uppercase text-xs">Emergency Declared</span>
-                <p className="text-[#e4bebc] text-xs mt-1 font-medium">Services have been notified of your location.</p>
-              </>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                <span className="text-emerald-600 dark:text-[#53e16f] font-black tracking-[0.2em] uppercase text-xs">Emergency Declared</span>
+                <p className="text-emerald-700/80 dark:text-[#e4bebc] text-xs mt-1 font-medium">Services have been notified of your location.</p>
+                <button onClick={cancelDispatch} className="mt-4 px-5 py-2 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white rounded-full font-bold uppercase text-[10px] tracking-wider hover:bg-slate-300 dark:hover:bg-white/20 transition-colors">
+                  Cancel Dispatch
+                </button>
+              </motion.div>
             ) : (
-              <>
-                <span className="text-[#ffb4aa] font-black tracking-[0.2em] uppercase text-xs">Hold to Activate</span>
-                <p className="text-[#e4bebc] text-xs mt-1 font-medium">Automatic Emergency Dispatch system armed</p>
-              </>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                <span className="text-red-500 dark:text-[#ffb4aa] font-black tracking-[0.2em] uppercase text-xs">Hold to Activate</span>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-xs mt-1 font-medium">Automatic Emergency Dispatch system armed</p>
+              </motion.div>
             )}
           </div>
         </section>
 
         {/* ── MIDDLE: QUICK DIAL CARDS ── */}
         <section className="grid grid-cols-3 gap-3">
-          <a href="tel:112" className="bg-[#101c2e] p-4 rounded-xl flex flex-col items-center justify-center space-y-3 active:bg-[#1f2a3d] transition-colors">
-            <div className="w-12 h-12 rounded-full bg-[#ff5545]/20 flex items-center justify-center text-[#ff5545]">
+          <a href="tel:112" className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm p-5 rounded-3xl flex flex-col items-center justify-center space-y-3 active:scale-95 transition-all hover:border-red-500/30">
+            <div className="w-12 h-12 rounded-2xl bg-red-100 dark:bg-[#ff5545]/15 flex items-center justify-center text-red-600 dark:text-[#ff5545]">
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>medical_services</span>
             </div>
             <div className="text-center">
-              <p className="text-[10px] font-black tracking-widest opacity-60 uppercase text-[#d7e3fc]">112</p>
-              <p className="text-[10px] font-bold uppercase text-[#ffb4aa]">Emergency</p>
+              <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase">112</p>
+              <p className="text-[10px] font-bold uppercase text-red-600 dark:text-[#ffb4aa]">Emergency</p>
             </div>
           </a>
           
-          <a href="tel:100" className="bg-[#101c2e] p-4 rounded-xl flex flex-col items-center justify-center space-y-3 active:bg-[#1f2a3d] transition-colors">
-            <div className="w-12 h-12 rounded-full bg-[#4b8eff]/20 flex items-center justify-center text-[#4b8eff]">
+          <a href="tel:100" className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm p-5 rounded-3xl flex flex-col items-center justify-center space-y-3 active:scale-95 transition-all hover:border-blue-500/30">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-[#4b8eff]/15 flex items-center justify-center text-blue-600 dark:text-[#4b8eff]">
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>shield</span>
             </div>
             <div className="text-center">
-              <p className="text-[10px] font-black tracking-widest opacity-60 uppercase text-[#d7e3fc]">100</p>
-              <p className="text-[10px] font-bold uppercase text-[#adc6ff]">Police</p>
+              <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase">100</p>
+              <p className="text-[10px] font-bold uppercase text-blue-600 dark:text-[#adc6ff]">Police</p>
             </div>
           </a>
 
-          <a href="tel:102" className="bg-[#101c2e] p-4 rounded-xl flex flex-col items-center justify-center space-y-3 active:bg-[#1f2a3d] transition-colors">
-            <div className="w-12 h-12 rounded-full bg-[#05b046]/20 flex items-center justify-center text-[#05b046]">
+          <a href="tel:102" className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm p-5 rounded-3xl flex flex-col items-center justify-center space-y-3 active:scale-95 transition-all hover:border-emerald-500/30">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-[#05b046]/15 flex items-center justify-center text-emerald-600 dark:text-[#05b046]">
               <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>ecg_heart</span>
             </div>
             <div className="text-center">
-              <p className="text-[10px] font-black tracking-widest opacity-60 uppercase text-[#d7e3fc]">102</p>
-              <p className="text-[10px] font-bold uppercase text-[#53e16f]">Ambulance</p>
+              <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase">102</p>
+              <p className="text-[10px] font-bold uppercase text-emerald-600 dark:text-[#53e16f]">Ambulance</p>
             </div>
           </a>
         </section>
@@ -181,21 +206,29 @@ export default function EmergencyPage() {
         {/* ── SECTION: SHARE LOCATION ── */}
         <section className="space-y-4">
           <div className="flex justify-between items-end">
-            <h2 className="text-xl font-black tracking-tight text-[#d7e3fc] uppercase">Share Location</h2>
-            <span className="text-[10px] font-bold text-[#53e16f] uppercase tracking-widest bg-[#53e16f]/10 px-2 py-0.5 rounded">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 font-space px-2">Share Location</h2>
+            <span className="text-[9px] font-bold text-emerald-600 dark:text-[#53e16f] uppercase tracking-widest bg-emerald-100 dark:bg-[#53e16f]/10 px-2.5 py-1 rounded-full">
               Real-time Fix
             </span>
           </div>
 
-          <div className="bg-[#101c2e] rounded-lg p-6 space-y-6">
+          <div className="bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-md rounded-3xl p-6 space-y-6">
             <div className="flex items-start gap-4">
               <div className="flex-1 space-y-1">
-                <p className="text-[#e4bebc] text-[10px] font-black uppercase tracking-widest">GPS Coordinates Preview</p>
-                <p className="text-lg font-mono font-bold tracking-tight text-[#d7e3fc]">
-                   {coords ? `Lat: ${coords.lat.toFixed(4)}, Long: ${coords.lng.toFixed(4)}` : 'Resolving GPS...'}
-                </p>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest">GPS Coordinates Preview</p>
+                <div className="text-lg font-mono font-bold tracking-tight text-slate-800 dark:text-[#d7e3fc]">
+                   {geoError ? (
+                     <span className="text-red-500 dark:text-red-400 text-sm">{geoError}</span>
+                   ) : coords ? (
+                     `Lat: ${coords.lat.toFixed(4)}, Long: ${coords.lng.toFixed(4)}`
+                   ) : (
+                     <span className="flex items-center gap-2 text-slate-400">
+                       <Loader2 size={16} className="animate-spin" /> Resolving GPS...
+                     </span>
+                   )}
+                </div>
               </div>
-              <div className="w-16 h-16 rounded-lg overflow-hidden bg-[#2a3548] flex-shrink-0 relative">
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-slate-200 dark:bg-[#2a3548] flex-shrink-0 relative">
                 <Image 
                   className="object-cover grayscale opacity-50" 
                   alt="Map" 
@@ -207,12 +240,12 @@ export default function EmergencyPage() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <a href={waLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-[#05b046] text-[#003a11] py-4 rounded-xl font-bold uppercase text-xs tracking-widest active:scale-95 transition-all">
-                <span className="material-symbols-outlined text-sm">share</span>
+              <a href={waLink} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-[#05b046] text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest active:scale-95 transition-all shadow-md shadow-[#05b046]/20">
+                <span className="material-symbols-outlined text-[16px]">share</span>
                 WhatsApp
               </a>
-              <a href={smsLink} className="flex items-center justify-center gap-2 bg-[#2a3548] text-[#d7e3fc] py-4 rounded-xl font-bold uppercase text-xs tracking-widest active:scale-95 transition-all border border-[#5b403f]/15">
-                <span className="material-symbols-outlined text-sm">sms</span>
+              <a href={smsLink} className="flex items-center justify-center gap-2 bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-[#d7e3fc] py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest active:scale-95 transition-all border border-slate-200 dark:border-white/10 shadow-sm">
+                <span className="material-symbols-outlined text-[16px]">sms</span>
                 SMS Backup
               </a>
             </div>
@@ -221,29 +254,29 @@ export default function EmergencyPage() {
 
         {/* ── CARD: CRASH PROFILE ── */}
         <section className="space-y-4">
-          <h2 className="text-xl font-black tracking-tight text-[#d7e3fc] uppercase">Crash Profile</h2>
-          <div className="bg-[#2a3548]/40 backdrop-blur-md rounded-xl p-6 border border-[#5b403f]/15 relative overflow-hidden">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 font-space px-2">Crash Profile</h2>
+          <div className="bg-white/80 dark:bg-white/5 backdrop-blur-md rounded-3xl p-6 border border-slate-200 dark:border-white/10 shadow-sm relative overflow-hidden">
             {/* Decorative background elements */}
-            <div className="absolute -bottom-4 -right-4 opacity-5 rotate-12">
+            <div className="absolute -bottom-4 -right-4 opacity-[0.03] dark:opacity-5 rotate-12">
               <span className="material-symbols-outlined text-[8rem]">contact_emergency</span>
             </div>
             
             <div className="grid grid-cols-2 gap-y-6 gap-x-4 relative z-10">
               <div>
-                <p className="text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Blood Group</p>
-                <p className="text-xl font-black text-[#ffb4aa]">O- (Negative)</p>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Blood Group</p>
+                <p className="text-xl font-black text-red-600 dark:text-[#ffb4aa]">O- (Negative)</p>
               </div>
               <div>
-                <p className="text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Primary Contact</p>
-                <p className="text-lg font-bold text-[#d7e3fc] truncate">Sarah Thorne</p>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Primary Contact</p>
+                <p className="text-lg font-bold text-slate-900 dark:text-[#d7e3fc] truncate">Sarah Thorne</p>
               </div>
               <div>
-                <p className="text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Vehicle ID</p>
-                <p className="text-base font-mono font-bold text-[#adc6ff]">SV-2024-AI</p>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Vehicle ID</p>
+                <p className="text-base font-mono font-bold text-blue-600 dark:text-[#adc6ff]">SV-2024-AI</p>
               </div>
               <div>
-                <p className="text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Medical Notes</p>
-                <p className="text-sm font-medium text-[#d7e3fc] italic">&quot;No known allergies&quot;</p>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Medical Notes</p>
+                <p className="text-sm font-medium text-slate-800 dark:text-[#d7e3fc] italic">&quot;No known allergies&quot;</p>
               </div>
             </div>
           </div>

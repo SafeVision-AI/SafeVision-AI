@@ -14,9 +14,6 @@ import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import PureMultimodalInput, { Attachment } from '@/components/chat/multimodal-ai-chat-input';
-import { useTheme } from '@/components/ThemeProvider';
-import { Sun, Moon, Monitor } from 'lucide-react';
-
 interface Message {
   id: string;
   role: 'user' | 'ai' | 'system';
@@ -26,24 +23,7 @@ interface Message {
   suggestedQueries?: string[];
 }
 
-const TypingText = ({ text, onComplete }: { text: string; onComplete?: () => void }) => {
-  const [displayedText, setDisplayedText] = useState("");
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (index < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + text[index]);
-        setIndex((prev) => prev + 1);
-      }, 10); // Fast but visible decryption speed
-      return () => clearTimeout(timeout);
-    } else if (onComplete) {
-      onComplete();
-    }
-  }, [index, text, onComplete]);
-
-  return <span>{displayedText}</span>;
-};
+import TypingText from '@/components/dashboard/TypingText';
 
 const INITIAL_MESSAGES: Message[] = [
   {
@@ -83,6 +63,8 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -104,9 +86,16 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
     }
   }, [messages, loading]);
+
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => setToastMessage(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [toastMessage]);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -166,6 +155,20 @@ export default function ChatPage() {
       <SystemSidebar />
       <BottomNav />
 
+      {/* ── Toast Notification ── */}
+      <AnimatePresence>
+        {toastMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: -20, x: '-50%' }}
+            className="fixed top-20 left-1/2 z-50 bg-slate-800 dark:bg-white text-white dark:text-slate-900 px-4 py-2 rounded-full shadow-lg text-sm font-medium"
+          >
+            {toastMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Chat Canvas ── */}
       <main ref={scrollRef} className="flex-1 overflow-y-auto px-4 sm:px-6 overflow-x-hidden pt-28 lg:pt-24 pb-48 lg:pb-36 flex flex-col max-w-4xl mx-auto w-full relative z-10 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="space-y-8 flex flex-col w-full pb-8">
@@ -200,7 +203,7 @@ export default function ChatPage() {
                       <div className="bg-gradient-to-br from-blue-600 to-blue-700 dark:from-blue-600 dark:to-indigo-600 rounded-t-2xl rounded-bl-2xl px-5 py-3.5 shadow-lg shadow-blue-600/20 border border-blue-500/50">
                         <p className="text-white text-[15px] leading-relaxed font-medium">{msg.text}</p>
                       </div>
-                      <span suppressHydrationWarning className="text-[10px] text-slate-400 dark:text-slate-500 mr-2 font-medium tracking-wide shadow-sm">{msg.timestamp} • SafeVision AI</span>
+                      <time dateTime={msg.timestamp} suppressHydrationWarning className="text-[10px] text-slate-400 dark:text-slate-500 mr-2 font-medium tracking-wide shadow-sm">{msg.timestamp} • SafeVision AI</time>
                     </div>
                   </motion.div>
                 );
@@ -239,18 +242,30 @@ export default function ChatPage() {
                       </div>
 
                       <div className="flex items-center gap-4 ml-2 mb-1">
-                        <span suppressHydrationWarning className="text-[10px] text-slate-400 dark:text-slate-500 font-medium tracking-wide">{msg.timestamp} • SafeVision AI</span>
+                        <time dateTime={msg.timestamp} suppressHydrationWarning className="text-[10px] text-slate-400 dark:text-slate-500 font-medium tracking-wide">{msg.timestamp} • SafeVision AI</time>
                         <div className="flex gap-1.5 ml-1">
-                          <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800">
+                          <button 
+                            onClick={() => setToastMessage("Copied to clipboard!")}
+                            className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800"
+                          >
                             <Copy size={13} strokeWidth={2} />
                           </button>
-                          <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800">
+                          <button 
+                            onClick={() => setToastMessage("Feedback recorded")}
+                            className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800"
+                          >
                             <ThumbsUp size={13} strokeWidth={2} />
                           </button>
-                          <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800">
+                          <button 
+                            onClick={() => setToastMessage("Feedback recorded")}
+                            className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800"
+                          >
                             <ThumbsDown size={13} strokeWidth={2} />
                           </button>
-                          <button className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 ml-1">
+                          <button 
+                            onClick={() => setToastMessage("Retrying...")}
+                            className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800 ml-1"
+                          >
                             <RotateCcw size={13} strokeWidth={2} />
                           </button>
                         </div>
@@ -278,7 +293,7 @@ export default function ChatPage() {
               }
             })}
 
-            {messages.length <= 2 && !loading && (
+            {((messages.length <= 2) || showSuggestions) && !loading && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -300,6 +315,25 @@ export default function ChatPage() {
                     </button>
                   ))}
                 </div>
+                {messages.length > 2 && (
+                  <button 
+                    onClick={() => setShowSuggestions(false)}
+                    className="mt-4 text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 underline underline-offset-2 transition-colors mx-auto block"
+                  >
+                    Hide Suggestions
+                  </button>
+                )}
+              </motion.div>
+            )}
+
+            {messages.length > 2 && !showSuggestions && !loading && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="self-center">
+                <button 
+                  onClick={() => setShowSuggestions(true)}
+                  className="px-4 py-2 rounded-full bg-white/50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-white dark:hover:bg-white/10 transition-colors shadow-sm"
+                >
+                  Show Suggested Inquiries
+                </button>
               </motion.div>
             )}
 
@@ -323,7 +357,7 @@ export default function ChatPage() {
       </main>
 
       {/* ── Bottom Input Shell ── */}
-      <div className="absolute bottom-0 w-full z-50 flex justify-between items-end bg-gradient-to-t from-slate-50 dark:from-[#0B1121] via-slate-50/90 dark:via-[#0B1121]/90 to-transparent pt-16 pb-24 lg:pb-6 px-4 sm:px-6 pointer-events-none">
+      <div className="absolute bottom-0 w-full z-50 flex justify-between items-end bg-gradient-to-t from-slate-50 dark:from-[#0B1121] via-slate-50/90 dark:via-[#0B1121]/90 to-transparent pt-16 pb-28 lg:pb-6 px-4 sm:px-6 pointer-events-none">
         <div className="max-w-4xl mx-auto w-full flex flex-col relative items-end pointer-events-none">
           <div className="w-full flex items-end gap-2 sm:gap-3 pointer-events-auto">
             <PureMultimodalInput

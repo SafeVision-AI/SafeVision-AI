@@ -20,6 +20,18 @@ export default function ProfilePage() {
   const { crashDetectionEnabled, setCrashDetectionEnabled } = useAppStore();
   const [offlineMode, setOfflineMode] = useState(false);
   const [pushNotifs, setPushNotifs] = useState(true);
+  const [showPurgeConfirm, setShowPurgeConfirm] = useState(false);
+
+  const handlePurge = () => {
+    if (!showPurgeConfirm) {
+      setShowPurgeConfirm(true);
+      setTimeout(() => setShowPurgeConfirm(false), 3000);
+    } else {
+      // Intended purge logic here
+      alert('Local session data purged.');
+      setShowPurgeConfirm(false);
+    }
+  };
 
   useEffect(() => { document.title = 'Profile | SafeVisionAI'; }, []);
 
@@ -35,7 +47,7 @@ export default function ProfilePage() {
 
       <SystemSidebar />
 
-      <main className="flex-1 w-full max-w-2xl mx-auto pt-28 lg:pt-24 pb-32 px-6 space-y-12 relative z-10">
+      <main className="flex-1 w-full max-w-2xl mx-auto pt-28 lg:pt-24 pb-44 px-6 space-y-12 relative z-10">
         
         {/* ── Section 1: Hero Identity Matrix ── */}
         <section className="flex flex-col gap-8 relative">
@@ -52,7 +64,8 @@ export default function ProfilePage() {
                   className="object-cover" 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvek5YwIYwT_V1ClELIh5PXKtqOV5obKd0wL5yKz9FHXdd3_WJG6coDdu-PPf0DNIB5zEOaWf30nx4BNoacevnVq5eWQJR9oLIzttE387el_91QJ1D3m2LuramyDLlck_Y4rh-3djYdFOobdAaLQ_ptEKI84K19tL0THN9WJR9IDappcWQ6hJGnFXM-usSzTsZfeYV2DxA0Ddwhig2-E0bV8ZWJuyTGds4dly794f0RfXE2wi15ovYzPknpl1gFFItf_aWuwzeXjUl"
                   fill
-                  unoptimized
+                  sizes="(max-width: 768px) 128px, 128px"
+                  priority
                 />
               </div>
               <div className="absolute -bottom-2 -right-2 bg-emerald-500 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white dark:border-[#071325] shadow-lg">
@@ -76,7 +89,7 @@ export default function ProfilePage() {
 
           {/* Vitals HUD Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm flex flex-col gap-4">
+            <div className="p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 shadow-sm flex flex-col gap-4">
                <div className="flex items-center justify-between">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Vessel</p>
                   <Car size={16} className="text-emerald-500" />
@@ -87,7 +100,7 @@ export default function ProfilePage() {
                </div>
             </div>
             
-            <div className="p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm flex flex-col gap-4">
+            <div className="p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 shadow-sm flex flex-col gap-4">
                <div className="flex items-center justify-between">
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Bio Signature</p>
                   <Heart size={16} className="text-red-500" />
@@ -109,7 +122,7 @@ export default function ProfilePage() {
                { id: 'crash', icon: <ShieldAlert size={18} />, label: 'Crash Detection', sub: 'Instant satellite SOS engagement', state: crashDetectionEnabled, toggle: setCrashDetectionEnabled },
                { id: 'notify', icon: <Bell size={18} />, label: 'Push Hub', sub: 'Critical hazard & P0 alerts', state: pushNotifs, toggle: setPushNotifs },
              ].map(item => (
-               <label key={item.id} className="group flex items-center justify-between p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/5 shadow-sm hover:border-emerald-500/20 transition-all cursor-pointer">
+               <label key={item.id} className="group flex items-center justify-between p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/5 shadow-sm hover:border-emerald-500/20 transition-all cursor-pointer">
                   <div className="flex items-center gap-5">
                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${item.state ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-50 dark:bg-white/10 text-slate-400'}`}>
                         {item.icon}
@@ -120,8 +133,8 @@ export default function ProfilePage() {
                      </div>
                   </div>
                   <div className="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" className="sr-only peer" checked={item.state} onChange={e => item.toggle(e.target.checked)} />
-                    <div className="w-12 h-6 bg-slate-200 dark:bg-white/10 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                    <input type="checkbox" className="sr-only peer" checked={item.state} onChange={e => item.toggle(e.target.checked)} aria-label={`Toggle ${item.label}`} />
+                    <div className="w-12 h-6 bg-slate-200 dark:bg-white/10 rounded-full peer peer-focus:ring-2 peer-focus:ring-emerald-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
                   </div>
                </label>
              ))}
@@ -131,7 +144,7 @@ export default function ProfilePage() {
         {/* ── Section 3: Achievements & Legacy ── */}
         <section className="flex flex-col gap-6">
            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 font-space px-2">Tactical Awards</h3>
-           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-6 px-6">
+           <div className="flex gap-4 overflow-x-auto pb-6 -mx-6 px-6 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent">
               {[
                 { title: 'Zero Citation', score: '365 Days', bgColor: 'bg-emerald-500/10', iconColor: 'text-emerald-500' },
                 { title: 'First Responder', score: 'Level 14', bgColor: 'bg-amber-500/10', iconColor: 'text-amber-500' },
@@ -152,8 +165,15 @@ export default function ProfilePage() {
 
         {/* Action Panel */}
         <section className="flex flex-col items-center gap-6 pt-10">
-           <button className="h-14 px-10 rounded-full border-2 border-slate-200 dark:border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 hover:text-red-500 hover:border-red-500/20 transition-all active:scale-95">
-             PURGE LOCAL SESSION
+           <button 
+             onClick={handlePurge}
+             className={`h-14 px-10 rounded-full border-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all active:scale-95 ${
+               showPurgeConfirm
+                 ? 'border-red-500 bg-red-500/10 text-red-500'
+                 : 'border-slate-200 dark:border-white/10 text-slate-400 hover:text-red-500 hover:border-red-500/20'
+             }`}
+           >
+             {showPurgeConfirm ? 'CONFIRM PURGE?' : 'PURGE LOCAL SESSION'}
            </button>
            <p className="text-[9px] font-black text-slate-300 dark:text-slate-500 uppercase tracking-[0.3em]">Sentinel V4.2 Real-time Security Layer</p>
         </section>

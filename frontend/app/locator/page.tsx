@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   Activity,
   ArrowLeft,
@@ -687,23 +687,6 @@ function MobileLocator({
           )}
         </section>
       </main>
-
-      <div className="fixed bottom-28 right-6 z-50 md:hidden">
-        <Link href="/sos">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg shadow-red-600/40 text-white font-black text-lg tracking-widest relative overflow-hidden"
-          >
-            <motion.div
-              animate={{ scale: [1, 2], opacity: [0.5, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="absolute inset-0 rounded-full bg-white"
-            />
-            SOS
-          </motion.button>
-        </Link>
-      </div>
     </div>
   );
 }
@@ -836,23 +819,6 @@ function DesktopLocator({
             <div className="absolute inset-0 pointer-events-none bg-slate-900/5 dark:bg-black/20 mix-blend-color z-10" />
           </div>
 
-          <div className="absolute bottom-6 right-6 lg:bottom-10 lg:right-10 z-[60]">
-            <Link href="/sos">
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 2 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-16 h-16 lg:w-20 lg:h-20 bg-[#ff5545] rounded-full flex flex-col items-center justify-center shadow-[0_0_50px_rgba(255,85,69,0.4)] text-white font-black tracking-tighter relative overflow-hidden group"
-              >
-                <motion.div
-                  animate={{ scale: [1, 2, 2.5], opacity: [0.5, 0.2, 0] }}
-                  transition={{ repeat: Infinity, duration: 2, ease: 'easeOut' }}
-                  className="absolute inset-0 rounded-full border-4 border-white/20"
-                />
-                <span className="text-base lg:text-xl relative z-10 leading-none mb-0.5">SOS</span>
-              </motion.button>
-            </Link>
-          </div>
-
           <div className="absolute bottom-8 left-8 z-20 bg-white/90 dark:bg-[#0B1121]/90 backdrop-blur-md p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl min-w-[180px] hidden lg:block">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -863,7 +829,7 @@ function DesktopLocator({
           </div>
         </section>
 
-        <section className="w-[320px] lg:w-[380px] xl:w-[460px] h-full bg-white dark:bg-[#0B1121] flex flex-col z-20 shadow-2xl overflow-hidden shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] dark:shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.5)] border-l border-slate-200 dark:border-white/5">
+        <section className="w-[300px] lg:w-[340px] xl:w-[360px] h-full bg-white dark:bg-[#0B1121] flex flex-col z-20 shadow-2xl overflow-hidden shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] dark:shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.5)] border-l border-slate-200 dark:border-white/5">
           <div className="p-6 lg:p-8 pb-4 shrink-0">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20 shrink-0">

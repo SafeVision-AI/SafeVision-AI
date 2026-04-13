@@ -4,9 +4,7 @@ import './globals.css';
 import { ConnectivityProvider } from '@/components/ConnectivityProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { PageShell } from '@/components/PageShell';
-import { cn } from "@/lib/utils";
-// TODO: Re-enable after upgrading to React 19 — crashes on React 18 due to ReactSharedInternals mismatch
-// import { TwentyFirstToolbar } from '@21st-extension/toolbar-next';
+
 
 export const metadata: Metadata = {
   title: 'SafeVisionAI - AI-Powered Road Safety',
@@ -72,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        {/* <TwentyFirstToolbar /> */}
+
         <ThemeProvider>
           <ConnectivityProvider>
             <PageShell>{children}</PageShell>
