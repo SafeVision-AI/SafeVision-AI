@@ -1,0 +1,69 @@
+{
+  "numbers": {
+    "national_emergency": {
+      "service": "112",
+      "coverage": "Pan-India",
+      "notes": "Unified emergency response"
+    },
+    "ambulance": {
+      "service": "102",
+      "coverage": "Pan-India",
+      "notes": "Public ambulance dispatch in many states"
+    },
+    "police": {
+      "service": "100",
+      "coverage": "Pan-India",
+      "notes": "Police control room"
+    },
+    "fire": {
+      "service": "101",
+      "coverage": "Pan-India",
+      "notes": "Fire and rescue services"
+    },
+    "medical_emergency": {
+      "service": "108",
+      "coverage": "Most states",
+      "notes": "Integrated emergency medical response"
+    },
+    "national_highway": {
+      "service": "1033",
+      "coverage": "National Highways",
+      "notes": "NHAI emergency helpline"
+    },
+    "state_highway": {
+      "service": "1073",
+      "coverage": "Many states",
+      "notes": "State highway emergency and roadside support"
+    },
+    "health_helpline": {
+      "service": "104",
+      "coverage": "Many states",
+      "notes": "Public health advice and referrals"
+    },
+    "women_helpline": {
+      "service": "1091",
+      "coverage": "Pan-India",
+      "notes": "Women safety helpline"
+    },
+    "child_helpline": {
+      "service": "1098",
+      "coverage": "Pan-India",
+      "notes": "Child emergency support"
+    },
+    "disaster_management": {
+      "service": "1099",
+      "coverage": "Selected deployments",
+      "notes": "Disaster management support where available"
+    },
+    "aiims_trauma": {
+      "service": "011-26588500",
+      "coverage": "Delhi referral",
+      "notes": "AIIMS Trauma Centre board line"
+    },
+    "cpgrams": {
+      "service": "1800-11-0012",
+      "coverage": "Pan-India",
+      "notes": "Public grievance support desk"
+    }
+  }
+}

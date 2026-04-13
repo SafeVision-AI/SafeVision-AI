@@ -1,0 +1,24 @@
+violation_code,section,description_en,base_fine_inr,repeat_fine_inr,vehicle_type,imprisonment,dl_points
+177,Section 177,General traffic rule violation where no specific penalty is prescribed,500,1500,all,None,0
+177A,Section 177A,Violation of road regulations or road markings,500,1000,all,None,0
+179,Section 179,Disobedience of lawful direction or refusal to share required information,2000,2000,all,None,0
+180,Sections 5/180,Allowing an unauthorised or unlicensed person to drive,5000,5000,all,None,0
+181,Sections 3/181,Driving without a valid driving licence,5000,5000,all,None,0
+182,Section 182,Driving despite disqualification or furnishing materially false information,10000,10000,all,None,0
+183_LMV,Section 183,Overspeeding by light motor vehicle or standard private vehicle,1000,2000,LMV,None,0
+183_HMV,Section 183,Overspeeding by heavy goods vehicle or passenger transport vehicle,2000,4000,HMV,None,0
+184,Section 184,Dangerous or reckless driving including handheld device distraction,5000,10000,all,Up to 1 year on repeat offence,0
+185_FIRST,Section 185,Driving under the influence of alcohol or drugs - first offence,10000,15000,all,Up to 6 months,0
+185_REPEAT,Section 185,Driving under the influence of alcohol or drugs - repeat offence within 3 years,15000,15000,all,Up to 2 years,0
+192A,Sections 66(1)/192A,Using a transport vehicle without permit or beyond permit conditions,10000,10000,all,None,0
+194,Section 194,Overloading a goods carriage beyond permissible limit,20000,20000,goods_vehicle,None,0
+194A,Section 194A,Carrying excess passengers in a transport vehicle (per excess passenger),200,200,transport_vehicle,None,0
+194B,Section 194B,Failure to use seat belt or child restraint where required,1000,1000,all,None,0
+194C,Section 194C,Violation of motorcycle safety measures including triple riding,1000,1000,2W,None,3
+194D,Section 194D,Failure to wear protective headgear on a two-wheeler,1000,1000,2W,Possible licence disqualification for 3 months,3
+194E,Section 194E,Failure to give free passage to an emergency vehicle,10000,10000,all,None,0
+194F,Section 194F,Using horn unnecessarily or in a notified silence zone,1000,1000,all,None,0
+194G,Section 194G,School bus or educational institution vehicle safety contravention using a minimum doubled penalty placeholder,2000,2000,school_vehicle,Actual amount depends on underlying offence,0
+196,Sections 146/196,Driving without valid insurance cover,2000,4000,all,Up to 3 months on repeat offence,0
+199,Section 199,Offence by company or person in charge where liability follows the underlying contravention,0,0,all,As per underlying offence,0
+199A,Section 199A,Juvenile driving offence attributed to guardian or owner,25000,25000,all,Up to 3 years and vehicle registration suspension,6

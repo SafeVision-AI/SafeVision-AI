@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import re
 
 from config import Settings
 
@@ -54,7 +55,7 @@ class FirstAidTool:
     def lookup(self, query: str) -> dict | None:
         text = query.lower()
         for key, guide in self._guides.items():
-            keywords = guide.get('keywords') or [key]
+            keywords = guide.get('keywords') or [key, guide.get('title', ''), guide.get('category', '')]
             if any(keyword.lower() in text for keyword in keywords):
                 return guide
         return None
@@ -66,6 +67,43 @@ class FirstAidTool:
             payload = json.loads(self._data_path.read_text(encoding='utf-8'))
         except Exception:
             return FALLBACK_GUIDES
-        if not isinstance(payload, dict) or not payload:
-            return FALLBACK_GUIDES
-        return payload
+        if isinstance(payload, dict) and payload:
+            return payload
+        if isinstance(payload, list):
+            normalized = self._normalize_article_list(payload)
+            if normalized:
+                return normalized
+        return FALLBACK_GUIDES
+
+    @staticmethod
+    def _normalize_article_list(payload: list[dict]) -> dict[str, dict]:
+        guides: dict[str, dict] = {}
+        for article in payload:
+            if not isinstance(article, dict):
+                continue
+            title = str(article.get('title') or '').strip()
+            category = str(article.get('category') or '').strip().lower()
+            article_id = str(article.get('id') or '').strip()
+            steps = article.get('steps') or []
+            if not title or not isinstance(steps, list) or not steps:
+                continue
+            key = article_id or category or re.sub(r'[^a-z0-9]+', '_', title.lower()).strip('_')
+            warning = article.get('warning')
+            guide = {
+                'id': article_id or key,
+                'title': title,
+                'category': category or None,
+                'steps': [str(step).strip() for step in steps if str(step).strip()],
+                'call_ambulance_if': [
+                    str(condition).strip()
+                    for condition in (article.get('call_ambulance_if') or [])
+                    if str(condition).strip()
+                ],
+                'warning': str(warning).strip() if warning else None,
+            }
+            keywords = [guide['id'], title, category]
+            guides[key] = {
+                **guide,
+                'keywords': [item for item in keywords if item],
+            }
+        return guides

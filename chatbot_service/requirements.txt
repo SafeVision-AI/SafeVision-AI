@@ -2,6 +2,7 @@ fastapi
 uvicorn
 pydantic
 python-dotenv
+python-multipart
 langgraph
 langchain
 langchain-openai
@@ -11,3 +12,7 @@ sentence-transformers
 redis
 httpx
 pypdf
+torch
+torchaudio
+transformers
+datasets

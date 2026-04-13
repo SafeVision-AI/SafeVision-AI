@@ -15,6 +15,7 @@ from memory.redis_memory import ConversationMemoryStore
 from providers.router import ProviderRouter
 from rag.retriever import Retriever
 from rag.vectorstore import LocalVectorStore
+from services import IndicSeamlessService
 from tools import (
     BackendToolClient,
     ChallanTool,
@@ -41,6 +42,7 @@ def create_app() -> FastAPI:
         vectorstore = LocalVectorStore(settings.chroma_persist_dir, settings.rag_data_dir)
         retriever = Retriever(vectorstore, default_top_k=settings.top_k_retrieval)
         weather_tool = WeatherTool(settings)
+        speech_service = IndicSeamlessService(settings)
         context_assembler = ContextAssembler(
             retriever=retriever,
             sos_tool=SosTool(backend_client),
@@ -63,6 +65,7 @@ def create_app() -> FastAPI:
 
         app.state.memory_store = memory_store
         app.state.chat_engine = chat_engine
+        app.state.speech_service = speech_service
 
         try:
             yield

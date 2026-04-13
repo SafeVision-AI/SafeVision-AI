@@ -27,6 +27,15 @@ def _as_path(value: str | None, *, default: Path) -> Path:
     return path
 
 
+def _as_optional_path(value: str | None) -> Path | None:
+    if value is None or not value.strip():
+        return None
+    path = Path(value.strip())
+    if not path.is_absolute():
+        path = ROOT_DIR / path
+    return path
+
+
 @dataclass(frozen=True, slots=True)
 class Settings:
     environment: str
@@ -42,6 +51,10 @@ class Settings:
     top_k_retrieval: int
     default_llm_provider: str
     default_llm_model: str
+    speech_model_id: str
+    speech_model_dir: Path | None
+    speech_device: str
+    speech_default_target_lang: str
     openweather_api_key: str | None
     openweather_base_url: str
     openweather_units: str
@@ -78,6 +91,10 @@ def get_settings() -> Settings:
         top_k_retrieval=int(os.getenv('TOP_K_RETRIEVAL', '5')),
         default_llm_provider=os.getenv('DEFAULT_LLM_PROVIDER', 'template').strip().lower(),
         default_llm_model=os.getenv('DEFAULT_LLM_MODEL', 'deterministic-rag'),
+        speech_model_id=os.getenv('SPEECH_MODEL_ID', 'ai4bharat/indic-seamless').strip(),
+        speech_model_dir=_as_optional_path(os.getenv('SPEECH_MODEL_DIR')),
+        speech_device=os.getenv('SPEECH_DEVICE', 'auto').strip().lower(),
+        speech_default_target_lang=os.getenv('SPEECH_DEFAULT_TARGET_LANG', 'eng').strip().lower(),
         openweather_api_key=os.getenv('OPENWEATHER_API_KEY') or None,
         openweather_base_url=os.getenv('OPENWEATHER_BASE_URL', 'https://api.openweathermap.org/data/2.5').rstrip('/'),
         openweather_units=os.getenv('OPENWEATHER_UNITS', 'metric'),
