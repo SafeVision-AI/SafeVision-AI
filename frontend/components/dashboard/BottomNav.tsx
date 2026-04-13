@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { MapPin, BotMessageSquare, MapPinPlus, AlertTriangle, HeartPulse } from 'lucide-react';
 
 interface NavItem {
@@ -46,12 +46,29 @@ const BottomNav = memo(function BottomNav() {
         {items.map((item, index) => {
           const isActive = index === active;
           return (
-            <Link href={item.href} key={item.id} className="relative flex flex-col items-center group">
-              {/* Button */}
+            <Link 
+              href={item.href} 
+              key={item.id} 
+              className="relative flex flex-col items-center group p-1 min-w-touch min-h-touch"
+              aria-current={isActive ? "page" : undefined}
+              onClick={() => {
+                if (typeof window !== 'undefined' && navigator.vibrate) {
+                  navigator.vibrate(10);
+                }
+              }}
+            >
+              {/* Button & Pill */}
+              {isActive && (
+                <motion.div
+                  layoutId="active-pill"
+                  className="absolute inset-x-2 top-0.5 bottom-4 bg-blue-600 dark:bg-blue-500 rounded-2xl -z-10"
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
               <motion.div
-                whileHover={{ scale: 1.2 }}
-                animate={{ scale: isActive ? 1.4 : 1 }}
-                className={`flex items-center justify-center w-11 h-11 relative z-10 transition-colors ${isActive
+                whileHover={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1.2 : 1 }}
+                className={`flex items-center justify-center w-9 h-9 relative z-10 transition-colors ${isActive
                   ? 'text-white'
                   : 'text-slate-600 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400'
                   }`}
@@ -69,10 +86,11 @@ const BottomNav = memo(function BottomNav() {
                 )}
               </motion.div>
 
-              {/* Tooltip */}
-              <span className="absolute bottom-full mb-2 px-2 py-1 text-xs rounded-md bg-slate-800 text-white dark:bg-slate-200 dark:text-black opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
+              {/* Persistent Text Label */}
+              <span className={`text-[9px] font-bold mt-1 tracking-wide ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'}`}>
                 {item.label}
               </span>
+
             </Link>
           );
         })}

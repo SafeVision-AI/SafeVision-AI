@@ -3,7 +3,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import Link from 'next/link';
 import { Menu, Mic, MapPin, Moon, Sun, Monitor, Search, ArrowLeft } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { formatAccuracyLabel, formatLocationLabel, isApproximateLocation } from '@/lib/location-utils';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
@@ -46,10 +46,18 @@ const TopSearch = memo(function TopSearch({
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log('Searching for:', searchQuery);
+    }
+  };
 
   const locationLabel = formatLocationLabel(gpsLocation, gpsError);
   const locationAccuracy = formatAccuracyLabel(gpsLocation);
@@ -81,7 +89,7 @@ const TopSearch = memo(function TopSearch({
             <div className="bg-emerald-500/10 p-1.5 rounded-full">
               <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors whitespace-nowrap">
+            <span className="text-sm font-bold text-slate-700 dark:text-slate-300 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors whitespace-nowrap truncate max-w-[200px]">
               {locationLabel}
             </span>
             {locationAccuracy ? (
@@ -93,7 +101,12 @@ const TopSearch = memo(function TopSearch({
         </div>
 
         {/* Floating Pill Search Bar (Google Maps Style) */}
-        <div className={`w-full sm:max-w-md md:max-w-none md:flex-1 lg:flex-none lg:w-full lg:max-w-xl pointer-events-auto flex items-center h-[52px] bg-white/95 dark:bg-[#1a2133]/95 backdrop-blur-2xl rounded-full px-4 transition-all duration-300 border ${isFocused ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]'}`}>
+        <form 
+          onSubmit={handleSearch}
+          role="search"
+          aria-label="Search"
+          className={`w-full sm:max-w-md md:max-w-none md:flex-1 lg:flex-none lg:w-full lg:max-w-xl pointer-events-auto flex items-center h-[52px] bg-white/95 dark:bg-[#1a2133]/95 backdrop-blur-2xl rounded-full px-4 transition-all duration-300 border ${isFocused ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]'}`}
+        >
           
           {showBack && (
             <Link href={backHref} className="p-2 mr-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all text-slate-700 dark:text-slate-300 lg:hidden group flex items-center justify-center">
@@ -110,16 +123,19 @@ const TopSearch = memo(function TopSearch({
 
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Ask Maps or Search"
+            aria-label="Search input"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 px-2 text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-500 dark:placeholder:text-slate-400 font-medium text-base h-full w-full"
           />
 
-          <button className="p-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all ml-2">
+          <button type="button" className="p-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all ml-2">
             <Mic className="w-5 h-5" />
           </button>
-        </div>
+        </form>
 
         {/* Right Side: Theme Toggle on Tablet/Desktop */}
         <div className="hidden md:flex pointer-events-auto h-[52px]">
@@ -169,7 +185,7 @@ const TopSearch = memo(function TopSearch({
               <div className="bg-emerald-500/10 p-1 rounded-full flex items-center justify-center">
                 <MapPin className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <span className="text-sm font-semibold text-slate-800 dark:text-[#d7e3fc]">
+              <span className="text-sm font-semibold text-slate-800 dark:text-[#d7e3fc] truncate max-w-[200px]">
                 {gpsError ? 'Enable Location' : gpsLocation ? 'Refresh Location' : 'Use My Location'}
               </span>
               {locationIsApproximate && locationAccuracy ? (
@@ -184,7 +200,7 @@ const TopSearch = memo(function TopSearch({
               <button
                 key={chip.label}
                 onClick={() => setServiceCategory(chip.value)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-xl rounded-full shadow-lg ring-1 ring-white/40 dark:ring-white/10 whitespace-nowrap active:scale-95 transition-transform hover:shadow-2xl"
+                className={`flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-xl rounded-full shadow-lg ring-1 whitespace-nowrap active:scale-95 transition-transform hover:shadow-2xl ${isActive ? 'ring-2 ring-blue-500/30' : 'ring-white/40 dark:ring-white/10'}`}
                 data-active={isActive}
                 aria-pressed={isActive}
               >

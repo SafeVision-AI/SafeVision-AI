@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   MapPin,
   BotMessageSquare,
@@ -21,15 +21,15 @@ import {
 import { useAppStore } from '@/lib/store';
 
 const navItems = [
-  { icon: <MapPin size={24} />, label: 'Map', href: '/', color: 'text-blue-500' },
-  { icon: <BotMessageSquare size={24} />, label: 'AI Assistant', href: '/assistant', color: 'text-indigo-500' },
-  { icon: <MapPinPlus size={24} />, label: 'Locator', href: '/locator', color: 'text-emerald-500' },
-  { icon: <HeartPulse size={24} />, label: 'First Aid', href: '/first-aid', color: 'text-red-500' },
-  { icon: <AlertTriangle size={24} />, label: 'Report Road Issue', href: '/report', color: 'text-orange-500' },
-  { icon: <Scale size={24} />, label: 'Challan Calculator', href: '/challan', color: 'text-slate-500' },
-  { icon: <ShieldAlert size={24} />, label: 'Emergency', href: '/emergency', color: 'text-red-600' },
-  { icon: <User size={24} />, label: 'Profile', href: '/profile', color: 'text-sky-500' },
-  { icon: <Settings size={24} />, label: 'Settings', href: '/settings', color: 'text-slate-400' },
+  { icon: <MapPin size={20} />, label: 'Map', href: '/', color: 'text-blue-500' },
+  { icon: <BotMessageSquare size={20} />, label: 'AI Assistant', href: '/assistant', color: 'text-indigo-500' },
+  { icon: <MapPinPlus size={20} />, label: 'Locator', href: '/locator', color: 'text-emerald-500' },
+  { icon: <HeartPulse size={20} />, label: 'First Aid', href: '/first-aid', color: 'text-red-500' },
+  { icon: <AlertTriangle size={20} />, label: 'Report Road Issue', href: '/report', color: 'text-orange-500' },
+  { icon: <Scale size={20} />, label: 'Challan Calculator', href: '/challan', color: 'text-slate-500' },
+  { icon: <ShieldAlert size={20} />, label: 'Emergency', href: '/emergency', color: 'text-red-600' },
+  { icon: <User size={20} />, label: 'Profile', href: '/profile', color: 'text-sky-500' },
+  { icon: <Settings size={20} />, label: 'Settings', href: '/settings', color: 'text-slate-400' },
 ];
 
 const quickDials = [
@@ -98,7 +98,7 @@ export function AppSidebar() {
                     />
                   )}
                   <div className={`${item.color} ${isActive ? 'scale-110' : 'group-hover:scale-110'} p-1.5 rounded-lg bg-current/10 transition-transform shrink-0`}>
-                    {React.cloneElement(item.icon as React.ReactElement, { size: 20 })}
+                    {item.icon}
                   </div>
                   {!isDesktopSidebarCollapsed && (
                     <span className={`text-[13px] whitespace-nowrap transition-colors ${isActive

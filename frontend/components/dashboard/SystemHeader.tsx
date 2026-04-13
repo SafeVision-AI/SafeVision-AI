@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Search, Mic, Sun, Moon, Monitor, Menu, ShieldCheck } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 interface SystemHeaderProps {
   title?: string;
@@ -25,9 +25,30 @@ const SystemHeader = memo(function SystemHeader({
   const { theme, setTheme } = useTheme();
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
 
+  const [searchQuery, setSearchQuery] = useState('');
+
   useEffect(() => {
     setMounted(true);
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    setIsOnline(navigator.onLine);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      console.log('Searching for:', searchQuery);
+      // Implement actual search navigation later
+    }
+  };
 
   return (
     <header className="hidden lg:flex fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-2xl border-b border-slate-200 dark:border-white/5 shadow-sm px-6 h-16 items-center justify-between transition-colors duration-500">
@@ -42,7 +63,10 @@ const SystemHeader = memo(function SystemHeader({
         )}
         
         <div className="flex flex-col">
-          <h1 className="text-slate-800 dark:text-slate-200 font-black tracking-tight text-base leading-tight font-space uppercase">
+          <h1 
+            className="text-slate-800 dark:text-slate-200 font-black tracking-tight text-base leading-tight font-space uppercase"
+            aria-current="page"
+          >
             {title}
           </h1>
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
@@ -53,11 +77,18 @@ const SystemHeader = memo(function SystemHeader({
       </div>
 
       {/* Desktop Search Bar (Google Maps Style) */}
-      <div className="flex-1 max-w-md mx-8 flex h-11 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-2 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_20px_rgba(59,130,246,0.15)] focus-within:bg-white dark:focus-within:bg-[#1f283d] focus-within:border-blue-500/30">
+      <form 
+        onSubmit={handleSearch}
+        role="search"
+        aria-label="Search"
+        className="flex-1 max-w-md mx-8 flex h-11 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-2 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_20px_rgba(59,130,246,0.15)] focus-within:bg-white dark:focus-within:bg-[#1f283d] focus-within:border-blue-500/30"
+      >
         <button
+          type="button"
           onClick={() => setSystemSidebarOpen(true)}
           className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 transition-colors mr-1"
           title="Global Navigation"
+          aria-label="Open navigation menu"
         >
           <Menu size={18} />
         </button>
@@ -65,25 +96,33 @@ const SystemHeader = memo(function SystemHeader({
         <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0 ml-1" />
         <input
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Ask Maps or Search System"
+          aria-label="Search input"
           className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 px-3 text-sm text-slate-800 dark:text-slate-200 placeholder:text-slate-500 font-medium h-full w-full"
         />
-        <button className="p-2 mr-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all">
+        <button 
+          type="button"
+          className="p-2 mr-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all"
+        >
           <Mic className="w-4 h-4" />
         </button>
-      </div>
+      </form>
 
       <div className="flex items-center gap-4 min-w-[280px] justify-end">
         {/* Connection Status */}
         <div className="flex bg-white dark:bg-[#161c2d] rounded-xl p-0.5 border border-slate-200 dark:border-white/5 shadow-inner">
           <button
-            onClick={() => setIsOnline(true)}
+            title="Force Online Mode"
+            disabled={isOnline}
             className={`px-3 py-1.5 text-[11px] rounded-lg font-bold transition-all duration-200 ${isOnline ? 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
           >
             Online
           </button>
           <button
-            onClick={() => setIsOnline(false)}
+            title="Force Offline Mode"
+            disabled={!isOnline}
             className={`px-3 py-1.5 text-[11px] rounded-lg font-bold transition-all duration-200 ${!isOnline ? 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm ring-1 ring-black/5 dark:ring-white/10' : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'}`}
           >
             Offline

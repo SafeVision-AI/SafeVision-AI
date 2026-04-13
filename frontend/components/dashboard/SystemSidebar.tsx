@@ -1,7 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
   MapPin,
@@ -34,11 +34,11 @@ const SystemSidebar = memo(function SystemSidebar() {
         delayChildren: 0.2,
       },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: { x: -20, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+    visible: { x: 0, opacity: 1, transition: { type: 'spring' as const, stiffness: 300, damping: 24 } },
   };
 
   const navItems = [
@@ -79,6 +79,9 @@ const SystemSidebar = memo(function SystemSidebar() {
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation"
             className="fixed top-0 left-0 h-full w-[85vw] sm:w-[340px] max-w-[340px] bg-[#f8fafc] dark:bg-[#0a0f1a] shadow-2xl z-[101] flex flex-col border-r border-white/10 overflow-hidden lg:hidden"
           >
             {/* Header */}
@@ -98,6 +101,7 @@ const SystemSidebar = memo(function SystemSidebar() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close Sidebar"
+                autoFocus
                 className="p-3 hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-all text-slate-500 hover:text-slate-800 dark:hover:text-white active:scale-90"
               >
                 <X size={28} strokeWidth={3} />
@@ -176,18 +180,20 @@ const SystemSidebar = memo(function SystemSidebar() {
 
             {/* Primary Action Footer: SOS */}
             <div className="p-6 bg-slate-100 dark:bg-white/5 border-t border-slate-200 dark:border-white/5">
-              <Link href="/sos" onClick={() => setOpen(false)}>
-                <button className="w-full flex items-center justify-center gap-3 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-600/30 transition-all active:scale-95 group overflow-hidden relative">
-                  <motion.div
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute inset-0 bg-white/10"
-                  />
-                  <span className="material-symbols-outlined text-3xl font-black relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    sos
-                  </span>
-                  <span className="relative z-10 tracking-widest uppercase">System SOS</span>
-                </button>
+              <Link 
+                href="/sos" 
+                onClick={() => setOpen(false)}
+                className="w-full flex items-center justify-center gap-3 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-600/30 transition-all active:scale-95 group overflow-hidden relative"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                  className="absolute inset-0 bg-white/10"
+                />
+                <span className="material-symbols-outlined text-3xl font-black relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  sos
+                </span>
+                <span className="relative z-10 tracking-widest uppercase">System SOS</span>
               </Link>
               <p className="text-center text-[10px] font-bold text-slate-500 mt-4 tracking-tighter">
                 SafeVision AI v2.4.0-Sentinel • Professional Responder Tier
