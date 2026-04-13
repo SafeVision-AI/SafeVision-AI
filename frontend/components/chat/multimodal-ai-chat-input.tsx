@@ -12,7 +12,7 @@ import React, {
 } from 'react';
 
 import equal from 'fast-deep-equal';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { Loader2 as LoaderIcon, X as XIcon, Mic, Send } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
@@ -150,6 +150,8 @@ function PureMicButton({ disabled }: { disabled?: boolean }) {
       onClick={(event) => {
         event.preventDefault();
         setIsActive(!isActive);
+        // Stub for Web Speech API
+        console.log(isActive ? 'Web Speech API stub: Stopped recording' : 'Web Speech API stub: Started recording');
       }}
       disabled={disabled}
       aria-label="Use microphone"
@@ -344,6 +346,9 @@ export function PureMultimodalInput({
   // Placeholder File Upload Function
   const uploadFile = async (file: File): Promise<Attachment | undefined> => {
     return new Promise((resolve) => {
+      // Stub for File Upload
+      console.log('File upload stub: Uploading', file.name, file.size, 'bytes');
+
       setTimeout(() => {
         try {
           const mockUrl = URL.createObjectURL(file);
@@ -484,7 +489,7 @@ export function PureMultimodalInput({
             rows={1}
             autoFocus
             disabled={!canSend || isGenerating || uploadQueue.length > 0}
-            className="text-slate-300 placeholder:text-slate-500 py-3 font-medium max-h-[120px] overflow-y-auto w-full"
+            className="text-slate-800 dark:text-slate-200 placeholder:text-slate-500 py-3 font-medium max-h-[120px] overflow-y-auto w-full"
             onKeyDown={(event) => {
               if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
                 event.preventDefault();

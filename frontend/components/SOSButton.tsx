@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { AlertCircle } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { generateSosWhatsAppLink, generateSosSmsLink } from '@/lib/sos-share';

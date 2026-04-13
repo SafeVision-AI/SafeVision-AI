@@ -257,6 +257,7 @@ function buildPopupContent(title: string, overline?: string, details: string[] =
   const heading = document.createElement('div');
 
   wrapper.style.minWidth = '220px';
+  wrapper.style.maxWidth = '220px';
   wrapper.style.fontFamily = 'Inter, sans-serif';
   wrapper.style.color = '#0f172a';
 
@@ -264,6 +265,9 @@ function buildPopupContent(title: string, overline?: string, details: string[] =
   heading.style.fontWeight = '800';
   heading.style.fontSize = '14px';
   heading.style.letterSpacing = '-0.02em';
+  heading.style.whiteSpace = 'nowrap';
+  heading.style.overflow = 'hidden';
+  heading.style.textOverflow = 'ellipsis';
   wrapper.appendChild(heading);
 
   if (overline) {
@@ -283,6 +287,9 @@ function buildPopupContent(title: string, overline?: string, details: string[] =
     row.style.fontSize = '12px';
     row.style.lineHeight = '1.45';
     row.style.color = '#334155';
+    row.style.whiteSpace = 'nowrap';
+    row.style.overflow = 'hidden';
+    row.style.textOverflow = 'ellipsis';
     wrapper.appendChild(row);
   });
 

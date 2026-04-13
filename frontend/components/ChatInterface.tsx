@@ -5,6 +5,7 @@ import { useAppStore } from '@/lib/store';
 import { sendChatMessage, ChatMessage as ApiChatMessage } from '@/lib/api';
 import { useGeolocation } from '@/lib/geolocation';
 import { ConnectivityBadge } from './ConnectivityBadge';
+import { Send, Wifi, WifiOff, Loader2, Bot, UserCircle } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -50,7 +51,7 @@ export function ChatInterface() {
       if (aiMode === 'online') {
         const response = await sendChatMessage({
           message: userMsg.content,
-          session_id: 'default-session', // hardcoded for demo
+          session_id: 'default-session',
           lat: location?.lat,
           lon: location?.lon,
         });
@@ -65,8 +66,7 @@ export function ChatInterface() {
           },
         ]);
       } else {
-        // Offline mode simulation - wait for ModelLoader and actual WebLLM
-        // If WebLLM isn't hooked up yet, just reply with a placeholder
+        // Offline mode simulation
         setTimeout(() => {
           setMessages((prev) => [
             ...prev,
@@ -78,7 +78,7 @@ export function ChatInterface() {
           ]);
           setIsLoading(false);
         }, 1000);
-        return; // handle offline state inside the timeout for now
+        return;
       }
     } catch (err) {
       console.error('Chat error:', err);
@@ -96,112 +96,67 @@ export function ChatInterface() {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div className="flex flex-col h-full bg-slate-50 dark:bg-[#071325]">
       {/* HEADER / MODE TOGGLE */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0.75rem',
-        borderBottom: '1px solid var(--outline-variant)',
-        background: 'var(--bg-card)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '1.25rem' }}>🧠</span>
-          <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>SafeVisionAI Chat</div>
+      <div className="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-white/5 bg-white/80 dark:bg-white/5 backdrop-blur-xl">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
+            <Bot size={16} className="text-blue-600 dark:text-blue-400" />
+          </div>
+          <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">SafeVisionAI Chat</span>
         </div>
 
         {/* Toggle between Online and Offline Mode */}
-        <div style={{ display: 'flex', background: 'var(--bg-card-high)', borderRadius: '99px', padding: '4px' }}>
+        <div className="flex items-center bg-slate-100 dark:bg-white/5 rounded-full p-0.5 border border-slate-200 dark:border-white/10">
           <button
             onClick={() => setAiMode('online')}
-            style={{
-              padding: '4px 12px',
-              borderRadius: '99px',
-              border: 'none',
-              background: aiMode === 'online' ? 'var(--brand-primary)' : 'transparent',
-              color: aiMode === 'online' ? '#fff' : 'var(--text-secondary)',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'background 0.2s',
-            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+              aiMode === 'online'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+            }`}
           >
-            Online (Fast)
+            <Wifi size={12} />
+            Online
           </button>
           <button
             onClick={() => setAiMode('offline')}
-            style={{
-              padding: '4px 12px',
-              borderRadius: '99px',
-              border: 'none',
-              background: aiMode === 'offline' ? 'var(--accent-purple)' : 'transparent',
-              color: aiMode === 'offline' ? '#fff' : 'var(--text-secondary)',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'background 0.2s',
-            }}
-            disabled={connectivity === 'offline'} // Or allow them to force it
+            disabled={connectivity === 'offline'}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+              aiMode === 'offline'
+                ? 'bg-indigo-600 text-white shadow-sm'
+                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+            }`}
           >
-            Offline LLM
+            <WifiOff size={12} />
+            Offline
           </button>
         </div>
       </div>
 
       {/* CHAT MESSAGES AREA */}
-      <div
-        className="hide-scrollbar"
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          padding: '1rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          background: 'var(--bg-main)'
-        }}
-      >
+      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 scrollbar-hide">
         {messages.map((msg) => {
           const isUser = msg.role === 'user';
           return (
             <div
               key={msg.id}
-              className="animate-fade-in-up"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: isUser ? 'flex-end' : 'flex-start',
-                maxWidth: '100%',
-              }}
+              className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} animate-fade-in-up`}
             >
-              <div style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '8px',
-                flexDirection: isUser ? 'row-reverse' : 'row',
-                maxWidth: '85%',
-              }}>
-                <div style={{
-                  width: '24px', height: '24px', borderRadius: '50%',
-                  background: isUser ? 'var(--brand-primary)' : 'var(--accent-green)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '12px', flexShrink: 0, marginTop: '4px'
-                }}>
-                  {isUser ? '👤' : '🤖'}
+              <div className={`flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : 'flex-row'} max-w-[85%]`}>
+                <div className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 ${
+                  isUser
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-emerald-500/10 text-emerald-500'
+                }`}>
+                  {isUser ? <UserCircle size={14} /> : <Bot size={14} />}
                 </div>
 
-                <div style={{
-                  padding: '10px 14px',
-                  borderRadius: isUser ? '16px 16px 0 16px' : '16px 16px 16px 0',
-                  background: isUser ? 'var(--brand-primary)' : 'var(--bg-card-high)',
-                  color: isUser ? '#fff' : 'var(--text-primary)',
-                  fontSize: '0.875rem',
-                  lineHeight: 1.5,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                  border: isUser ? 'none' : '1px solid var(--outline-variant)',
-                  whiteSpace: 'pre-wrap'
-                }}>
+                <div className={`px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
+                  isUser
+                    ? 'bg-blue-600 text-white rounded-2xl rounded-tr-sm shadow-md'
+                    : 'bg-white dark:bg-white/5 text-slate-800 dark:text-[#d7e3fc] rounded-2xl rounded-tl-sm border border-slate-200 dark:border-white/10 shadow-sm'
+                }`}>
                   {msg.content}
                 </div>
               </div>
@@ -210,19 +165,14 @@ export function ChatInterface() {
         })}
 
         {isLoading && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '0 8px', alignSelf: 'flex-start' }}>
-            <div style={{
-              width: '24px', height: '24px', borderRadius: '50%',
-              background: 'var(--accent-green)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '12px',
-            }}>🤖</div>
-            <div style={{
-              padding: '10px 14px', background: 'var(--bg-card-high)', borderRadius: '16px 16px 16px 0',
-              display: 'flex', gap: '4px'
-            }}>
-              <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-muted)' }} />
-              <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-muted)', animationDelay: '0.2s' }} />
-              <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--text-muted)', animationDelay: '0.4s' }} />
+          <div className="flex items-start gap-2.5 self-start">
+            <div className="w-7 h-7 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+              <Bot size={14} className="text-emerald-500" />
+            </div>
+            <div className="px-4 py-3 bg-white dark:bg-white/5 rounded-2xl rounded-tl-sm border border-slate-200 dark:border-white/10 flex gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: '300ms' }} />
             </div>
           </div>
         )}
@@ -230,51 +180,32 @@ export function ChatInterface() {
       </div>
 
       {/* INPUT AREA */}
-      <div style={{
-        padding: '0.75rem',
-        background: 'var(--bg-card)',
-        borderTop: '1px solid var(--outline-variant)'
-      }}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem' }}>
+      <div className="px-4 py-3 bg-white/80 dark:bg-white/5 backdrop-blur-xl border-t border-slate-200 dark:border-white/5">
+        <form onSubmit={handleSubmit} className="flex items-center gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about traffic rules or first aid..."
             disabled={isLoading || aiMode === 'loading'}
-            style={{
-              flex: 1,
-              padding: '0.75rem 1rem',
-              borderRadius: '99px',
-              border: '1px solid var(--outline)',
-              background: 'var(--bg-main)',
-              color: 'var(--text-primary)',
-              fontSize: '0.875rem',
-              outline: 'none',
-              transition: 'border var(--transition-fast)'
-            }}
-            onFocus={(e) => e.target.style.borderColor = 'var(--brand-primary)'}
-            onBlur={(e) => e.target.style.borderColor = 'var(--outline)'}
+            aria-label="Chat message input"
+            className="flex-1 px-4 py-3 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 transition-all"
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading || aiMode === 'loading'}
-            style={{
-              width: '44px',
-              height: '44px',
-              borderRadius: '50%',
-              border: 'none',
-              background: !input.trim() || isLoading ? 'var(--bg-card-highest)' : 'var(--brand-primary)',
-              color: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: !input.trim() || isLoading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.2s',
-              flexShrink: 0
-            }}
+            aria-label="Send message"
+            className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all active:scale-90 ${
+              !input.trim() || isLoading
+                ? 'bg-slate-100 dark:bg-white/5 text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                : 'bg-blue-600 text-white shadow-md shadow-blue-600/20 hover:bg-blue-700'
+            }`}
           >
-            {aiMode === 'loading' ? '⌛' : '↑'}
+            {aiMode === 'loading' ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Send size={16} />
+            )}
           </button>
         </form>
       </div>

@@ -1,17 +1,8 @@
 'use client';
 
-interface EmergencyNumber {
-  number: string;
-  label: string;
-  color: string;
-}
+import { Fragment } from 'react';
 
-const NUMBERS: EmergencyNumber[] = [
-  { number: '112', label: 'Emergency', color: 'var(--accent-red)' },
-  { number: '102', label: 'Ambulance', color: 'var(--accent-green)' },
-  { number: '100', label: 'Police',    color: 'var(--accent-blue)' },
-  { number: '1033', label: 'Highway',  color: 'var(--accent-orange)' },
-];
+import { PRIMARY_EMERGENCY_BAR } from '@/lib/emergency-numbers';
 
 export function EmergencyNumbers() {
   return (
@@ -20,20 +11,20 @@ export function EmergencyNumbers() {
       aria-label="Emergency phone numbers"
       role="navigation"
     >
-      {NUMBERS.map((n, i) => (
-        <>
+      {PRIMARY_EMERGENCY_BAR.map((n, i) => (
+        <Fragment key={n.id}>
           {i > 0 && <div className="bar-divider" aria-hidden="true" key={`div-${i}`} />}
           <a
-            key={n.number}
-            href={`tel:${n.number}`}
+            key={n.service}
+            href={`tel:${n.service}`}
             className="emergency-bar-btn"
-            aria-label={`Call ${n.label}: ${n.number}`}
+            aria-label={`Call ${n.label}: ${n.service}`}
           >
             <span
               className="emergency-bar-num"
               style={{ color: n.color }}
             >
-              {n.number}
+              {n.service}
             </span>
             <span
               className="emergency-bar-label"
@@ -42,7 +33,7 @@ export function EmergencyNumbers() {
               {n.label}
             </span>
           </a>
-        </>
+        </Fragment>
       ))}
     </nav>
   );
