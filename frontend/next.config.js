@@ -8,6 +8,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'source.unsplash.com' },
       { protocol: 'https', hostname: 'unpkg.com' },
       { protocol: 'https', hostname: 'nominatim.openstreetmap.org' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
     ],
   },
   // No orphan redirects needed — /emergency and /settings routes now exist

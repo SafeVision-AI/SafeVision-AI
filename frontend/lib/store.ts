@@ -108,6 +108,15 @@ interface AppState {
   setSystemSidebarOpen: (v: boolean) => void;
   isDesktopSidebarCollapsed: boolean;
   setDesktopSidebarCollapsed: (v: boolean) => void;
+
+  // Challan Calculator
+  challanState: {
+    violation: string;
+    vehicle: string;
+    jurisdiction: string;
+    isRepeat: boolean;
+  };
+  setChallanState: (state: Partial<AppState['challanState']>) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -175,6 +184,15 @@ export const useAppStore = create<AppState>()(
       setSystemSidebarOpen: (v) => set({ isSystemSidebarOpen: v }),
       isDesktopSidebarCollapsed: false,
       setDesktopSidebarCollapsed: (v) => set({ isDesktopSidebarCollapsed: v }),
+
+      // Challan Calculator
+      challanState: {
+        violation: 'dui',
+        vehicle: '4w',
+        jurisdiction: 'Tamil Nadu (TN)',
+        isRepeat: false,
+      },
+      setChallanState: (state) => set((s) => ({ challanState: { ...s.challanState, ...state } })),
     }),
     {
       name: 'svai-storage',
