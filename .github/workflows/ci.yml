@@ -1,1 +1,68 @@
-# GitHub Actions CI/CD — runs backend tests and frontend build on every push to main/develop
+name: SafeVisionAI CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install backend dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pytest httpx
+    - name: Wait for services or mock setup (if required)
+      run: echo "Tests may require DB or mocks. Assuming tests use mocks or sqlite."
+    - name: Run backend tests
+      run: pytest tests/ -v
+
+  chatbot-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chatbot_service
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+    - name: Install chatbot dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        pip install pytest httpx
+    - name: Run chatbot tests
+      run: pytest tests/ -v
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20.x"
+        cache: 'npm'
+        cache-dependency-path: './frontend/package-lock.json'
+    - name: Install frontend dependencies
+      run: npm ci --legacy-peer-deps
+    - name: Build frontend
+      run: |
+        export NEXT_PUBLIC_BACKEND_URL="http://localhost:8000"
+        npm run build
