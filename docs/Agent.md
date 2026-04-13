@@ -40,6 +40,7 @@
 ```
 SafeVisionAI/
 
+ chatbot_service/             Standalone FastAPI Voice & Chatbot Service
  backend/                     FastAPI Python 3.11 application
     main.py                  App entry point  CORS, routers, health check
     requirements.txt         All pinned Python dependencies
@@ -155,6 +156,8 @@ SafeVisionAI/
     Deployment.md            Step-by-step setup and deployment
     AI_Instructions.md       How each AI layer works with code examples
     DataSources.md           Where all data comes from
+
+  chatbot_docs/                Mirrored or customized docs for the chatbot infrastructure
 
  .github/workflows/ci.yml    GitHub Actions: test backend + build frontend
  render.yaml                 Render.com deployment config

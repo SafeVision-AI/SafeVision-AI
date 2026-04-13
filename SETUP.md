@@ -114,6 +114,54 @@ uvicorn main:app --reload --port 8000
 
 ---
 
+# 🤖 CHATBOT SERVICE SETUP
+
+---
+
+## Step 5.1 — Create a Python Virtual Environment for Chatbot
+
+```bash
+cd chatbot_service
+python -m venv .venv
+```
+
+### Activate the Virtual Environment
+
+**Windows (PowerShell):**
+```powershell
+.venv\Scripts\activate
+```
+
+**Linux / macOS:**
+```bash
+source .venv/bin/activate
+```
+
+---
+
+## Step 5.2 — Install dependencies & Configure
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+```
+
+Edit `chatbot_service/.env` with your API keys (Gemini, Groq, Twilio if needed).
+
+---
+
+## Step 5.3 — Run the Chatbot Service
+
+```bash
+uvicorn main:app --reload --port 8001
+```
+
+✅ **Verify:**
+- Health check: [http://localhost:8001/health](http://localhost:8001/health)
+- Swagger API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
+
+---
+
 # 🖥️ FRONTEND SETUP
 
 ---
@@ -200,12 +248,18 @@ cd SafeVisionAI/backend
 # source .venv/bin/activate    # Linux/Mac
 uvicorn main:app --reload --port 8000
 
-# Terminal 2: Frontend
+# Terminal 2: Chatbot Service
+cd SafeVisionAI/chatbot_service
+.venv\Scripts\activate         # Windows
+uvicorn main:app --reload --port 8001
+
+# Terminal 3: Frontend
 cd SafeVisionAI/frontend
 npm run dev
 
-# Both running:
+# All running:
 # Backend:  http://localhost:8000
+# Chatbot:  http://localhost:8001
 # API Docs: http://localhost:8000/docs
 # Frontend: http://localhost:3000
 ```

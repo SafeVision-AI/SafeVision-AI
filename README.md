@@ -58,8 +58,11 @@ Verify: http://localhost:3000
 ```
 SafeVisionAI/
 -- backend/          FastAPI Python 3.11 + PostgreSQL/PostGIS + ChromaDB
--- frontend/         Next.js 14 TypeScript PWA + WebLLM + DuckDB-Wasm
+-- chatbot_service/  FastAPI Chatbot/Voice Service + Custom RAG pipelines
+-- frontend/         Next.js 14 TypeScript PWA + WebLLM/DuckDB-Wasm UI
 -- docs/             Complete technical documentation
+-- chatbot_docs/     Documentation specifically for Chatbot Service
+-- scripts/          Global Python/Shell scripts for OS setup and data prep
 -- .github/          GitHub Actions CI/CD
 ```
 
