@@ -6,6 +6,7 @@ from core.redis_client import CacheHelper
 from models.schemas import EmergencyResponse, EmergencyServiceItem, SosResponse
 from services.exceptions import ExternalServiceError
 from services.emergency_locator import EmergencyLocatorService
+from services.local_emergency_catalog import LocalEmergencyEntry
 
 
 class FakeCache:
@@ -231,3 +232,52 @@ def test_cache_helper_falls_back_to_memory():
 
     assert asyncio.run(round_trip()) == {'ok': True}
     assert cache.backend_name == 'memory'
+
+
+def test_emergency_locator_uses_local_catalog_before_overpass():
+    class Settings:
+        emergency_radius_steps = [500, 1000, 5000]
+        max_radius = 5000
+        emergency_min_results = 2
+        cache_ttl_seconds = 60
+        default_radius = 5000
+
+    class FailingOverpass:
+        async def search_services(self, **kwargs):
+            raise ExternalServiceError('Overpass API unavailable')
+
+    cache = FakeCache()
+    service = EmergencyLocatorService(settings=Settings(), cache=cache, overpass_service=FailingOverpass())
+    service._local_catalog = [
+        LocalEmergencyEntry(
+            id='local-1',
+            name='Local Trauma Hospital',
+            category='hospital',
+            lat=13.0830,
+            lon=80.2709,
+            has_trauma=True,
+            source='local:hospital_directory',
+        )
+    ]
+
+    async def fake_query_database(*, radius_meters: int, **kwargs):
+        return []
+
+    service._query_database = fake_query_database  # type: ignore[method-assign]
+
+    import asyncio
+
+    result = asyncio.run(
+        service.find_nearby(
+            db=object(),
+            lat=13.0827,
+            lon=80.2707,
+            categories='hospital',
+            radius=5000,
+            limit=5,
+        )
+    )
+
+    assert result.source == 'local'
+    assert result.count == 1
+    assert result.services[0].name == 'Local Trauma Hospital'
