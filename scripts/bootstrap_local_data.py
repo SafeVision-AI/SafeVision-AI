@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import csv
 from io import BytesIO
 import json
 import math
 import shutil
+import struct
 import sys
 import tempfile
 import zipfile
@@ -32,6 +34,7 @@ CHATBOT_DATA_DIR = PROJECT_ROOT / 'chatbot_service' / 'data'
 FRONTEND_OFFLINE_DIR = PROJECT_ROOT / 'frontend' / 'public' / 'offline-data'
 BACKEND_CHALLAN_DIR = PROJECT_ROOT / 'backend' / 'datasets' / 'challan'
 ROADS_DIR = CHATBOT_DATA_DIR / 'roads'
+PMGSY_MAX_POINTS_PER_SEGMENT = 24
 
 OFFLINE_CITY_CENTERS: dict[str, tuple[float, float]] = {
     'chennai': (13.0827, 80.2707),
@@ -144,38 +147,53 @@ def export_pmgsy_geojson() -> None:
         print('PMGSY archive not found; skipping pmgsy_roads.geojson export')
         return
 
-    try:
-        import geopandas as gpd
-        import pandas as pd
-    except Exception:
-        print('geopandas/pandas are not installed in the active Python; skipping pmgsy_roads.geojson export')
-        return
+    planned_states: list[str] = []
+    skipped_archives: list[str] = []
+    feature_count = 0
 
-    frames = []
-    with zipfile.ZipFile(source) as outer, tempfile.TemporaryDirectory() as tmp_dir_name:
-        tmp_dir = Path(tmp_dir_name)
-        for member in sorted(name for name in outer.namelist() if name.endswith('.zip') and '/Road_DRRP/' in name):
-            if member.endswith('-split.zip'):
+    with zipfile.ZipFile(source) as outer, target.open('w', encoding='utf-8') as handle:
+        planned_states = _list_pmgsy_state_members(outer)
+        skipped_archives = _list_pmgsy_split_archives(outer)
+        properties = {
+            'generated_from': source.name,
+            'geometry_generalization': f'max {PMGSY_MAX_POINTS_PER_SEGMENT} points per segment',
+            'planned_states': planned_states,
+            'skipped_archives': skipped_archives,
+        }
+        handle.write('{"type":"FeatureCollection","properties":')
+        json.dump(properties, handle, ensure_ascii=False, separators=(',', ':'))
+        handle.write(',"features":[')
+
+        is_first_feature = True
+        exported_states: list[str] = []
+        for state_name, archive_bytes in _iter_pmgsy_state_archives(outer):
+            try:
+                shp_bytes, dbf_bytes = _read_shapefile_bundle(archive_bytes)
+            except ValueError:
                 continue
-            state_name = Path(member).stem
-            inner_dir = tmp_dir / state_name
-            inner_dir.mkdir(parents=True, exist_ok=True)
-            with zipfile.ZipFile(BytesIO(outer.read(member))) as inner:
-                inner.extractall(inner_dir)
-            shp_files = list(inner_dir.glob('*.shp'))
-            if not shp_files:
-                continue
-            frame = gpd.read_file(shp_files[0])
-            frame['pmgsy_state'] = state_name
-            frames.append(frame)
 
-    if not frames:
-        print('No PMGSY shapefiles could be extracted; skipping pmgsy_roads.geojson export')
-        return
+            exported_states.append(state_name)
+            for row, geometry in zip(_iter_dbf_rows(dbf_bytes), _iter_polyline_geometries(shp_bytes)):
+                if geometry is None:
+                    continue
+                feature = {
+                    'type': 'Feature',
+                    'id': f'pmgsy-{state_name}-{row.get("ER_ID") or feature_count + 1}',
+                    'geometry': geometry,
+                    'properties': _build_pmgsy_properties(row, state_name),
+                }
+                if not is_first_feature:
+                    handle.write(',')
+                json.dump(feature, handle, ensure_ascii=False, separators=(',', ':'))
+                is_first_feature = False
+                feature_count += 1
 
-    merged = gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), geometry='geometry', crs=frames[0].crs)
-    merged.to_file(target, driver='GeoJSON')
-    print(f'PMGSY GeoJSON exported: rows={len(merged)} path={target}')
+        handle.write(']}')
+
+    print(
+        'PMGSY GeoJSON exported: '
+        f'rows={feature_count} states={len(exported_states)} skipped={len(skipped_archives)} path={target}'
+    )
 
 
 def export_national_highways_csv() -> None:
@@ -189,7 +207,32 @@ def export_national_highways_csv() -> None:
         if path.name != target.name and any(token in path.stem.lower() for token in ('nh', 'highway', 'nhai'))
     )
     if not candidates:
-        print('No local national-highway source file found in chatbot_service/data/roads; skipping national_highways.csv export')
+        summary_rows = _build_road_summary_rows()
+        if not summary_rows:
+            print('No usable local road CSVs found; skipping national_highways.csv export')
+            return
+
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open('w', encoding='utf-8', newline='') as handle:
+            writer = csv.DictWriter(
+                handle,
+                fieldnames=[
+                    'source_file',
+                    'geography_level',
+                    'geography_name',
+                    'period',
+                    'metric_name',
+                    'value',
+                    'unit',
+                    'notes',
+                ],
+            )
+            writer.writeheader()
+            writer.writerows(summary_rows)
+        print(
+            'National highways CSV synthesized from local road tables: '
+            f'rows={len(summary_rows)} path={target}'
+        )
         return
 
     shutil.copyfile(candidates[0], target)
@@ -218,6 +261,257 @@ def _distance_meters(lat1: float, lon1: float, lat2: float, lon2: float) -> floa
         + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2) ** 2
     )
     return 2 * radius * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def _list_pmgsy_state_members(outer: zipfile.ZipFile) -> list[str]:
+    return [
+        Path(member).stem
+        for member in sorted(name for name in outer.namelist() if '/Road_DRRP/' in name and name.endswith('.zip'))
+        if not member.endswith('-split.zip')
+    ]
+
+
+def _list_pmgsy_split_archives(outer: zipfile.ZipFile) -> list[str]:
+    return [
+        Path(member).stem
+        for member in sorted(name for name in outer.namelist() if '/Road_DRRP/' in name and name.endswith('-split.zip'))
+    ]
+
+
+def _iter_pmgsy_state_archives(outer: zipfile.ZipFile):
+    for member in sorted(name for name in outer.namelist() if '/Road_DRRP/' in name and name.endswith('.zip')):
+        if member.endswith('-split.zip'):
+            continue
+        yield Path(member).stem, outer.read(member)
+
+
+def _read_shapefile_bundle(archive_bytes: bytes) -> tuple[bytes, bytes]:
+    with zipfile.ZipFile(BytesIO(archive_bytes)) as archive:
+        shp_names = [name for name in archive.namelist() if name.lower().endswith('.shp')]
+        dbf_names = [name for name in archive.namelist() if name.lower().endswith('.dbf')]
+        if not shp_names or not dbf_names:
+            raise ValueError('Missing shapefile members')
+        return archive.read(shp_names[0]), archive.read(dbf_names[0])
+
+
+def _iter_dbf_rows(dbf_bytes: bytes) -> list[dict[str, object]]:
+    header_length = struct.unpack('<H', dbf_bytes[8:10])[0]
+    record_length = struct.unpack('<H', dbf_bytes[10:12])[0]
+    field_specs = []
+    pos = 32
+    offset = 1
+    while pos < header_length - 1:
+        field = dbf_bytes[pos:pos + 32]
+        if field[0] == 0x0D:
+            break
+        field_specs.append(
+            (
+                field[:11].split(b'\x00', 1)[0].decode('ascii', 'ignore'),
+                chr(field[11]),
+                field[16],
+                field[17],
+                offset,
+            )
+        )
+        offset += field[16]
+        pos += 32
+
+    records = struct.unpack('<I', dbf_bytes[4:8])[0]
+    row_start = header_length
+    for _ in range(records):
+        record = dbf_bytes[row_start:row_start + record_length]
+        row_start += record_length
+        if not record or record[0:1] == b'*':
+            continue
+        row: dict[str, object] = {}
+        for name, field_type, field_len, decimals, value_offset in field_specs:
+            raw = record[value_offset:value_offset + field_len]
+            text = raw.decode('latin1', 'ignore').strip()
+            if not text:
+                continue
+            if field_type == 'N':
+                if decimals:
+                    try:
+                        row[name] = float(text)
+                    except ValueError:
+                        row[name] = text
+                else:
+                    try:
+                        row[name] = int(text)
+                    except ValueError:
+                        row[name] = text
+            else:
+                row[name] = text
+        yield row
+
+
+def _iter_polyline_geometries(shp_bytes: bytes) -> list[dict[str, object] | None]:
+    pos = 100
+    total_size = len(shp_bytes)
+    while pos + 8 <= total_size:
+        content_length_words = struct.unpack('>i', shp_bytes[pos + 4:pos + 8])[0]
+        record_end = pos + 8 + content_length_words * 2
+        record = shp_bytes[pos + 8:record_end]
+        pos = record_end
+        if len(record) < 44:
+            yield None
+            continue
+
+        shape_type = struct.unpack('<i', record[:4])[0]
+        if shape_type == 0:
+            yield None
+            continue
+        if shape_type not in {3, 13, 23}:
+            yield None
+            continue
+
+        num_parts = struct.unpack('<i', record[36:40])[0]
+        num_points = struct.unpack('<i', record[40:44])[0]
+        parts_offset = 44
+        points_offset = parts_offset + 4 * num_parts
+        parts = [
+            struct.unpack('<i', record[parts_offset + index * 4:parts_offset + (index + 1) * 4])[0]
+            for index in range(num_parts)
+        ]
+        points = [
+            struct.unpack('<2d', record[points_offset + index * 16:points_offset + (index + 1) * 16])
+            for index in range(num_points)
+        ]
+
+        coordinates = []
+        for index, start in enumerate(parts):
+            end = parts[index + 1] if index + 1 < len(parts) else len(points)
+            line = _downsample_line(points[start:end], max_points=PMGSY_MAX_POINTS_PER_SEGMENT)
+            if len(line) < 2:
+                continue
+            coordinates.append([[round(lon, 6), round(lat, 6)] for lon, lat in line])
+
+        if not coordinates:
+            yield None
+        elif len(coordinates) == 1:
+            yield {'type': 'LineString', 'coordinates': coordinates[0]}
+        else:
+            yield {'type': 'MultiLineString', 'coordinates': coordinates}
+
+
+def _downsample_line(points: list[tuple[float, float]], *, max_points: int) -> list[tuple[float, float]]:
+    if len(points) <= max_points:
+        return points
+    last_index = len(points) - 1
+    indexes = {
+        0,
+        last_index,
+        *(
+            min(last_index, round(step * last_index / (max_points - 1)))
+            for step in range(1, max_points - 1)
+        ),
+    }
+    return [points[index] for index in sorted(indexes)]
+
+
+def _build_pmgsy_properties(row: dict[str, object], state_name: str) -> dict[str, object]:
+    props: dict[str, object] = {'pmgsy_state': state_name}
+    field_map = {
+        'ER_ID': 'er_id',
+        'STATE_ID': 'state_id',
+        'BLOCK_ID': 'block_id',
+        'DISTRICT_I': 'district_id',
+        'DRRP_ROAD_': 'road_code',
+        'RoadCatego': 'road_category',
+        'RoadName': 'road_name',
+        'RoadOwner': 'road_owner',
+    }
+    for source_key, target_key in field_map.items():
+        value = row.get(source_key)
+        if value not in (None, ''):
+            props[target_key] = value
+    return props
+
+
+def _build_road_summary_rows() -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    for path in sorted(ROADS_DIR.glob('*.csv')):
+        if path.name in {'national_highways.csv', 'tolls-with-metadata.csv'}:
+            continue
+        if path.name.endswith('-metadata-hotosm_ind_roads_lines_geojson-zip.csv'):
+            continue
+        rows.extend(_normalize_road_summary_table(path))
+    return rows
+
+
+def _normalize_road_summary_table(path: Path) -> list[dict[str, str]]:
+    with path.open('r', encoding='utf-8-sig', newline='') as handle:
+        reader = csv.DictReader(handle)
+        if reader.fieldnames is None:
+            return []
+
+        geography_column = _detect_geography_column(reader.fieldnames)
+        serial_columns = {'Sr. No.', 'Sl. No.', 'Sl.No.', 'S.No.', 'S. No.'}
+        notes = (
+            'Generated from local road programme CSVs because no direct NHAI/NH master CSV '
+            'was present in chatbot_service/data/roads.'
+        )
+        rows: list[dict[str, str]] = []
+        for raw in reader:
+            geography_name = (raw.get(geography_column) or '').strip() if geography_column else ''
+            if not geography_name:
+                continue
+            for column, value in raw.items():
+                if column in serial_columns or column == geography_column:
+                    continue
+                metric_value = _normalize_metric_value(value or '')
+                if metric_value is None:
+                    continue
+                metric_name, period = _split_metric_column(column)
+                rows.append(
+                    {
+                        'source_file': path.name,
+                        'geography_level': 'district' if geography_column == 'District Name' else 'state',
+                        'geography_name': geography_name,
+                        'period': period,
+                        'metric_name': metric_name,
+                        'value': metric_value,
+                        'unit': 'km_or_count',
+                        'notes': notes,
+                    }
+                )
+        return rows
+
+
+def _detect_geography_column(fieldnames: list[str]) -> str | None:
+    candidates = ['District Name', 'State/UT', 'State', 'District', 'State/UT ']
+    for candidate in candidates:
+        if candidate in fieldnames:
+            return candidate
+    return None
+
+
+def _normalize_metric_value(value: str) -> str | None:
+    cleaned = value.strip()
+    if not cleaned or cleaned.upper() in {'NA', 'N/A', '-'}:
+        return None
+    try:
+        return str(int(cleaned))
+    except ValueError:
+        try:
+            return str(float(cleaned))
+        except ValueError:
+            return None
+
+
+def _split_metric_column(column: str) -> tuple[str, str]:
+    cleaned = column.strip()
+    period_match = None
+    for token in ('2024-25', '2023-24', '2022-23', '2021-22', '2020-21', '2019-20'):
+        if token in cleaned:
+            period_match = token
+            break
+    if period_match is None:
+        return cleaned, ''
+
+    metric_name = cleaned.replace(period_match, '').replace(' - ', ' ').replace('(as on 14.07.2022)', '').strip()
+    metric_name = ' '.join(metric_name.split()) or cleaned
+    return metric_name, period_match
 
 
 def main() -> None:

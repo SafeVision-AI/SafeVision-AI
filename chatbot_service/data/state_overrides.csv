@@ -1,7 +1,7 @@
-violation_code,state_code,override_fine,authority,effective_date
-194D,TN,1000,Transport and Road Safety Wing Tamil Nadu,2019-09-01
-181,MH,500,Transport Department Maharashtra public compounding schedule,2019-09-01
-194E,DL,10000,Delhi Traffic Police published penalty schedule,2019-09-01
-194D,KA,500,Bengaluru Traffic Police published FAQ schedule,2019-09-01
-194D,KL,1000,Motor Vehicles Department Kerala baseline schedule,2019-09-01
-183,GJ,1000,Transport Department Gujarat baseline schedule,2019-09-01
+violation_code,state_code,override_fine,authority,effective_date,section,description_en,source_title,source_url,verified_on,note
+194D,TN,1000,Transport and Road Safety Wing Tamil Nadu,2019-09-01,Sections 129/194D,Failure to wear a helmet or seat belt as required.,Temporary Tamil Nadu baseline,,,"Hackathon baseline only; official gazette link still pending."
+181,MH,500,Transport Department Maharashtra public compounding schedule,2019-09-01,Sections 3/181,Driving without a valid driving licence.,Maharashtra Transport offences page,https://transport.maharashtra.gov.in/1112/Offences-and-Penalties,2026-04-14,"Public state page is older than the 2019 central amendment; recheck against the current Maharashtra gazette before production."
+194E,DL,10000,Delhi Traffic Police published penalty schedule,2019-09-01,Section 194E,Driving without valid insurance coverage.,Delhi Traffic Police traffic offences page,https://traffic.delhipolice.gov.in/traffic-offences,2026-04-14,"Verified against the current Delhi Traffic Police offence schedule."
+194D,KA,500,Bengaluru Traffic Police published FAQ schedule,2019-09-01,Sections 129/194D,Failure to wear a helmet or seat belt as required.,Bengaluru Traffic Police FAQs,https://btp.gov.in/FAQs.aspx,2026-04-14,"Verified against the Bengaluru Traffic Police public FAQ page."
+194D,KL,1000,Motor Vehicles Department Kerala baseline schedule,2019-09-01,Sections 129/194D,Failure to wear a helmet or seat belt as required.,Kerala Motor Vehicles Department FAQ portal,https://mvd.kerala.gov.in/en/faqs?page=1&tid=All&tid_1=All,2026-04-14,"Kerala MVD public portal is the current reference point; confirm the exact gazette or circular before production use."
+183,GJ,1000,Transport Department Gujarat baseline schedule,2019-09-01,Section 183,Speeding beyond the notified limit.,Temporary Gujarat baseline,,,"Hackathon baseline only; official Gujarat source link still pending."

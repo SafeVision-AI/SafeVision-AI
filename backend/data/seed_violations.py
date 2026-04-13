@@ -275,12 +275,16 @@ def _normalize_override_row(row: dict[str, str]) -> dict[str, str] | None:
     if vehicle_class:
         normalized_vehicle_class = _normalize_vehicle_class(vehicle_class)
 
-    authority = (row.get('authority') or '').strip()
+    authority = (row.get('authority') or row.get('source_title') or '').strip()
     effective_date = (row.get('effective_date') or '').strip()
+    source_url = (row.get('source_url') or '').strip()
+    verified_on = (row.get('verified_on') or '').strip()
     note_parts = [
         (row.get('note') or row.get('state_override') or row.get('remarks') or '').strip(),
         authority,
         f'effective {effective_date}' if effective_date else '',
+        f'verified {verified_on}' if verified_on else '',
+        f'source {source_url}' if source_url else '',
     ]
 
     return {

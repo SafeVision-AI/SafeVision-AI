@@ -8,7 +8,9 @@
 .env.production
 .env.*.local
 backend/.env
+frontend/.env
 frontend/.env.local
+chatbot_service/.env
 
 # ============================================================
 # PYTHON / BACKEND
