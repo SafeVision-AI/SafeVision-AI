@@ -1,12 +1,15 @@
 {
-  "name": "SafeVisionAI",
-  "short_name": "SafeVisionAI",
-  "description": "AI-Powered Emergency Navigator PWA for Road Safety.",
+  "name": "SafeVision AI",
+  "short_name": "SafeVision",
+  "description": "AI-powered road safety, emergency locator, pothole detector, and traffic challan calculator for India.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#071325",
-  "theme_color": "#071325",
-  "orientation": "portrait",
+  "orientation": "any",
+  "theme_color": "#0B1121",
+  "background_color": "#0B1121",
+  "lang": "en-IN",
+  "categories": ["navigation", "utilities", "lifestyle"],
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -23,14 +26,35 @@
   ],
   "shortcuts": [
     {
+      "name": "SOS Emergency",
+      "short_name": "SOS",
+      "description": "Activate emergency SOS",
+      "url": "/sos",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "Emergency Locator",
+      "short_name": "Locator",
+      "description": "Find nearest hospitals and police",
       "url": "/locator",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "First Aid",
+      "name": "First Aid Guide",
+      "short_name": "First Aid",
+      "description": "AI-guided emergency response steps",
       "url": "/first-aid",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/dashboard.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "SafeVision AI Dashboard"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

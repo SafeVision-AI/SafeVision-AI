@@ -2,8 +2,12 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import toast from 'react-hot-toast';
 import { useAppStore } from '@/lib/store';
 import { submitReport } from '@/lib/api';
+
+const MAX_UPLOAD_BYTES = Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_BYTES || 5242880);
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /**
  * ReportForm — High-Fidelity Road Reporter HUD
@@ -15,12 +19,24 @@ const ReportForm: React.FC = () => {
   const [issue, setIssue] = useState('pothole');
   const [severity, setSeverity] = useState(3);
   const [desc, setDesc] = useState('');
+  const [photo, setPhoto] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const { gpsLocation, connectivity } = useAppStore();
 
   const handleSubmit = async () => {
+    if (photo) {
+      if (photo.size > MAX_UPLOAD_BYTES) {
+        toast.error('Photo must be less than 5MB');
+        return;
+      }
+      if (!ALLOWED_TYPES.includes(photo.type)) {
+        toast.error('Only JPEG, PNG or WebP allowed');
+        return;
+      }
+    }
+
     setLoading(true);
     const payload = {
       type: issue,
@@ -63,7 +79,7 @@ const ReportForm: React.FC = () => {
           The hazard has been localized and broadcasted to regional enforcement units.
         </p>
         <button 
-          onClick={() => { setSubmitted(false); setStep(1); }}
+          onClick={() => { setSubmitted(false); setStep(1); setDesc(''); setPhoto(null); }}
           className="mt-6 w-full py-4 bg-[#b0c6ff]/10 hover:bg-[#b0c6ff]/20 text-[#b0c6ff] rounded-xl text-[10px] font-black uppercase tracking-widest border border-[#b0c6ff]/20 transition-all"
         >
           Begin New Recon
@@ -147,6 +163,17 @@ const ReportForm: React.FC = () => {
               placeholder="Operational details (e.g. Left lane impassable)..."
               className="w-full bg-[#142032]/40 border border-[#b0c6ff]/10 rounded-2xl p-4 text-sm text-[#d7e3fc] placeholder-[#b0c6ff]/20 min-h-[120px] focus:outline-none focus:border-[#b0c6ff]/40"
             />
+
+            <div className="bg-[#142032]/40 rounded-2xl border border-[#b0c6ff]/10 p-4">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#b0c6ff]/40 mb-3 block">Attach Evidence (Photo)</label>
+              <input 
+                type="file" 
+                accept="image/jpeg, image/png, image/webp"
+                onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+                className="text-xs text-[#b0c6ff] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#b0c6ff]/10 file:text-[#b0c6ff] hover:file:bg-[#b0c6ff]/20"
+              />
+              {photo && <p className="text-[10px] text-[#40e56c] mt-2">Attached: {photo.name}</p>}
+            </div>
 
             <div className="flex gap-3">
               <button 

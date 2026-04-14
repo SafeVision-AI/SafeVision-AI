@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -14,6 +14,41 @@ import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import PureMultimodalInput, { Attachment } from '@/components/chat/multimodal-ai-chat-input';
+import { useGeolocation } from '@/lib/geolocation';
+
+const CHATBOT_URL =
+  process.env.NEXT_PUBLIC_CHATBOT_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'http://localhost:8010';
+
+async function* streamChat(
+  message: string,
+  session_id: string,
+  lat?: number,
+  lon?: number,
+): AsyncGenerator<{ type: string; text?: string; intent?: string; sources?: string[]; session_id?: string; message?: string }> {
+  const resp = await fetch(`${CHATBOT_URL}/api/v1/chat/stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, session_id, lat, lon }),
+  });
+  if (!resp.ok || !resp.body) throw new Error(`Chat error: ${resp.status}`);
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() ?? '';
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        try { yield JSON.parse(line.slice(6)); } catch { /* skip */ }
+      }
+    }
+  }
+}
 interface Message {
   id: string;
   role: 'user' | 'ai' | 'system';
@@ -66,6 +101,8 @@ export default function ChatPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
+  const { location } = useGeolocation();
+  const [sessionId] = useState(() => `assistant-${Date.now()}`);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const welcomeAdded = useRef(false);
@@ -104,33 +141,53 @@ export default function ChatPage() {
     }
   }, [input]);
 
-  const handleSend = async (text: string) => {
+  const handleSend = useCallback(async (text: string) => {
     if (!text.trim()) return;
 
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      text,
-      timestamp: time,
-    };
-
+    const userMsg: Message = { id: Date.now().toString(), role: 'user', text, timestamp: time };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setLoading(true);
 
-    setTimeout(() => {
-      let aiMsg = { ...MOCK_RESPONSES.default };
-      if (text.toLowerCase().includes('dui') || text.toLowerCase().includes('drunk') || text.toLowerCase().includes('influence')) {
-        aiMsg = { ...MOCK_RESPONSES.dui };
-      }
-      aiMsg.id = (Date.now() + 1).toString();
-      aiMsg.timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // Streaming assistant placeholder
+    const assistantId = `ai-${Date.now() + 1}`;
+    setMessages(prev => [...prev, { id: assistantId, role: 'ai', text: '', timestamp: time }]);
 
-      setMessages(prev => [...prev, aiMsg]);
+    try {
+      let accumulated = '';
+      for await (const event of streamChat(text, sessionId, location?.lat, location?.lon)) {
+        if (event.type === 'token' && event.text) {
+          accumulated += event.text;
+          setMessages(prev =>
+            prev.map(m => m.id === assistantId ? { ...m, text: accumulated } : m)
+          );
+        } else if (event.type === 'done') {
+          const sources = event.sources ?? [];
+          setMessages(prev =>
+            prev.map(m =>
+              m.id === assistantId
+                ? { ...m, text: accumulated || 'No response received.', citations: sources }
+                : m
+            )
+          );
+        } else if (event.type === 'error') {
+          throw new Error(event.message ?? 'Stream error');
+        }
+      }
+    } catch (err) {
+      console.error('Chat error:', err);
+      setMessages(prev =>
+        prev.map(m =>
+          m.id === assistantId
+            ? { ...m, text: 'Connection error. Please check your network or try again.' }
+            : m
+        )
+      );
+    } finally {
       setLoading(false);
-    }, 1500);
-  };
+    }
+  }, [sessionId, location]);
 
   return (
     <div className="flex flex-col h-[100dvh] w-full relative overflow-hidden bg-slate-50/50 dark:bg-[#0B1121]">

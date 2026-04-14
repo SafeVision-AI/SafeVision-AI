@@ -1,100 +1,176 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useAppStore } from '@/lib/store';
-import { sendChatMessage, ChatMessage as ApiChatMessage } from '@/lib/api';
 import { useGeolocation } from '@/lib/geolocation';
 import { ConnectivityBadge } from './ConnectivityBadge';
-import { Send, Wifi, WifiOff, Loader2, Bot, UserCircle } from 'lucide-react';
+import { Send, Wifi, WifiOff, Loader2, Bot, UserCircle, Mic } from 'lucide-react';
+import { getOfflineAI, askOfflineAI } from '@/lib/offline-ai';
 
+// ── Types ──────────────────────────────────────────────────────────────────
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   sources?: string[];
+  streaming?: boolean;
 }
 
+const CHATBOT_URL =
+  process.env.NEXT_PUBLIC_CHATBOT_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  'http://localhost:8010';
+
+// ── Helper: call backend SSE stream ───────────────────────────────────────
+async function* streamChat(
+  message: string,
+  session_id: string,
+  lat?: number,
+  lon?: number,
+): AsyncGenerator<{ type: string; text?: string; intent?: string; sources?: string[]; session_id?: string; message?: string }> {
+  const resp = await fetch(`${CHATBOT_URL}/api/v1/chat/stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message, session_id, lat, lon }),
+  });
+
+  if (!resp.ok || !resp.body) {
+    throw new Error(`Chat error: ${resp.status}`);
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() ?? '';
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        try {
+          yield JSON.parse(line.slice(6));
+        } catch {
+          // malformed — skip
+        }
+      }
+    }
+  }
+}
+
+// ── Component ──────────────────────────────────────────────────────────────
 export function ChatInterface() {
-  const {
-    aiMode,
-    connectivity,
-    setAiMode
-  } = useAppStore();
+  const { aiMode, connectivity, setAiMode } = useAppStore();
   const { location } = useGeolocation();
 
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'greeting',
       role: 'assistant',
-      content: 'Hello! I am your SafeVisionAI assistant. How can I help you today? You can ask me about traffic rules, emergency procedures, or first-aid instructions.',
-    }
+      content:
+        'Hello! I am your SafeVisionAI assistant. Ask me about traffic rules, emergency procedures, first aid, challan fines, or pothole reporting.',
+    },
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId] = useState(() => `session-${Date.now()}`);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom on new message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault();
-    if (!input.trim() || isLoading) return;
+  // ── Send message ─────────────────────────────────────────────────────────
+  const handleSubmit = useCallback(
+    async (e?: React.FormEvent, overrideText?: string) => {
+      e?.preventDefault();
+      const text = overrideText ?? input.trim();
+      if (!text || isLoading) return;
 
-    const userMsg: Message = { id: Date.now().toString(), role: 'user', content: input.trim() };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
-    setIsLoading(true);
+      const userMsg: Message = { id: Date.now().toString(), role: 'user', content: text };
+      setMessages((prev) => [...prev, userMsg]);
+      setInput('');
+      setIsLoading(true);
 
-    try {
-      if (aiMode === 'online') {
-        const response = await sendChatMessage({
-          message: userMsg.content,
-          session_id: 'default-session',
-          lat: location?.lat,
-          lon: location?.lon,
-        });
-
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: Date.now().toString(),
-            role: 'assistant',
-            content: response.response,
-            sources: response.sources,
-          },
-        ]);
-      } else {
-        // Offline mode simulation
-        setTimeout(() => {
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: Date.now().toString(),
-              role: 'assistant',
-              content: '[OFFLINE] First aid for burns: 1. Cool the burn under running water for 20 minutes. 2. Remove clothing/jewelry near the burn. 3. Cover with a sterile dressing. Do NOT apply ice or ointments.',
-            },
-          ]);
-          setIsLoading(false);
-        }, 1000);
-        return;
-      }
-    } catch (err) {
-      console.error('Chat error:', err);
+      // Placeholder for streaming response
+      const assistantId = `assistant-${Date.now()}`;
       setMessages((prev) => [
         ...prev,
-        {
-          id: Date.now().toString(),
-          role: 'assistant',
-          content: 'Sorry, I encountered a communication error. Please check your connection or switch to Offline Mode.',
-        },
+        { id: assistantId, role: 'assistant', content: '', streaming: true },
       ]);
-    } finally {
-      setIsLoading(false);
+
+      try {
+        if (aiMode === 'online' || aiMode === 'loading') {
+          // ── SSE streaming from backend ──────────────────────────────────
+          let accumulated = '';
+          let finalSources: string[] = [];
+
+          for await (const event of streamChat(text, sessionId, location?.lat, location?.lon)) {
+            if (event.type === 'token' && event.text) {
+              accumulated += event.text;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantId ? { ...m, content: accumulated } : m,
+                ),
+              );
+            } else if (event.type === 'done') {
+              finalSources = event.sources ?? [];
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantId
+                    ? { ...m, content: accumulated, sources: finalSources, streaming: false }
+                    : m,
+                ),
+              );
+            } else if (event.type === 'error') {
+              throw new Error(event.message ?? 'Stream error');
+            }
+          }
+        } else {
+          // ── Offline AI ────────────────────────────────────────────────
+          // Ensure offline AI is initialized
+          await getOfflineAI();
+          const offlineReply = await askOfflineAI(text);
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId
+                ? { ...m, content: offlineReply, streaming: false }
+                : m,
+            ),
+          );
+        }
+      } catch (err) {
+        console.error('Chat error:', err);
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId
+              ? {
+                  ...m,
+                  content:
+                    'Sorry, I encountered an error. Please check your connection or switch to Offline Mode.',
+                  streaming: false,
+                }
+              : m,
+          ),
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [aiMode, input, isLoading, sessionId, location],
+  );
+
+  // ── Keyboard shortcut ────────────────────────────────────────────────────
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit();
     }
   };
 
+  // ── Render ───────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col h-full bg-slate-50 dark:bg-[#071325]">
       {/* HEADER / MODE TOGGLE */}
@@ -103,10 +179,13 @@ export function ChatInterface() {
           <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
             <Bot size={16} className="text-blue-600 dark:text-blue-400" />
           </div>
-          <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">SafeVisionAI Chat</span>
+          <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
+            SafeVisionAI Chat
+          </span>
+          <ConnectivityBadge />
         </div>
 
-        {/* Toggle between Online and Offline Mode */}
+        {/* Mode toggle */}
         <div className="flex items-center bg-slate-100 dark:bg-white/5 rounded-full p-0.5 border border-slate-200 dark:border-white/10">
           <button
             onClick={() => setAiMode('online')}
@@ -121,7 +200,6 @@ export function ChatInterface() {
           </button>
           <button
             onClick={() => setAiMode('offline')}
-            disabled={connectivity === 'offline'}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
               aiMode === 'offline'
                 ? 'bg-indigo-600 text-white shadow-sm'
@@ -134,7 +212,7 @@ export function ChatInterface() {
         </div>
       </div>
 
-      {/* CHAT MESSAGES AREA */}
+      {/* CHAT MESSAGES */}
       <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 scrollbar-hide">
         {messages.map((msg) => {
           const isUser = msg.role === 'user';
@@ -143,28 +221,51 @@ export function ChatInterface() {
               key={msg.id}
               className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} animate-fade-in-up`}
             >
-              <div className={`flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : 'flex-row'} max-w-[85%]`}>
-                <div className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 ${
-                  isUser
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-emerald-500/10 text-emerald-500'
-                }`}>
+              <div
+                className={`flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : 'flex-row'} max-w-[85%]`}
+              >
+                <div
+                  className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 ${
+                    isUser ? 'bg-blue-600 text-white' : 'bg-emerald-500/10 text-emerald-500'
+                  }`}
+                >
                   {isUser ? <UserCircle size={14} /> : <Bot size={14} />}
                 </div>
 
-                <div className={`px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
-                  isUser
-                    ? 'bg-blue-600 text-white rounded-2xl rounded-tr-sm shadow-md'
-                    : 'bg-white dark:bg-white/5 text-slate-800 dark:text-[#d7e3fc] rounded-2xl rounded-tl-sm border border-slate-200 dark:border-white/10 shadow-sm'
-                }`}>
-                  {msg.content}
+                <div
+                  className={`px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
+                    isUser
+                      ? 'bg-blue-600 text-white rounded-2xl rounded-tr-sm shadow-md'
+                      : 'bg-white dark:bg-white/5 text-slate-800 dark:text-[#d7e3fc] rounded-2xl rounded-tl-sm border border-slate-200 dark:border-white/10 shadow-sm'
+                  }`}
+                >
+                  {msg.content || (msg.streaming ? '' : '…')}
+                  {/* Streaming cursor */}
+                  {msg.streaming && (
+                    <span className="inline-block w-0.5 h-4 bg-current ml-0.5 animate-pulse" />
+                  )}
                 </div>
               </div>
+
+              {/* Sources */}
+              {msg.sources && msg.sources.length > 0 && (
+                <div className="mt-1 ml-9 flex flex-wrap gap-1.5">
+                  {msg.sources.map((src) => (
+                    <span
+                      key={src}
+                      className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-white/10"
+                    >
+                      {src}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           );
         })}
 
-        {isLoading && (
+        {/* Loading dots (shown before first streaming token arrives) */}
+        {isLoading && !messages.some((m) => m.streaming) && (
           <div className="flex items-start gap-2.5 self-start">
             <div className="w-7 h-7 rounded-xl bg-emerald-500/10 flex items-center justify-center">
               <Bot size={14} className="text-emerald-500" />
@@ -179,21 +280,26 @@ export function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* INPUT AREA */}
+      {/* INPUT */}
       <div className="px-4 py-3 bg-white/80 dark:bg-white/5 backdrop-blur-xl border-t border-slate-200 dark:border-white/5">
         <form onSubmit={handleSubmit} className="flex items-center gap-3">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask about traffic rules or first aid..."
-            disabled={isLoading || aiMode === 'loading'}
+            onKeyDown={handleKeyDown}
+            placeholder={
+              aiMode === 'offline'
+                ? 'Ask a question (offline mode)…'
+                : 'Ask about traffic rules, first aid, emergencies…'
+            }
+            disabled={isLoading}
             aria-label="Chat message input"
             className="flex-1 px-4 py-3 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 transition-all"
           />
           <button
             type="submit"
-            disabled={!input.trim() || isLoading || aiMode === 'loading'}
+            disabled={!input.trim() || isLoading}
             aria-label="Send message"
             className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all active:scale-90 ${
               !input.trim() || isLoading
@@ -201,11 +307,7 @@ export function ChatInterface() {
                 : 'bg-blue-600 text-white shadow-md shadow-blue-600/20 hover:bg-blue-700'
             }`}
           >
-            {aiMode === 'loading' ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <Send size={16} />
-            )}
+            {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
           </button>
         </form>
       </div>
