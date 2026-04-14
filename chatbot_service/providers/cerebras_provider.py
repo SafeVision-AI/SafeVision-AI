@@ -1,27 +1,22 @@
-from providers.base import TemplateProvider
+"""Cerebras Cloud provider — llama-3.3-70b at 2000+ tok/s. Fastest LLM on earth.
+Free tier: 1M tokens/day, 30 RPM. Sign up: cloud.cerebras.ai
+Env vars: CEREBRAS_API_KEY, CEREBRAS_MODEL (optional)
+"""
+from __future__ import annotations
+
+from providers.base import HttpProvider
 
 
-class CerebrasProvider(TemplateProvider):
-    """Cerebras Cloud — llama-3.3-70b at 2000+ tok/s. Fastest LLM on earth.
-    Free tier: 1M tokens/day, 30 RPM. Sign up: cloud.cerebras.ai
-    """
+class CerebrasProvider(HttpProvider):
+    """Cerebras — speed overflow for Groq rate-limiting; 2000+ tok/s."""
 
-    BASE_URL = "https://api.cerebras.ai/v1/chat/completions"
+    name = "cerebras"
 
-    def api_key_setting(self) -> str:
-        return "cerebras_api_key"
+    def api_key_env(self) -> str:
+        return "CEREBRAS_API_KEY"
 
-    def model_setting(self) -> str:
-        return "cerebras_model"
+    def base_url(self) -> str:
+        return "https://api.cerebras.ai/v1/chat/completions"
 
     def default_model(self) -> str:
         return "llama-3.3-70b"
-
-    def build_headers(self, api_key: str) -> dict:
-        return {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        }
-
-    def build_url(self) -> str:
-        return self.BASE_URL

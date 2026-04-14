@@ -1,30 +1,28 @@
-from providers.base import TemplateProvider
+"""OpenRouter provider — gateway to 20+ models with one API key.
+Free tier: 50 req/day free. $10 gives 1K req. Sign up: openrouter.ai
+Env vars: OPENROUTER_API_KEY, OPENROUTER_MODEL (optional)
+"""
+from __future__ import annotations
+
+from providers.base import HttpProvider
 
 
-class OpenRouterProvider(TemplateProvider):
-    """OpenRouter — gateway to 20+ models with one API key.
-    Free tier: 50 req/day, $10 gives 1K req. Sign up: openrouter.ai
-    Automatically selects the best free model available.
-    """
+class OpenRouterProvider(HttpProvider):
+    """OpenRouter — gateway to 20+ models; auto-selects best free model."""
 
-    BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
+    name = "openrouter"
 
-    def api_key_setting(self) -> str:
-        return "openrouter_api_key"
+    def api_key_env(self) -> str:
+        return "OPENROUTER_API_KEY"
 
-    def model_setting(self) -> str:
-        return "openrouter_model"
+    def base_url(self) -> str:
+        return "https://openrouter.ai/api/v1/chat/completions"
 
     def default_model(self) -> str:
-        return "meta-llama/llama-3.1-70b-instruct:free"
+        return "meta-llama/llama-3.1-8b-instruct:free"
 
-    def build_headers(self, api_key: str) -> dict:
+    def extra_headers(self) -> dict:
         return {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
             "HTTP-Referer": "https://github.com/SafeVision-AI/SafeVision-AI",
             "X-Title": "RoadSoS",
         }
-
-    def build_url(self) -> str:
-        return self.BASE_URL
