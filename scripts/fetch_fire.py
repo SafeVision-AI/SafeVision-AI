@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+LOGGER = logging.getLogger(__name__)
+
 from _overpass_utils import ROOT_DIR, build_arg_parser, build_india_query, fetch_elements, normalize_row, write_rows
 
 
@@ -23,7 +27,7 @@ def main() -> None:
         if (row := normalize_row(element, default_type='fire_station', fallback_name='Unnamed fire station')) is not None
     ]
     count = write_rows(args.output, rows)
-    print(f'Saved {count} fire station records to {args.output}')
+    LOGGER.info(f'Saved {count} fire station records to {args.output}')
 
 
 if __name__ == '__main__':
