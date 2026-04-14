@@ -12,6 +12,10 @@ sentence-transformers
 redis
 httpx
 pypdf
+pdfplumber
+requests
+pandas
+numpy
 torch
 torchaudio
 transformers
