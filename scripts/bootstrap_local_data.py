@@ -15,19 +15,36 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 BACKEND_ROOT = PROJECT_ROOT / 'backend'
-if str(BACKEND_ROOT) not in sys.path:
-    sys.path.insert(0, str(BACKEND_ROOT))
 
-from data.seed_violations import (  # noqa: E402
-    DEFAULT_RULES,
-    OVERRIDE_COLUMNS,
-    RULE_COLUMNS,
-    _load_override_rows,
-    _load_rule_rows,
-    _rule_to_row,
-    _write_csv,
-)
-from services.local_emergency_catalog import load_local_emergency_catalog  # noqa: E402
+import importlib.util as _ilu
+
+
+def _load_backend_module(rel_path: str, module_name: str):
+    """Load a module from backend/ by explicit file path and register it in
+    sys.modules under *module_name*.  This makes the import fully transparent
+    to Pylance/Pyright (no opaque sys.path mutation) while still satisfying
+    Python internals that need __module__ to be resolvable (e.g. dataclasses
+    with slots=True)."""
+    abs_path = BACKEND_ROOT / rel_path
+    spec = _ilu.spec_from_file_location(module_name, abs_path)
+    mod = _ilu.module_from_spec(spec)  # type: ignore[arg-type]
+    sys.modules[module_name] = mod  # register BEFORE exec so __module__ resolves
+    spec.loader.exec_module(mod)  # type: ignore[union-attr]
+    return mod
+
+
+_seed_viol = _load_backend_module("scripts/seed_violations.py", "scripts.seed_violations")
+DEFAULT_RULES = _seed_viol.DEFAULT_RULES
+OVERRIDE_COLUMNS = _seed_viol.OVERRIDE_COLUMNS
+RULE_COLUMNS = _seed_viol.RULE_COLUMNS
+_load_override_rows = _seed_viol._load_override_rows
+_load_rule_rows = _seed_viol._load_rule_rows
+_rule_to_row = _seed_viol._rule_to_row
+_write_csv = _seed_viol._write_csv
+
+_emerg_catalog = _load_backend_module("services/local_emergency_catalog.py", "services.local_emergency_catalog")
+load_local_emergency_catalog = _emerg_catalog.load_local_emergency_catalog
+
 
 
 CHATBOT_DATA_DIR = PROJECT_ROOT / 'chatbot_service' / 'data'
@@ -91,11 +108,20 @@ def sync_challan_assets() -> None:
 
 
 def sync_first_aid_bundle() -> None:
+    """Always sync first-aid.json from frontend (canonical 20-article source) to chatbot data.
+
+    The chatbot_service/data/first_aid.json was historically only 4 entries.
+    The frontend/public/offline-data/first-aid.json contains the full 20 WHO-based articles
+    and is the ground truth. This function overwrites unconditionally so the chatbot is never
+    left with the stale 4-entry version.
+    """
     source = FRONTEND_OFFLINE_DIR / 'first-aid.json'
     target = CHATBOT_DATA_DIR / 'first_aid.json'
-    if source.exists() and not target.exists():
-        shutil.copyfile(source, target)
-        print(f'Copied first aid bundle to {target}')
+    if not source.exists():
+        print(f'WARNING: first-aid.json source not found at {source} — skipping sync')
+        return
+    shutil.copyfile(source, target)
+    print(f'Synced first aid bundle ({source.stat().st_size:,} bytes) -> {target}')
 
 
 def build_emergency_geojson() -> None:
