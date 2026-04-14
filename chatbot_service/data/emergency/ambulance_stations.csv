@@ -1,0 +1,39 @@
+osm_id,osm_type,name,lat,lon,phone,type,city,state,address,opening_hours,website,source
+7446672945,node,Al Arif Hospital Ambulance,8.452513,76.951528,,ambulance_station,,,,,,overpass
+2902870312,node,Ambulance Station M. G. Hospital,25.345835,74.641474,,ambulance_station,,,,,,overpass
+3937619675,node,Buddha Hospital 24hrs,24.694390,84.985541,+9177664000959,ambulance_station,,,,"Mo-Su 08:00-11:00,13:00-17:00",,overpass
+1303001919,way,Cochin Emergency Office,9.961123,76.291241,,ambulance_station,,,,,,overpass
+7492380505,node,Edathiriji Life Guards,10.333182,76.176679,,ambulance_station,,,Potta - Moonupeedika Road,,,overpass
+3923326769,node,Goverment Hospital 24hrs,24.697908,84.992537,,ambulance_station,,,,,,overpass
+7456101509,node,Govt Homeo Hospital,11.450300,75.703675,,ambulance_station,,,,,,overpass
+9782431043,node,Islampur Ambulance Service,26.258062,88.185410,,ambulance_station,,,,,,overpass
+7476308663,node,KAH memorial hospital ambulance service,12.213314,75.163233,,ambulance_station,,,,,,overpass
+801543463,way,KJ ambulance,8.491615,76.933400,,ambulance_station,,,,,,overpass
+13371416055,node,Kesar Ambulance Services,18.763312,73.558956,+91 95953 33451,ambulance_station,,,,,,overpass
+7448547812,node,LMS BB Hospital,8.970654,76.685957,,ambulance_station,,,,,,overpass
+799353374,way,S Ambulance,8.965149,76.673033,,ambulance_station,,,,,,overpass
+8347354867,node,SANJEEVANI HOSPITAL AMBULANCE STATION,9.259361,76.596300,,ambulance_station,,,,,,overpass
+7634531624,node,St Joseph ambulance,9.092468,76.859452,,ambulance_station,,,Residential Road,,,overpass
+7476133380,node,Thimiri bank ambulance service,12.210825,75.165100,,ambulance_station,,,,,,overpass
+316417395,node,Thāne,19.333333,73.250000,,ambulance_station,,,,,,overpass
+5893838806,node,Tmmk Ambulance,10.336804,79.380028,9750505094,ambulance_station,,,Ecr Road,,,overpass
+4114050476,node,Unnamed ambulance station,10.070914,76.222080,,ambulance_station,,,,,,overpass
+7278519587,node,Unnamed ambulance station,15.227967,74.154036,,ambulance_station,,,,,,overpass
+7476143023,node,Unnamed ambulance station,12.082910,75.237256,,ambulance_station,,,,,,overpass
+7479528438,node,Unnamed ambulance station,8.689709,76.836723,,ambulance_station,,,,,,overpass
+8867672414,node,Unnamed ambulance station,10.802455,76.404117,,ambulance_station,,,,,,overpass
+10131841194,node,Unnamed ambulance station,25.594543,85.087149,,ambulance_station,,,,,,overpass
+342743520,way,Unnamed ambulance station,22.327997,69.857040,,ambulance_station,,,,,,overpass
+691230461,way,Unnamed ambulance station,11.005930,77.560473,,ambulance_station,,,,,,overpass
+803403558,way,Unnamed ambulance station,9.292211,76.551842,,ambulance_station,,,,,,overpass
+7452923733,node,ambulance service,10.025956,76.448635,,ambulance_station,,,,,,overpass
+7485406934,node,chittar PHC ambulance station,9.329899,76.923063,,ambulance_station,,,,,,overpass
+7382880640,node,haritha ambulance,10.873454,76.133586,,ambulance_station,,,,,,overpass
+7519176113,node,karakkandy hospital,11.673535,76.266188,,ambulance_station,,,,,,overpass
+7478381048,node,life care hospital,12.144164,75.178812,,ambulance_station,,,,,,overpass
+7509238548,node,malabar hospital ambulance,11.124698,76.110931,,ambulance_station,,,,,,overpass
+6908300327,node,poyyanil,9.339333,76.717384,,hospital,,,"26, residential road",,,overpass
+6690779946,node,State Health Transport Organisation,17.438504,78.443401,,ambulance_station,Hyderabad,,"Beside Maitrivanam Building, Hyderabad",,,overpass
+1136747237,way,ACTS,10.511152,76.258852,,ambulance_station,Thrissur,,"Nadathara Road, Thrissur",,,overpass
+6950366830,node,"CHC, Chithirapuram",10.031180,77.044492,,ambulance_station,,Kerala,Kerala,,,overpass
+6885045483,node,Tellichery Co-operative Hospital ambulance station,11.764205,75.479666,+91 490 232 5306,blood_bank,Thalassery,Kerala,"Thalassery, Kerala",24/7,,overpass

@@ -1,0 +1,711 @@
+osm_id,osm_type,name,lat,lon,phone,type,city,state,address,opening_hours,website,source
+8411203149,node,AIIMS Patna Firestation,25.559891,85.041172,,fire_station,,,,,,overpass
+1376380212,way,Aerodrome Rescue and Fire Fighting,19.091428,72.873630,,fire_station,,,,,,overpass
+12991121069,node,Agni Mapaka Kendram,16.503700,80.674089,,fire_station,,,,,,overpass
+1066739652,way,Airoli Fire station,19.151294,72.989524,,fire_station,,,,,,overpass
+965521117,way,Airport Fire Station,11.139094,75.953610,,fire_station,,,,,,overpass
+1442919035,way,Airport Fire Station,8.728376,78.024356,,fire_station,,,,,,overpass
+251882757,way,Airport Rescue and Fire Fighting Station,13.200908,77.703821,,fire_station,,,,,,overpass
+1110808756,way,Airport Rescue and Fire Fighting Station,13.193503,77.702467,,fire_station,,,,,,overpass
+1479265653,way,Andheri Fire Station,19.112162,72.840863,,fire_station,,,,,,overpass
+1134831507,way,Anjanapura Fire Station,12.858841,77.563454,,fire_station,,,,,,overpass
+7466818593,node,Asansol Fire Brigade,23.685537,86.976102,,fire_station,,,,,,overpass
+961102113,way,Asansol Fire Station,23.685549,86.976168,,fire_station,,,,,,overpass
+694452173,way,Ashokenagar Fire Station,22.845293,88.631041,,fire_station,,,,,,overpass
+1023608102,way,Ayodhya City Fire Station,26.781132,82.178350,,fire_station,,,,,,overpass
+619212563,way,BEGUNIA FIRE STATION,20.202037,85.444467,,fire_station,,,,,,overpass
+3207088571,node,BMM Fire station,15.169800,76.378404,,fire_station,,,,,,overpass
+354294947,way,Babasaheb Worlikar Fire Station,19.013219,72.823534,,fire_station,,,,,,overpass
+944086589,way,Balkum Fire Station,19.217771,72.982878,,fire_station,,,,,,overpass
+351498421,way,Ballari Fire Station,15.155023,76.912846,,fire_station,,,,,,overpass
+1134831509,way,Banashankari Fire Station,12.922146,77.561183,,fire_station,,,,,,overpass
+1364481599,way,Banaswadi Fire Station,13.011612,77.645997,,fire_station,,,,,,overpass
+434887905,way,Bandra Fire Brigade,19.050443,72.837564,,fire_station,,,,,,overpass
+8294732968,node,Bankura Fire Station,23.239888,87.034874,,fire_station,,,,,,overpass
+351561090,way,Barakhamba Road Fire Station,28.632012,77.223356,,fire_station,,,,,,overpass
+490263013,way,Baramunda Fire Station,20.279055,85.799301,,fire_station,,,,,,overpass
+1172752032,way,Baruipur Fire Station,22.341708,88.450106,+913324332555,fire_station,,,,,,overpass
+6845945393,node,Belgaum Fire Station,15.842796,74.507966,,fire_station,,,,,,overpass
+1134831510,way,Bengaluru North Fire Station,12.962504,77.563432,,fire_station,,,,,,overpass
+10579312537,node,Bengaluru Secretariat Fire Station,12.977764,77.588805,,fire_station,,,,,,overpass
+1481122651,node,Bhatha,30.070611,75.930545,,fire_station,,,,,,overpass
+1481130480,node,Bhatha,30.079124,75.931221,,fire_station,,,,,,overpass
+1485625688,node,Bhatha,30.270854,75.873922,,fire_station,,,,,,overpass
+1485625760,node,Bhatha,30.280007,75.886904,,fire_station,,,,,,overpass
+13167485130,node,Bidar Fire Station,17.922074,77.520700,,fire_station,,,,,,overpass
+911719804,way,Birmaharajpur Fire Station,20.867140,84.049397,,fire_station,,,,,,overpass
+429410556,node,Bodakdev Fire Station,23.039812,72.516317,,fire_station,,,,,,overpass
+11011114254,node,Bopal Fire Station,23.012673,72.471187,,fire_station,,,,24/7,https://ahmedabadcity.gov.in/portal/jsp/Static_pages/fire_dept.jsp,overpass
+257439666,way,Borivali Firestation,19.229820,72.840002,,fire_station,,,,,,overpass
+700725781,node,Byculla,18.972456,72.831962,,fire_station,,,,,,overpass
+9567719217,node,C R Avenue Fire Station,22.577837,88.360628,,fire_station,,,"127, Chittaranjan Avenue",24/7,,overpass
+12596618844,node,CBD Shahdara Fire Station,28.661811,77.296707,,fire_station,,,,,,overpass
+254120196,way,CIAL Fire Station,10.155701,76.403173,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+4376877994,node,CMC fire station,19.962083,79.294837,,fire_station,,,civil lines,24/7,,overpass
+568934024,way,Canacona Fire Station and Emergency Station,15.006810,74.057914,,fire_station,,,,,,overpass
+1349277499,node,Cantonment Board Ferozepur,30.918434,74.613567,,fire_station,,,,,,overpass
+13144484779,node,Chakan Fire station,18.773670,73.869374,,fire_station,,,,,,overpass
+12613224026,node,Chapra fire station,25.782026,84.762149,,fire_station,,,,,,overpass
+620705901,way,Chennai International Airport Fire Station 2,12.992503,80.166022,,fire_station,,,,,,overpass
+10566662372,node,Chikhali Fire Station,18.664410,73.817798,,fire_station,,,,,,overpass
+12892324871,node,Chittivalasa Fire Station,17.904534,83.405308,,fire_station,,,,,,overpass
+1385752911,way,Coimbatore Fire Staion,10.997955,76.968512,,fire_station,,,,,,overpass
+430889485,way,Curchorem Fire Station,15.260332,74.103651,,fire_station,,,,,,overpass
+116072855,way,Dadar Fire Brigade,19.014180,72.845705,,fire_station,,,,,,overpass
+349476874,way,Dali Fire Station,27.023170,88.255070,,fire_station,,,,,,overpass
+2114145168,node,Darjeeling Fire Station,27.023165,88.255068,,fire_station,,,,,,overpass
+349477597,way,Darjeeling Fire Station,27.043275,88.264769,,fire_station,,,,,,overpass
+1789651737,node,Davanagere Fire Station,14.458971,75.933042,,fire_station,,,,,,overpass
+380417657,way,Dayaram Rajguru Agnishamak Kendra,18.529936,73.870605,,fire_station,,,,,,overpass
+13072373294,node,"Delhi Fire Service ,Kalyanvas Fire Station",28.617231,77.309172,,fire_station,,,,,,overpass
+359074975,way,Dindoshi Fire Station,19.175061,72.860998,,fire_station,,,,,,overpass
+1413795344,way,Dinkar Balu Patil Navi Mumbai International Airport Fire Station,18.988697,73.068572,,fire_station,,,,,,overpass
+639214831,way,"District Fire & Rescue Office Alappuzha (Assistant Divisional Office), Alappuzha",9.497969,76.349096,,fire_station,,,,,,overpass
+755416485,way,District Fire & Rescue Station,9.974281,76.295558,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+9056899016,node,District Fire Office,12.509359,74.986253,,fire_station,,,,,,overpass
+9060927690,node,District Fire Office,9.497228,76.348815,,fire_station,,,,,,overpass
+9058337949,node,District Fire Office.Palakkad,10.759825,76.659118,,fire_station,,,,,,overpass
+9058337974,node,District Fire and Rescue Office Thrissur,10.517502,76.216872,,fire_station,,,,,,overpass
+746271913,way,"District Fire and Rescue Office, Malappuram",11.052802,76.090725,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+1134831515,way,Doddaballapur Fire Station,13.246288,77.551647,,fire_station,,,,,,overpass
+1347725323,way,Donyi Polo Airport Fire Station,26.971531,93.640385,,fire_station,,,,,,overpass
+231411029,way,Electronics City Fire Station,12.835499,77.662697,+918022971576,fire_station,,,,,,overpass
+218697330,way,Erandvana Fire Station,18.506717,73.832804,,fire_station,,,,,,overpass
+1122111815,way,Esplanade Fire Station,13.086478,80.286063,,fire_station,,,,,,overpass
+5041287397,node,FIRE STATION,17.357013,82.537597,,fire_station,,,,,,overpass
+8115058870,node,FIRE STATION,18.452286,83.638971,,fire_station,,,,,,overpass
+11696932831,node,FIRE STATION,28.686171,77.285905,,fire_station,,,,,,overpass
+975341590,way,FIRE STATION,26.484352,81.559192,,fire_station,,,,,,overpass
+1360324736,way,FIRE STATION,26.107034,84.495999,,fire_station,,,,,,overpass
+9287373633,node,FIRE STATION KONNI,9.229288,76.852021,,fire_station,,,,,,overpass
+8077369885,node,FIRESTATION THRISSUR,10.517130,76.217015,,fire_station,,,,,,overpass
+8987498155,node,"Fair and rescue Station, Poovar",8.325157,77.075175,,fire_station,,,,,,overpass
+1452602445,way,Fire & Rescue Pathanapuram,9.042172,76.855438,,fire_station,,,,,,overpass
+966163917,way,"Fire & Rescue Station, Mulanthuruthy",9.912264,76.406803,,fire_station,,,,,,overpass
+959811021,way,"Fire & Rescue Station, Nilambur",11.272591,76.229814,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+12621901264,node,Fire And Rescue Service Station,8.802312,78.153765,,fire_station,,,,,,overpass
+12290232366,node,Fire And Rescue Services Station,10.359544,77.968078,,fire_station,,,,,,overpass
+746271741,way,"Fire And Rescue Station, Kozhikode Beach",11.254822,75.773501,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+955378583,way,"Fire And Rescue Station, Mala",10.225389,76.249083,,fire_station,,,,,,overpass
+952249806,way,"Fire And Rescue Station, Pudukkad",10.416587,76.271353,,fire_station,,,Puthukkad,,,overpass
+1248415462,node,Fire Brigade,30.406930,74.027096,,fire_station,,,,,,overpass
+4428579332,node,Fire Brigade,21.593126,78.531513,,fire_station,,,,,,overpass
+6255335872,node,Fire Brigade,25.713509,94.104079,,fire_station,,,,,,overpass
+10222809619,node,Fire Brigade,25.168730,93.018977,,fire_station,,,,,,overpass
+1157152068,way,Fire Brigade Diglipur,13.245556,92.975843,,fire_station,,,,,,overpass
+835661329,node,Fire Brigade Station,30.373246,75.541502,,fire_station,,,,,,overpass
+12495396871,node,Fire Brigade Station,28.698237,77.204953,,fire_station,,,,,,overpass
+387788295,way,"Fire Brigade and Emergency Services, Sakkardara",21.119737,79.114400,0712-2703829 ; 0712-2703852,fire_station,,,,,,overpass
+1491822106,way,Fire Brigade office Igatpuri,19.694045,73.554166,,fire_station,,,,,,overpass
+991657852,way,"Fire Brigade, Rajapur",16.657337,73.514800,,fire_station,,,,,,overpass
+1957973153,node,"Fire Brigade,Rampura Phul",30.277863,75.236116,,fire_station,,,,,,overpass
+6485835443,node,Fire Control Room,11.951915,79.800112,,fire_station,,,,,,overpass
+852495476,way,Fire Department Building,28.733845,77.786717,,fire_station,,,,,,overpass
+10030914135,node,"Fire Force, Mukkam",11.327766,75.988439,,fire_station,,,,,,overpass
+327984740,way,Fire House,12.958846,74.888337,,fire_station,,,,,,overpass
+78595558,way,Fire Safety Management Academy,28.706895,77.128527,+91-11-2756-2535;+91-11-2755-2155,fire_station,,,,,,overpass
+9067256077,node,Fire Service Station,33.998325,74.792298,,fire_station,,,"SIDCO Industrial Estate, Rangreth",,,overpass
+357036757,way,Fire St.,17.450731,78.466417,,fire_station,,,,,,overpass
+1114871812,node,Fire Station,28.568567,77.184312,,fire_station,,,,,,overpass
+1465647252,node,Fire Station,13.258896,76.465006,,fire_station,,,,,,overpass
+2301227533,node,Fire Station,25.447821,81.839889,,fire_station,,,,,,overpass
+2629372542,node,Fire Station,21.199815,72.821162,,fire_station,,,,,,overpass
+2717151882,node,Fire Station,26.329747,94.531568,,fire_station,,,,,,overpass
+3076342595,node,Fire Station,16.991085,81.777527,,fire_station,,,,,,overpass
+3076342596,node,Fire Station,17.010722,81.770695,,fire_station,,,,,,overpass
+6115840284,node,Fire Station,30.345080,78.018823,,fire_station,,,,,,overpass
+8422730392,node,Fire Station,11.443928,75.693427,,fire_station,,,,,,overpass
+9976314646,node,Fire Station,10.072167,76.317397,,fire_station,,,,,,overpass
+11993365461,node,Fire Station,15.907441,80.473013,,fire_station,,,,,,overpass
+12033842756,node,Fire Station,14.990460,78.987025,,fire_station,,,,,,overpass
+12320021520,node,Fire Station,12.332831,78.348946,,fire_station,,,,,,overpass
+129475678,way,Fire Station,30.741665,76.747102,,fire_station,,,,,,overpass
+222720965,way,Fire Station,14.781190,75.135450,,fire_station,,,,,,overpass
+553652569,way,Fire Station,21.647452,69.657229,,fire_station,,,,,,overpass
+1134831513,way,Fire Station,13.022621,77.549913,,fire_station,,,,,,overpass
+1292168478,way,Fire Station,14.118114,78.157452,,fire_station,,,,,,overpass
+414134628,way,Fire Station 1,28.548243,77.094762,,fire_station,,,,,,overpass
+10712065073,node,Fire Station Chalakudy,10.301481,76.337998,,fire_station,,,,,,overpass
+5136715532,node,Fire Station Chanakyapuri,28.602644,77.190365,+91-11-2611-2266,fire_station,,,,,,overpass
+6032167264,node,Fire Station Chidambaram,11.393961,79.702725,,fire_station,,,,,,overpass
+485799116,way,Fire Station Gudiyattam,12.946122,78.873833,,fire_station,,,,,,overpass
+676084548,way,Fire Station Headquarter Srinagar,34.074684,74.797760,,fire_station,,,,,,overpass
+5577800978,node,Fire Station Mandi,31.701980,76.944476,,fire_station,,,,,,overpass
+828938531,way,Fire Station Minicoy,8.281264,73.054563,,fire_station,,,,,,overpass
+6225480221,node,Fire Station Naraina,28.632996,77.139003,,fire_station,,,,,,overpass
+1426212239,way,Fire Station Nehru Place,28.549250,77.256732,+91-101-644-5230,fire_station,,,,,,overpass
+8850425161,node,Fire Station Podia,18.188544,81.545762,,fire_station,,,,,,overpass
+10566635071,node,Fire Station Pradhikaran,18.659248,73.771741,,fire_station,,,Arunkumar Randhir Road,,,overpass
+1194323859,way,Fire Station Rudrapur,28.975459,79.390877,,fire_station,,,,,,overpass
+8067982146,node,Fire Station Sasthamcotta,9.046764,76.626958,,fire_station,,,,,,overpass
+158040926,way,Fire Station Shankar Road,28.640699,77.175764,,fire_station,,,,,,overpass
+9604825045,node,Fire Station Udala,21.573032,86.569874,,fire_station,,,,,,overpass
+6837577307,node,"Fire Station, Nagarkurnool",16.500783,78.286998,,fire_station,,,,,,overpass
+8843840992,node,"Fire Station, North Paravur",10.151738,76.242026,,fire_station,,,,,,overpass
+9298333288,node,"Fire Station, North Paravur",10.149217,76.234507,,fire_station,,,,,,overpass
+9331495523,node,"Fire Station, Peringod",10.866104,76.478723,,fire_station,,,Palakkad-Perintalmanna Road,,,overpass
+1014144875,way,"Fire Station,Piravom",9.871810,76.489739,,fire_station,,,,,,overpass
+11133587107,node,"Fire and Emergency Services Station, Raha",26.234028,92.526013,,fire_station,,,,,,overpass
+9107548687,node,Fire and Emergency Station S.H Pora,34.091627,74.800528,,fire_station,,,,,,overpass
+9107554153,node,Fire and Emergency Station Safakadal,34.095256,74.787096,,fire_station,,,,,,overpass
+620246127,way,"Fire and Resccue Station, Kottayam",9.641756,76.371610,,fire_station,,,,,,overpass
+1102514788,way,Fire and Rescue Office,10.805507,76.194275,,fire_station,,,,,,overpass
+959795303,way,"Fire and Rescue Office, Thiruvali",11.201405,76.179381,,fire_station,,,,,,overpass
+10139117384,node,"Fire and Rescue Service, Kumarapuram",9.277837,76.441889,,fire_station,,,,,,overpass
+10035962365,node,Fire and Rescue Station,9.187315,76.518601,,fire_station,,,,,,overpass
+10083145455,node,Fire and Rescue Station,10.007372,76.967841,,fire_station,,,,,,overpass
+10091440620,node,Fire and Rescue Station,12.029822,75.506369,,fire_station,,,,,,overpass
+10091634792,node,Fire and Rescue Station,12.004750,75.541425,,fire_station,,,,,,overpass
+758306707,way,Fire and Rescue Station,9.054780,76.534324,,fire_station,,,,,,overpass
+755415145,way,Fire and Rescue Station Adoor,9.159449,76.724396,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+798646673,way,Fire and Rescue Station Aluva,10.107517,76.350908,,fire_station,,,,,,overpass
+474863896,way,Fire and Rescue Station Angamaly,10.179423,76.378518,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+744212589,way,Fire and Rescue Station Kannur,11.867579,75.367379,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+7130230413,node,Fire and Rescue Station Keezhayikonam,8.704496,76.904489,,fire_station,,,,,,overpass
+979354528,way,Fire and Rescue Station MOOLAMATTOM,9.789213,76.853000,,fire_station,,,,,,overpass
+803429404,way,Fire and Rescue Station Manjeri,11.109219,76.119861,,fire_station,,,,,,overpass
+979455647,way,Fire and Rescue Station Muvattupuzha,9.989477,76.584783,,fire_station,,,,,,overpass
+954615533,way,Fire and Rescue Station Neyyar Dam,8.524811,77.130405,,fire_station,,,,,,overpass
+979397756,way,Fire and Rescue Station Poovar,8.325223,77.075161,,fire_station,,,,,,overpass
+800267764,way,Fire and Rescue Station Sasthamcotta,9.046761,76.626952,,fire_station,,,,,,overpass
+750328423,way,Fire and Rescue Station Technopark,8.559818,76.878139,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+843061098,way,Fire and Rescue Station Thrissur,10.558678,76.226531,,fire_station,,,,,,overpass
+7517648167,node,Fire and Rescue Station Vaikom,9.749682,76.412518,,fire_station,,,Vaikom,,https://fire.kerala.gov.in/,overpass
+4708279357,node,Fire and Rescue Station Vallarpadam,10.069504,76.313641,,fire_station,,,,,,overpass
+800663934,way,Fire and Rescue Station Vellimaadukunnu,11.290721,75.816487,,fire_station,,,,,,overpass
+798196259,way,"Fire and Rescue Station, Adimali",10.007305,76.968125,,fire_station,,,,,,overpass
+644454817,way,"Fire and Rescue Station, Alappuzha",9.497242,76.348859,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+475936728,way,"Fire and Rescue Station, Chackai",8.489801,76.914993,,fire_station,,,,,,overpass
+410454664,way,"Fire and Rescue Station, Chamakkada",8.883985,76.584394,,fire_station,,,,,,overpass
+684178694,way,"Fire and Rescue Station, Changanassery",9.443749,76.541888,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+753624335,way,"Fire and Rescue Station, Chavara",9.006332,76.537127,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+7388516548,node,"Fire and Rescue Station, Chelakadu",11.684318,75.682274,,fire_station,,,,,,overpass
+978922873,way,"Fire and Rescue Station, Chelakadu",11.684340,75.682289,,fire_station,,,,,,overpass
+750328231,way,"Fire and Rescue Station, Chengalchoola",8.494489,76.952538,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+798473311,way,"Fire and Rescue Station, Chengannur",9.317967,76.617152,,fire_station,,,,,,overpass
+979370892,way,"Fire and Rescue Station, Cheruthony",9.853304,76.969826,,fire_station,,,,,,overpass
+376042235,way,"Fire and Rescue Station, Chittur",10.687715,76.717803,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+979393619,way,"Fire and Rescue Station, Erattupetta",9.685062,76.778410,,fire_station,,,,,,overpass
+866552481,way,"Fire and Rescue Station, Guruvayoor",10.594347,76.045051,,fire_station,,,,,,overpass
+954620629,way,"Fire and Rescue Station, Harippad",9.278858,76.443199,,fire_station,,,,,,overpass
+978816828,way,"Fire and Rescue Station, Iritty",11.990796,75.672278,,fire_station,,,,,,overpass
+1452265922,way,"Fire and Rescue Station, Kadappakkada",8.889736,76.602080,,fire_station,,,,,,overpass
+979354527,way,"Fire and Rescue Station, Kaduthuruthy",9.755649,76.503542,,fire_station,,,,,,overpass
+799120097,way,"Fire and Rescue Station, Kalloorkad",9.964904,76.671103,,fire_station,,,,,,overpass
+800646444,way,"Fire and Rescue Station, Kanhangad",12.313113,75.090435,,fire_station,,,TB,,,overpass
+739764020,way,"Fire and Rescue Station, Kanjirappaly",9.560838,76.800202,+91 4828 202 755,fire_station,,,NH 220,,https://fire.kerala.gov.in/,overpass
+726095732,way,"Fire and Rescue Station, Kannur",11.864161,75.367603,,fire_station,,,,,,overpass
+653356117,way,"Fire and Rescue Station, Kannur Airport 1",11.912062,75.537767,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+653356110,way,"Fire and Rescue Station, Kannur Airport Station 2",11.918581,75.555252,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+802852196,way,"Fire and Rescue Station, Karandakkad",12.509300,74.986316,,fire_station,,,,,,overpass
+954615532,way,"Fire and Rescue Station, Kattakkada",8.494311,77.062499,,fire_station,,,,,,overpass
+784216591,way,"Fire and Rescue Station, Kattapana",9.752062,77.109858,,fire_station,,,kattappana ITI road,,,overpass
+750328729,way,"Fire and Rescue Station, Kayamkulam",9.179936,76.496898,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+954620623,way,"Fire and Rescue Station, Keezhayikkonam",8.704340,76.904648,,fire_station,,,,,,overpass
+790305249,way,"Fire and Rescue Station, Kollam",8.891946,76.603245,,fire_station,,,,,,overpass
+979455646,way,"Fire and Rescue Station, Koothuparamba",11.831646,75.574845,,fire_station,,,,,,overpass
+954620626,way,"Fire and Rescue Station, Kottrakkara",9.004065,76.784050,,fire_station,,,,,,overpass
+978980105,way,"Fire and Rescue Station, Koyilandy",11.443733,75.693623,,fire_station,,,,,,overpass
+801761916,way,"Fire and Rescue Station, Kundara",8.965625,76.671380,,fire_station,,,,,,overpass
+978980106,way,"Fire and Rescue Station, Kunnamkulam",10.658905,76.067625,,fire_station,,,,,,overpass
+788093608,way,"Fire and Rescue Station, Kuttikkol",12.477550,75.208933,,fire_station,,,,,,overpass
+978922872,way,"Fire and Rescue Station, Mananthavadi",11.802167,76.031439,,fire_station,,,,,,overpass
+7515405364,node,"Fire and Rescue Station, Manjeri",11.109145,76.119888,,fire_station,,,Tirur - Malappuram - Manjeri Road,,,overpass
+942908659,way,"Fire and Rescue Station, Mannarkad",10.984421,76.424400,,fire_station,,,,,,overpass
+755416674,way,"Fire and Rescue Station, Mattancherry",9.958849,76.257697,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+754481450,way,"Fire and Rescue Station, Mattannur",11.937943,75.561120,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+755415622,way,"Fire and Rescue Station, Mavelikara",9.245292,76.533730,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+9057816794,node,"Fire and Rescue Station, Meenchanda",11.214533,75.799301,,fire_station,,,,,,overpass
+746271888,way,"Fire and Rescue Station, Meenchanda",11.214553,75.799273,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+839778381,way,"Fire and Rescue Station, Mukkam",11.327488,75.988264,,fire_station,,,,,,overpass
+954615534,way,"Fire and Rescue Station, Nedumangadu",8.615451,76.981603,,fire_station,,,,,,overpass
+823170810,way,"Fire and Rescue Station, Neyyattinkara",8.406862,77.083463,,fire_station,,,,,,overpass
+888926911,way,"Fire and Rescue Station, Pala",9.720322,76.688341,,fire_station,,,,,,overpass
+554513197,way,"Fire and Rescue Station, Pampady",9.570315,76.639246,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+978980104,way,"Fire and Rescue Station, Panoor",11.760175,75.583812,,fire_station,,,,,,overpass
+8835878279,node,"Fire and Rescue Station, Parassala",8.347130,77.160284,,fire_station,,,,,,overpass
+762837766,way,"Fire and Rescue Station, Parassala",8.347103,77.160279,,fire_station,,,,,,overpass
+954620625,way,"Fire and Rescue Station, Paravoor",8.814694,76.671379,,fire_station,,,,,,overpass
+978980108,way,"Fire and Rescue Station, Paravur",10.151729,76.242019,,fire_station,,,,,,overpass
+979397755,way,"Fire and Rescue Station, Pathanamthitta",9.264875,76.793422,,fire_station,,,,,,overpass
+978816826,way,"Fire and Rescue Station, Payyanur",12.119564,75.209557,,fire_station,,,,,,overpass
+803033363,way,"Fire and Rescue Station, Perambra",11.562807,75.747288,,fire_station,,,,,,overpass
+895243014,way,"Fire and Rescue Station, Peravoor",11.895904,75.732808,,fire_station,,,,,,overpass
+964994432,way,"Fire and Rescue Station, Peringome",12.225791,75.313536,,fire_station,,,,,,overpass
+978926465,way,"Fire and Rescue Station, Perinthalmanna",10.973565,76.234280,,fire_station,,,,,,overpass
+3816579578,node,"Fire and Rescue Station, Perumade",9.575444,76.992046,,fire_station,,,,,,overpass
+956323974,way,"Fire and Rescue Station, Perumade",9.575430,76.992092,,fire_station,,,,,,overpass
+620064155,way,"Fire and Rescue Station, Perumbavoor",10.117285,76.493352,,fire_station,,,,,,overpass
+978926466,way,"Fire and Rescue Station, Ponnani",10.767928,75.923394,,fire_station,,,,,,overpass
+954620628,way,"Fire and Rescue Station, Sasthamcotta",9.010023,76.929475,,fire_station,,,,,,overpass
+979397754,way,"Fire and Rescue Station, Seethathodu",9.332376,76.971536,,fire_station,,,,,,overpass
+978816827,way,"Fire and Rescue Station, Taliparamba",12.043248,75.379071,,fire_station,,,,,,overpass
+744212695,way,"Fire and Rescue Station, Thalassery",11.748179,75.487168,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+979354525,way,"Fire and Rescue Station, Thodupuzha",9.898442,76.703537,,fire_station,,,,,,overpass
+978980109,way,"Fire and Rescue Station, Thrikkakara",10.019514,76.334107,,fire_station,,,,,,overpass
+744212544,way,"Fire and Rescue Station, Trikkaripur",12.163629,75.177499,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+798527825,way,"Fire and Rescue Station, Tripunithura",9.935838,76.352137,,fire_station,,,,,,overpass
+846694909,way,"Fire and Rescue Station, Vadakara",11.610268,75.590650,,fire_station,,,,,,overpass
+846694910,way,"Fire and Rescue Station, Vadakara",11.610258,75.590853,,fire_station,,,,,,overpass
+843060674,way,"Fire and Rescue Station, Vadakkencherry",10.604549,76.499773,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+954620624,way,"Fire and Rescue Station, Varkkala",8.733353,76.727514,,fire_station,,,,,,overpass
+792949590,way,"Fire and Rescue Station, Vellimaadukunnu",11.290823,75.816670,,fire_station,,,,,,overpass
+10721291559,node,"Fire and Rescue Station, Vellimadukunnu",11.290808,75.816646,,fire_station,,,,,,overpass
+972577671,way,"Fire and Rescue Station, Vithura",8.669326,77.083492,,fire_station,,,,,,overpass
+453249819,way,"Fire and Rescue Station, Viyyur",10.555862,76.223750,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+823169727,way,"Fire and Rescue Station, Vizhinjam",8.384916,76.983457,,fire_station,,,,,,overpass
+217731034,way,Fire and Rescue station,13.035212,80.230626,,fire_station,,,,,,overpass
+802696318,way,"Fire and Rescue station, Palai",9.720382,76.690634,,fire_station,,,,,,overpass
+1088095495,way,Fire and rescue Station Vaikom,9.749805,76.412539,,fire_station,,,,,,overpass
+1092545264,way,Fire safety department,20.053480,78.949073,,fire_station,,,,,,overpass
+4984615984,node,Fire station,21.107275,79.080336,,fire_station,,,,,,overpass
+7503415136,node,Fire station,19.312459,84.789544,,fire_station,,,,,,overpass
+9289451217,node,Fire station,10.239630,76.205354,,fire_station,,,,,,overpass
+10171081034,node,Fire station,16.956523,82.233048,,fire_station,,,,,,overpass
+265801014,way,Fire station,18.676323,78.104298,,fire_station,,,,,,overpass
+979370893,way,"Firea and Rescue Station, Nedumkandam",9.836579,77.160297,,fire_station,,,,,,overpass
+1487554971,node,Firebrigade Station,30.919314,75.850460,,fire_station,,,,,,overpass
+10946268605,node,Forest Fire Crew Station,30.003494,79.569165,,fire_station,,,,,,overpass
+2168679530,node,Fort Fire Brigade,18.935074,72.834642,,fire_station,,,,,,overpass
+544503667,way,GIFT Fire Station,23.166325,72.683827,,fire_station,,,,,,overpass
+942754044,node,Ganapathy FireStation,11.039199,76.997501,,fire_station,,,,,,overpass
+10538924174,node,Gandacherra Fire Service,23.612972,91.819947,,fire_station,,,,,,overpass
+8058855486,node,Gangtok fire station,27.332104,88.613987,,fire_station,,,,,,overpass
+5265565022,node,Garamur fire & emergency services station,26.974781,94.157911,,fire_station,,,,,,overpass
+621466311,way,Goregaon Fire Station,19.153497,72.840329,,fire_station,,,,,,overpass
+10026140197,node,Government Fire Station,10.993890,75.868004,,fire_station,,,,,,overpass
+39834515,way,Gowalia Tank Fire Station,18.961720,72.812734,,fire_station,,,,,,overpass
+1099480535,way,Gowkadal Fire station,34.074568,74.811465,,fire_station,,,,,,overpass
+891175139,way,Haldwani Fire Station,29.194852,79.515000,,fire_station,,,,,,overpass
+13455393955,node,Hari Nagar Fire Station,28.622290,77.110136,,fire_station,,,,,,overpass
+2373933275,node,Hassan Fire Station,13.008726,76.122579,,fire_station,,,,,,overpass
+928264962,node,Hebbal Fire Station,13.048249,77.618528,,fire_station,,,,,,overpass
+1076398554,way,High Grounds Fire Station,12.980594,77.579931,,fire_station,,,,,,overpass
+1134831514,way,Hoskote Fire Station,13.065981,77.778987,,fire_station,,,,,,overpass
+1134831508,way,Hulimavu Fire Station,12.872352,77.598815,,fire_station,,,,,,overpass
+10775939739,node,IIT Kanpur Fire Station,26.511950,80.230065,,fire_station,,,,,,overpass
+6991535449,node,ITI Fire Station,13.003798,77.678640,,fire_station,,,,,,overpass
+1429449939,way,Indira Gandhi International Airport Fire Station,28.566569,77.098780,,fire_station,,,,,,overpass
+1497725901,way,Indira Nagar Fire Station,26.872701,80.984069,,fire_station,,,,,,overpass
+1063677898,way,Islampur Fire Station,26.254156,88.184808,,fire_station,,,,,,overpass
+4376875895,node,Islampur agnishaman,17.056859,74.262491,,fire_station,,,,,,overpass
+5466155231,node,Jagtial Fire Station,18.789197,78.914784,,fire_station,,,,,,overpass
+13506157296,node,Janakpuri Fire Station,28.621215,77.091114,,fire_station,,,,,,overpass
+680592899,way,Jawahar Bag Fire Station,19.191687,72.978249,,fire_station,,,,,,overpass
+680592900,way,Jawahar Bag Fire Station,19.191599,72.978556,,fire_station,,,,,,overpass
+788256779,way,Jayanagara Fire Station,12.933795,77.600289,,fire_station,,,,,,overpass
+516914811,way,Jharkhand Fire Services HQ,23.344262,85.326777,,fire_station,,,,,,overpass
+1424032795,way,Jnagareddygudem Fire Station,17.123275,81.312543,,fire_station,,,,,,overpass
+358944917,way,Jorhat Fire Station,26.754795,94.211426,,fire_station,,,,,,overpass
+617845614,way,KHURDHA FIRE STATION,20.170526,85.613024,,fire_station,,,,,,overpass
+172425257,way,Kalighat Fire Brigade,22.523293,88.343653,,fire_station,,,,,,overpass
+12862184700,node,Kaliyaganj Fire Station,25.627270,88.322196,,fire_station,,,,,,overpass
+836177898,way,Kallakurichi Fire Station,11.739404,78.948198,,fire_station,,,,,,overpass
+13686160391,node,Kalmeshwar Fire Station,21.231129,78.924155,,fire_station,,,,,,overpass
+1330557955,way,Kalyan Fire Station,19.248687,73.121944,,fire_station,,,,,,overpass
+375705231,way,Kandi Fire Station,23.949181,88.030421,,fire_station,,,,,,overpass
+352973116,way,Kandivali Fire Station,19.206027,72.850536,,fire_station,,,,,,overpass
+9604962402,node,Kaptipada Fire station,21.510519,86.541316,,fire_station,,,,,,overpass
+1086465948,way,Kaptipada fire station,21.510397,86.541059,,fire_station,,,,,,overpass
+1351053098,way,Kashinagar Fire Station,18.882514,83.884919,,fire_station,,,,,,overpass
+946944918,way,"Kerala Fire and Rescue Station, Narikkuni",11.372718,75.852627,,fire_station,,,,,,overpass
+9285630419,node,Kerala fire and rescue station,10.178251,76.374110,+91-4842452101,fire_station,,,,,,overpass
+13472788004,node,Keshavpuram Fire Station,28.681511,77.147805,,fire_station,,,,,,overpass
+353758946,way,Kharghar Fire Station,19.038845,73.063524,,fire_station,,,,,,overpass
+13160145332,node,Kokrajhar Fire Station,26.392888,90.302215,,fire_station,,,,,,overpass
+1623278706,node,Kollencode Fire Station,8.284415,77.117171,,fire_station,,,,,,overpass
+552183184,way,Kondhwa Fire Station,18.461489,73.889931,,fire_station,,,,,,overpass
+7348066258,node,Koothanallur Fire  Station,10.718776,79.523731,,fire_station,,,,,,overpass
+1071065218,way,Koparkhairne Fire Station,19.111331,73.006442,,fire_station,,,,,,overpass
+2192111450,node,Kothrud Fire Station,18.498889,73.813480,,fire_station,,,,,,overpass
+515129936,way,Kothrud Fire Station,18.498892,73.813446,,fire_station,,,,,,overpass
+1224826508,way,Kottavalasa Fire Station,17.907880,83.185648,,fire_station,,,,,,overpass
+12596310775,node,Lalitpur Fire Station,24.691946,78.415293,,fire_station,,,,,,overpass
+10725036852,node,Late.Mahadu Sakharam Tingare,18.596983,73.906553,,fire_station,,,,,,overpass
+8585616661,node,Life Republic Fire Station,18.622011,73.716068,,fire_station,,,,,,overpass
+1411851629,way,Life Republic Fire Station,18.621806,73.715984,,fire_station,,,,,,overpass
+636232108,way,Madhyamgram Fire Station,22.691767,88.466828,,fire_station,,,,,,overpass
+1105131964,way,Madurai Airport Fire Station,9.837000,78.093434,,fire_station,,,,,,overpass
+668040798,way,Mahadevapura Fire Station,12.998470,77.702364,,fire_station,,,,,,overpass
+11019832297,node,Mahadula Fire Station,21.249533,79.081763,,fire_station,,,,,,overpass
+9231655517,node,Maharajgang,23.825449,91.285061,,fire_station,,,,,,overpass
+1347716166,way,Maharishi Valmiki International Airport Fire Station,26.747553,82.152495,,fire_station,,,,,,overpass
+10566692810,node,Main PCMC Fire Station,18.622762,73.818048,,fire_station,,,YCM Road,,,overpass
+1453106116,way,Mal Fire Station,26.878385,88.746990,,fire_station,,,,,,overpass
+3628741330,node,Malakpet Fire Station,17.368467,78.501844,040 2344 9213,fire_station,,,,,https://fire.telangana.gov.in/,overpass
+4499475491,node,Malik,25.258660,86.996773,,fire_station,,,"84, malik khanjarpur",24/7,,overpass
+128123470,way,Malwani Fire Station,19.196610,72.822580,,fire_station,,,,,,overpass
+10911277208,node,Mandi fire station,31.682908,76.944980,,fire_station,,,,,,overpass
+11749844984,node,Manikhamb Fire Station,21.495072,86.937898,,fire_station,,,,,,overpass
+1178513108,way,Manohar International Airport Fire Station,15.738443,73.854469,,fire_station,,,,,,overpass
+1178522830,way,Manohar International Airport Satellite Fire Station,15.747183,73.861708,,fire_station,,,,,,overpass
+1181844072,way,Mapusa Fire Station,15.590280,73.809056,,fire_station,,,,,,overpass
+4269710993,node,Margao Fire Station,15.269330,73.970303,,fire_station,,,,,,overpass
+1410353206,way,Marol fire brigade,19.109561,72.877878,,fire_station,,,,,,overpass
+8168454969,node,Matigara Fire Brigade Office,26.725292,88.385883,,fire_station,,,,,,overpass
+4496283273,node,Mehsana Muncipalty fire cantrol room,23.606510,72.390229,,fire_station,,,,,,overpass
+436106992,node,Memnagar Fire Station,23.045506,72.551001,,fire_station,,,,,,overpass
+1473264367,node,Mettupalayam Fire Station,11.293845,76.951239,,fire_station,,,,,,overpass
+11846087225,node,Mettur FIre and Rescue Dept.,11.801849,77.826911,,fire_station,,,,,,overpass
+1243105383,way,Mini Fire Station,19.085369,72.831273,,fire_station,,,,,,overpass
+7486324686,node,Mira Bhayander Mahanagarpalika Fire Bridage and Emergency centre,19.292598,72.851921,,fire_station,,,,,,overpass
+1105414357,way,Moolakothalam Fire Station,13.105508,80.278214,,fire_station,,,,,,overpass
+13644854430,node,Moti Nagar Fire Station,28.659862,77.145579,,fire_station,,,,,,overpass
+1396722475,way,Mulbagal Fire Station,13.178769,78.415939,,fire_station,,,,,,overpass
+6837577306,node,"Mulkalagudem, 33/11 KV Sub Station",17.913565,79.534375,,fire_station,,,,,,overpass
+1074457140,way,NCTPS Fire Station,13.251232,80.327245,,fire_station,,,,,,overpass
+143698431,way,NIT Faridabad Fire Station,28.390052,77.305591,,fire_station,,,,,,overpass
+812715585,way,Nabadwip Fire Service,23.398162,88.367247,,fire_station,,,,,,overpass
+1134831506,way,Nagarbhavi Fire Station,12.935415,77.510028,,fire_station,,,,,,overpass
+1454593298,way,Nalgonda Fire Station,17.061881,79.266138,,fire_station,,,,,,overpass
+4204725189,node,Nanded City Fire Station,18.460237,73.796494,,fire_station,,,Nanded City Road,,,overpass
+6983064785,node,Narendra Nagar Fire Station,21.107117,79.080682,,fire_station,,,,,,overpass
+207413375,way,Nariman Point Fire Station,18.923006,72.826081,,fire_station,,,,,,overpass
+353760968,way,Nerul Fire Station,19.023710,73.025417,,fire_station,,,,,,overpass
+1183742847,way,New Fire Station,23.182410,80.051769,,fire_station,,,,,,overpass
+1184836661,way,New Fire Station,16.528641,80.800169,,fire_station,,,,,,overpass
+1261803303,node,New Panvel Fire Brigade,18.996077,73.118969,,fire_station,,,,,,overpass
+9060927688,node,Office of District Fire Officer,9.587682,76.520788,,fire_station,,,,,,overpass
+325781833,way,Office of the Chief Fire Officer,12.972836,77.610257,,fire_station,,,,,,overpass
+328099012,way,Old Fire House,12.963206,74.889114,,fire_station,,,,,,overpass
+979798522,way,Old Fire St.,23.184527,80.059827,,fire_station,,,,,,overpass
+1124603005,way,Old Goa Fire Station,15.500167,73.914187,,fire_station,,,,,,overpass
+5621265135,node,Pedda Gantyada Fore Station,17.668024,83.207823,,fire_station,,,,,,overpass
+1134831512,way,Peenya Fire Station,13.027950,77.520561,,fire_station,,,,,,overpass
+1372586493,way,Pilerne FIre Station,15.532984,73.794031,,fire_station,,,,,,overpass
+1366169593,way,Police Fire Station,26.870075,80.907547,,fire_station,,,,,,overpass
+1356611457,way,Porvorim Fire Station,15.523016,73.829576,,fire_station,,,,,,overpass
+671451162,node,Pune Cantonment Fire Station,18.498565,73.884322,,fire_station,,,,,,overpass
+218881239,way,Pune Main Fire Station,18.506519,73.865226,,fire_station,,,,,,overpass
+13339891149,node,Purushottampur Fire Station,19.512035,84.872582,,fire_station,,,,,,overpass
+10566607673,node,Rahatani Fire Station,18.596235,73.781716,,fire_station,,,Aundh-Ravet BRT Road,,,overpass
+1136503963,way,Rajajinagar Fire Station,12.980657,77.548502,,fire_station,,,,,,overpass
+1062100300,way,Rajiv Gandhi International Airport ARFF Main Station,17.234391,78.445957,,fire_station,,,,,,overpass
+1050547521,way,Ramanagara Fire Station,12.742994,77.310621,,fire_station,,,,,,overpass
+6746947176,node,Ranirbazar fire service station,23.828958,91.375963,,fire_station,,,,,,overpass
+9060927689,node,Regional Fire Office,9.587654,76.520787,,fire_station,,,,,,overpass
+9058337948,node,"Regional Fire Office, Fire and Rescue Services, Palakkad",10.759897,76.659118,,fire_station,,,,,,overpass
+13110127586,node,Roop Nagar Fire Station,28.685006,77.202908,,fire_station,,,,,,overpass
+582824404,node,S P Road Fire Station,17.443083,78.485514,,fire_station,,,,,,overpass
+1279876670,way,SKota Fire Station,18.115875,83.138560,,fire_station,,,,,,overpass
+13543686113,node,Sabbavaram Fire Station,17.791567,83.127368,,fire_station,,,,,,overpass
+11698683039,node,Saharanpur Fire Station,29.955263,77.540311,,fire_station,,,,,,overpass
+1075468272,way,Saraswathipuram Fire Station,12.303735,76.634560,,fire_station,,,,,,overpass
+1395129396,way,Sardar Vallabhbhai Patel International Airport Fire Station,23.077832,72.630547,,fire_station,,,,,,overpass
+232431996,way,Sarjapura Road Firestation,12.916813,77.673857,,fire_station,,,,,,overpass
+129774350,way,Sector 17,30.735813,76.780549,,fire_station,,,,,,overpass
+4438230893,node,Sector 6 Fire Station,28.597318,77.064024,,fire_station,,,,,,overpass
+4344846604,node,Shamshan Ghat Arnetu,29.955440,76.202423,,fire_station,,,,,,overpass
+359129222,way,Shibpur Fire Brigade,22.570447,88.326271,,fire_station,,,,,,overpass
+1012095695,node,Shimla Fire Station,31.104768,77.172949,,fire_station,,,,,,overpass
+1813605986,node,Shimoga Fire Brigade,13.930133,75.567526,,fire_station,,,,,,overpass
+4925330240,node,Singtam firestation,27.233032,88.498947,,fire_station,,,,,,overpass
+1304723072,node,"Suncity Road Fire Station, Pune",18.475477,73.815447,,fire_station,,,,,,overpass
+1134831504,way,Sunkadakatte Fire Station,12.975370,77.425043,,fire_station,,,,,,overpass
+1918542001,node,Surandai Fire Station,8.970830,77.420194,,fire_station,,,,,,overpass
+332066858,node,Sushant Lok Fire Station,28.463707,77.072964,,fire_station,,,,,,overpass
+3029313653,node,Tamil Nadu Fire and Rescue Services,12.943636,80.133596,"+91-44-22380206, 22382204",fire_station,,,,,,overpass
+594656061,way,Tamilnadu fire and rescue services,11.044095,76.948516,,fire_station,,,,,,overpass
+8116992449,node,Tanuku fire station,16.764174,81.688691,,fire_station,,,,,,overpass
+2187315849,node,Testing Fire Station,19.039624,72.853887,,fire_station,,,,,,overpass
+302899362,node,Teynampet FS,13.047447,80.249119,,fire_station,,,,,,overpass
+229021982,way,Thaltej Fire Dpt.,23.053753,72.499106,,fire_station,,,,,,overpass
+10590397253,node,Thergaav Fire Station,18.612189,73.778806,,fire_station,,,,,,overpass
+348323469,node,Thermal Plant,29.343756,75.863358,,fire_station,,,,,,overpass
+12181440340,node,Thiruvallur fire station,13.137825,79.907707,,fire_station,,,,,,overpass
+405392184,node,Tirumala Fire Station,13.685232,79.351380,,fire_station,,,,,,overpass
+1685476665,node,Tisaiyanvillai Fire Station,8.337157,77.853051,,fire_station,,,,,,overpass
+11247473279,node,Udupi Fire Station,13.327723,74.740036,,fire_station,,,,Mo-Su 09:00-09:00,https://ksfes.karnataka.gov.in/,overpass
+642215376,way,Ulwe Fire Station,18.975726,73.028119,,fire_station,,,,,,overpass
+861411346,node,Umerkhadi Fire Station,18.957962,72.832639,,fire_station,,,,,,overpass
+264480826,node,Unnamed fire station,13.063776,80.235682,,fire_station,,,,,,overpass
+352677571,node,Unnamed fire station,19.153935,73.241343,,fire_station,,,,,,overpass
+372717372,node,Unnamed fire station,28.572801,77.166982,,fire_station,,,,,,overpass
+605222184,node,Unnamed fire station,18.941482,72.829157,,fire_station,,,,,,overpass
+798089786,node,Unnamed fire station,17.256674,80.148906,,fire_station,,,,,,overpass
+1474289502,node,Unnamed fire station,15.427377,75.640398,,fire_station,,,,,,overpass
+1545194126,node,Unnamed fire station,23.239127,69.681640,,fire_station,,,,,,overpass
+1603833215,node,Unnamed fire station,10.866351,72.194204,,fire_station,,,,,,overpass
+1740713596,node,Unnamed fire station,22.691409,72.863991,,fire_station,,,,,,overpass
+1900761944,node,Unnamed fire station,12.425265,75.727155,,fire_station,,,,,,overpass
+1987151036,node,Unnamed fire station,12.575539,75.385099,,fire_station,,,,,,overpass
+2044163259,node,Unnamed fire station,26.802044,84.500647,,fire_station,,,,,,overpass
+2165822097,node,Unnamed fire station,28.647076,77.181207,,fire_station,,,,,,overpass
+2167520192,node,Unnamed fire station,10.587115,92.557784,,fire_station,,,,,,overpass
+2344004347,node,Unnamed fire station,22.300113,73.201638,,fire_station,,,,,,overpass
+2427727851,node,Unnamed fire station,13.035131,80.230692,,fire_station,,,,,,overpass
+2681745519,node,Unnamed fire station,23.832437,91.269386,,fire_station,,,,,,overpass
+2683027313,node,Unnamed fire station,28.662320,77.079627,,fire_station,,,,,,overpass
+3081416874,node,Unnamed fire station,15.078051,76.540727,,fire_station,,,,,,overpass
+3200943739,node,Unnamed fire station,17.422421,78.538458,,fire_station,,,,,,overpass
+3759834557,node,Unnamed fire station,27.175087,77.999510,,fire_station,,,,,,overpass
+3822901583,node,Unnamed fire station,23.332046,86.362422,,fire_station,,,,,,overpass
+4283907393,node,Unnamed fire station,15.399766,73.820040,,fire_station,,,,,,overpass
+4305461798,node,Unnamed fire station,11.653941,78.151135,,fire_station,,,,,,overpass
+4427339589,node,Unnamed fire station,26.936952,75.757327,01412466336,fire_station,,,"2B, Khatipura Road",,,overpass
+4689269189,node,Unnamed fire station,19.405670,72.827469,,fire_station,,,new link road,,,overpass
+4723581163,node,Unnamed fire station,26.004469,79.453624,,fire_station,,,,,,overpass
+4821972821,node,Unnamed fire station,19.405702,72.827853,,fire_station,,,,,,overpass
+5003290157,node,Unnamed fire station,8.177842,77.425950,04652-226571,fire_station,,,,,,overpass
+5003334123,node,Unnamed fire station,14.834821,76.232507,,fire_station,,,,,,overpass
+5016657227,node,Unnamed fire station,14.783026,76.000076,,fire_station,,,,,,overpass
+5118895338,node,Unnamed fire station,13.326636,76.247051,,fire_station,,,,,,overpass
+5252129921,node,Unnamed fire station,11.674235,92.737290,,fire_station,,,,,,overpass
+5255263122,node,Unnamed fire station,19.280594,72.872239,,fire_station,,,Jangid Complex Road,,,overpass
+5304198425,node,Unnamed fire station,12.831017,80.222431,,fire_station,,,,,,overpass
+5763462267,node,Unnamed fire station,31.411477,76.863413,,fire_station,,,,,,overpass
+6359499505,node,Unnamed fire station,12.295967,78.074067,,fire_station,,,,,,overpass
+6364028885,node,Unnamed fire station,17.016299,81.733023,,fire_station,,,,,,overpass
+6539125899,node,Unnamed fire station,28.659476,77.216097,,fire_station,,,,,,overpass
+6593022579,node,Unnamed fire station,18.776722,84.094810,,fire_station,,,,,,overpass
+6611410538,node,Unnamed fire station,32.098081,76.283304,,fire_station,,,,,,overpass
+6630947655,node,Unnamed fire station,12.417297,76.688124,,fire_station,,,,,,overpass
+6754560852,node,Unnamed fire station,23.858127,91.290615,,fire_station,,,,,,overpass
+7243989343,node,Unnamed fire station,18.001074,79.564553,,fire_station,,,,,,overpass
+7903002235,node,Unnamed fire station,12.524657,78.217143,,fire_station,,,,,,overpass
+8316131973,node,Unnamed fire station,20.018418,76.045308,,fire_station,,,,,,overpass
+8386142246,node,Unnamed fire station,18.107766,78.824671,,fire_station,,,,,,overpass
+8541103819,node,Unnamed fire station,10.268209,78.539599,,fire_station,,,,,,overpass
+8559616288,node,Unnamed fire station,9.005842,76.536004,,fire_station,,,,,,overpass
+8567498773,node,Unnamed fire station,9.048459,76.629239,,fire_station,,,,,,overpass
+8909040185,node,Unnamed fire station,25.188853,73.448679,,fire_station,,,,,,overpass
+8949470739,node,Unnamed fire station,19.394126,74.647987,,fire_station,,,,,,overpass
+9024751917,node,Unnamed fire station,19.033118,72.841209,,fire_station,,,,,,overpass
+10248419033,node,Unnamed fire station,27.062827,88.463512,,fire_station,,,,,,overpass
+10295654117,node,Unnamed fire station,30.692786,76.855417,,fire_station,,,,,,overpass
+10807128721,node,Unnamed fire station,28.737415,77.153923,,fire_station,,,,,,overpass
+10859732817,node,Unnamed fire station,12.929797,79.329197,04172 226084,fire_station,,,,,,overpass
+11248279569,node,Unnamed fire station,12.310576,76.317391,,fire_station,,,,,,overpass
+11308955288,node,Unnamed fire station,28.651822,77.233680,,fire_station,,,,,,overpass
+11349070130,node,Unnamed fire station,30.373779,77.857433,,fire_station,,,,,,overpass
+11568650732,node,Unnamed fire station,17.709511,83.298744,,fire_station,,,,,,overpass
+11691641330,node,Unnamed fire station,28.736157,77.297457,,fire_station,,,,,,overpass
+11693022646,node,Unnamed fire station,28.115353,75.389332,,fire_station,,,,,,overpass
+11736392871,node,Unnamed fire station,17.491359,78.391086,,fire_station,,,,,,overpass
+11744699156,node,Unnamed fire station,25.667046,91.900519,,fire_station,,,,,,overpass
+11755384332,node,Unnamed fire station,25.258786,91.734551,,fire_station,,,,,,overpass
+11810827239,node,Unnamed fire station,10.781329,79.607638,,fire_station,,,,,,overpass
+11885839703,node,Unnamed fire station,17.430354,81.789249,,fire_station,,,,,,overpass
+11939010319,node,Unnamed fire station,13.028018,77.520817,,fire_station,,,,,,overpass
+12049327970,node,Unnamed fire station,30.300828,79.050638,,fire_station,,,,,,overpass
+12252407644,node,Unnamed fire station,16.186395,81.135548,,fire_station,,,,,,overpass
+12280775271,node,Unnamed fire station,9.516751,77.631596,,fire_station,,,,,,overpass
+12465669883,node,Unnamed fire station,34.550669,76.137032,,fire_station,,,,,,overpass
+12596118627,node,Unnamed fire station,29.317359,76.316870,,fire_station,,,,,,overpass
+13097016990,node,Unnamed fire station,12.755166,77.801805,,fire_station,,,,,,overpass
+13140741227,node,Unnamed fire station,27.475522,77.336428,,fire_station,,,,,,overpass
+13272413960,node,Unnamed fire station,30.318872,78.040450,,fire_station,,,,,,overpass
+13341600672,node,Unnamed fire station,15.509315,80.047444,,fire_station,,,,,,overpass
+13386524883,node,Unnamed fire station,28.175950,77.614388,,fire_station,,,,,,overpass
+13617387174,node,Unnamed fire station,13.705016,80.016542,,fire_station,,,,,,overpass
+13621883557,node,Unnamed fire station,11.671229,77.129744,,fire_station,,,,,,overpass
+13621972630,node,Unnamed fire station,11.187571,77.279229,,fire_station,,,,,,overpass
+13621977252,node,Unnamed fire station,11.121769,77.331308,,fire_station,,,,,,overpass
+13673513631,node,Unnamed fire station,10.987174,76.844744,,fire_station,,,,,,overpass
+83797865,way,Unnamed fire station,27.356413,95.319443,,fire_station,,,,,,overpass
+129453737,way,Unnamed fire station,30.706497,76.778531,,fire_station,,,,,,overpass
+129790733,way,Unnamed fire station,30.757232,76.785811,,fire_station,,,,,,overpass
+152007422,way,Unnamed fire station,28.496035,77.063930,,fire_station,,,,,,overpass
+155023248,way,Unnamed fire station,16.870125,80.019608,,fire_station,,,,,,overpass
+207324977,way,Unnamed fire station,18.935121,72.834600,,fire_station,,,,,,overpass
+211274291,way,Unnamed fire station,13.042939,80.277719,,fire_station,,,,,,overpass
+217457954,way,Unnamed fire station,28.612260,76.976766,,fire_station,,,,,,overpass
+236816398,way,Unnamed fire station,20.254423,85.813714,,fire_station,,,,,,overpass
+258331283,way,Unnamed fire station,29.969606,76.864997,,fire_station,,,,,,overpass
+259024075,way,Unnamed fire station,28.674562,77.284132,,fire_station,,,,,,overpass
+262517138,way,Unnamed fire station,28.659227,77.143944,,fire_station,,,,,,overpass
+265430048,way,Unnamed fire station,16.981956,79.943691,,fire_station,,,,,,overpass
+268713037,way,Unnamed fire station,12.536555,76.914654,,fire_station,,,,,,overpass
+283776526,way,Unnamed fire station,28.620498,77.336814,,fire_station,,,,,,overpass
+312572471,way,Unnamed fire station,24.717143,84.999561,,fire_station,,,,,,overpass
+321671312,way,Unnamed fire station,22.432259,69.865433,,fire_station,,,,,,overpass
+321792373,way,Unnamed fire station,22.345715,69.873682,,fire_station,,,,,,overpass
+321793270,way,Unnamed fire station,22.340180,69.851263,,fire_station,,,,,,overpass
+321959899,way,Unnamed fire station,22.355443,69.887174,,fire_station,,,,,,overpass
+322837436,way,Unnamed fire station,22.426326,69.854695,,fire_station,,,,,,overpass
+323860643,way,Unnamed fire station,22.375103,69.835876,,fire_station,,,,,,overpass
+350581161,way,Unnamed fire station,28.669048,77.100265,,fire_station,,,,,,overpass
+356190537,way,Unnamed fire station,19.024405,73.040596,02227572111,fire_station,,,Sakharam Patil Marg,,,overpass
+358886929,way,Unnamed fire station,22.568059,88.432726,,fire_station,,,,,,overpass
+359554796,way,Unnamed fire station,18.578936,73.740628,,fire_station,,,,,,overpass
+375131403,way,Unnamed fire station,21.645524,69.609532,,fire_station,,,,,,overpass
+376238117,way,Unnamed fire station,23.231464,77.458132,,fire_station,,,,,,overpass
+386153715,way,Unnamed fire station,25.760275,87.463905,,fire_station,,,,,,overpass
+454614813,way,Unnamed fire station,10.763592,78.718709,,fire_station,,,,,,overpass
+463386324,way,Unnamed fire station,21.095510,79.048196,,fire_station,,,,,,overpass
+463386325,way,Unnamed fire station,21.095483,79.048134,,fire_station,,,,,,overpass
+475875258,way,Unnamed fire station,17.628415,78.401725,,fire_station,,,,,,overpass
+475941769,way,Unnamed fire station,17.551612,78.522665,,fire_station,,,,,,overpass
+578416187,way,Unnamed fire station,22.326919,69.857010,,fire_station,,,,,,overpass
+588067364,way,Unnamed fire station,21.116430,72.739952,,fire_station,,,,,,overpass
+667715321,way,Unnamed fire station,10.075995,76.318063,,fire_station,,,,,https://fire.kerala.gov.in/,overpass
+711095156,way,Unnamed fire station,16.024564,80.915246,,fire_station,,,,,,overpass
+730818942,way,Unnamed fire station,10.064272,78.776016,,fire_station,,,,,,overpass
+762071608,way,Unnamed fire station,32.768395,74.835942,,fire_station,,,,,,overpass
+767720343,way,Unnamed fire station,20.185120,79.993148,,fire_station,,,,,,overpass
+776433489,way,Unnamed fire station,17.986400,79.593249,,fire_station,,,,,,overpass
+788999102,way,Unnamed fire station,24.760038,93.893338,,fire_station,,,,,,overpass
+798017068,way,Unnamed fire station,10.057106,76.617227,,fire_station,,,,,,overpass
+815847567,way,Unnamed fire station,11.833129,93.029784,,fire_station,,,,,,overpass
+821306773,way,Unnamed fire station,18.507177,73.739451,,fire_station,,,,,,overpass
+843061940,way,Unnamed fire station,10.658339,76.071461,,fire_station,,,"fire and rescue station kunnnamkulam, Thrissur – kunnamkuklam road",,,overpass
+851636896,way,Unnamed fire station,15.356733,75.079431,,fire_station,,,,,,overpass
+852495477,way,Unnamed fire station,28.733835,77.786519,,fire_station,,,,,,overpass
+852495478,way,Unnamed fire station,28.733645,77.786580,,fire_station,,,,,,overpass
+890933048,way,Unnamed fire station,23.313664,85.328216,,fire_station,,,,,,overpass
+935761727,way,Unnamed fire station,19.163898,73.073800,,fire_station,,,,,,overpass
+945059965,way,Unnamed fire station,19.196251,72.822467,,fire_station,,,,,,overpass
+948969308,way,Unnamed fire station,19.217487,72.982732,,fire_station,,,,,,overpass
+959109240,way,Unnamed fire station,8.825319,76.921195,,fire_station,,,,,,overpass
+988399710,way,Unnamed fire station,18.920280,73.002603,,fire_station,,,,,,overpass
+989702298,way,Unnamed fire station,18.944965,72.940446,,fire_station,,,,,,overpass
+999345671,way,Unnamed fire station,28.625177,77.307249,,fire_station,,,,,,overpass
+1016623992,way,Unnamed fire station,11.034173,77.042936,,fire_station,,,,,,overpass
+1065558131,way,Unnamed fire station,28.617079,77.309231,,fire_station,,,,,,overpass
+1074780708,way,Unnamed fire station,23.099273,88.547895,,fire_station,,,,,,overpass
+1075921840,way,Unnamed fire station,13.113332,80.296372,,fire_station,,,,,,overpass
+1087704156,way,Unnamed fire station,13.375369,77.866019,,fire_station,,,,,,overpass
+1096512891,way,Unnamed fire station,12.988477,80.171679,,fire_station,,,,,,overpass
+1102553611,way,Unnamed fire station,8.824964,76.921976,,fire_station,,,,,,overpass
+1107911283,way,Unnamed fire station,13.068633,80.261333,,fire_station,,,,,,overpass
+1111736336,way,Unnamed fire station,16.956519,82.233065,,fire_station,,,,,,overpass
+1124288529,way,Unnamed fire station,26.812876,80.904464,,fire_station,,,,,,overpass
+1136674909,way,Unnamed fire station,28.734156,77.174969,,fire_station,,,,,,overpass
+1170518400,way,Unnamed fire station,28.685390,77.315157,,fire_station,,,,,,overpass
+1171543422,way,Unnamed fire station,26.728260,84.187014,,fire_station,,,,,,overpass
+1183742846,way,Unnamed fire station,23.182527,80.051720,,fire_station,,,,,,overpass
+1186047961,way,Unnamed fire station,23.890096,91.243410,,fire_station,,,,,,overpass
+1192455106,way,Unnamed fire station,11.924528,79.832447,,fire_station,,,,,,overpass
+1236877577,way,Unnamed fire station,28.731007,77.120855,,fire_station,,,,,,overpass
+1258330543,way,Unnamed fire station,27.178243,75.718997,,fire_station,,,,,,overpass
+1260676192,way,Unnamed fire station,27.166378,88.364240,,fire_station,,,,,,overpass
+1293386117,way,Unnamed fire station,32.976341,75.720279,,fire_station,,,,,,overpass
+1323671622,way,Unnamed fire station,15.486861,73.817444,,fire_station,,,,,,overpass
+1324599675,way,Unnamed fire station,16.513534,80.517681,,fire_station,,,,,,overpass
+1327803143,way,Unnamed fire station,13.792978,76.263636,,fire_station,,,,,,overpass
+1354141627,way,Unnamed fire station,16.863285,75.802691,,fire_station,,,,,,overpass
+1360903747,way,Unnamed fire station,9.974252,76.295541,,fire_station,,,,,,overpass
+1420327676,way,Unnamed fire station,16.196913,81.199347,,fire_station,,,,,,overpass
+1428296785,way,Unnamed fire station,12.968573,79.154409,,fire_station,,,,,,overpass
+1459205289,way,Unnamed fire station,12.859807,74.841405,,fire_station,,,,,,overpass
+1469959277,way,Unnamed fire station,19.968416,73.768626,,fire_station,,,,,,overpass
+1487293919,way,Unnamed fire station,22.243607,68.961310,,fire_station,,,,,,overpass
+1498869884,way,Unnamed fire station,28.677459,77.361110,,fire_station,,,,,,overpass
+6541779885,node,Usha fire brigade,22.501376,88.361766,,fire_station,,,,,,overpass
+11086014212,node,"Uttarakhand Fire and Emergency Station, Sidcul",29.001315,79.417525,,fire_station,,,,,,overpass
+322435730,way,Vadiwadi Fire Sation,22.314729,73.166517,,fire_station,,,,,,overpass
+1122048181,node,Vashi Fire Station,19.076405,72.998471,,fire_station,,,,,,overpass
+4693434964,node,Vellore Fire station,12.914123,79.131245,,fire_station,,,,,,overpass
+1482886951,way,Verna IDC fire Station,15.369663,73.935543,,fire_station,,,,,,overpass
+1330412751,way,Vikhroli Fire Brigade,19.101129,72.918244,,fire_station,,,,,,overpass
+1454237136,way,Villupuram Fire Station,11.943265,79.487333,,fire_station,,,,,,overpass
+4419269499,node,Virudhunagar Fire Station,9.593434,77.953921,,fire_station,,,,,,overpass
+1410443101,way,Visakhapatnam Central Fire Station,17.709104,83.293289,,fire_station,,,,,,overpass
+1172399106,way,Washermanpet Fire & Rescue Station,13.102440,80.274401,,fire_station,,,,,,overpass
+2813628983,node,West Bengal Fire Service HQ,22.557893,88.354870,,fire_station,,,,,,overpass
+1101376586,way,Whitefield Fire Station,12.987320,77.732111,,fire_station,,,,,,overpass
+1134831516,way,Yelahanka Fire Station,13.125144,77.600951,,fire_station,,,,,,overpass
+265816770,way,adilabad fire station,19.665681,78.530454,,fire_station,,,,,,overpass
+1102553610,way,fire and rescue station kadakkal,8.824971,76.921940,,fire_station,,,,,,overpass
+3242344367,node,fire station,19.862430,75.321740,,fire_station,,,,,,overpass
+3534960334,node,fire station,17.676593,77.622747,,fire_station,,,,,,overpass
+12593221466,node,fire station,26.754843,83.372765,,fire_station,,,,,,overpass
+1002562442,way,fire station,8.406858,77.083463,,fire_station,,,,,,overpass
+8111098052,node,panjagutta firestation,17.412705,78.408885,,fire_station,,,,,,overpass
+835485762,way,pucca dunga fire station,32.740754,74.868765,,fire_station,,,,,,overpass
+718462920,way,ranirbazar fire station,23.828851,91.375941,,fire_station,,,,,,overpass
+12596061770,node,sravsti fire police,27.707329,81.908483,,fire_station,,,,,,overpass
+8978092814,node,مغل پورہ فائر اسٹیشن,17.359502,78.476775,040 23449226,fire_station,,,,,https://fire.telangana.gov.in/,overpass
+1137211166,way,Maharaj Ganj Bazar Fire Station,23.824996,91.285063,,fire_station,Agartala,,"Ramthakur Sangha, Opposite to V2 Mall, Agartala",,,overpass
+978980107,way,"Fire and Rescue Station, Alathur",10.644876,76.547702,+914922223151,fire_station,Alathur,,"Salem-Kochi-Kanyakumari Highway, Alathur",,,overpass
+978807041,way,"Fire and Rescue Station, Ambar",12.660414,74.925147,,fire_station,Ambar,,Ambar,,,overpass
+620544868,way,"Fire And Rescue Station, Aroor",9.882936,76.301208,,fire_station,Aroor,,Aroor,,,overpass
+774543662,way,"Fire and Rescue Station, Poovanpara, Attingal",8.710948,76.812628,,fire_station,Attingal,,"Poovanpara, Attingal",,,overpass
+500325004,way,Unnamed fire station,30.211953,74.937868,,fire_station,Bathinda,,Bathinda,,,overpass
+864023717,way,Municipal Fire Station,21.768624,72.132086,,fire_station,Bhavnagar,,Bhavnagar,,,overpass
+6392671387,node,Chatrapur Fire Station,19.358266,84.994251,+91 262600,fire_station,Chatrapur,,"Sri Ram Nagar, Chatrapur",,,overpass
+2311428475,node,Chembur Fire Station,19.054525,72.893520,,fire_station,"Chembur, Mumbai",,"V N Purav Marg (Sion Trombay Road), Chembur, Mumbai",,,overpass
+627797054,way,"Fire and Rescue Station, Cherthala",9.679342,76.340588,,fire_station,Cherthala,,Cherthala,,,overpass
+4506616174,node,Cooch Behar Fire Service,26.320336,89.453290,,fire_station,Cooch Behar,,"Sunity Road, Cooch Behar",,,overpass
+8377811524,node,Mekliganj Fire Brigade,26.345714,88.907358,,fire_station,Coochbehar,,"Mekliganj, Coochbehar",,,overpass
+5087818814,node,Dharamsala Fire Brigade,32.215155,76.318125,,fire_station,Dharamsala,,"Dharamshala Road, Dharamsala",,,overpass
+6757753082,node,Unnamed fire station,23.538463,87.295119,,fire_station,DurgapurCityCentre,,DurgapurCityCentre,,,overpass
+12395555373,node,Erode District Fire Station,11.332637,77.727253,,fire_station,Erode,,"Gandhiji Road, Erode",,,overpass
+8919834459,node,Gauribidanur Fire Station,13.602388,77.524062,08156274322,fire_station,Gauribidanur,,Gauribidanur,,,overpass
+8919834460,node,Gudibanda Fire Station,13.672789,77.708281,,fire_station,Gauribidanur,,Gauribidanur,,,overpass
+696345396,way,Fire Station Gokulpuri,28.700391,77.291098,,fire_station,Gokulpuri,,"Fire Station Gokulpuri, Loni Road, Gokulpuri",,,overpass
+7037458773,node,Golaghat Fire Brigade,26.498313,93.961008,,fire_station,Golaghat,,"Bagchung Road, Golaghat",,,overpass
+13673808203,node,Gop Fire Station,19.969735,86.025832,,fire_station,Gop,,Gop,,,overpass
+7677301202,node,Fire Service Station,34.290543,74.620427,,fire_station,Hajan,,Hajan,,,overpass
+717866687,way,"Fire and Rescue Station, Irinjalakuda",10.361284,76.213267,+91 480 2820558,fire_station,IRINJALAKUDA,,"Porathissery Road, IRINJALAKUDA",,https://fire.kerala.gov.in/,overpass
+10947499224,node,Imphal Fire Station,24.804942,93.935377,,fire_station,Imphal,,"Governor Rd, Imphal",,,overpass
+1354252177,way,Jalpaiguri Fire Station,26.515106,88.730657,,fire_station,Jalpaiguri,,"VIP Road, Jalpaiguri",,,overpass
+1050510523,way,Jaynagar Fire Station,22.160839,88.434804,,fire_station,Jaynagar Majilpur,,"Jaynagar-Kultali Road, Jaynagar Majilpur",,,overpass
+3546863558,node,Jonai Fire Service Station,27.822440,95.230042,,fire_station,Jonai,,Jonai,,,overpass
+11753075267,node,Kakatpur Fire Station,19.991203,86.224614,,fire_station,Kakatpur,,Kakatpur,,,overpass
+372606474,way,Kalamboli Fire Station,19.026006,73.105093,,fire_station,Kalamboli,,Kalamboli,,,overpass
+803587469,way,"Fire and Rescue Station, Kalpetta",11.598703,76.080355,,fire_station,Kalpetta,,"Wayanad Road, Kalpetta",,,overpass
+663434710,way,Kangeyam Fire Station,11.008049,77.561336,,fire_station,Kangeyam,,"Chennimalai road, Kangeyam",,,overpass
+7463868461,node,Fire and Rescue Station,9.969140,76.284833,,fire_station,Kochi,,"Club Road, Ernakulam South, Kochi",,,overpass
+666195391,way,"Fire and Rescue Station, Kodungallur",10.239638,76.205331,+91 480 2802101,fire_station,"Kodungallur, Thrissur",,"Pullut P O, Fire Station Road, Uzhavathkadavu, Kodungallur, Thrissur",,https://fire.kerala.gov.in/,overpass
+1067409041,way,Baranagar Fire Station,22.652446,88.372335,,fire_station,Kolkata,,"7, Deshpran Sasmal Avenue, Kolkata",,https://wbfes.gov.in/,overpass
+14226213,relation,Manicktala Fire Station,22.583369,88.391694,+913323207489,fire_station,Kolkata,,"17, Bagamari Lane, Kankurgach, CIT Road, Kolkata",,https://www.wbfes.gov.in/,overpass
+11769073760,node,Fire Station Konark,19.898239,86.114943,,fire_station,Konark,,Konark,,,overpass
+366858550,way,Fire and Rescue Station Konni,9.229098,76.852039,,fire_station,Konni,,Konni,,https://fire.kerala.gov.in/,overpass
+1001635940,way,"Fire and Rescue Station,Koothatukulam",9.864164,76.591618,,fire_station,Koothattukulam,,Koothattukulam,,,overpass
+798315531,way,"Fire and Rescue Station, Kottayam",9.587628,76.520772,,fire_station,Kottayam,,"Palace Road, Kottayam",24/7,,overpass
+7456302701,node,Fire and Rescue Station Koyilandy,11.443714,75.693613,+91-496 262 0101,fire_station,Koyilandy,,"KOYILANDY, Koyilandy",,,overpass
+2388196226,node,Fire Brigade,24.792561,93.002607,,fire_station,Lakhipur,,"Lakhipur Town, Lakhipur",,,overpass
+439113612,way,Fire Department Building,22.532400,92.892696,,fire_station,Lawngtlai,,"Electric Veng, Electric Veng, Lawngtlai",,,overpass
+665687016,way,Mulund Fire Brigade,19.175132,72.942533,,fire_station,Mulund (West),,"Lala Devidayal Road, Mulund (West)",,,overpass
+623417932,node,Colaba Fire Station,18.915455,72.826053,,fire_station,Mumbai,,"N Sawant Road, Mumbai",,,overpass
+353174234,way,Kurla Agnishaman Kendra,19.084430,72.885935,,fire_station,Mumbai,,"LBS Marg, Mumbai",,,overpass
+356173988,way,Nariman Point Fire Station,18.923092,72.826008,,fire_station,Mumbai,,"Rajendra Venkateshwara Rao Marg, Mumbai",,,overpass
+315426772,way,Fire Station,12.343285,76.656502,,fire_station,Mysuru,,Mysuru,,,overpass
+11672445202,node,Fire station Nahan,30.558598,77.300694,,fire_station,Nahan,,Nahan,,,overpass
+357361706,way,Fire Station,27.107268,93.693670,,fire_station,Naharlagun,,Naharlagun,,,overpass
+13336349897,node,Nalgonda Fire Station,17.061970,79.265897,,fire_station,Nalgonda,,"Clock Tower Road, Nalgonda",,,overpass
+5102719433,node,Tawa Delight,19.039279,73.099231,,fire_station,Navi Mumbai,,"Indra Apartment, Sector 16, Roadpali, Kalamboli, Panvel, Kalamboli Link Road, Navi Mumbai",Mo 11:00-23:00,,overpass
+6112964504,node,Nelamangala Fire Station,13.099720,77.389359,,fire_station,Nelamangala,,"Nelamangala - Chikkaballapur Highway, Nelamangala",,,overpass
+5483331672,node,Unnamed fire station,28.621435,77.207645,,fire_station,New Delhi,,New Delhi,,,overpass
+11591421136,node,Nimapada Fire Station,20.053575,86.002904,,fire_station,Nimapada,,Nimapada,,,overpass
+1442077372,way,Nowshera Fire Station,34.129039,74.805689,,fire_station,Nowshera,,Nowshera,,,overpass
+7453415391,node,Fire and Rescue Station Pathanamthitta,9.264886,76.793397,,fire_station,PATHANAMTHITTA,,PATHANAMTHITTA,,,overpass
+1346021103,way,Baner Fire Station,18.560262,73.776962,,fire_station,PUNE,,"Gera Emerald City Road, PUNE",,,overpass
+372546200,way,"Fire and Rescue Station, Kanjikode",10.792085,76.728057,,fire_station,Palakkad,,"Kanjikode, Palakkad",,https://fire.kerala.gov.in/,overpass
+194947978,way,"Fire and Rescue Station, Palakkad",10.759868,76.659166,,fire_station,Palakkad,,Palakkad,,https://fire.kerala.gov.in/,overpass
+2888418501,node,Agnishaman Kendra,32.116808,76.539135,+91189 4230232,fire_station,Palampur,,"Palampur Kandi Road, Palampur",,,overpass
+892787218,way,Fire Station Parwanoo,30.838221,76.962359,,fire_station,Parwanoo,,"Sector-3, old NH22, Parwanoo",,https://himachal.nic.in/index.php?lang=1&dpt_id=171,overpass
+12189834601,node,"Fire Station, Pipariya",22.754244,78.350244,,fire_station,Pipariya,,Pipariya,,,overpass
+4316621643,node,Pondicherry Fire Department;Villa Labourdonna's Guest House,11.926059,79.831986,,fire_station,Puducherry,,"50G, Rue Labourtonnais, Puducherry",,,overpass
+261258201,way,Aundh Fire Station,18.560578,73.814275,+912026451707,fire_station,Pune,,"Pune, Ward No. 8, Sadhu Vasvani Nagar,, University Road, Pune",,,overpass
+359552051,way,Hinjawadi Fire Station - Phase 1,18.584845,73.735095,,fire_station,Pune,,"HPMP+W3G,Rajiv Gandhi Infotech Park,,, Blue Ridge Road, Phase 1, Pune",,,overpass
+11942759805,node,Janta Fire Brigade station,18.499617,73.848468,,fire_station,Pune,,"Parvti Paytha,Janta Vasahat, Pune",,,overpass
+12595604887,node,Fire Brigade Station Safidon,29.412590,76.665934,,fire_station,Safidon,,Safidon,,,overpass
+373856193,way,"Fire and Rescue Station, Shoranur",10.776419,76.280489,,fire_station,Shoranur,,"14, Ottappalam-Kulapully-Shornur Road, Shoranur",,https://fire.kerala.gov.in/,overpass
+558281022,way,Siliguri Fire Station,26.702920,88.417402,,fire_station,Siliguri,,"Station Feeder Road, Siliguri",,,overpass
+1418186598,way,"Fire Station, Rajiv Gandhi Education City",28.944346,77.102127,,fire_station,Sonipat,,"Rajiv Gandhi Education City, Sonipat",,,overpass
+858033838,way,"Fire and Rescue Station, Sulthan Bathery",11.669548,76.262038,,fire_station,Sulthan Bathery,,"Sulthan batheri - Pulpally Road, Sulthan Bathery",,,overpass
+1302295327,way,Fire and Rescue Services Station,11.019251,77.127932,+91-0422-2689101,fire_station,Sulur,,"Kalangal Road, Sulur",,,overpass
+3761594600,node,Unnamed fire station,19.068187,73.131667,,fire_station,Taloja MIDC,,Taloja MIDC,,,overpass
+801998481,way,"Fire and Rescue Station, Valappad",10.401313,76.118122,,fire_station,"Thalikulam, Thrissur",,"FIRE&RESCUE STATION NATTIKA, Opposite of Carmal Central School ,East Tippu Sultan Road, Thalikulam, Thrissur",,,overpass
+354797910,way,Fire Station Thane (E),19.183011,72.975953,,fire_station,Thane,,Thane,,,overpass
+822533725,way,Rustomjee Fire Station,19.208902,72.991645,,fire_station,Thane West,,"Besides Saket Complex CHS, Saket Road, Thane West",,,overpass
+690019838,way,Fire and Rescue Station Thiruvalla,9.381213,76.569731,,fire_station,Thiruvalla,,"Revenue Tower Road, Thiruvalla",,,overpass
+884350172,way,"Fire and Rescue Station, Tirur",10.913016,75.924835,,fire_station,Tirur,,Tirur,,,overpass
+9642669885,node,Fire Service Station,33.925776,75.117529,,fire_station,Tral,,"Tral-i-Bala, Tral",,,overpass
+9381658867,node,"Fire and rescue station ,Tripunithra",9.935814,76.352054,+91-277 5388,fire_station,Tripunithara,,"Kannankulangara, Ettumanoor - Ernakulam Road, Tripunithara",,,overpass
+1275546893,way,Pune Municipal Corporation Fire Station Wagholi,18.588777,73.969217,,fire_station,"Wagholi, Pune, Maharashtra",,"Infront of Fire brigade office, Lohgaon Rd, near AWHO Vijay Vihar,, Wagholi, Pune, Maharashtra",,,overpass
+2935214942,node,balugaon fire station,19.762381,85.215249,,fire_station,balugaon,,"bhagabati, balugaon",,,overpass
+5051609255,node,Bhimavaram Fire station,16.543177,81.534030,,fire_station,bhimavaram,,"FIRE STATION RD, bhimavaram",,,overpass
+5354315736,node,Fire service station;Fire Force Service center,12.976853,80.227634,,fire_station,chennai,,"Thiruvallur Street, chennai",,,overpass
+8552402076,node,Unnamed fire station,23.982860,85.375229,,fire_station,hazaribagh,,hazaribagh,,,overpass
+8068250599,node,Fire&Rescue Station Chamakkada,8.888476,76.583697,,fire_station,kollam,,"Chamakkada Road, kollam",,,overpass
+8078222391,node,"Fire and Rescue Station, Kunnamkulam",10.658830,76.067632,+91-4885222511,fire_station,kunnamkulam,,kunnamkulam,,,overpass
+801664171,way,Fire and Rescue Station,10.226087,76.249483,,fire_station,mala,,mala,,,overpass
+4446184707,node,Airport Fire Station,21.183723,81.738507,+91 78699 74230,fire_station,naya raipur,,"Ramchandi,, naya raipur",,http://www.aai.aero/allAirports/raipur_generalinfo.jsp,overpass
+760457109,way,"Fire and Rescue Station, Wadakkanchery",10.665915,76.250364,,fire_station,wadakkancherry,,"wadakanchery, wadakkancherry",,,overpass
+6369635014,node,"Fire Station, Yemmiganur",15.755751,77.458240,,fire_station,yemmiganur,,yemmiganur,,,overpass
+1381376816,way,Safdarjung Fire Station,28.586333,77.213313,+91 11 2461 1111,fire_station,,DL,DL,,,overpass
+1455130588,way,Basni Fire Station,26.230609,73.007190,02912651402,fire_station,Jodhpur,Rajasthan,"RIICO -Basni AREA RD, Jodhpur, Rajasthan",,,overpass
+1455131127,way,Shastri Nagar Fire Station,26.272333,73.002544,02912772760,fire_station,Jodhpur,Rajasthan,"Mahavir Circle, Jodhpur, Rajasthan",,,overpass
