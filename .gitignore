@@ -33,17 +33,27 @@ build/
 # ChromaDB - vector store built locally via build_vectorstore.py (never commit ~100MB)
 backend/data/chroma_db/
 
-# Downloaded PDF source documents (too large for git, download manually)
+# Downloaded PDF source documents
 backend/data/*.pdf
 backend/data/state_amendments/*.pdf
-chatbot_service/data/legal/state_amendments/*.pdf
-chatbot_service/data/legal/indian_kanoon/*.pdf
-chatbot_service/data/legal/*.pdf
+# Note: chatbot_service/data/legal PDFs and CSVs are INTENTIONALLY NOT IGNORED
+# They are deployed to the server so the vectorstore can be built during startup.
+
 chatbot_service/data/legal/indian_kanoon/*.zip
 chatbot_service/data/qa_pairs/*.zip
 chatbot_service/data/accidents/*/*.pdf
 chatbot_service/data/accidents/_raw_manugupta/
-
+chatbot_service/data/accidents/*.csv
+chatbot_service/data/accidents/*/*.csv
+chatbot_service/data/boundaries/*.csv
+chatbot_service/data/boundaries/*.geojson
+chatbot_service/data/boundaries/*.json
+chatbot_service/data/hospitals/*.csv
+chatbot_service/data/medical/*.csv
+chatbot_service/data/medical/*.pdf
+chatbot_service/data/roads/*.csv
+chatbot_service/data/roads/*.geojson
+chatbot_service/data/roads/*.zip
 # Alembic temp files
 backend/migrations/versions/*.pyc
 
@@ -110,19 +120,17 @@ frontend/public/leaflet/
 
 # Local dataset drops and generated offline bundles
 backend/datasets/
-chatbot_service/data/accidents/*.csv
-chatbot_service/data/accidents/*/*.csv
-chatbot_service/data/boundaries/*.csv
-chatbot_service/data/boundaries/*.geojson
-chatbot_service/data/boundaries/*.json
-chatbot_service/data/hospitals/*.csv
-chatbot_service/data/legal/*.csv
-chatbot_service/data/medical/*.csv
-chatbot_service/data/medical/*.pdf
+frontend/public/leaflet/
+
+# Skip large bulk offline bundles (frontend handles its own PWA bundle)
+frontend/public/offline-data/city-bundles/
+frontend/public/offline-data/translations/
+
+# Pothole image training data
 chatbot_service/data/pothole_training/
-chatbot_service/data/roads/*.csv
-chatbot_service/data/roads/*.geojson
-chatbot_service/data/roads/*.zip
+
+# Large boundary shapefiles
+chatbot_service/data/boundaries/*.zip
 frontend/public/offline-data/city-bundles/
 frontend/public/offline-data/translations/
 

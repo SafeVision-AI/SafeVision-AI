@@ -1,0 +1,123 @@
+version: "3.9"
+
+services:
+  # ────────────────────────────────────────────────────────────────
+  # PostgreSQL + PostGIS — spatial database
+  # ────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: svai_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: safevisionai
+      POSTGRES_USER: svai
+      POSTGRES_PASSWORD: svai_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U svai -d safevisionai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ────────────────────────────────────────────────────────────────
+  # Redis — caching + session memory
+  # ────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: svai_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ────────────────────────────────────────────────────────────────
+  # Backend — FastAPI + PostGIS
+  # ────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: svai_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://svai:svai_dev_password@postgres:5432/safevisionai
+      REDIS_URL: redis://redis:6379/0
+      CHATBOT_SERVICE_URL: http://chatbot:8010
+      ENVIRONMENT: development
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ────────────────────────────────────────────────────────────────
+  # Chatbot Service — LangChain RAG + Multi-provider LLM
+  # ────────────────────────────────────────────────────────────────
+  chatbot:
+    build:
+      context: ./chatbot_service
+      dockerfile: Dockerfile
+    container_name: svai_chatbot
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+    env_file: ./chatbot_service/.env
+    environment:
+      REDIS_URL: redis://redis:6379/1
+      MAIN_BACKEND_BASE_URL: http://backend:8000
+      ENVIRONMENT: development
+    ports:
+      - "8010:8010"
+    volumes:
+      - ./chatbot_service/data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8010/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ────────────────────────────────────────────────────────────────
+  # Frontend — Next.js 15 PWA
+  # ────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    container_name: svai_frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+      chatbot:
+        condition: service_healthy
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+      NEXT_PUBLIC_CHATBOT_URL: http://localhost:8010
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
+  redis_data:
