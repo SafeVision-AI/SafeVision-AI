@@ -1,0 +1,38 @@
+name: Chatbot Service CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'chatbot_service/**'
+      - '.github/workflows/chatbot.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'chatbot_service/**'
+
+jobs:
+  test:
+    name: Chatbot Pytests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: chatbot_service/requirements.txt
+
+      - name: Install Chatbot Dependencies
+        working-directory: ./chatbot_service
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          if [ -f "requirements-dev.txt" ]; then pip install -r requirements-dev.txt; fi
+
+      - name: Run Pytest
+        working-directory: ./chatbot_service
+        run: pytest tests/ -v

@@ -1,0 +1,36 @@
+name: Security & SAST Audit
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 0 * * 0' # Run weekly on Sundays
+
+jobs:
+  security-audit:
+    name: Full Stack Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Frontend NPM Audit (High/Critical)
+        working-directory: ./frontend
+        # Runs basic vulnerability check; ignores low/moderate to avoid noise
+        run: npm audit --audit-level=high || echo "NPM high vulnerabilities found - Please review."
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          
+      - name: Install Python Security Tools
+        run: pip install bandit safety
+        
+      - name: Bandit SAST Scan (Backend)
+        working-directory: ./backend
+        # -lll filters only High confidence + High severity issues
+        run: bandit -r . -lll || echo "Backend SAST warnings found."
+        
+      - name: Bandit SAST Scan (Chatbot)
+        working-directory: ./chatbot_service
+        run: bandit -r . -lll || echo "Chatbot SAST warnings found."
