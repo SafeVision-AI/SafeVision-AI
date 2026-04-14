@@ -1,0 +1,390 @@
+"""
+Motor Vehicles Act 1988 — Complete Reference for RAG Knowledge Base
+Government of India | Ministry of Road Transport and Highways
+Source: The Motor Vehicles Act, 1988 (Act No. 59 of 1988) as amended
+
+==========================================================================
+PART I — PRELIMINARY
+==========================================================================
+
+Section 1 — Short title, extent and commencement
+(1) This Act may be called the Motor Vehicles Act, 1988.
+(2) It extends to the whole of India.
+(3) It shall come into force on such date as the Central Government may, by notification in the Official Gazette, appoint.
+
+Section 2 — Definitions
+In this Act, unless the context otherwise requires:
+(1) "adaptive vehicle" means a motor vehicle specifically designed or modified for use by a person with disability.
+(3) "articulated vehicle" means a motor vehicle to which a semi-trailer is attached.
+(6) "axle weight" means in relation to an axle of a vehicle, the total weight transmitted by the wheels of the axle to the surface upon which the vehicle rests.
+(11) "certificate of registration" means the certificate issued by a competent authority to the effect that a motor vehicle has been duly registered in accordance with this Act.
+(14) "contract carriage" means a motor vehicle which carries a passenger or passengers for hire or reward and is engaged under a contract.
+(16) "dealer" means a person who is engaged in the business of buying and selling motor vehicles.
+(24) "driving licence" means the licence issued by a competent authority under Chapter II authorising the person specified therein to drive a motor vehicle or a class of motor vehicle.
+(28) "educational institution bus" means a motor vehicle used for the transport of school students.
+(41) "invalid carriage" means a motor vehicle specially designed and constructed, and not merely adapted, for the use of a person suffering from some physical defect or disability.
+(45) "learner's licence" means the licence issued by a competent authority under Chapter II authorising the person specified therein to drive a motor vehicle as a learner.
+
+==========================================================================
+PART II — LICENSING OF DRIVERS OF MOTOR VEHICLES (Sections 3-42)
+==========================================================================
+
+Section 3 — Necessity for driving licence
+(1) No person shall drive a motor vehicle in any public place unless he holds an effective driving licence issued to him authorising him to drive the vehicle.
+(2) The driving licence required under sub-section (1) shall specify the class of vehicle which the holder of the licence is authorised to drive.
+
+Section 4 — Age limit in connection with driving of motor vehicles
+(1) No person under the age of eighteen years shall drive a motor vehicle in any public place.
+(2) No person shall drive a transport vehicle in any public place unless he is twenty years of age or more.
+Exception: A person who has attained the age of sixteen years may drive a motor vehicle of not more than 50cc engine capacity (non-transport vehicle).
+
+Section 5 — Responsibility of owners of motor vehicles
+An owner shall not allow any person to drive a motor vehicle unless that person holds an effective driving licence in respect of that vehicle.
+
+Section 9 — Grant of learner's licence
+(1) An application for a learner's licence shall be made to the licensing authority in Form 1.
+(3) A learner's licence shall be valid for a period of six months.
+
+Section 10 — Form and contents of licences to drive
+A driving licence shall be in such form and shall contain such information as may be prescribed by the Central Government.
+
+Section 14 — Currency of licences to drive motor vehicles
+(1) A driving licence issued or renewed shall be effective for a period of twenty years from the date of issue or renewal.
+(2) A transport vehicle licence shall be effective for a period of three years.
+
+Section 19 — Power of licensing authority to disqualify from holding a driving licence or revoke such licence
+A licensing authority may disqualify any person from holding or obtaining a driving licence or revoke a driving licence if the person has been convicted of an offence under this Act.
+
+==========================================================================
+PART III — LICENSING OF CONDUCTORS OF STAGE CARRIAGES (Sections 29-38)
+==========================================================================
+
+Section 29 — Necessity for conductor's licence
+No person shall act as a conductor of a stage carriage unless he holds an effective conductor's licence.
+
+==========================================================================
+PART IV — REGISTRATION OF MOTOR VEHICLES (Sections 39-112)
+==========================================================================
+
+Section 39 — Necessity for registration
+No person shall drive any motor vehicle and no owner shall cause or permit any motor vehicle to be driven in any public place unless the vehicle is registered.
+
+Section 40 — Registration where to be made
+Subject to the provisions of Section 42, every owner of a motor vehicle shall cause the vehicle to be registered by a registering authority in whose jurisdiction he has his residence or place of business or the vehicle is normally kept.
+
+Section 41 — Registration of motor vehicles
+The registering authority shall register a motor vehicle in the prescribed manner and assign a registration mark to the vehicle.
+
+Section 47 — Change of residence or place of business
+When the owner of a registered vehicle ceases to reside or carry on business at the address recorded in the certificate of registration, he shall apply to the registering authority for the transfer of the registration record.
+
+Section 49 — Transfer of ownership
+(1) Where the ownership of a motor vehicle is transferred:
+(a) the transferor shall report the transfer to the registering authority within fourteen days of the transfer.
+(b) the transferee shall apply to the registering authority within thirty days of the transfer for transfer of ownership to be recorded.
+
+==========================================================================
+PART V — CONTROL OF TRANSPORT VEHICLES (Sections 66-99)
+==========================================================================
+
+Section 66 — Necessity for permits
+No owner of a motor vehicle shall use or permit the use of the vehicle as a transport vehicle without a permit.
+
+Section 93 — Agents and canvassers to obtain licence
+No person shall, for reward, engage in business as an agent or canvasser for the booking of passengers or goods without a licence.
+
+==========================================================================
+PART VI — SPECIAL PROVISIONS RELATING TO STATE TRANSPORT UNDERTAKINGS
+==========================================================================
+
+Sections 99-108 cover the special provisions for State Transport Undertakings including nationalisation of routes, publication of schemes, and compensation.
+
+==========================================================================
+PART VII — CONSTRUCTION, EQUIPMENT AND MAINTENANCE OF MOTOR VEHICLES
+==========================================================================
+
+Section 109 — General provisions regarding construction and maintenance of vehicles
+Every motor vehicle shall be so constructed and so maintained as to be at all times under the effective control of the person driving the vehicle.
+
+Section 110 — Power to Central Government to make rules for construction and maintenance
+The Central Government may make rules for the construction, equipment and maintenance of motor vehicles and trailers, including rules about:
+(b) lights and reflectors
+(c) brakes and steering
+(d) tyres
+(h) safety glass
+(i) seat belts
+
+Section 112 — Limits of speed
+(1) No person shall drive a motor vehicle in contravention of the speed limits referred to in Section 116.
+The prescribed speed limits under Central Motor Vehicles Rules 1989:
+- Plain roads: Cars/Jeeps: 120 km/h, Buses: 100 km/h, Trucks/LCV: 80 km/h
+- Expressways: Cars: 120 km/h, Buses: 100 km/h
+- Urban/City areas: All vehicles: 50 km/h
+- School zones/Hospital zones: 20-30 km/h (state-specific)
+
+==========================================================================
+PART VIII — CONTROL OF TRAFFIC (Sections 112-138)
+==========================================================================
+
+Section 113 — Limits of weight and limitations on use
+(1) No person shall drive or cause or allow to be driven in any public place any motor vehicle which is not within the weight limits prescribed.
+(2) The Central Government may prescribe different laden weight limits for different categories of roads.
+
+Section 118 — Driving regulations
+The following driving regulations apply:
+- Driving on the left side of the road
+- Overtaking on the right side only
+- No overtaking at junctions, bends, hilltops
+- Proper signalling before turning or stopping
+- Stopping at red signals and pedestrian crossings
+
+Section 119 — Duty to obey traffic signs
+Every driver of a motor vehicle shall obey all traffic signs erected or placed under the authority of a State Government.
+
+Section 121 — Signals and signalling devices
+While driving on public roads:
+- Indicator lights must be used when turning
+- Horn should be used only when necessary
+- High beam headlights must be dipped when meeting oncoming traffic
+
+Section 122 — Leaving vehicle in dangerous position
+No person shall cause or allow any motor vehicle to remain stationary in any public place in such a position or in such a condition or in such circumstances as to cause or be likely to cause danger, obstruction or undue inconvenience to other users of the public place.
+
+Section 125 — Pedestrians' rights at crossings
+At a pedestrian crossing, a driver must allow pedestrians to cross safely. A driver approaching a pedestrian crossing shall slow down and give precedence to pedestrians already on or about to cross.
+
+Section 128 — Safety measures for drivers and pillion riders
+(1) The driver of a two-wheeled motor vehicle and any pillion rider shall wear protective headgear conforming to the prescribed standards.
+(2) The driver of a motor vehicle other than a two-wheeled vehicle shall use the seat belt.
+(3) The Central Government may make rules prescribing standards for protective headgear.
+
+Section 129 — Wearing of protective headgear
+Every person driving or riding (otherwise than in a side car, on a motor cycle) shall, while in a public place, wear protective headgear in accordance with the rules made by the Central Government.
+
+Section 134 — Duty of driver in case of accident and injury to persons
+(1) The driver of a motor vehicle involved in an accident of the nature referred to in Section 132 shall:
+(a) take all reasonable steps to secure medical attention for the injured persons by conveying the person to the nearest medical practitioner or hospital;
+(b) give on demand by a police officer any information required by him.
+
+Section 134A — Protection of Good Samaritans
+(1) No person who is a Good Samaritan shall be liable for civil or criminal action for any injury to or death of an accident victim, caused due to his negligent act or omission while rendering emergency medical or non-medical care or assistance, or while transporting accident victims to hospitals.
+(2) A Good Samaritan shall be protected from harassment at the hands of police or hospital.
+(3) For the purposes of this section, "Good Samaritan" means a person who in good faith, voluntarily and without expectation of any reward or compensation, renders emergency medical or non-medical care or assistance at the scene of an accident.
+
+Section 138 — Power of State Government to make rules
+The State Government may make rules for the purpose of carrying into effect the provisions of this Part.
+
+==========================================================================
+PART IX — INSURANCE OF MOTOR VEHICLES AGAINST THIRD PARTY RISKS
+==========================================================================
+
+Section 146 — Necessity for insurance against third party risk
+(1) No person shall use, except as a passenger, a motor vehicle in a public place, unless there is in force in relation to the use of the vehicle by that person a policy of insurance complying with the requirements of this Chapter.
+
+Section 147 — Requirements of policies and limits of liability
+A policy of insurance must insure the person or classes of persons specified in the policy against any liability which may be incurred by him in respect of the death of or bodily injury to any person or damage to any property of a third party caused by or arising out of the use of the vehicle.
+
+The minimum liability under third party insurance:
+- Death or permanent disablement: As per Motor Accident Claims Tribunal order (no cap since 1994)
+- Third party property damage: Rs 7.5 lakh maximum
+
+==========================================================================
+PART X — LIABILITY WITHOUT FAULT IN CERTAIN CASES (Sections 140-144)
+==========================================================================
+
+Section 140 — Liability to pay compensation in certain cases on the principle of no fault
+(1) Where death or permanent disablement of any person has resulted from an accident arising out of the use of a motor vehicle or motor vehicles, the owner of the vehicle shall, or, as the case may be, the owners of the vehicles shall, jointly and severally, be liable to pay compensation in respect of such death or disablement in accordance with the provisions of this section.
+(2) The amount of compensation payable under sub-section (1) shall be:
+(a) in respect of the death of any person, a fixed sum of fifty thousand rupees.
+(b) in respect of the permanent disablement of any person, a fixed sum of twenty-five thousand rupees.
+
+Note: The amounts under Section 140 were structured compensation applicable as a baseline regardless of fault.
+
+Section 163A — Special provisions as to payment of compensation on structured formula basis
+(1) Notwithstanding anything contained in this Act, the owner of a motor vehicle or the authorised insurer shall be liable to pay in the case of death or permanent disablement due to accident arising out of the use of motor vehicle, compensation, as indicated in the Second Schedule.
+
+==========================================================================
+PART XI — CLAIMS TRIBUNALS (Sections 165-176)
+==========================================================================
+
+Section 165 — Claims Tribunals
+(1) A State Government may, by notification in the Official Gazette, constitute one or more Motor Accidents Claims Tribunals (hereinafter referred to as Claims Tribunal) for such area as may be specified in the notification for the purpose of adjudicating upon claims for compensation in respect of accidents involving the death of, or bodily injury to, persons arising out of the use of motor vehicles.
+
+Section 166 — Application for compensation
+(1) An application for compensation arising out of an accident of the nature specified in Sub-section (1) of Section 165 may be made:
+(a) by the person who has sustained the injury;
+(b) by the owner of the property so damaged;
+(c) where death has resulted from the accident, by all or any of the legal representatives of the deceased;
+(d) by any agent duly authorised by the person injured or all or any of the legal representatives of the deceased.
+
+Section 168 — Award of Claims Tribunal
+(1) On receipt of an application for compensation made under Section 166, the Claims Tribunal shall, after giving notice of the application to the insurer and to such other persons as may be prescribed, and after giving the parties an opportunity of being heard, hold an inquiry into the claim or, as the case may be, each of the claims and, subject to the provisions of Section 162 may make an award determining the amount of compensation which appears to it to be just and specifying the person or persons to whom compensation shall be paid.
+
+==========================================================================
+PART XII — OFFENCES, PENALTIES AND PROCEDURE (Sections 177-210)
+==========================================================================
+
+Section 177 — General provision for punishment of offences
+Whoever contravenes any provision of this Act or of any rule, regulation or notification made thereunder shall, if no penalty is provided for the offence, be punishable with fine which may extend to one hundred rupees, or if having been previously convicted of any such offence, with fine which may extend to three hundred rupees.
+
+As amended by the MV Amendment Act 2019:
+First offence: Rs 500
+Repeat offence: Rs 1,500
+
+Section 177A — Penalty for violation of road regulations
+Whoever contravenes any regulation made under this Act shall be punishable with fine which may extend to five hundred rupees, or if having been previously convicted of any such offence, with fine which may extend to one thousand rupees.
+
+Section 179 — Disobedience of orders, obstruction and refusal of information
+(1) Whoever wilfully obstructs or attempts to obstruct any person authorised by or under this Act shall be punishable with fine of two thousand rupees.
+
+Section 180 — Allowing unauthorised persons to drive vehicles
+Whoever, being the owner or person in charge of a motor vehicle, allows any such motor vehicle to be driven by a person who does not satisfy the requirements of Section 3, shall be punishable with imprisonment for a term which may extend to three months, or with fine of five thousand rupees, or with both.
+
+Section 181 — Driving vehicles in contravention of Section 3
+Whoever drives a motor vehicle in contravention of Section 3 (without a valid driving licence) shall be punishable with imprisonment for a term which may extend to three months, or with fine of five thousand rupees, or with both.
+
+Section 182 — Offences relating to licences
+(1) Whoever, being disqualified under this Act or under any order of the Court from driving, drives a motor vehicle or applies for or obtains a driving licence or acts as a driving instructor shall be punishable with imprisonment for a term which may extend to three months, or with fine of ten thousand rupees.
+
+Section 183 — Driving at excessive speed
+(1) Whoever drives a motor vehicle in contravention of the speed limits referred to in Section 112 shall be punishable with fine of one thousand rupees (light motor vehicle) or two thousand rupees (heavy goods vehicle or passenger transport vehicle).
+(2) Whoever is convicted of an offence under this section shall be disqualified from holding any driving licence for a period of three months.
+Amended by MV Act 2019: LMV fine Rs 1,000 (repeat Rs 2,000); HMV fine Rs 2,000 (repeat Rs 4,000).
+
+Section 184 — Driving dangerously
+Whoever drives a motor vehicle at a speed or in a manner which is dangerous to the public, having regard to all the circumstances of the case, including the nature, condition and use of the place where the vehicle is driven and the amount of traffic which actually is at the time or which might reasonably be expected to be in the place, shall be punishable with imprisonment for a term which may extend to six months, or with fine of five thousand rupees.
+Amended by MV Act 2019: Fine of Rs 5,000; repeat offence imprisonment up to 1 year with fine of Rs 10,000. Using handheld device while driving is treated as dangerous driving.
+
+Section 185 — Driving by a drunken person or by a person under the influence of drugs
+Whoever, while driving or attempting to drive a motor vehicle:
+(a) has, in his blood, alcohol exceeding 30 mg per 100 ml of blood detected in a test by a breath analyser; or
+(b) is under the influence of a drug to such an extent as to be incapable of exercising proper control over the vehicle,
+shall be punishable with imprisonment for a term which may extend to six months along with fine:
+- First offence: Rs 10,000
+- Repeat offence within 3 years: Rs 15,000 and imprisonment up to 2 years
+
+Section 186 — Driving when mentally or physically unfit to drive
+Whoever drives a motor vehicle in any public place when he is to his knowledge suffering from any disease or disability calculated to cause his driving of the vehicle to be a source of danger to the public shall be punishable with fine of one thousand rupees on first conviction and three thousand rupees on each subsequent conviction.
+
+Section 189 — Racing and trials of speed
+Whoever without written consent of the State Government engages in a race or trial of speed with any other motor vehicle in a public place shall be punishable with imprisonment for a term which may extend to one month, or with fine of five hundred rupees, or with both.
+
+Section 192 — Using vehicle without registration
+Whoever drives a motor vehicle or causes or allows a motor vehicle to be used in contravention of the provisions of Section 39 shall be punishable with fine of ten thousand rupees.
+
+Section 192A — Using vehicle without permit
+Whoever drives a transport vehicle without a permit shall be punishable with fine of ten thousand rupees; contravention of permit conditions: fine of twenty-five thousand rupees.
+
+Section 194 — Exceeding permissible weight
+(1) Whoever drives or causes or allows to be driven in any public place any motor vehicle or trailer which is not within the permissible laden weight shall be punishable with fine of twenty thousand rupees, plus two thousand rupees for every tonne in excess of the permissible gross vehicle weight.
+
+Section 194A — Carrying excess passengers
+Whoever permits a transport vehicle to carry passengers in excess of the permitted capacity shall be punishable with fine of two hundred rupees per excess passenger.
+
+Section 194B — Seat belt
+Whoever drives a motor vehicle or rides in a motor vehicle without wearing a seat belt, in contravention of Section 138(1) shall be punishable with fine of one thousand rupees.
+
+Section 194C — Helmets
+Whoever drives or rides a motor cycle without wearing a protective headgear conforming to the prescribed standards shall be punishable with:
+Fine of one thousand rupees and disqualification from holding a driving licence for a period of three months; additionally 3 penalty points on driving licence.
+
+Section 194D — Protective headgear for pillion riders
+Same as 194C — applies to both drivers and pillion riders equally.
+Fine: Rs 1,000; DL disqualification possible.
+
+Section 194E — Obstruction of emergency vehicles
+Whoever fails to give way to ambulances and other emergency vehicles shall be punishable with fine of ten thousand rupees.
+
+Section 194F — No horn zones and noise pollution
+Whoever uses horn unnecessarily or in a notified silence zone shall be punishable with fine of one thousand rupees.
+
+Section 196 — Driving uninsured vehicle
+Whoever drives a motor vehicle or causes or allows a motor vehicle to be used without insurance shall be punishable with imprisonment for a term which may extend to three months, or fine of two thousand rupees; repeat: imprisonment up to three months or fine of four thousand rupees.
+
+Section 199A — Offences by juveniles
+Where the person commits an offence under this Act:
+(i) the guardians or parents shall be deemed to be guilty of the contravention;
+(ii) the juvenile shall be tried under the Juvenile Justice Act;
+(iii) the registration of the motor vehicle used shall be cancelled for twelve months;
+(iv) the guardian shall be punishable with fine of Rs 25,000 and imprisonment up to 3 years.
+
+Section 200 — Compounding of offences
+The court may allow certain prescribed offences to be compounded on payment of a prescribed sum.
+
+==========================================================================
+PART XIII — MISCELLANEOUS
+==========================================================================
+
+Section 207 — Power of police officer to impound motor vehicle
+A police officer may seize and detain any motor vehicle used in connection with the commission of any offence under this Act.
+
+Section 210 — Courts to send intimation of conviction
+When any person holding a driving licence is convicted of an offence under this act, the court shall send to the licensing authority which issued the licence an intimation of the conviction and the particulars of any order made disqualifying him.
+
+==========================================================================
+SCHEDULES — COMPENSATION TABLES (Second Schedule — Section 163A)
+==========================================================================
+
+The Second Schedule provides the structured formula for compensation computation in motor accident claims. The multipliers are applied to the annual income of the deceased/injured person based on their age.
+
+Multiplier table (age to multiplier mapping):
+Age up to 15 years: 20
+Age 15-25: 20
+Age 25-30: 19
+Age 30-35: 17
+Age 35-40: 15
+Age 40-45: 13
+Age 45-50: 11
+Age 50-55: 9
+Age 55-60: 7
+Age 60-65: 5
+Age 65 and above: 4
+
+The annual income includes actual salary/wages/income plus a notional income where applicable.
+
+==========================================================================
+KEY AMENDMENTS — MOTOR VEHICLES AMENDMENT ACT, 2019
+==========================================================================
+
+The Motor Vehicles (Amendment) Act, 2019 (Act No. 32 of 2019) received President's assent on 9 August 2019. Major changes:
+
+1. INCREASED PENALTIES (effective 1 September 2019):
+   - General violation (Section 177): Rs 500 (was Rs 100)
+   - Drunk driving (Section 185): Rs 10,000 first offence, Rs 15,000 repeat
+   - Driving without licence (Section 181): Rs 5,000 (was Rs 500)
+   - Overspeeding (Section 183): Rs 1,000-2,000 LMV, Rs 2,000-4,000 HMV
+   - Dangerous driving (Section 184): Rs 5,000 first, Rs 10,000 repeat
+   - No helmet (Section 194C): Rs 1,000
+   - No seat belt (Section 194B): Rs 1,000
+   - No insurance (Section 196): Rs 2,000 first, Rs 4,000 repeat
+   - Overloading (Section 194): Rs 20,000 + Rs 2,000 per extra tonne
+   - Juvenile driving (Section 199A): Rs 25,000 guardian fine + 3 years prison
+
+2. NEW PROVISIONS:
+   - Good Samaritan protection (Section 134A)
+   - Compulsory vehicle recall for safety defects
+   - National Road Safety Board
+   - National Register for Driving Licences
+   - National Register for Vehicle Registration
+   - Hit and run compensation increased to Rs 2 lakh for death, Rs 50,000 for injury
+
+3. CRASH INVESTIGATION SCHEME:
+   - Mandatory investigation of road accidents by agencies prescribed by Central Government
+
+4. GOLDEN HOUR SCHEME:
+   - Cashless treatment for road accident victims during golden hour (first hour after accident)
+   - Administered through Central Government health scheme
+
+==========================================================================
+SOURCE INFORMATION
+==========================================================================
+
+This document contains a comprehensive summary of the Motor Vehicles Act, 1988 (Act No. 59 of 1988) as in force including the Motor Vehicles (Amendment) Act, 2019 (Act No. 32 of 2019).
+
+Official source: Ministry of Road Transport and Highways, Government of India
+For the complete text: https://indiacode.nic.in
+For official notifications: https://morth.nic.in
+For traffic violation information: https://parivahan.gov.in/echallan
+
+This summary is intended for the RoadSoS RAG knowledge base to answer user queries about traffic laws and road safety regulations in India.
+"""
