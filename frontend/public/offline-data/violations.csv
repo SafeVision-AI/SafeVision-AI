@@ -20,3 +20,6 @@ violation_code,section,description,base_fine,base_fine_2w,base_fine_4w,base_fine
 196,Sections 146/196,Driving without valid insurance cover,2000,,,,,4000,,,,,
 199,Section 199,Offence by company or person in charge where liability follows the underlying contravention,0,,,,,0,,,,,
 199A,Section 199A,Juvenile driving offence attributed to guardian or owner,25000,,,,,25000,,,,,
+201,Section 201,General penalty for contravening provisions where no specific penalty is prescribed,100,,,,,300,,,,,
+206,Section 206,Power of police officer to arrest without warrant for certain offences under the Act,0,,,,,0,,,,,
+207,Section 207,Power of police officer to detain vehicle used in contravention of the Act,0,,,,,0,,,,,

@@ -22,3 +22,8 @@ violation_code,section,description_en,base_fine_inr,repeat_fine_inr,vehicle_type
 196,Sections 146/196,Driving without valid insurance cover,2000,4000,all,Up to 3 months on repeat offence,0
 199,Section 199,Offence by company or person in charge where liability follows the underlying contravention,0,0,all,As per underlying offence,0
 199A,Section 199A,Juvenile driving offence attributed to guardian or owner,25000,25000,all,Up to 3 years and vehicle registration suspension,6
+200,Section 200,Compounding of offences by police officer or other prescribed authority for minor violations,varies,varies,all,None,0
+201,Section 201,General penalty for contravening provisions where no specific penalty is prescribed,100,300,all,None,0
+206,Section 206,Power of police officer to arrest without warrant for certain offences under the Act,0,0,all,As prescribed,0
+207,Section 207,Power of police officer to detain vehicle used in contravention of the Act,0,0,all,None,0
+210B,Section 210B,Double penalty applies if the same offence is committed from a vehicle with a learner licence,varies,varies,all,None,0
