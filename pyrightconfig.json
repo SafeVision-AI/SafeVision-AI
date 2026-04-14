@@ -1,0 +1,13 @@
+{
+  "include": [
+    "scripts",
+    "backend",
+    "chatbot_service"
+  ],
+  "extraPaths": [
+    "backend"
+  ],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic",
+  "reportMissingModuleSource": "none"
+}
