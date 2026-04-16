@@ -184,3 +184,6 @@ chatbot_service/data/chroma_db/
 # These are placeholder 0-byte files — will commit real ONNX when exported
 # frontend/public/models/yolov8n_pothole.onnx   <- commit when exported from Colab
 # frontend/public/models/maarg-risk.onnx        <- commit when trained
+
+# DB
+chatbot_service/data/chroma_db/

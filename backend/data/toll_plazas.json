@@ -1,0 +1,3302 @@
+[
+  {
+    "Plaza Name": "Thakurtola (End of Durg Bypass)",
+    "NH Number": 4,
+    "Latitude": 21.117914,
+    "Longitude": 81.122298
+  },
+  {
+    "Plaza Name": "Bankapur",
+    "NH Number": 5,
+    "Latitude": 14.90999,
+    "Longitude": 75.2798
+  },
+  {
+    "Plaza Name": "Hirebagewadi",
+    "NH Number": 6,
+    "Latitude": 15.76311,
+    "Longitude": 74.64785
+  },
+  {
+    "Plaza Name": "Durg Bypass (Dhamdanaka)",
+    "NH Number": 7,
+    "Latitude": 21.214518,
+    "Longitude": 81.287962
+  },
+  {
+    "Plaza Name": "Hattargi",
+    "NH Number": 8,
+    "Latitude": 16.1433,
+    "Longitude": 74.51696
+  },
+  {
+    "Plaza Name": "Kognoli",
+    "NH Number": 9,
+    "Latitude": 16.5422,
+    "Longitude": 74.31825
+  },
+  {
+    "Plaza Name": "Tundla",
+    "NH Number": 10,
+    "Latitude": 27.218247,
+    "Longitude": 78.272821
+  },
+  {
+    "Plaza Name": "Brahamarakotlu",
+    "NH Number": 11,
+    "Latitude": 12.875095,
+    "Longitude": 75.003849
+  },
+  {
+    "Plaza Name": "Cable Stayed Naini Bridge",
+    "NH Number": 12,
+    "Latitude": 25.41629,
+    "Longitude": 81.861017
+  },
+  {
+    "Plaza Name": "Bassi",
+    "NH Number": 13,
+    "Latitude": 25.033921,
+    "Longitude": 74.817676
+  },
+  {
+    "Plaza Name": "Aroli",
+    "NH Number": 14,
+    "Latitude": 25.09118,
+    "Longitude": 75.199063
+  },
+  {
+    "Plaza Name": "Dhaneshwar",
+    "NH Number": 15,
+    "Latitude": 25.072621,
+    "Longitude": 75.598467
+  },
+  {
+    "Plaza Name": "Fatehpur",
+    "NH Number": 16,
+    "Latitude": 25.122,
+    "Longitude": 76.572806
+  },
+  {
+    "Plaza Name": "Simliya",
+    "NH Number": 17,
+    "Latitude": 25.170089,
+    "Longitude": 76.130552
+  },
+  {
+    "Plaza Name": "Omallur",
+    "NH Number": 18,
+    "Latitude": 11.72034,
+    "Longitude": 78.07338
+  },
+  {
+    "Plaza Name": "Nathakkarai",
+    "NH Number": 19,
+    "Latitude": 11.592809,
+    "Longitude": 78.780812
+  },
+  {
+    "Plaza Name": "Veeracholapuram (West)",
+    "NH Number": 20,
+    "Latitude": 11.736464,
+    "Longitude": 79.010409
+  },
+  {
+    "Plaza Name": "Palayam (Dharmapuri)",
+    "NH Number": 21,
+    "Latitude": 12.00643,
+    "Longitude": 78.08042
+  },
+  {
+    "Plaza Name": "Rasampalayan",
+    "NH Number": 22,
+    "Latitude": 11.193895,
+    "Longitude": 78.103219
+  },
+  {
+    "Plaza Name": "Nemili (Sriperumbudur)",
+    "NH Number": 23,
+    "Latitude": 12.982155,
+    "Longitude": 79.968944
+  },
+  {
+    "Plaza Name": "Joya",
+    "NH Number": 24,
+    "Latitude": 28.836176,
+    "Longitude": 78.420749
+  },
+  {
+    "Plaza Name": "Khalghat -MP/Maharashtra Border(Sendhwa, Jamli)",
+    "NH Number": 25,
+    "Latitude": 21.75667,
+    "Longitude": 75.156824
+  },
+  {
+    "Plaza Name": "Boothakudi",
+    "NH Number": 26,
+    "Latitude": 10.64127,
+    "Longitude": 78.581277
+  },
+  {
+    "Plaza Name": "Chittampatti",
+    "NH Number": 27,
+    "Latitude": 9.989594,
+    "Longitude": 78.244086
+  },
+  {
+    "Plaza Name": "Banglore - Neelamangla",
+    "NH Number": 28,
+    "Latitude": 13.090749,
+    "Longitude": 77.400004
+  },
+  {
+    "Plaza Name": "Chalageri",
+    "NH Number": 29,
+    "Latitude": 14.556778,
+    "Longitude": 75.728025
+  },
+  {
+    "Plaza Name": "Choundha",
+    "NH Number": 30,
+    "Latitude": 26.467309,
+    "Longitude": 78.010916
+  },
+  {
+    "Plaza Name": "Brijghat",
+    "NH Number": 31,
+    "Latitude": 28.767149,
+    "Longitude": 78.110043
+  },
+  {
+    "Plaza Name": "Usaka ( Chamari)",
+    "NH Number": 34,
+    "Latitude": 26.036608,
+    "Longitude": 79.577976
+  },
+  {
+    "Plaza Name": "Indore Dewas  (Indore Bypass)",
+    "NH Number": 35,
+    "Latitude": 22.822692,
+    "Longitude": 75.938208
+  },
+  {
+    "Plaza Name": "Siwaya",
+    "NH Number": 39,
+    "Latitude": 29.095601,
+    "Longitude": 77.710995
+  },
+  {
+    "Plaza Name": "Daffi",
+    "NH Number": 40,
+    "Latitude": 25.248275,
+    "Longitude": 82.994017
+  },
+  {
+    "Plaza Name": "Mohania",
+    "NH Number": 41,
+    "Latitude": 25.19093,
+    "Longitude": 83.559544
+  },
+  {
+    "Plaza Name": "Sasaram",
+    "NH Number": 43,
+    "Latitude": 24.957125,
+    "Longitude": 83.954997
+  },
+  {
+    "Plaza Name": "Anantram",
+    "NH Number": 44,
+    "Latitude": 26.594931,
+    "Longitude": 79.268034
+  },
+  {
+    "Plaza Name": "Tendua (Gorakhpur Bypass)",
+    "NH Number": 45,
+    "Latitude": 26.724015,
+    "Longitude": 83.274398
+  },
+  {
+    "Plaza Name": "Barajore (Bara)",
+    "NH Number": 47,
+    "Latitude": 26.386389,
+    "Longitude": 80.021485
+  },
+  {
+    "Plaza Name": "Bharudi",
+    "NH Number": 48,
+    "Latitude": 21.805381,
+    "Longitude": 70.663976
+  },
+  {
+    "Plaza Name": "Pithadiya",
+    "NH Number": 49,
+    "Latitude": 22.082642,
+    "Longitude": 70.781004
+  },
+  {
+    "Plaza Name": "Choryasi",
+    "NH Number": 50,
+    "Latitude": 21.303367,
+    "Longitude": 72.95418
+  },
+  {
+    "Plaza Name": "Anewadi",
+    "NH Number": 56,
+    "Latitude": 17.810312,
+    "Longitude": 73.971381
+  },
+  {
+    "Plaza Name": "Mettupatti",
+    "NH Number": 57,
+    "Latitude": 11.66167,
+    "Longitude": 78.330768
+  },
+  {
+    "Plaza Name": "Doddakarenahalli (Neelmangala )",
+    "NH Number": 58,
+    "Latitude": 13.068175,
+    "Longitude": 77.3605999
+  },
+  {
+    "Plaza Name": "Thirumandurai",
+    "NH Number": 59,
+    "Latitude": 11.396808,
+    "Longitude": 78.99356
+  },
+  {
+    "Plaza Name": "Paduna",
+    "NH Number": 61,
+    "Latitude": 24.271438,
+    "Longitude": 73.67379
+  },
+  {
+    "Plaza Name": "Patas",
+    "NH Number": 64,
+    "Latitude": 18.424491,
+    "Longitude": 74.466193
+  },
+  {
+    "Plaza Name": "Thandikhui",
+    "NH Number": 66,
+    "Latitude": 32.607394,
+    "Longitude": 74.944346
+  },
+  {
+    "Plaza Name": "Daroda",
+    "NH Number": 67,
+    "Latitude": 20.450467,
+    "Longitude": 78.755153
+  },
+  {
+    "Plaza Name": "Samakhiyali",
+    "NH Number": 68,
+    "Latitude": 23.308555,
+    "Longitude": 70.49059
+  },
+  {
+    "Plaza Name": "Kelapur",
+    "NH Number": 70,
+    "Latitude": 20.019307,
+    "Longitude": 78.54022
+  },
+  {
+    "Plaza Name": "Nandgaon Peth",
+    "NH Number": 71,
+    "Latitude": 20.951008,
+    "Longitude": 77.788359
+  },
+  {
+    "Plaza Name": "Mundiyar",
+    "NH Number": 72,
+    "Latitude": 25.208647,
+    "Longitude": 77.136059
+  },
+  {
+    "Plaza Name": "Raksha",
+    "NH Number": 73,
+    "Latitude": 25.461841,
+    "Longitude": 78.451052
+  },
+  {
+    "Plaza Name": "Ramnagar",
+    "NH Number": 74,
+    "Latitude": 25.278913,
+    "Longitude": 77.614165
+  },
+  {
+    "Plaza Name": "Athur (Tindivanam)",
+    "NH Number": 75,
+    "Latitude": 12.346862,
+    "Longitude": 79.779856
+  },
+  {
+    "Plaza Name": "Vanagaram (Chennai Bypass)",
+    "NH Number": 76,
+    "Latitude": 13.043526,
+    "Longitude": 80.149598
+  },
+  {
+    "Plaza Name": "Mandawnagar",
+    "NH Number": 77,
+    "Latitude": 26.810525,
+    "Longitude": 82.731283
+  },
+  {
+    "Plaza Name": "Surapattu (Chennai Bypass II)",
+    "NH Number": 79,
+    "Latitude": 13.136678,
+    "Longitude": 80.181624
+  },
+  {
+    "Plaza Name": "Paranur (Chengalpet)",
+    "NH Number": 80,
+    "Latitude": 12.723887,
+    "Longitude": 79.981917
+  },
+  {
+    "Plaza Name": "Nallur",
+    "NH Number": 82,
+    "Latitude": 13.216958,
+    "Longitude": 80.169353
+  },
+  {
+    "Plaza Name": "Allonia",
+    "NH Number": 84,
+    "Latitude": 22.269661,
+    "Longitude": 79.54517
+  },
+  {
+    "Plaza Name": "Eliyarpathi",
+    "NH Number": 85,
+    "Latitude": 9.78299,
+    "Longitude": 78.094492
+  },
+  {
+    "Plaza Name": "Pudurpandiyapuram",
+    "NH Number": 86,
+    "Latitude": 8.862935,
+    "Longitude": 78.117106
+  },
+  {
+    "Plaza Name": "Guna Bypass",
+    "NH Number": 87,
+    "Latitude": 24.620413,
+    "Longitude": 77.26147
+  },
+  {
+    "Plaza Name": "Malthone",
+    "NH Number": 88,
+    "Latitude": 24.322069,
+    "Longitude": 78.526217
+  },
+  {
+    "Plaza Name": "Badarpur",
+    "NH Number": 89,
+    "Latitude": 28.476208,
+    "Longitude": 77.305485
+  },
+  {
+    "Plaza Name": "Titarpani",
+    "NH Number": 90,
+    "Latitude": 23.233839,
+    "Longitude": 79.047247
+  },
+  {
+    "Plaza Name": "Gurau (Semra Atikabad)",
+    "NH Number": 92,
+    "Latitude": 26.996524,
+    "Longitude": 78.777334
+  },
+  {
+    "Plaza Name": "Jajau (Old Baretha)",
+    "NH Number": 95,
+    "Latitude": 26.931976,
+    "Longitude": 77.933397
+  },
+  {
+    "Plaza Name": "Vaiguntham",
+    "NH Number": 96,
+    "Latitude": 11.513282,
+    "Longitude": 77.923946
+  },
+  {
+    "Plaza Name": "Makhel",
+    "NH Number": 97,
+    "Latitude": 23.490457,
+    "Longitude": 70.942745
+  },
+  {
+    "Plaza Name": "Vijaymangalmam",
+    "NH Number": 98,
+    "Latitude": 11.245714,
+    "Longitude": 77.519702
+  },
+  {
+    "Plaza Name": "Bhiladi",
+    "NH Number": 99,
+    "Latitude": 24.143855,
+    "Longitude": 71.977168
+  },
+  {
+    "Plaza Name": "Kumbalam",
+    "NH Number": 100,
+    "Latitude": 9.89525,
+    "Longitude": 76.313542
+  },
+  {
+    "Plaza Name": "Varahi",
+    "NH Number": 101,
+    "Latitude": 23.791263,
+    "Longitude": 71.427652
+  },
+  {
+    "Plaza Name": "Velanchettiyur",
+    "NH Number": 102,
+    "Latitude": 10.699008,
+    "Longitude": 77.932875
+  },
+  {
+    "Plaza Name": "Krishnagiri",
+    "NH Number": 103,
+    "Latitude": 12.544583,
+    "Longitude": 78.201132
+  },
+  {
+    "Plaza Name": "Vikravandi(Villupuram)",
+    "NH Number": 104,
+    "Latitude": 12.024441,
+    "Longitude": 79.538059
+  },
+  {
+    "Plaza Name": "Pallikonda",
+    "NH Number": 105,
+    "Latitude": 12.905829,
+    "Longitude": 78.951686
+  },
+  {
+    "Plaza Name": "Morattandi",
+    "NH Number": 106,
+    "Latitude": 11.983278,
+    "Longitude": 79.78836
+  },
+  {
+    "Plaza Name": "Vaniyambadi",
+    "NH Number": 107,
+    "Latitude": 12.648554,
+    "Longitude": 78.5833
+  },
+  {
+    "Plaza Name": "Nanguneri",
+    "NH Number": 108,
+    "Latitude": 8.527035,
+    "Longitude": 77.663289
+  },
+  {
+    "Plaza Name": "Kodai Road",
+    "NH Number": 109,
+    "Latitude": 10.194488,
+    "Longitude": 77.909317
+  },
+  {
+    "Plaza Name": "Ludhawai",
+    "NH Number": 110,
+    "Latitude": 27.178509,
+    "Longitude": 77.416845
+  },
+  {
+    "Plaza Name": "Etturvattam",
+    "NH Number": 111,
+    "Latitude": 9.385445,
+    "Longitude": 77.914347
+  },
+  {
+    "Plaza Name": "Kappalur",
+    "NH Number": 112,
+    "Latitude": 9.844294,
+    "Longitude": 78.011209
+  },
+  {
+    "Plaza Name": "Salaipudhur",
+    "NH Number": 113,
+    "Latitude": 8.975702,
+    "Longitude": 77.774608
+  },
+  {
+    "Plaza Name": "Paliyekkara",
+    "NH Number": 114,
+    "Latitude": 10.442868,
+    "Longitude": 76.260179
+  },
+  {
+    "Plaza Name": "Valavanthankottai",
+    "NH Number": 115,
+    "Latitude": 10.744371,
+    "Longitude": 78.834044
+  },
+  {
+    "Plaza Name": "Karbylu (Bellur Cross)",
+    "NH Number": 116,
+    "Latitude": 12.962828,
+    "Longitude": 76.765205
+  },
+  {
+    "Plaza Name": "Pudukottai (Vagaikulam)",
+    "NH Number": 117,
+    "Latitude": 8.755472,
+    "Longitude": 78.065264
+  },
+  {
+    "Plaza Name": "Samayapuram",
+    "NH Number": 118,
+    "Latitude": 10.92937,
+    "Longitude": 78.744056
+  },
+  {
+    "Plaza Name": "Sengurichi",
+    "NH Number": 119,
+    "Latitude": 11.706434,
+    "Longitude": 79.322335
+  },
+  {
+    "Plaza Name": "Korai",
+    "NH Number": 120,
+    "Latitude": 27.114895,
+    "Longitude": 77.715981
+  },
+  {
+    "Plaza Name": "Khalghat  (Indore - Khalghat)",
+    "NH Number": 121,
+    "Latitude": 22.173782,
+    "Longitude": 75.456797
+  },
+  {
+    "Plaza Name": "Parsoni Khem",
+    "NH Number": 123,
+    "Latitude": 26.451663,
+    "Longitude": 85.022711
+  },
+  {
+    "Plaza Name": "Kishangarh (Badgaon)",
+    "NH Number": 124,
+    "Latitude": 26.595329,
+    "Longitude": 74.939169
+  },
+  {
+    "Plaza Name": "Maithi",
+    "NH Number": 125,
+    "Latitude": 26.112648,
+    "Longitude": 85.564827
+  },
+  {
+    "Plaza Name": "Tatiyawas",
+    "NH Number": 129,
+    "Latitude": 27.089775,
+    "Longitude": 75.7415
+  },
+  {
+    "Plaza Name": "Chiddan",
+    "NH Number": 130,
+    "Latitude": 31.617167,
+    "Longitude": 74.692378
+  },
+  {
+    "Plaza Name": "Dappar",
+    "NH Number": 131,
+    "Latitude": 30.527449,
+    "Longitude": 76.813037
+  },
+  {
+    "Plaza Name": "Gogunda (Jaswantgarh)",
+    "NH Number": 132,
+    "Latitude": 24.766166,
+    "Longitude": 73.523999
+  },
+  {
+    "Plaza Name": "Kurali (Behrampur)",
+    "NH Number": 133,
+    "Latitude": 30.842218,
+    "Longitude": 76.568495
+  },
+  {
+    "Plaza Name": "Jojro Ka Khera",
+    "NH Number": 134,
+    "Latitude": 25.082922,
+    "Longitude": 74.624379
+  },
+  {
+    "Plaza Name": "Kedi",
+    "NH Number": 135,
+    "Latitude": 26.104125,
+    "Longitude": 74.685331
+  },
+  {
+    "Plaza Name": "Khandi Obari",
+    "NH Number": 136,
+    "Latitude": 23.993636,
+    "Longitude": 73.627895
+  },
+  {
+    "Plaza Name": "Narayanpura",
+    "NH Number": 137,
+    "Latitude": 24.613529,
+    "Longitude": 74.233079
+  },
+  {
+    "Plaza Name": "Malera",
+    "NH Number": 138,
+    "Latitude": 24.712368,
+    "Longitude": 73.093755
+  },
+  {
+    "Plaza Name": "Ghoti",
+    "NH Number": 139,
+    "Latitude": 19.708905,
+    "Longitude": 73.614819
+  },
+  {
+    "Plaza Name": "Vaghasia",
+    "NH Number": 140,
+    "Latitude": 22.42301,
+    "Longitude": 71.088805
+  },
+  {
+    "Plaza Name": "Lakhanpur/ Rajbagh",
+    "NH Number": 141,
+    "Latitude": 32.382605,
+    "Longitude": 75.598788
+  },
+  {
+    "Plaza Name": "Dhumiyani",
+    "NH Number": 142,
+    "Latitude": 21.751451,
+    "Longitude": 70.326793
+  },
+  {
+    "Plaza Name": "Chandwad",
+    "NH Number": 143,
+    "Latitude": 20.325014,
+    "Longitude": 74.210751
+  },
+  {
+    "Plaza Name": "Khedshivapur",
+    "NH Number": 144,
+    "Latitude": 18.3313849,
+    "Longitude": 73.8525197
+  },
+  {
+    "Plaza Name": "Baswant (Pimplegaon)",
+    "NH Number": 145,
+    "Latitude": 20.141701,
+    "Longitude": 73.976492
+  },
+  {
+    "Plaza Name": "Sendurwafa",
+    "NH Number": 146,
+    "Latitude": 21.088119,
+    "Longitude": 80.032855
+  },
+  {
+    "Plaza Name": "Shirpur",
+    "NH Number": 147,
+    "Latitude": 21.319718,
+    "Longitude": 74.889291
+  },
+  {
+    "Plaza Name": "Gondhkhairi/ Kondhali",
+    "NH Number": 148,
+    "Latitude": 21.137001,
+    "Longitude": 78.89666
+  },
+  {
+    "Plaza Name": "Chandimandir",
+    "NH Number": 149,
+    "Latitude": 30.738834,
+    "Longitude": 76.897977
+  },
+  {
+    "Plaza Name": "Dighal",
+    "NH Number": 150,
+    "Latitude": 28.776746,
+    "Longitude": 76.621688
+  },
+  {
+    "Plaza Name": "Dhilwan",
+    "NH Number": 151,
+    "Latitude": 31.499318,
+    "Longitude": 75.323065
+  },
+  {
+    "Plaza Name": "Gangaycha Jatt",
+    "NH Number": 152,
+    "Latitude": 28.275006,
+    "Longitude": 76.613363
+  },
+  {
+    "Plaza Name": "Nijjarpura",
+    "NH Number": 153,
+    "Latitude": 31.577704,
+    "Longitude": 74.997072
+  },
+  {
+    "Plaza Name": "Panipat Elevated",
+    "NH Number": 154,
+    "Latitude": 29.433664,
+    "Longitude": 76.97014
+  },
+  {
+    "Plaza Name": "Gharaunda (Karnal)",
+    "NH Number": 155,
+    "Latitude": 29.584373,
+    "Longitude": 76.978792
+  },
+  {
+    "Plaza Name": "Sambhu(Ghaggar)",
+    "NH Number": 156,
+    "Latitude": 30.403832,
+    "Longitude": 76.736825
+  },
+  {
+    "Plaza Name": "Ladowal",
+    "NH Number": 157,
+    "Latitude": 30.990725,
+    "Longitude": 75.790082
+  },
+  {
+    "Plaza Name": "Karanja (Ghadge)",
+    "NH Number": 158,
+    "Latitude": 21.162103,
+    "Longitude": 78.399287
+  },
+  {
+    "Plaza Name": "Srinagar",
+    "NH Number": 159,
+    "Latitude": 28.00548,
+    "Longitude": 77.332377
+  },
+  {
+    "Plaza Name": "Mahuvan",
+    "NH Number": 160,
+    "Latitude": 27.337188,
+    "Longitude": 77.737458
+  },
+  {
+    "Plaza Name": "Lalanagar",
+    "NH Number": 161,
+    "Latitude": 25.266948,
+    "Longitude": 82.491513
+  },
+  {
+    "Plaza Name": "Salemgarh",
+    "NH Number": 162,
+    "Latitude": 26.631703,
+    "Longitude": 84.238336
+  },
+  {
+    "Plaza Name": "Muziana Hetim",
+    "NH Number": 163,
+    "Latitude": 26.733855,
+    "Longitude": 83.808555
+  },
+  {
+    "Plaza Name": "Chaukadi",
+    "NH Number": 164,
+    "Latitude": 26.781312,
+    "Longitude": 82.417008
+  },
+  {
+    "Plaza Name": "Katoghan",
+    "NH Number": 165,
+    "Latitude": 25.749487,
+    "Longitude": 81.170481
+  },
+  {
+    "Plaza Name": "Gurapalli",
+    "NH Number": 166,
+    "Latitude": 19.638154,
+    "Longitude": 85.140017
+  },
+  {
+    "Plaza Name": "Srirampur",
+    "NH Number": 168,
+    "Latitude": 20.678864,
+    "Longitude": 86.165581
+  },
+  {
+    "Plaza Name": "Gudipada (Old Gangapada)",
+    "NH Number": 169,
+    "Latitude": 20.20348,
+    "Longitude": 85.668597
+  },
+  {
+    "Plaza Name": "Sergarh",
+    "NH Number": 170,
+    "Latitude": 21.429889,
+    "Longitude": 86.836645
+  },
+  {
+    "Plaza Name": "Panikholi",
+    "NH Number": 171,
+    "Latitude": 20.897746,
+    "Longitude": 86.21625
+  },
+  {
+    "Plaza Name": "Manguli",
+    "NH Number": 172,
+    "Latitude": 20.540387,
+    "Longitude": 85.96387
+  },
+  {
+    "Plaza Name": "Krishnavaram",
+    "NH Number": 173,
+    "Latitude": 17.215448,
+    "Longitude": 82.1107
+  },
+  {
+    "Plaza Name": "Rolmamda",
+    "NH Number": 174,
+    "Latitude": 19.28019,
+    "Longitude": 78.409222
+  },
+  {
+    "Plaza Name": "Manoharabad",
+    "NH Number": 175,
+    "Latitude": 17.801103,
+    "Longitude": 78.471683
+  },
+  {
+    "Plaza Name": "Gamjal",
+    "NH Number": 176,
+    "Latitude": 19.026592,
+    "Longitude": 78.362705
+  },
+  {
+    "Plaza Name": "Pippalwada",
+    "NH Number": 177,
+    "Latitude": 19.781093,
+    "Longitude": 78.565772
+  },
+  {
+    "Plaza Name": "Pundag",
+    "NH Number": 178,
+    "Latitude": 23.542635,
+    "Longitude": 85.503153
+  },
+  {
+    "Plaza Name": "Sikandra",
+    "NH Number": 179,
+    "Latitude": 26.944488,
+    "Longitude": 76.557567
+  },
+  {
+    "Plaza Name": "Rajadhok",
+    "NH Number": 180,
+    "Latitude": 26.859184,
+    "Longitude": 76.105596
+  },
+  {
+    "Plaza Name": "Amoli",
+    "NH Number": 181,
+    "Latitude": 27.101301,
+    "Longitude": 77.090874
+  },
+  {
+    "Plaza Name": "Thikariya (Jaipur)",
+    "NH Number": 182,
+    "Latitude": 26.843328,
+    "Longitude": 75.615578
+  },
+  {
+    "Plaza Name": "Barkheda (Chandlai)",
+    "NH Number": 183,
+    "Latitude": 26.68816,
+    "Longitude": 75.904726
+  },
+  {
+    "Plaza Name": "Sonwa (Sonva)",
+    "NH Number": 184,
+    "Latitude": 26.109852,
+    "Longitude": 75.744832
+  },
+  {
+    "Plaza Name": "Lambiya Kalan",
+    "NH Number": 185,
+    "Latitude": 25.5938407,
+    "Longitude": 74.5948394
+  },
+  {
+    "Plaza Name": "Hoskote",
+    "NH Number": 186,
+    "Latitude": 13.059436,
+    "Longitude": 77.770734
+  },
+  {
+    "Plaza Name": "Bagepalli",
+    "NH Number": 187,
+    "Latitude": 13.793094,
+    "Longitude": 77.764384
+  },
+  {
+    "Plaza Name": "Kirasave",
+    "NH Number": 188,
+    "Latitude": 12.958304,
+    "Longitude": 76.623563
+  },
+  {
+    "Plaza Name": "Shanthigrama",
+    "NH Number": 189,
+    "Latitude": 12.982709,
+    "Longitude": 76.228913
+  },
+  {
+    "Plaza Name": "Bann",
+    "NH Number": 190,
+    "Latitude": 32.838928,
+    "Longitude": 74.940536
+  },
+  {
+    "Plaza Name": "Harsa Mansar",
+    "NH Number": 191,
+    "Latitude": 32.058621,
+    "Longitude": 75.614278
+  },
+  {
+    "Plaza Name": "Arjunali",
+    "NH Number": 193,
+    "Latitude": 19.361481,
+    "Longitude": 73.165874
+  },
+  {
+    "Plaza Name": "Mansar (Kamptee - Kanhan Bypass)/ Tekadi",
+    "NH Number": 194,
+    "Latitude": 21.382332,
+    "Longitude": 79.253327
+  },
+  {
+    "Plaza Name": "Borkhedi (Nagpur ByPass)",
+    "NH Number": 195,
+    "Latitude": 20.85612,
+    "Longitude": 78.963632
+  },
+  {
+    "Plaza Name": "Laling (Dhule)",
+    "NH Number": 197,
+    "Latitude": 20.833054,
+    "Longitude": 74.754192
+  },
+  {
+    "Plaza Name": "Vanana",
+    "NH Number": 199,
+    "Latitude": 21.664929,
+    "Longitude": 69.709536
+  },
+  {
+    "Plaza Name": "Ait",
+    "NH Number": 200,
+    "Latitude": 25.879908,
+    "Longitude": 79.210298
+  },
+  {
+    "Plaza Name": "Vighakhet",
+    "NH Number": 201,
+    "Latitude": 24.789564,
+    "Longitude": 78.448812
+  },
+  {
+    "Plaza Name": "Khemana",
+    "NH Number": 202,
+    "Latitude": 24.241335,
+    "Longitude": 72.462709
+  },
+  {
+    "Plaza Name": "Laxmipuram",
+    "NH Number": 203,
+    "Latitude": 18.05799,
+    "Longitude": 83.52111
+  },
+  {
+    "Plaza Name": "Raje(Old Naraur)",
+    "NH Number": 204,
+    "Latitude": 26.225984,
+    "Longitude": 86.153489
+  },
+  {
+    "Plaza Name": "Chilakapalem",
+    "NH Number": 205,
+    "Latitude": 18.273462,
+    "Longitude": 83.807965
+  },
+  {
+    "Plaza Name": "Indalwai",
+    "NH Number": 207,
+    "Latitude": 18.538266,
+    "Longitude": 78.239734
+  },
+  {
+    "Plaza Name": "Sardewadi / Indapur",
+    "NH Number": 208,
+    "Latitude": 18.844903,
+    "Longitude": 73.09453
+  },
+  {
+    "Plaza Name": "Itunja (Barabhari)",
+    "NH Number": 209,
+    "Latitude": 27.503818,
+    "Longitude": 80.752729
+  },
+  {
+    "Plaza Name": "Ahmadpur",
+    "NH Number": 210,
+    "Latitude": 26.858314,
+    "Longitude": 81.422445
+  },
+  {
+    "Plaza Name": "Ronahi",
+    "NH Number": 211,
+    "Latitude": 26.763728,
+    "Longitude": 82.006302
+  },
+  {
+    "Plaza Name": "Nawabganj",
+    "NH Number": 212,
+    "Latitude": 26.623172,
+    "Longitude": 80.694765
+  },
+  {
+    "Plaza Name": "Shahjahanpur",
+    "NH Number": 213,
+    "Latitude": 27.99978,
+    "Longitude": 76.430522
+  },
+  {
+    "Plaza Name": "Manoharpur",
+    "NH Number": 214,
+    "Latitude": 27.3056399,
+    "Longitude": 75.9535128
+  },
+  {
+    "Plaza Name": "Daulatpura",
+    "NH Number": 215,
+    "Latitude": 27.0868994,
+    "Longitude": 75.8345568
+  },
+  {
+    "Plaza Name": "Raikal",
+    "NH Number": 216,
+    "Latitude": 17.005867,
+    "Longitude": 78.194493
+  },
+  {
+    "Plaza Name": "Shakhapur",
+    "NH Number": 217,
+    "Latitude": 16.535645,
+    "Longitude": 77.944453
+  },
+  {
+    "Plaza Name": "Gudur (Hyd-Yadgiri)",
+    "NH Number": 218,
+    "Latitude": 17.485724,
+    "Longitude": 78.8217
+  },
+  {
+    "Plaza Name": "Pullur",
+    "NH Number": 219,
+    "Latitude": 15.887742,
+    "Longitude": 78.016978
+  },
+  {
+    "Plaza Name": "Vempadu",
+    "NH Number": 220,
+    "Latitude": 17.397831,
+    "Longitude": 82.67582
+  },
+  {
+    "Plaza Name": "Panthangi",
+    "NH Number": 222,
+    "Latitude": 17.232887,
+    "Longitude": 78.960464
+  },
+  {
+    "Plaza Name": "Paschim Madati",
+    "NH Number": 223,
+    "Latitude": 26.568967,
+    "Longitude": 88.275366
+  },
+  {
+    "Plaza Name": "Rampura",
+    "NH Number": 224,
+    "Latitude": 22.24076,
+    "Longitude": 87.39207
+  },
+  {
+    "Plaza Name": "Rasoiya Dhamna",
+    "NH Number": 225,
+    "Latitude": 24.3234,
+    "Longitude": 85.3881
+  },
+  {
+    "Plaza Name": "Ghanghri",
+    "NH Number": 226,
+    "Latitude": 24.030104,
+    "Longitude": 85.948614
+  },
+  {
+    "Plaza Name": "Keesara",
+    "NH Number": 227,
+    "Latitude": 16.718077,
+    "Longitude": 80.324314
+  },
+  {
+    "Plaza Name": "Kaza",
+    "NH Number": 228,
+    "Latitude": 16.3856,
+    "Longitude": 80.53367
+  },
+  {
+    "Plaza Name": "Budhanam",
+    "NH Number": 229,
+    "Latitude": 14.059589,
+    "Longitude": 79.894624
+  },
+  {
+    "Plaza Name": "Marur",
+    "NH Number": 230,
+    "Latitude": 14.499817,
+    "Longitude": 77.631127
+  },
+  {
+    "Plaza Name": "Debra",
+    "NH Number": 231,
+    "Latitude": 22.397144,
+    "Longitude": 87.522855
+  },
+  {
+    "Plaza Name": "Sonapetya",
+    "NH Number": 232,
+    "Latitude": 22.335479,
+    "Longitude": 87.869477
+  },
+  {
+    "Plaza Name": "Bellupada",
+    "NH Number": 233,
+    "Latitude": 19.111282,
+    "Longitude": 84.699281
+  },
+  {
+    "Plaza Name": "Madapam",
+    "NH Number": 235,
+    "Latitude": 18.377344,
+    "Longitude": 84.000528
+  },
+  {
+    "Plaza Name": "Aganampudi",
+    "NH Number": 236,
+    "Latitude": 17.685435,
+    "Longitude": 83.149931
+  },
+  {
+    "Plaza Name": "Balgudar",
+    "NH Number": 237,
+    "Latitude": 25.250014,
+    "Longitude": 86.034744
+  },
+  {
+    "Plaza Name": "Saukala",
+    "NH Number": 238,
+    "Latitude": 24.599579,
+    "Longitude": 84.70284
+  },
+  {
+    "Plaza Name": "Ponnambalapatti",
+    "NH Number": 239,
+    "Latitude": 10.536361,
+    "Longitude": 78.257067
+  },
+  {
+    "Plaza Name": "Main Toll (Panchvati colony) (Sheela Nagar)",
+    "NH Number": 240,
+    "Latitude": 17.713856,
+    "Longitude": 83.212186
+  },
+  {
+    "Plaza Name": "Kasaba (Bijapur)",
+    "NH Number": 242,
+    "Latitude": 16.786741,
+    "Longitude": 75.739648
+  },
+  {
+    "Plaza Name": "Venkatachalam (Old Nellore)",
+    "NH Number": 243,
+    "Latitude": 14.312218,
+    "Longitude": 79.916296
+  },
+  {
+    "Plaza Name": "Undavariya/ Sirohi",
+    "NH Number": 244,
+    "Latitude": 24.633512,
+    "Longitude": 72.907078
+  },
+  {
+    "Plaza Name": "Indore Dewas (Indore side)",
+    "NH Number": 245,
+    "Latitude": 22.959586,
+    "Longitude": 76.084165
+  },
+  {
+    "Plaza Name": "Nathavalasa/ Vizianagaram",
+    "NH Number": 246,
+    "Latitude": 18.057967,
+    "Longitude": 83.521081
+  },
+  {
+    "Plaza Name": "Pottipadu",
+    "NH Number": 247,
+    "Latitude": 16.572341,
+    "Longitude": 80.862502
+  },
+  {
+    "Plaza Name": "Kalaparru",
+    "NH Number": 248,
+    "Latitude": 16.676408,
+    "Longitude": 81.022129
+  },
+  {
+    "Plaza Name": "Sullurpet",
+    "NH Number": 250,
+    "Latitude": 13.744936,
+    "Longitude": 79.990993
+  },
+  {
+    "Plaza Name": "Sunambatti (Musunuru)",
+    "NH Number": 251,
+    "Latitude": 14.851896,
+    "Longitude": 79.987757
+  },
+  {
+    "Plaza Name": "Bolapalli",
+    "NH Number": 252,
+    "Latitude": 15.886754,
+    "Longitude": 80.070843
+  },
+  {
+    "Plaza Name": "Tanguturu",
+    "NH Number": 253,
+    "Latitude": 15.358166,
+    "Longitude": 80.040105
+  },
+  {
+    "Plaza Name": "Kasepalli",
+    "NH Number": 255,
+    "Latitude": 15.061783,
+    "Longitude": 77.630325
+  },
+  {
+    "Plaza Name": "Tasawade",
+    "NH Number": 256,
+    "Latitude": 17.365756,
+    "Longitude": 74.122928
+  },
+  {
+    "Plaza Name": "Kini",
+    "NH Number": 257,
+    "Latitude": 16.8767054,
+    "Longitude": 74.2983001
+  },
+  {
+    "Plaza Name": "Amakathadu",
+    "NH Number": 258,
+    "Latitude": 15.48468,
+    "Longitude": 77.897632
+  },
+  {
+    "Plaza Name": "Bhalgam (Belgaum)",
+    "NH Number": 259,
+    "Latitude": 23.912341,
+    "Longitude": 71.783991
+  },
+  {
+    "Plaza Name": "Laxmannath",
+    "NH Number": 260,
+    "Latitude": 13.1955,
+    "Longitude": 77.652944
+  },
+  {
+    "Plaza Name": "Varwade",
+    "NH Number": 261,
+    "Latitude": 17.957588,
+    "Longitude": 75.331066
+  },
+  {
+    "Plaza Name": "Gwalior Bypass (Mehra)",
+    "NH Number": 262,
+    "Latitude": 26.197589,
+    "Longitude": 78.240691
+  },
+  {
+    "Plaza Name": "Surajbari",
+    "NH Number": 263,
+    "Latitude": 23.233738,
+    "Longitude": 70.689457
+  },
+  {
+    "Plaza Name": "Sawaleshwar",
+    "NH Number": 264,
+    "Latitude": 17.764629,
+    "Longitude": 75.75589
+  },
+  {
+    "Plaza Name": "Chitora",
+    "NH Number": 265,
+    "Latitude": 23.725268,
+    "Longitude": 78.809133
+  },
+  {
+    "Plaza Name": "Bakoli",
+    "NH Number": 266,
+    "Latitude": 23.780036,
+    "Longitude": 79.464288
+  },
+  {
+    "Plaza Name": "Guilalu",
+    "NH Number": 267,
+    "Latitude": 14.053778,
+    "Longitude": 76.560573
+  },
+  {
+    "Plaza Name": "Karjeevanhalli",
+    "NH Number": 269,
+    "Latitude": 13.612918,
+    "Longitude": 76.953866
+  },
+  {
+    "Plaza Name": "Navayuga Devanahalli / Sadahalli / Pujanahalli",
+    "NH Number": 270,
+    "Latitude": 13.19355,
+    "Longitude": 77.649812
+  },
+  {
+    "Plaza Name": "Kaythsandra/Tumkur/Chokkanahalli",
+    "NH Number": 271,
+    "Latitude": 13.302065,
+    "Longitude": 77.161956
+  },
+  {
+    "Plaza Name": "Kherki Daula",
+    "NH Number": 272,
+    "Latitude": 28.395604,
+    "Longitude": 76.98176
+  },
+  {
+    "Plaza Name": "Palsit",
+    "NH Number": 273,
+    "Latitude": 23.178722,
+    "Longitude": 88.026395
+  },
+  {
+    "Plaza Name": "Badauri",
+    "NH Number": 275,
+    "Latitude": 26.126972,
+    "Longitude": 80.585425
+  },
+  {
+    "Plaza Name": "Nivedita Setu",
+    "NH Number": 278,
+    "Latitude": 22.654373,
+    "Longitude": 88.325118
+  },
+  {
+    "Plaza Name": "Dankuni",
+    "NH Number": 279,
+    "Latitude": 22.698891,
+    "Longitude": 88.288862
+  },
+  {
+    "Plaza Name": "Jaladhulagori (Dhulagarh)",
+    "NH Number": 280,
+    "Latitude": 22.57319,
+    "Longitude": 88.181739
+  },
+  {
+    "Plaza Name": "Surjapur",
+    "NH Number": 281,
+    "Latitude": 25.933485,
+    "Longitude": 87.843205
+  },
+  {
+    "Plaza Name": "Beliyad",
+    "NH Number": 282,
+    "Latitude": 23.763627,
+    "Longitude": 86.79803
+  },
+  {
+    "Plaza Name": "Hariabara",
+    "NH Number": 283,
+    "Latitude": 26.152636,
+    "Longitude": 87.445216
+  },
+  {
+    "Plaza Name": "Barsoni",
+    "NH Number": 284,
+    "Latitude": 25.804671,
+    "Longitude": 87.59074
+  },
+  {
+    "Plaza Name": "Kharik",
+    "NH Number": 285,
+    "Latitude": 25.385796,
+    "Longitude": 87.01154
+  },
+  {
+    "Plaza Name": "Maranga",
+    "NH Number": 286,
+    "Latitude": 25.728646,
+    "Longitude": 87.458249
+  },
+  {
+    "Plaza Name": "Boriach",
+    "NH Number": 287,
+    "Latitude": 20.885548,
+    "Longitude": 73.052162
+  },
+  {
+    "Plaza Name": "Bhagwada",
+    "NH Number": 288,
+    "Latitude": 20.43495,
+    "Longitude": 72.917204
+  },
+  {
+    "Plaza Name": "Charoti",
+    "NH Number": 289,
+    "Latitude": 19.890544,
+    "Longitude": 72.942644
+  },
+  {
+    "Plaza Name": "Khaniwade",
+    "NH Number": 290,
+    "Latitude": 19.520454,
+    "Longitude": 72.916883
+  },
+  {
+    "Plaza Name": "Dahar",
+    "NH Number": 291,
+    "Latitude": 29.31922,
+    "Longitude": 76.918442
+  },
+  {
+    "Plaza Name": "Makrauli Kalan",
+    "NH Number": 292,
+    "Latitude": 28.944307,
+    "Longitude": 76.609736
+  },
+  {
+    "Plaza Name": "Asanpur",
+    "NH Number": 294,
+    "Latitude": 26.299831,
+    "Longitude": 86.630217
+  },
+  {
+    "Plaza Name": "Hebbalu",
+    "NH Number": 295,
+    "Latitude": 14.375564,
+    "Longitude": 76.106875
+  },
+  {
+    "Plaza Name": "Chennasamudram",
+    "NH Number": 296,
+    "Latitude": 12.910943,
+    "Longitude": 79.40121
+  },
+  {
+    "Plaza Name": "Songir",
+    "NH Number": 298,
+    "Latitude": 21.050995,
+    "Longitude": 74.785116
+  },
+  {
+    "Plaza Name": "IGI Airport",
+    "NH Number": 299,
+    "Latitude": 28.543853,
+    "Longitude": 77.115435
+  },
+  {
+    "Plaza Name": "Shahapur",
+    "NH Number": 300,
+    "Latitude": 15.357898,
+    "Longitude": 76.312781
+  },
+  {
+    "Plaza Name": "Vanagari",
+    "NH Number": 301,
+    "Latitude": 16.290681,
+    "Longitude": 75.923324
+  },
+  {
+    "Plaza Name": "BharthanKarjan",
+    "NH Number": 302,
+    "Latitude": 22.015027,
+    "Longitude": 73.115049
+  },
+  {
+    "Plaza Name": "Deingpasoh",
+    "NH Number": 303,
+    "Latitude": 25.648846,
+    "Longitude": 92.047612
+  },
+  {
+    "Plaza Name": "Thirupparaithurai",
+    "NH Number": 304,
+    "Latitude": 10.885791,
+    "Longitude": 78.557668
+  },
+  {
+    "Plaza Name": "Manavasi",
+    "NH Number": 305,
+    "Latitude": 10.930934,
+    "Longitude": 78.215268
+  },
+  {
+    "Plaza Name": "Lechchumanapatti",
+    "NH Number": 306,
+    "Latitude": 10.624244,
+    "Longitude": 78.747767
+  },
+  {
+    "Plaza Name": "Vantada",
+    "NH Number": 308,
+    "Latitude": 23.61615,
+    "Longitude": 73.254472
+  },
+  {
+    "Plaza Name": "Kathpur",
+    "NH Number": 309,
+    "Latitude": 23.410181,
+    "Longitude": 72.828618
+  },
+  {
+    "Plaza Name": "Lambalakudi",
+    "NH Number": 310,
+    "Latitude": 10.299776,
+    "Longitude": 78.770713
+  },
+  {
+    "Plaza Name": "Ahmedabad Vadodra Expressways",
+    "NH Number": 311,
+    "Latitude": 22.975844,
+    "Longitude": 72.650399
+  },
+  {
+    "Plaza Name": "Attibele (BETL)",
+    "NH Number": 312,
+    "Latitude": 12.776883,
+    "Longitude": 77.777119
+  },
+  {
+    "Plaza Name": "Neelamangala  - Tumkur /Kulumepalya",
+    "NH Number": 313,
+    "Latitude": 13.114638,
+    "Longitude": 77.37463
+  },
+  {
+    "Plaza Name": "Elevated Section/ Electronic City",
+    "NH Number": 314,
+    "Latitude": 12.847667,
+    "Longitude": 77.670866
+  },
+  {
+    "Plaza Name": "Nagarhalla",
+    "NH Number": 315,
+    "Latitude": 16.292989,
+    "Longitude": 75.921069
+  },
+  {
+    "Plaza Name": "Gabbur (MoRTH)",
+    "NH Number": 316,
+    "Latitude": 15.318834,
+    "Longitude": 75.139696
+  },
+  {
+    "Plaza Name": "Narendra (MoRTH)",
+    "NH Number": 321,
+    "Latitude": 15.488902,
+    "Longitude": 74.969857
+  },
+  {
+    "Plaza Name": "Pamban Bridge (MoRTH)",
+    "NH Number": 324,
+    "Latitude": 9.283225,
+    "Longitude": 79.215127
+  },
+  {
+    "Plaza Name": "Kalia Bhomora Bridge (MoRTH)",
+    "NH Number": 326,
+    "Latitude": 26.567367,
+    "Longitude": 92.869461
+  },
+  {
+    "Plaza Name": "Gangadhar Bridge (MoRTH)",
+    "NH Number": 330,
+    "Latitude": 26.149881,
+    "Longitude": 89.811537
+  },
+  {
+    "Plaza Name": "Baggad (MoRTH)",
+    "NH Number": 333,
+    "Latitude": 25.592575,
+    "Longitude": 73.904897
+  },
+  {
+    "Plaza Name": "Bagaliya (MoRTH)",
+    "NH Number": 338,
+    "Latitude": 25.884014,
+    "Longitude": 74.160275
+  },
+  {
+    "Plaza Name": "Bagodara (MoRTH)",
+    "NH Number": 339,
+    "Latitude": 22.620565,
+    "Longitude": 72.161496
+  },
+  {
+    "Plaza Name": "Kharpada (MoRTH)",
+    "NH Number": 340,
+    "Latitude": 18.844713,
+    "Longitude": 73.094525
+  },
+  {
+    "Plaza Name": "Jia Bridge (MoRTH)",
+    "NH Number": 341,
+    "Latitude": 31.898237,
+    "Longitude": 77.148301
+  },
+  {
+    "Plaza Name": "Savitri (MoRTH)",
+    "NH Number": 342,
+    "Latitude": 18.084885,
+    "Longitude": 73.462503
+  },
+  {
+    "Plaza Name": "Nashirabad (MoRTH)",
+    "NH Number": 343,
+    "Latitude": 21.013505,
+    "Longitude": 75.670495
+  },
+  {
+    "Plaza Name": "Fekri (MoRTH)",
+    "NH Number": 344,
+    "Latitude": 21.039996,
+    "Longitude": 75.829168
+  },
+  {
+    "Plaza Name": "Kharegaon (MoRTH)",
+    "NH Number": 345,
+    "Latitude": 19.2121,
+    "Longitude": 73.006946
+  },
+  {
+    "Plaza Name": "Moshi (MoRTH)",
+    "NH Number": 346,
+    "Latitude": 18.605613,
+    "Longitude": 73.823404
+  },
+  {
+    "Plaza Name": "Parvati Bridge (MoRTH)",
+    "NH Number": 347,
+    "Latitude": 23.471246,
+    "Longitude": 77.071876
+  },
+  {
+    "Plaza Name": "Chandloi/ Rajgurunagar (MoRTH)",
+    "NH Number": 348,
+    "Latitude": 18.844296,
+    "Longitude": 73.881986
+  },
+  {
+    "Plaza Name": "Ashoka DSC Katni bypass (MoRTH)",
+    "NH Number": 349,
+    "Latitude": 23.888883,
+    "Longitude": 80.384806
+  },
+  {
+    "Plaza Name": "Kawdipath (MoRTH)",
+    "NH Number": 350,
+    "Latitude": 18.493223,
+    "Longitude": 73.992593
+  },
+  {
+    "Plaza Name": "Kasurdi (MoRTH)",
+    "NH Number": 351,
+    "Latitude": 18.48286,
+    "Longitude": 74.234706
+  },
+  {
+    "Plaza Name": "Koshta (MoRTH)",
+    "NH Number": 352,
+    "Latitude": 24.550197,
+    "Longitude": 81.346796
+  },
+  {
+    "Plaza Name": "Kardha (MoRTH)",
+    "NH Number": 353,
+    "Latitude": 21.139568,
+    "Longitude": 79.675405
+  },
+  {
+    "Plaza Name": "Tiwasa (MoRTH)",
+    "NH Number": 354,
+    "Latitude": 21.086207,
+    "Longitude": 78.066995
+  },
+  {
+    "Plaza Name": "Nardana (MoRTH)",
+    "NH Number": 357,
+    "Latitude": 21.181762,
+    "Longitude": 74.823119
+  },
+  {
+    "Plaza Name": "Baretha (MoRTH)",
+    "NH Number": 358,
+    "Latitude": 26.320743,
+    "Longitude": 78.272518
+  },
+  {
+    "Plaza Name": "Wadakbal (MoRTH)",
+    "NH Number": 359,
+    "Latitude": 17.534301,
+    "Longitude": 75.880075
+  },
+  {
+    "Plaza Name": "Barahi (MoRTH)",
+    "NH Number": 360,
+    "Latitude": 26.683159,
+    "Longitude": 78.917937
+  },
+  {
+    "Plaza Name": "Bamanbore (MoRTH)",
+    "NH Number": 362,
+    "Latitude": 22.409684,
+    "Longitude": 71.015587
+  },
+  {
+    "Plaza Name": "Patancheru (Prograssive Construction Toll) (MoRTH)",
+    "NH Number": 363,
+    "Latitude": 17.523428,
+    "Longitude": 78.273342
+  },
+  {
+    "Plaza Name": "Rawason Bridge (MoRTH)",
+    "NH Number": 364,
+    "Latitude": 29.842349,
+    "Longitude": 78.19098
+  },
+  {
+    "Plaza Name": "Nandghat Bridge (MoRTH)",
+    "NH Number": 366,
+    "Latitude": 21.766145,
+    "Longitude": 81.812198
+  },
+  {
+    "Plaza Name": "Kharun (MoRTH)",
+    "NH Number": 367,
+    "Latitude": 21.252543,
+    "Longitude": 81.536664
+  },
+  {
+    "Plaza Name": "Kosa Nala (MoRTH)",
+    "NH Number": 368,
+    "Latitude": 21.204731,
+    "Longitude": 81.337106
+  },
+  {
+    "Plaza Name": "Kundannur (MoRTH)",
+    "NH Number": 370,
+    "Latitude": 9.94307,
+    "Longitude": 76.318202
+  },
+  {
+    "Plaza Name": "Akkulam (MoRTH)",
+    "NH Number": 371,
+    "Latitude": 8.520122,
+    "Longitude": 76.89465
+  },
+  {
+    "Plaza Name": "Varapuzha Bridge (MoRTH)",
+    "NH Number": 373,
+    "Latitude": 10.074058,
+    "Longitude": 76.28012
+  },
+  {
+    "Plaza Name": "Bhatwada (Godhra)",
+    "NH Number": 374,
+    "Latitude": 22.792886,
+    "Longitude": 73.842871
+  },
+  {
+    "Plaza Name": "Chollang",
+    "NH Number": 375,
+    "Latitude": 31.623756,
+    "Longitude": 75.640462
+  },
+  {
+    "Plaza Name": "Chillakallu",
+    "NH Number": 376,
+    "Latitude": 16.885015,
+    "Longitude": 80.160654
+  },
+  {
+    "Plaza Name": "Korlaphadu",
+    "NH Number": 377,
+    "Latitude": 17.159677,
+    "Longitude": 79.474848
+  },
+  {
+    "Plaza Name": "Hitnal",
+    "NH Number": 379,
+    "Latitude": 15.323649,
+    "Longitude": 76.303646
+  },
+  {
+    "Plaza Name": "Madrak",
+    "NH Number": 380,
+    "Latitude": 27.804002,
+    "Longitude": 78.087022
+  },
+  {
+    "Plaza Name": "Baros",
+    "NH Number": 381,
+    "Latitude": 27.346247,
+    "Longitude": 78.032201
+  },
+  {
+    "Plaza Name": "Khairabad (Karondi)",
+    "NH Number": 384,
+    "Latitude": 27.558744,
+    "Longitude": 80.661034
+  },
+  {
+    "Plaza Name": "Pithai",
+    "NH Number": 385,
+    "Latitude": 22.413798,
+    "Longitude": 72.957428
+  },
+  {
+    "Plaza Name": "Vavadikhurd",
+    "NH Number": 386,
+    "Latitude": 22.792571,
+    "Longitude": 73.533274
+  },
+  {
+    "Plaza Name": "Mulbagal",
+    "NH Number": 387,
+    "Latitude": 13.148469,
+    "Longitude": 78.290548
+  },
+  {
+    "Plaza Name": "Kishorpur (Chandermore)",
+    "NH Number": 388,
+    "Latitude": 24.563182,
+    "Longitude": 88.019993
+  },
+  {
+    "Plaza Name": "Gopgram (Shibpur)",
+    "NH Number": 389,
+    "Latitude": 24.150449,
+    "Longitude": 88.18629
+  },
+  {
+    "Plaza Name": "Babina",
+    "NH Number": 394,
+    "Latitude": 25.216966,
+    "Longitude": 78.464471
+  },
+  {
+    "Plaza Name": "Dahalapara",
+    "NH Number": 395,
+    "Latitude": 26.476288,
+    "Longitude": 90.712054
+  },
+  {
+    "Plaza Name": "Niyamatpur Ekrotiya",
+    "NH Number": 396,
+    "Latitude": 28.814182,
+    "Longitude": 78.902248
+  },
+  {
+    "Plaza Name": "Thriyakhetal",
+    "NH Number": 397,
+    "Latitude": 28.480289,
+    "Longitude": 79.283886
+  },
+  {
+    "Plaza Name": "Guabari",
+    "NH Number": 398,
+    "Latitude": 26.476592,
+    "Longitude": 89.756535
+  },
+  {
+    "Plaza Name": "Fulara",
+    "NH Number": 400,
+    "Latitude": 22.043538,
+    "Longitude": 79.418722
+  },
+  {
+    "Plaza Name": "Chikhalikala",
+    "NH Number": 401,
+    "Latitude": 21.841921,
+    "Longitude": 78.433316
+  },
+  {
+    "Plaza Name": "Jungawani",
+    "NH Number": 402,
+    "Latitude": 22.377896,
+    "Longitude": 79.151021
+  },
+  {
+    "Plaza Name": "Jaitpur",
+    "NH Number": 403,
+    "Latitude": 22.548497,
+    "Longitude": 79.600413
+  },
+  {
+    "Plaza Name": "Dakhina Sekhpur",
+    "NH Number": 405,
+    "Latitude": 26.524482,
+    "Longitude": 81.066094
+  },
+  {
+    "Plaza Name": "Kelwad",
+    "NH Number": 406,
+    "Latitude": 21.471322,
+    "Longitude": 78.8726
+  },
+  {
+    "Plaza Name": "Chullimada Hamlet (Pampampallam)",
+    "NH Number": 408,
+    "Latitude": 10.81311,
+    "Longitude": 76.798051
+  },
+  {
+    "Plaza Name": "Aliyapur",
+    "NH Number": 409,
+    "Latitude": 26.069752,
+    "Longitude": 80.163011
+  },
+  {
+    "Plaza Name": "Khanna",
+    "NH Number": 410,
+    "Latitude": 25.543293,
+    "Longitude": 80.060095
+  },
+  {
+    "Plaza Name": "Baragarh (Barhaguda)",
+    "NH Number": 411,
+    "Latitude": 21.35447,
+    "Longitude": 83.681021
+  },
+  {
+    "Plaza Name": "Ponnarimangalam",
+    "NH Number": 412,
+    "Latitude": 10.010336,
+    "Longitude": 76.257977
+  },
+  {
+    "Plaza Name": "Ladpalwan",
+    "NH Number": 413,
+    "Latitude": 32.197881,
+    "Longitude": 75.533697
+  },
+  {
+    "Plaza Name": "Waryam Nangal",
+    "NH Number": 414,
+    "Latitude": 31.731947,
+    "Longitude": 75.041365
+  },
+  {
+    "Plaza Name": "Deederganj",
+    "NH Number": 415,
+    "Latitude": 25.570828,
+    "Longitude": 85.247807
+  },
+  {
+    "Plaza Name": "Akhepura",
+    "NH Number": 416,
+    "Latitude": 27.50603,
+    "Longitude": 75.348401
+  },
+  {
+    "Plaza Name": "Milanpur",
+    "NH Number": 417,
+    "Latitude": 21.864457,
+    "Longitude": 77.961508
+  },
+  {
+    "Plaza Name": "Khambara",
+    "NH Number": 418,
+    "Latitude": 21.693812,
+    "Longitude": 78.387824
+  },
+  {
+    "Plaza Name": "Patanswangi",
+    "NH Number": 419,
+    "Latitude": 21.343724,
+    "Longitude": 79.009038
+  },
+  {
+    "Plaza Name": "Gegal",
+    "NH Number": 420,
+    "Latitude": 26.551347,
+    "Longitude": 74.780202
+  },
+  {
+    "Plaza Name": "Pipalaz",
+    "NH Number": 421,
+    "Latitude": 26.158466,
+    "Longitude": 74.371725
+  },
+  {
+    "Plaza Name": "Gadoi",
+    "NH Number": 422,
+    "Latitude": 21.425234,
+    "Longitude": 70.295437
+  },
+  {
+    "Plaza Name": "Dari",
+    "NH Number": 423,
+    "Latitude": 20.961287,
+    "Longitude": 70.334349
+  },
+  {
+    "Plaza Name": "Raha(Saragaon)",
+    "NH Number": 424,
+    "Latitude": 26.245678,
+    "Longitude": 92.541521
+  },
+  {
+    "Plaza Name": "Daboka",
+    "NH Number": 425,
+    "Latitude": 26.114657,
+    "Longitude": 92.875479
+  },
+  {
+    "Plaza Name": "Nazira Khat",
+    "NH Number": 426,
+    "Latitude": 26.100258,
+    "Longitude": 91.879125
+  },
+  {
+    "Plaza Name": "Mandal (Vyara)",
+    "NH Number": 427,
+    "Latitude": 21.134676,
+    "Longitude": 73.478511
+  },
+  {
+    "Plaza Name": "Bhatia",
+    "NH Number": 428,
+    "Latitude": 21.190249,
+    "Longitude": 72.869085
+  },
+  {
+    "Plaza Name": "Luharali",
+    "NH Number": 429,
+    "Latitude": 28.497746,
+    "Longitude": 77.629298
+  },
+  {
+    "Plaza Name": "Somna",
+    "NH Number": 430,
+    "Latitude": 28.062821,
+    "Longitude": 77.946047
+  },
+  {
+    "Plaza Name": "Lakholi",
+    "NH Number": 431,
+    "Latitude": 21.20296,
+    "Longitude": 81.905328
+  },
+  {
+    "Plaza Name": "Sundar Nagar",
+    "NH Number": 432,
+    "Latitude": 21.229353,
+    "Longitude": 81.607029
+  },
+  {
+    "Plaza Name": "Raipur",
+    "NH Number": 433,
+    "Latitude": 26.063535,
+    "Longitude": 74.05947
+  },
+  {
+    "Plaza Name": "Indranagar",
+    "NH Number": 434,
+    "Latitude": 25.828286,
+    "Longitude": 73.45492
+  },
+  {
+    "Plaza Name": "Birami",
+    "NH Number": 438,
+    "Latitude": 25.371114,
+    "Longitude": 73.201486
+  },
+  {
+    "Plaza Name": "Uthamam",
+    "NH Number": 439,
+    "Latitude": 25.033571,
+    "Longitude": 72.94353
+  },
+  {
+    "Plaza Name": "Gaddurur",
+    "NH Number": 440,
+    "Latitude": 13.194218,
+    "Longitude": 78.545197
+  },
+  {
+    "Plaza Name": "WEPL Mathani",
+    "NH Number": 441,
+    "Latitude": 21.139545,
+    "Longitude": 79.365105
+  },
+  {
+    "Plaza Name": "Runni",
+    "NH Number": 442,
+    "Latitude": 26.373615,
+    "Longitude": 85.493984
+  },
+  {
+    "Plaza Name": "S V Puram",
+    "NH Number": 443,
+    "Latitude": 13.525577,
+    "Longitude": 79.532925
+  },
+  {
+    "Plaza Name": "Pattaraiperumbudur (temporary TP)",
+    "NH Number": 444,
+    "Latitude": 13.150776,
+    "Longitude": 79.834675
+  },
+  {
+    "Plaza Name": "Paat Sahanipur (Pipli)",
+    "NH Number": 445,
+    "Latitude": 20.137113,
+    "Longitude": 85.83902
+  },
+  {
+    "Plaza Name": "Methoon",
+    "NH Number": 446,
+    "Latitude": 24.420042,
+    "Longitude": 76.503896
+  },
+  {
+    "Plaza Name": "Kaniyur",
+    "NH Number": 447,
+    "Latitude": 11.012827,
+    "Longitude": 77.073181
+  },
+  {
+    "Plaza Name": "Mokha",
+    "NH Number": 448,
+    "Latitude": 22.934663,
+    "Longitude": 69.801655
+  },
+  {
+    "Plaza Name": "Eethakota",
+    "NH Number": 450,
+    "Latitude": 16.715205,
+    "Longitude": 81.827876
+  },
+  {
+    "Plaza Name": "Unguturu",
+    "NH Number": 451,
+    "Latitude": 16.823729,
+    "Longitude": 81.430664
+  },
+  {
+    "Plaza Name": "Chagalmarri",
+    "NH Number": 452,
+    "Latitude": 14.979577,
+    "Longitude": 78.574764
+  },
+  {
+    "Plaza Name": "Palempalli",
+    "NH Number": 453,
+    "Latitude": 14.513518,
+    "Longitude": 78.79121
+  },
+  {
+    "Plaza Name": "Pahammawlein",
+    "NH Number": 454,
+    "Latitude": 25.99328,
+    "Longitude": 91.860491
+  },
+  {
+    "Plaza Name": "Rohad",
+    "NH Number": 455,
+    "Latitude": 28.754563,
+    "Longitude": 76.795216
+  },
+  {
+    "Plaza Name": "Kishorpura",
+    "NH Number": 456,
+    "Latitude": 25.17025,
+    "Longitude": 76.130522
+  },
+  {
+    "Plaza Name": "Mandawada (Gomati)",
+    "NH Number": 457,
+    "Latitude": 25.20385,
+    "Longitude": 73.814701
+  },
+  {
+    "Plaza Name": "Negadiya",
+    "NH Number": 458,
+    "Latitude": 25.704011,
+    "Longitude": 74.061836
+  },
+  {
+    "Plaza Name": "Surathkal",
+    "NH Number": 459,
+    "Latitude": 12.993098,
+    "Longitude": 74.792333
+  },
+  {
+    "Plaza Name": "Bhiknoor",
+    "NH Number": 460,
+    "Latitude": 18.205251,
+    "Longitude": 78.398261
+  },
+  {
+    "Plaza Name": "Kunwarpur",
+    "NH Number": 461,
+    "Latitude": 25.674873,
+    "Longitude": 82.32499
+  },
+  {
+    "Plaza Name": "Nuruddinpur",
+    "NH Number": 462,
+    "Latitude": 26.035838,
+    "Longitude": 81.43825
+  },
+  {
+    "Plaza Name": "Chuipali",
+    "NH Number": 464,
+    "Latitude": 21.299829,
+    "Longitude": 82.94286
+  },
+  {
+    "Plaza Name": "Dhank",
+    "NH Number": 465,
+    "Latitude": 21.226901,
+    "Longitude": 82.422438
+  },
+  {
+    "Plaza Name": "Vasad",
+    "NH Number": 466,
+    "Latitude": 22.453254,
+    "Longitude": 73.070539
+  },
+  {
+    "Plaza Name": "Radhvanaj (Kheda)",
+    "NH Number": 467,
+    "Latitude": 22.715971,
+    "Longitude": 72.740887
+  },
+  {
+    "Plaza Name": "Madina Korsan",
+    "NH Number": 468,
+    "Latitude": 28.927049,
+    "Longitude": 76.442169
+  },
+  {
+    "Plaza Name": "Ramayana",
+    "NH Number": 469,
+    "Latitude": 29.100833,
+    "Longitude": 75.885093
+  },
+  {
+    "Plaza Name": "Para",
+    "NH Number": 470,
+    "Latitude": 25.788339,
+    "Longitude": 74.338933
+  },
+  {
+    "Plaza Name": "Saidpur Patedha",
+    "NH Number": 471,
+    "Latitude": 25.802861,
+    "Longitude": 85.283461
+  },
+  {
+    "Plaza Name": "Lilamba",
+    "NH Number": 472,
+    "Latitude": 26.084278,
+    "Longitude": 74.001389
+  },
+  {
+    "Plaza Name": "Aaini",
+    "NH Number": 473,
+    "Latitude": 27.292105,
+    "Longitude": 81.54465
+  },
+  {
+    "Plaza Name": "Gulalpurva",
+    "NH Number": 474,
+    "Latitude": 27.825548,
+    "Longitude": 81.527252
+  },
+  {
+    "Plaza Name": "Sonvay (Indore - Khalghat)",
+    "NH Number": 475,
+    "Latitude": 22.607365,
+    "Longitude": 75.794134
+  },
+  {
+    "Plaza Name": "Chalakwadi",
+    "NH Number": 476,
+    "Latitude": 19.170738,
+    "Longitude": 74.074993
+  },
+  {
+    "Plaza Name": "Hivargaon Pavsa",
+    "NH Number": 477,
+    "Latitude": 19.516452,
+    "Longitude": 74.201583
+  },
+  {
+    "Plaza Name": "Nimbaniya Ki Dhani (Bayatu)",
+    "NH Number": 478,
+    "Latitude": 25.865638,
+    "Longitude": 71.616734
+  },
+  {
+    "Plaza Name": "Gundmi",
+    "NH Number": 479,
+    "Latitude": 13.47641,
+    "Longitude": 74.713082
+  },
+  {
+    "Plaza Name": "Hazamady",
+    "NH Number": 480,
+    "Latitude": 13.108245,
+    "Longitude": 74.784562
+  },
+  {
+    "Plaza Name": "Talapady",
+    "NH Number": 481,
+    "Latitude": 12.75958,
+    "Longitude": 74.874087
+  },
+  {
+    "Plaza Name": "Kadthal",
+    "NH Number": 482,
+    "Latitude": 16.985586,
+    "Longitude": 78.50172
+  },
+  {
+    "Plaza Name": "Konetipuram",
+    "NH Number": 483,
+    "Latitude": 16.608082,
+    "Longitude": 78.677722
+  },
+  {
+    "Plaza Name": "Chinthapally",
+    "NH Number": 484,
+    "Latitude": 17.471578,
+    "Longitude": 79.980527
+  },
+  {
+    "Plaza Name": "Lakshmipur",
+    "NH Number": 485,
+    "Latitude": 24.822455,
+    "Longitude": 87.966864
+  },
+  {
+    "Plaza Name": "Chakseherdi (Gajol) Bagsarai",
+    "NH Number": 486,
+    "Latitude": 25.195872,
+    "Longitude": 88.182566
+  },
+  {
+    "Plaza Name": "Mahanth Maniyari",
+    "NH Number": 487,
+    "Latitude": 26.038799,
+    "Longitude": 85.447437
+  },
+  {
+    "Plaza Name": "Govindpur",
+    "NH Number": 488,
+    "Latitude": 25.590289,
+    "Longitude": 85.875945
+  },
+  {
+    "Plaza Name": "Konder",
+    "NH Number": 489,
+    "Latitude": 26.537213,
+    "Longitude": 77.086068
+  },
+  {
+    "Plaza Name": "Chila Chond",
+    "NH Number": 490,
+    "Latitude": 26.613002,
+    "Longitude": 77.515359
+  },
+  {
+    "Plaza Name": "Raibha",
+    "NH Number": 491,
+    "Latitude": 27.177493,
+    "Longitude": 77.811532
+  },
+  {
+    "Plaza Name": "Mada",
+    "NH Number": 492,
+    "Latitude": 33.024637,
+    "Longitude": 75.252118
+  },
+  {
+    "Plaza Name": "Nashri",
+    "NH Number": 493,
+    "Latitude": 33.174771,
+    "Longitude": 75.303421
+  },
+  {
+    "Plaza Name": "Banthadi",
+    "NH Number": 1476,
+    "Latitude": 27.275167,
+    "Longitude": 74.351659
+  },
+  {
+    "Plaza Name": "Tamdoli",
+    "NH Number": 1477,
+    "Latitude": 26.870978,
+    "Longitude": 74.293475
+  },
+  {
+    "Plaza Name": "Rupa Kheda",
+    "NH Number": 1478,
+    "Latitude": 25.110565,
+    "Longitude": 73.988241
+  },
+  {
+    "Plaza Name": "Mujras",
+    "NH Number": 1479,
+    "Latitude": 25.274995,
+    "Longitude": 74.492879
+  },
+  {
+    "Plaza Name": "SixML",
+    "NH Number": 4480,
+    "Latitude": 29.810574,
+    "Longitude": 73.875389
+  },
+  {
+    "Plaza Name": "Lasedi",
+    "NH Number": 4481,
+    "Latitude": 28.712002,
+    "Longitude": 75.481566
+  },
+  {
+    "Plaza Name": "Dhadhar",
+    "NH Number": 4482,
+    "Latitude": 28.329757,
+    "Longitude": 75.05592
+  },
+  {
+    "Plaza Name": "Shobhasar",
+    "NH Number": 4483,
+    "Latitude": 27.76326,
+    "Longitude": 74.723371
+  },
+  {
+    "Plaza Name": "Rapur",
+    "NH Number": 4484,
+    "Latitude": 14.210397,
+    "Longitude": 79.560418
+  },
+  {
+    "Plaza Name": "Chintalapalem",
+    "NH Number": 4485,
+    "Latitude": 13.788513,
+    "Longitude": 79.589622
+  },
+  {
+    "Plaza Name": "Badava",
+    "NH Number": 4486,
+    "Latitude": 16.850428,
+    "Longitude": 80.633633
+  },
+  {
+    "Plaza Name": "Shenbagampettai",
+    "NH Number": 4489,
+    "Latitude": 10.158744,
+    "Longitude": 78.651128
+  },
+  {
+    "Plaza Name": "Jasnathnagar",
+    "NH Number": 4490,
+    "Latitude": 26.308858,
+    "Longitude": 72.914295
+  },
+  {
+    "Plaza Name": "Motisar (Khanori)",
+    "NH Number": 4491,
+    "Latitude": 26.570811,
+    "Longitude": 72.327192
+  },
+  {
+    "Plaza Name": "Morani (Pokaran)",
+    "NH Number": 4492,
+    "Latitude": 26.889721,
+    "Longitude": 71.981819
+  },
+  {
+    "Plaza Name": "Mekalavaripalli",
+    "NH Number": 4493,
+    "Latitude": 15.412411,
+    "Longitude": 79.497541
+  },
+  {
+    "Plaza Name": "Raviguntapalli",
+    "NH Number": 4494,
+    "Latitude": 15.197922,
+    "Longitude": 79.450868
+  },
+  {
+    "Plaza Name": "Brahmanapalli",
+    "NH Number": 4495,
+    "Latitude": 14.736039,
+    "Longitude": 79.049052
+  },
+  {
+    "Plaza Name": "Hasanpur (Sainkul)",
+    "NH Number": 4496,
+    "Latitude": 21.147001,
+    "Longitude": 86.117538
+  },
+  {
+    "Plaza Name": "Khantaghar (Dhenkikote)",
+    "NH Number": 4497,
+    "Latitude": 21.508544,
+    "Longitude": 85.826198
+  },
+  {
+    "Plaza Name": "Banajodi (Padmapur)",
+    "NH Number": 4498,
+    "Latitude": 21.710167,
+    "Longitude": 85.5836
+  },
+  {
+    "Plaza Name": "Khadda",
+    "NH Number": 4499,
+    "Latitude": 24.522264,
+    "Longitude": 81.365223
+  },
+  {
+    "Plaza Name": "Sonvarsaa",
+    "NH Number": 4500,
+    "Latitude": 24.395853,
+    "Longitude": 81.802372
+  },
+  {
+    "Plaza Name": "Landhari",
+    "NH Number": 4501,
+    "Latitude": 29.292067,
+    "Longitude": 75.648213
+  },
+  {
+    "Plaza Name": "Narwana",
+    "NH Number": 4502,
+    "Latitude": 29.578554,
+    "Longitude": 76.088477
+  },
+  {
+    "Plaza Name": "Badopatti",
+    "NH Number": 4503,
+    "Latitude": 29.299141,
+    "Longitude": 75.819719
+  },
+  {
+    "Plaza Name": "Chaudhriwas",
+    "NH Number": 4504,
+    "Latitude": 28.99832,
+    "Longitude": 75.604417
+  },
+  {
+    "Plaza Name": "Kalajhar",
+    "NH Number": 4505,
+    "Latitude": 30.265789,
+    "Longitude": 76.148309
+  },
+  {
+    "Plaza Name": "Badbar",
+    "NH Number": 4506,
+    "Latitude": 30.247772,
+    "Longitude": 75.640226
+  },
+  {
+    "Plaza Name": "Bhagan",
+    "NH Number": 4507,
+    "Latitude": 29.060626,
+    "Longitude": 77.064081
+  },
+  {
+    "Plaza Name": "Sosokhurd",
+    "NH Number": 4508,
+    "Latitude": 23.548753,
+    "Longitude": 85.756866
+  },
+  {
+    "Plaza Name": "Tand Balidih",
+    "NH Number": 4509,
+    "Latitude": 23.668354,
+    "Longitude": 86.045229
+  },
+  {
+    "Plaza Name": "Doli",
+    "NH Number": 4510,
+    "Latitude": 26.062927,
+    "Longitude": 72.673202
+  },
+  {
+    "Plaza Name": "Palaya Gandharvakottai",
+    "NH Number": 4511,
+    "Latitude": 10.612499,
+    "Longitude": 79.0306
+  },
+  {
+    "Plaza Name": "Mangalgi",
+    "NH Number": 4512,
+    "Latitude": 17.745596,
+    "Longitude": 77.317882
+  },
+  {
+    "Plaza Name": "Kamkole",
+    "NH Number": 4513,
+    "Latitude": 17.645717,
+    "Longitude": 77.820114
+  },
+  {
+    "Plaza Name": "Yedeshi",
+    "NH Number": 4515,
+    "Latitude": 0.0,
+    "Longitude": 0.0
+  },
+  {
+    "Plaza Name": "Tamalwadi",
+    "NH Number": 4520,
+    "Latitude": 1.0,
+    "Longitude": 1.0
+  },
+  {
+    "Plaza Name": "Deoria",
+    "NH Number": 4536,
+    "Latitude": 28.930785,
+    "Longitude": 79.475734
+  },
+  {
+    "Plaza Name": "Jogipura",
+    "NH Number": 4537,
+    "Latitude": 24.097278,
+    "Longitude": 76.988952
+  },
+  {
+    "Plaza Name": "Pagara",
+    "NH Number": 4538,
+    "Latitude": 24.517835,
+    "Longitude": 77.186491
+  },
+  {
+    "Plaza Name": "Sakatpura(LHS)(Staggered)",
+    "NH Number": 4539,
+    "Latitude": 25.155846,
+    "Longitude": 75.781932
+  },
+  {
+    "Plaza Name": "Nayagaon(RHS) (Staggered)",
+    "NH Number": 4540,
+    "Latitude": 25.132506,
+    "Longitude": 75.796565
+  },
+  {
+    "Plaza Name": "Mandava",
+    "NH Number": 4541,
+    "Latitude": 21.702698,
+    "Longitude": 73.059975
+  },
+  {
+    "Plaza Name": "Basapuram",
+    "NH Number": 4542,
+    "Latitude": 14.708361,
+    "Longitude": 78.872406
+  },
+  {
+    "Plaza Name": "Nannur",
+    "NH Number": 4543,
+    "Latitude": 15.741038,
+    "Longitude": 78.070783
+  },
+  {
+    "Plaza Name": "Purankhedi",
+    "NH Number": 4544,
+    "Latitude": 25.245762,
+    "Longitude": 77.615602
+  },
+  {
+    "Plaza Name": "Banskopa",
+    "NH Number": 4545,
+    "Latitude": 23.491222,
+    "Longitude": 87.376575
+  },
+  {
+    "Plaza Name": "Semri",
+    "NH Number": 4546,
+    "Latitude": 25.637124,
+    "Longitude": 78.875044
+  },
+  {
+    "Plaza Name": "Banushi",
+    "NH Number": 4547,
+    "Latitude": 28.941,
+    "Longitude": 79.8157
+  },
+  {
+    "Plaza Name": "Hathitala",
+    "NH Number": 4548,
+    "Latitude": 25.562272,
+    "Longitude": 71.407666
+  },
+  {
+    "Plaza Name": "Bor Charnan",
+    "NH Number": 4549,
+    "Latitude": 25.105861,
+    "Longitude": 71.549558
+  },
+  {
+    "Plaza Name": "Harimma",
+    "NH Number": 4550,
+    "Latitude": 27.26549,
+    "Longitude": 73.856074
+  },
+  {
+    "Plaza Name": "Nimbi Jodha",
+    "NH Number": 4551,
+    "Latitude": 27.30534,
+    "Longitude": 74.1915
+  },
+  {
+    "Plaza Name": "Jindpur",
+    "NH Number": 4552,
+    "Latitude": 25.865,
+    "Longitude": 80.691
+  },
+  {
+    "Plaza Name": "Aihar",
+    "NH Number": 4553,
+    "Latitude": 26.197,
+    "Longitude": 81.0326
+  },
+  {
+    "Plaza Name": "Limdi",
+    "NH Number": 4554,
+    "Latitude": 25.467,
+    "Longitude": 41.293
+  },
+  {
+    "Plaza Name": "Milk Majra",
+    "NH Number": 4555,
+    "Latitude": 30.21128,
+    "Longitude": 77.194411
+  },
+  {
+    "Plaza Name": "Durgamvaripalli",
+    "NH Number": 4556,
+    "Latitude": 13.7143,
+    "Longitude": 78.873269
+  },
+  {
+    "Plaza Name": "Buchireddypalem",
+    "NH Number": 4557,
+    "Latitude": 14.543265,
+    "Longitude": 79.862348
+  },
+  {
+    "Plaza Name": "DC PALLI",
+    "NH Number": 4558,
+    "Latitude": 14.6854,
+    "Longitude": 79.5156
+  },
+  {
+    "Plaza Name": "Zidda",
+    "NH Number": 4559,
+    "Latitude": 40.32217,
+    "Longitude": 9.3264
+  },
+  {
+    "Plaza Name": "Leherabega",
+    "NH Number": 4560,
+    "Latitude": 30.233092,
+    "Longitude": 75.102496
+  },
+  {
+    "Plaza Name": "Paind",
+    "NH Number": 4561,
+    "Latitude": 30.4,
+    "Longitude": 75.5
+  },
+  {
+    "Plaza Name": "Dhareri jattan",
+    "NH Number": 4562,
+    "Latitude": 76.499529,
+    "Longitude": 30.39255
+  },
+  {
+    "Plaza Name": "Azizpur",
+    "NH Number": 4563,
+    "Latitude": 76.759305,
+    "Longitude": 30.5930556
+  },
+  {
+    "Plaza Name": "Bhavdeen",
+    "NH Number": 4566,
+    "Latitude": 29.29914,
+    "Longitude": 75.81971
+  },
+  {
+    "Plaza Name": "Halaharvi",
+    "NH Number": 4567,
+    "Latitude": 15.818714,
+    "Longitude": 77.453999
+  },
+  {
+    "Plaza Name": "Ramdevra",
+    "NH Number": 4568,
+    "Latitude": 27.0175781,
+    "Longitude": 72.0194626
+  },
+  {
+    "Plaza Name": "LATHI",
+    "NH Number": 4569,
+    "Latitude": 27.0298347,
+    "Longitude": 71.446434
+  },
+  {
+    "Plaza Name": "Mudkhera",
+    "NH Number": 4570,
+    "Latitude": 25.668,
+    "Longitude": 77.73
+  },
+  {
+    "Plaza Name": "Panihaar",
+    "NH Number": 4571,
+    "Latitude": 26.0978,
+    "Longitude": 78.0158
+  },
+  {
+    "Plaza Name": "Salasar",
+    "NH Number": 4572,
+    "Latitude": 28.00137,
+    "Longitude": 73.06546
+  },
+  {
+    "Plaza Name": "Nokhra",
+    "NH Number": 4573,
+    "Latitude": 27.45006,
+    "Longitude": 72.40303
+  },
+  {
+    "Plaza Name": "Kheerwa",
+    "NH Number": 4574,
+    "Latitude": 27.2827777,
+    "Longitude": 72.3230556
+  },
+  {
+    "Plaza Name": "Khuian Malkan",
+    "NH Number": 4575,
+    "Latitude": 29.880727,
+    "Longitude": 74.793736
+  },
+  {
+    "Plaza Name": "Pasyih",
+    "NH Number": 4576,
+    "Latitude": 25.4817,
+    "Longitude": 92.2882
+  },
+  {
+    "Plaza Name": "Lomshinong",
+    "NH Number": 4577,
+    "Latitude": 25.706,
+    "Longitude": 92.3756
+  },
+  {
+    "Plaza Name": "Davuluru",
+    "NH Number": 4578,
+    "Latitude": 16.4126432,
+    "Longitude": 80.7859938
+  },
+  {
+    "Plaza Name": "Pandutala",
+    "NH Number": 4579,
+    "Latitude": 80.8085833,
+    "Longitude": 22.3905556
+  },
+  {
+    "Plaza Name": "Thiruppachethi",
+    "NH Number": 4580,
+    "Latitude": 9.780999,
+    "Longitude": 78.335299
+  },
+  {
+    "Plaza Name": "Mohammad Ibrahimpur",
+    "NH Number": 4581,
+    "Latitude": 28.5798201,
+    "Longitude": 78.7958556
+  },
+  {
+    "Plaza Name": "Dumberwadi",
+    "NH Number": 4582,
+    "Latitude": 19.24404,
+    "Longitude": 74.013274
+  },
+  {
+    "Plaza Name": "Sonho",
+    "NH Number": 4583,
+    "Latitude": 25.924072,
+    "Longitude": 84.967898
+  },
+  {
+    "Plaza Name": "Pokhraira",
+    "NH Number": 4584,
+    "Latitude": 26.055956,
+    "Longitude": 85.182733
+  },
+  {
+    "Plaza Name": "Belon",
+    "NH Number": 4585,
+    "Latitude": 28.1859646,
+    "Longitude": 78.3630407
+  },
+  {
+    "Plaza Name": "Hadawa",
+    "NH Number": 4586,
+    "Latitude": 27.08318,
+    "Longitude": 83.232649
+  },
+  {
+    "Plaza Name": "Chhajarsi",
+    "NH Number": 4588,
+    "Latitude": 28.70178,
+    "Longitude": 77.621477
+  },
+  {
+    "Plaza Name": "Bara",
+    "NH Number": 4589,
+    "Latitude": 26.6293177,
+    "Longitude": 81.3336137
+  },
+  {
+    "Plaza Name": "Asroga",
+    "NH Number": 4590,
+    "Latitude": 26.18151,
+    "Longitude": 81.56264
+  },
+  {
+    "Plaza Name": "Kherwasani",
+    "NH Number": 4591,
+    "Latitude": 24.122464,
+    "Longitude": 80.599361
+  },
+  {
+    "Plaza Name": "Bogalur",
+    "NH Number": 4592,
+    "Latitude": 9.398195,
+    "Longitude": 78.71394
+  },
+  {
+    "Plaza Name": "Dhoki",
+    "NH Number": 4593,
+    "Latitude": 19.15597,
+    "Longitude": 74.41116
+  },
+  {
+    "Plaza Name": "Majhgawan",
+    "NH Number": 4594,
+    "Latitude": 23.48399,
+    "Longitude": 80.30481
+  },
+  {
+    "Plaza Name": "Pathoroundi",
+    "NH Number": 4595,
+    "Latitude": 23.24908,
+    "Longitude": 82.05883
+  },
+  {
+    "Plaza Name": "Shahdol",
+    "NH Number": 4596,
+    "Latitude": 23.28186,
+    "Longitude": 81.429282
+  },
+  {
+    "Plaza Name": "Chhapra",
+    "NH Number": 4597,
+    "Latitude": 23.657222,
+    "Longitude": 76.614862
+  },
+  {
+    "Plaza Name": "Rojwas",
+    "NH Number": 4598,
+    "Latitude": 23.330918,
+    "Longitude": 76.175973
+  },
+  {
+    "Plaza Name": "Dattigaon",
+    "NH Number": 4599,
+    "Latitude": 22.741519,
+    "Longitude": 74.836537
+  },
+  {
+    "Plaza Name": "Methwada",
+    "NH Number": 4600,
+    "Latitude": 22.6731595,
+    "Longitude": 75.545744
+  },
+  {
+    "Plaza Name": "Muthojipet",
+    "NH Number": 4601,
+    "Latitude": 18.002244,
+    "Longitude": 79.903564
+  },
+  {
+    "Plaza Name": "Amdi",
+    "NH Number": 4602,
+    "Latitude": 26.3827777,
+    "Longitude": 80.8863888
+  },
+  {
+    "Plaza Name": "Pargaon",
+    "NH Number": 4603,
+    "Latitude": 18.63166,
+    "Longitude": 75.6977
+  },
+  {
+    "Plaza Name": "Padalshingi",
+    "NH Number": 4604,
+    "Latitude": 19.3181,
+    "Longitude": 75.7487
+  },
+  {
+    "Plaza Name": "Bhokarwadi Maliwadi",
+    "NH Number": 4605,
+    "Latitude": 19.60083,
+    "Longitude": 75.6152
+  },
+  {
+    "Plaza Name": "Jagtara",
+    "NH Number": 4606,
+    "Latitude": 20.604749,
+    "Longitude": 81.419576
+  },
+  {
+    "Plaza Name": "Mashora",
+    "NH Number": 4607,
+    "Latitude": 19.662176,
+    "Longitude": 81.658696
+  },
+  {
+    "Plaza Name": "Badayiguda",
+    "NH Number": 4608,
+    "Latitude": 19.161402,
+    "Longitude": 81.98472
+  },
+  {
+    "Plaza Name": "Saliwada",
+    "NH Number": 4609,
+    "Latitude": 80.030222,
+    "Longitude": 23.105109
+  },
+  {
+    "Plaza Name": "Aksada",
+    "NH Number": 4611,
+    "Latitude": 26.7024838,
+    "Longitude": 82.6745948
+  },
+  {
+    "Plaza Name": "Chhapwa",
+    "NH Number": 4612,
+    "Latitude": 27.2644,
+    "Longitude": 83.3643
+  },
+  {
+    "Plaza Name": "Nainsar",
+    "NH Number": 4613,
+    "Latitude": 26.9209,
+    "Longitude": 83.297
+  },
+  {
+    "Plaza Name": "Mohtara",
+    "NH Number": 4614,
+    "Latitude": 23.418277,
+    "Longitude": 80.078098
+  },
+  {
+    "Plaza Name": "Odhaki Paipkhar",
+    "NH Number": 4615,
+    "Latitude": 24.404862,
+    "Longitude": 81.079578
+  },
+  {
+    "Plaza Name": "Gollaprolu",
+    "NH Number": 4617,
+    "Latitude": 17.1387,
+    "Longitude": 82.2718
+  },
+  {
+    "Plaza Name": "Mathur",
+    "NH Number": 4618,
+    "Latitude": 13.1766,
+    "Longitude": 80.2449
+  },
+  {
+    "Plaza Name": "Dilawarpur",
+    "NH Number": 4619,
+    "Latitude": 19.0990474,
+    "Longitude": 78.2133991
+  },
+  {
+    "Plaza Name": "Mandana",
+    "NH Number": 4620,
+    "Latitude": 24.966405,
+    "Longitude": 75.93462
+  },
+  {
+    "Plaza Name": "Kair Fakir ki Dhani",
+    "NH Number": 4621,
+    "Latitude": 26.630978,
+    "Longitude": 71.205575
+  },
+  {
+    "Plaza Name": "Pidhi",
+    "NH Number": 4622,
+    "Latitude": 26.3395,
+    "Longitude": 82.244267
+  },
+  {
+    "Plaza Name": "Aindhi",
+    "NH Number": 4623,
+    "Latitude": 26.245278,
+    "Longitude": 81.593749
+  },
+  {
+    "Plaza Name": "Sabli",
+    "NH Number": 4626,
+    "Latitude": 28.1602222,
+    "Longitude": 80.1005555
+  },
+  {
+    "Plaza Name": "Patgaon",
+    "NH Number": 4627,
+    "Latitude": 26.565182,
+    "Longitude": 90.238792
+  },
+  {
+    "Plaza Name": "Kannolli",
+    "NH Number": 4628,
+    "Latitude": 16.786827,
+    "Longitude": 75.739668
+  },
+  {
+    "Plaza Name": "Harval",
+    "NH Number": 4629,
+    "Latitude": 67.7752043,
+    "Longitude": 18.82095
+  },
+  {
+    "Plaza Name": "Talmod",
+    "NH Number": 5626,
+    "Latitude": 17.826227,
+    "Longitude": 76.74068
+  },
+  {
+    "Plaza Name": "Phulwadi",
+    "NH Number": 5627,
+    "Latitude": 17.79978,
+    "Longitude": 76.193308
+  },
+  {
+    "Plaza Name": "Boharipar (Khursi)",
+    "NH Number": 5628,
+    "Latitude": 23.047864,
+    "Longitude": 79.907251
+  },
+  {
+    "Plaza Name": "Sehatganj",
+    "NH Number": 5629,
+    "Latitude": 23.257753,
+    "Longitude": 77.638119
+  },
+  {
+    "Plaza Name": "Husnapur",
+    "NH Number": 5630,
+    "Latitude": 20.551197,
+    "Longitude": 78.039108
+  },
+  {
+    "Plaza Name": "Belekeri",
+    "NH Number": 5631,
+    "Latitude": 14.710895,
+    "Longitude": 74.2936251
+  },
+  {
+    "Plaza Name": "Holegadde",
+    "NH Number": 5632,
+    "Latitude": 14.3593904,
+    "Longitude": 74.419155
+  },
+  {
+    "Plaza Name": "Shirur",
+    "NH Number": 5633,
+    "Latitude": 13.9334681,
+    "Longitude": 74.5966233
+  },
+  {
+    "Plaza Name": "Sali Bamandanga",
+    "NH Number": 5634,
+    "Latitude": 23.629195,
+    "Longitude": 88.36003
+  },
+  {
+    "Plaza Name": "Nawabganj (Adampur)only entry  exit lane plaza at Allahabad Bypass",
+    "NH Number": 5636,
+    "Latitude": 25.558856,
+    "Longitude": 81.772125
+  },
+  {
+    "Plaza Name": "Ashiv",
+    "NH Number": 5637,
+    "Latitude": 18.127774,
+    "Longitude": 76.358179
+  },
+  {
+    "Plaza Name": "Namkhna",
+    "NH Number": 5638,
+    "Latitude": 21.7575,
+    "Longitude": 88.233611
+  },
+  {
+    "Plaza Name": "Mudhipar",
+    "NH Number": 5639,
+    "Latitude": 27.2038,
+    "Longitude": 77.5011
+  },
+  {
+    "Plaza Name": "Bhojpuri",
+    "NH Number": 5640,
+    "Latitude": 21.950763,
+    "Longitude": 82.061806
+  },
+  {
+    "Plaza Name": "Haladgaon",
+    "NH Number": 5641,
+    "Latitude": 20.857818,
+    "Longitude": 78.876369
+  },
+  {
+    "Plaza Name": "Vadodara",
+    "NH Number": 5642,
+    "Latitude": 22.96882,
+    "Longitude": 72.65872
+  }
+]
