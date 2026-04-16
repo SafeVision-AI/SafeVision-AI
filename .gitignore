@@ -30,6 +30,9 @@ dist/
 build/
 .eggs/
 
+# Machine-specific road manifest
+backend/scripts/road_sources.json
+
 # ChromaDB - vector store built locally via build_vectorstore.py (never commit ~100MB)
 backend/data/chroma_db/
 
@@ -98,6 +101,7 @@ Thumbs.db
 coverage/
 .nyc_output/
 .pytest_cache/
+chatbot_service/pytest-cache-files-*/
 .mypy_cache/
 .ruff_cache/
 htmlcov/
