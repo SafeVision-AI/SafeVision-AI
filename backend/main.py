@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
@@ -69,6 +69,34 @@ def create_app() -> FastAPI:
         allow_headers=['*'],
     )
     app.mount('/uploads', StaticFiles(directory=settings.upload_dir), name='uploads')
+
+    @app.get('/', tags=['System'])
+    async def root() -> dict:
+        return {
+            'service': 'RoadSoS / SafeVisionAI — Backend API',
+            'version': settings.version,
+            'status': 'online',
+            'description': (
+                'AI-powered road safety platform for India. '
+                'Real-time emergency locator, road issue reporting, '
+                'challan calculator, and smart routing.'
+            ),
+            'docs': '/docs',
+            'health': '/health',
+            'endpoints': {
+                'emergency_nearby':    'GET  /api/v1/emergency/nearby?lat=&lon=',
+                'emergency_sos':       'GET  /api/v1/emergency/sos?lat=&lon=',
+                'emergency_numbers':   'GET  /api/v1/emergency/numbers',
+                'challan_calculate':   'POST /api/v1/challan/calculate',
+                'road_issues':         'GET  /api/v1/roads/issues?lat=&lon=',
+                'road_report':         'POST /api/v1/roads/report',
+                'road_infrastructure': 'GET  /api/v1/roads/infrastructure?lat=&lon=',
+                'routing_preview':     'GET  /api/v1/routing/preview?origin_lat=&origin_lon=&destination_lat=&destination_lon=',
+                'geocode_search':      'GET  /api/v1/geocode/search?q=',
+                'chat':                'POST /api/v1/chat/',
+            },
+            'built_for': 'IIT Madras Road Safety Hackathon 2026',
+        }
 
     @app.get('/health', response_model=HealthResponse, tags=['System'])
     async def health() -> HealthResponse:

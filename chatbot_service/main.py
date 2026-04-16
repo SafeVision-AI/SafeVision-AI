@@ -82,6 +82,34 @@ def create_app() -> FastAPI:
         allow_methods=['*'],
         allow_headers=['*'],
     )
+
+    @app.get('/', tags=['System'])
+    async def root() -> dict:
+        return {
+            'service': 'RoadSoS / SafeVisionAI — Chatbot Service',
+            'version': '1.0.0',
+            'status': 'online',
+            'description': (
+                'Agentic RAG-powered road safety assistant for India. '
+                'Multi-provider LLM fallback chain (Groq, Gemini, HuggingFace). '
+                'Covers emergency response, MV Act legal queries, first aid, road reporting and more.'
+            ),
+            'docs': '/docs',
+            'health': '/health',
+            'endpoints': {
+                'chat':          'POST /api/v1/chat/',
+                'chat_stream':   'POST /api/v1/chat/stream',
+                'chat_history':  'GET  /api/v1/chat/history/{session_id}',
+                'chat_health':   'GET  /api/v1/chat/health',
+                'speech_status': 'GET  /speech/status',
+                'rebuild_index': 'POST /admin/rebuild-index',
+            },
+            'rag_index': {
+                'note': 'Hit /health for live chunk count and memory backend info',
+            },
+            'built_for': 'IIT Madras Road Safety Hackathon 2026',
+        }
+
     app.include_router(api_router)
     return app
 

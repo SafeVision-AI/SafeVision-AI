@@ -203,37 +203,52 @@ def _load_records(path: Path, fmt: str) -> list[dict[str, Any]]:
 
 async def import_records(
     records: list[InfrastructureRecord],
+    batch_size: int = 300,
 ) -> int:
     rows = [record.to_row() for record in records]
     if not rows:
         return 0
 
+    # Deduplicate by road_id WITHIN the full list (keep last occurrence).
+    # This prevents PostgreSQL errors when the same road_id appears twice
+    # in a single INSERT VALUES list (ON CONFLICT can't handle intra-batch dupes).
+    seen: dict[str, dict] = {}
+    for row in rows:
+        seen[row['road_id']] = row
+    rows = list(seen.values())
+
+    total = 0
     async with AsyncSessionLocal() as session:
-        stmt = insert(RoadInfrastructure).values(rows)
-        upsert = stmt.on_conflict_do_update(
-            index_elements=['road_id'],
-            set_={
-                'road_name': stmt.excluded.road_name,
-                'road_type': stmt.excluded.road_type,
-                'road_number': stmt.excluded.road_number,
-                'length_km': stmt.excluded.length_km,
-                'geometry': stmt.excluded.geometry,
-                'state_code': stmt.excluded.state_code,
-                'contractor_name': stmt.excluded.contractor_name,
-                'exec_engineer': stmt.excluded.exec_engineer,
-                'exec_engineer_phone': stmt.excluded.exec_engineer_phone,
-                'budget_sanctioned': stmt.excluded.budget_sanctioned,
-                'budget_spent': stmt.excluded.budget_spent,
-                'construction_date': stmt.excluded.construction_date,
-                'last_relayed_date': stmt.excluded.last_relayed_date,
-                'next_maintenance': stmt.excluded.next_maintenance,
-                'project_source': stmt.excluded.project_source,
-                'data_source_url': stmt.excluded.data_source_url,
-            },
-        )
-        await session.execute(upsert)
-        await session.commit()
-    return len(rows)
+        for i in range(0, len(rows), batch_size):
+            chunk = rows[i : i + batch_size]
+            stmt = insert(RoadInfrastructure).values(chunk)
+            upsert = stmt.on_conflict_do_update(
+                index_elements=['road_id'],
+                set_={
+                    'road_name': stmt.excluded.road_name,
+                    'road_type': stmt.excluded.road_type,
+                    'road_number': stmt.excluded.road_number,
+                    'length_km': stmt.excluded.length_km,
+                    'geometry': stmt.excluded.geometry,
+                    'state_code': stmt.excluded.state_code,
+                    'contractor_name': stmt.excluded.contractor_name,
+                    'exec_engineer': stmt.excluded.exec_engineer,
+                    'exec_engineer_phone': stmt.excluded.exec_engineer_phone,
+                    'budget_sanctioned': stmt.excluded.budget_sanctioned,
+                    'budget_spent': stmt.excluded.budget_spent,
+                    'construction_date': stmt.excluded.construction_date,
+                    'last_relayed_date': stmt.excluded.last_relayed_date,
+                    'next_maintenance': stmt.excluded.next_maintenance,
+                    'project_source': stmt.excluded.project_source,
+                    'data_source_url': stmt.excluded.data_source_url,
+                },
+            )
+            await session.execute(upsert)
+            await session.commit()
+            total += len(chunk)
+            print(f'  Batch {i // batch_size + 1}: {len(chunk)} rows upserted  (running total: {total})')
+    return total
+
 
 
 async def main() -> None:

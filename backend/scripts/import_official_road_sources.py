@@ -94,21 +94,25 @@ async def _import_source(source: dict[str, Any], settings) -> tuple[int, int]:
 
     records = []
     skipped = 0
+    source_prefix = source['name']  # e.g. 'pmgsy_rural_roads'
     for index, raw_record in enumerate(raw_records, start=1):
         try:
-            records.append(
-                _normalize_record(
-                    raw_record,
-                    default_state_code=source.get('default_state_code'),
-                    default_project_source=source.get('default_project_source') or source['name'],
-                    default_data_source_url=source.get('default_data_source_url') or source.get('url'),
-                    index=index,
-                )
+            record = _normalize_record(
+                raw_record,
+                default_state_code=source.get('default_state_code'),
+                default_project_source=source.get('default_project_source') or source['name'],
+                default_data_source_url=source.get('default_data_source_url') or source.get('url'),
+                index=index,
             )
+            # Prefix road_id with source name to guarantee global uniqueness.
+            # e.g. 'MDR201' (repeats across states) -> 'pmgsy_rural_roads-MDR201-5'
+            record.road_id = f'{source_prefix}-{record.road_id}-{index}'
+            records.append(record)
         except Exception as exc:
             skipped += 1
             print(f'[{source["name"]}] Skipping row {index}: {exc}')
 
+    print(f'[{source["name"]}] Normalized {len(records)} records, importing in batches...')
     imported = await import_records(records)
     return imported, skipped
 
