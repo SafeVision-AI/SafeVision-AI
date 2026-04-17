@@ -8,29 +8,30 @@ The outputs from these notebooks form the entire "intelligence" layer of the app
 
 ## 🚀 Getting Started in Colab (Fastest Way)
 
-1.  **Download the Data Vault**: Ensure you have the `data.zip` file (approx 3.3GB) from the repository root.
-2.  **Upload to Colab**: Upload `data.zip` to the root `/content/` directory.
-3.  **Extract Data**: Run the following command in a code cell:
+1.  **Clone the Data Hub**: Since we moved the data to Hugging Face, you can clone the entire hub directly into your session:
     ```bash
-    !unzip data.zip
+    # Clone the Hub
+    !git clone https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub /content/dataset_hub
+    
+    # Link the data folder so notebooks find it at /content/data
+    !ln -s /content/dataset_hub/data /content/data
     ```
-4.  **Extract Dataset Archives**: Some datasets are double-zipped. After unzipping the main vault, navigate to the pothole training directory and extract the `archive.zip`:
+2.  **Extract Dataset Archives**: Some datasets are double-zipped. Run this to extract the pothole training data:
     ```bash
     !unzip /content/data/chatbot_service/data/pothole_training/road_damage_2025/archive.zip -d /content/data/chatbot_service/data/pothole_training/road_damage_2025/
     ```
 
 ## 📁 Dataset Path Architecture
 
-If extracted correctly, the notebooks will automatically look for data in:
+If cloned and linked correctly, the notebooks will automatically find data in:
 
-| Feature | Colab Extraction Path | Status |
+| Feature | Colab Path | Status |
 | :--- | :--- | :--- |
-| **Accidents Data** | `/content/data/chatbot_service/data/accidents/kaggle_india_accidents.csv` | Ready |
-| **Legal/Medical PDFs** | `/content/data/chatbot_service/data/legal/*.pdf` & `/medical/*.pdf` | Ready |
-| **Pothole Training** | `/content/data/chatbot_service/data/pothole_training/road_damage_2025/archive.zip` | **Needs Extraction** |
-| **Road Damage Data** | `/content/data/chatbot_service/data/pothole_training/road_damage_2025/` | Target Dir |
-| **Roads & Tolls** | `/content/data/backend/data/roads/toll_plazas.csv` | Ready |
-| **Processed Features**| `/content/data/chatbot_service/data/accidents/blackspot_seed.csv` | Ready |
+| **Accidents Data** | `/content/data/chatbot_service/data/accidents/` | Ready |
+| **Legal/Medical PDFs** | `/content/data/chatbot_service/data/legal/*.pdf` | Ready |
+| **Pothole Training** | `/content/data/chatbot_service/data/pothole_training/road_damage_2025/` | **Needs Extract** |
+| **Roads & Tolls** | `/content/data/backend/data/roads/` | Ready |
+| **AI Models (ONNX)** | `/content/data/frontend/public/models/` | Ready |
 
 ---
 
