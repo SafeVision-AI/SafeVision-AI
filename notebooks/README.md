@@ -6,12 +6,31 @@ The outputs from these notebooks form the entire "intelligence" layer of the app
 
 ---
 
-## 🗄️ IMPORTANT: How to load the Datasets into Colab
-If you are running these Notebooks from scratch in Google Colab, you need the raw source datasets to train them.
+## 🚀 Getting Started in Colab (Fastest Way)
 
-1. **Extract the Data Vault**: You will find a Backup Zip file inside this directory (e.g., `SafeVisionAI_Data_Backup.zip`). **Extract this zip file** first.
-2. **Find the Paths**: Open the extracted folder, and navigate to the `data/` directory. Here you will see the exact same folder structure as the main codebase (e.g., `data/backend/data` and `data/chatbot_service/data`).
-3. **Upload to Colab**: When a Notebook asks you to manually upload a dataset, upload the specific files from inside the extracted `data/` directory.
+1.  **Download the Data Vault**: Ensure you have the `data.zip` file (approx 3.3GB) from the repository root.
+2.  **Upload to Colab**: Upload `data.zip` to the root `/content/` directory.
+3.  **Extract Data**: Run the following command in a code cell:
+    ```bash
+    !unzip data.zip
+    ```
+4.  **Extract Dataset Archives**: Some datasets are double-zipped. After unzipping the main vault, navigate to the pothole training directory and extract the `archive.zip`:
+    ```bash
+    !unzip /content/data/chatbot_service/data/pothole_training/road_damage_2025/archive.zip -d /content/data/chatbot_service/data/pothole_training/road_damage_2025/
+    ```
+
+## 📁 Dataset Path Architecture
+
+If extracted correctly, the notebooks will automatically look for data in:
+
+| Feature | Colab Extraction Path | Status |
+| :--- | :--- | :--- |
+| **Accidents Data** | `/content/data/chatbot_service/data/accidents/kaggle_india_accidents.csv` | Ready |
+| **Legal/Medical PDFs** | `/content/data/chatbot_service/data/legal/*.pdf` & `/medical/*.pdf` | Ready |
+| **Pothole Training** | `/content/data/chatbot_service/data/pothole_training/road_damage_2025/archive.zip` | **Needs Extraction** |
+| **Road Damage Data** | `/content/data/chatbot_service/data/pothole_training/road_damage_2025/` | Target Dir |
+| **Roads & Tolls** | `/content/data/backend/data/roads/toll_plazas.csv` | Ready |
+| **Processed Features**| `/content/data/chatbot_service/data/accidents/blackspot_seed.csv` | Ready |
 
 ---
 

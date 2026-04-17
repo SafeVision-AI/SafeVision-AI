@@ -187,3 +187,6 @@ chatbot_service/data/speech_finetuning/indic-seamless/
 # frontend/public/models/yolov8n_pothole.onnx   <- commit when exported from Colab
 # frontend/public/models/maarg-risk.onnx        <- commit when trained
 
+
+# Data Backup Root
+/data/
