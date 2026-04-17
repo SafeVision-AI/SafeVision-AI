@@ -11,7 +11,7 @@ from typing import Any
 import httpx
 
 from core.config import get_settings
-from scripts.import_road_infrastructure import (
+from scripts.app.import_road_infrastructure import (
     _load_records,
     _normalize_record,
     import_records,

@@ -8,7 +8,7 @@ from core.database import AsyncSessionLocal
 from core.redis_client import create_cache
 from services.emergency_locator import CITY_CENTERS, EmergencyLocatorService
 from services.overpass_service import OverpassService
-from scripts.seed_emergency import CITY_GROUPS
+from scripts.app.seed_emergency import CITY_GROUPS
 
 
 async def build_bundle(city: str) -> tuple[str, int]:
