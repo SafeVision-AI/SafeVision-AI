@@ -6,6 +6,16 @@ The outputs from these notebooks form the entire "intelligence" layer of the app
 
 ---
 
+## 🗄️ IMPORTANT: How to load the Datasets into Colab
+If you are running these Notebooks from scratch in Google Colab, you need the raw source datasets to train them.
+
+1. **Extract the Data Vault**: You will find a Backup Zip file inside this directory (e.g., `SafeVisionAI_Data_Backup.zip`). **Extract this zip file** first.
+2. **Find the Paths**: Open the extracted folder, and navigate to the `data/` directory. Here you will see the exact same folder structure as the main codebase (e.g., `data/backend/data` and `data/chatbot_service/data`).
+3. **Upload to Colab**: When a Notebook asks you to manually upload a dataset, upload the specific files from inside the extracted `data/` directory.
+
+---
+
+
 ## 📓 Notebook 1: YOLOv8 Pothole Detector Training
 * **Purpose**: Trains a custom YOLOv8 Nano object detection model on the Indian Road Pothole dataset to identify multiple classes: `pothole`, `crack`, and `manhole`. Employs data augmentation and runs for 50 epochs to maximize mAP.
 * **Why we use it**: It acts as the core computer vision engine to warn drivers of upcoming road deformities.
