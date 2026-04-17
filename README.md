@@ -18,6 +18,14 @@
 
 ---
 
+## 🛡️ Data Intelligence
+
+The "Intelligence Layer" of SafeVisionAI (3.3GB of pre-trained models, road damage datasets, and legal archives) is hosted on the **Hugging Face Dataset Hub** for high-performance delivery.
+
+**[👉 Explore the SafeVisionAI Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)**
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -57,16 +65,34 @@ Verify: http://localhost:3000
 
 ```
 SafeVisionAI/
--- backend/          FastAPI Python 3.11 + PostgreSQL/PostGIS + ChromaDB
--- chatbot_service/  FastAPI Chatbot/Voice Service + Custom RAG pipelines
--- frontend/         Next.js 14 TypeScript PWA + WebLLM/DuckDB-Wasm UI
--- docs/             Complete technical documentation
--- chatbot_docs/     Documentation specifically for Chatbot Service
--- scripts/          Global Python/Shell scripts for OS setup and data prep
--- .github/          GitHub Actions CI/CD
+├── backend/           FastAPI Python 3.11 + PostgreSQL/PostGIS + ChromaDB
+├── chatbot_service/   FastAPI Chatbot/Voice Service + Custom RAG pipelines
+├── frontend/          Next.js 14 TypeScript PWA + WebLLM/DuckDB-Wasm UI
+├── docs/              Complete technical documentation
+├── chatbot_docs/      Documentation specifically for Chatbot Service
+├── scripts/           Global data pipeline scripts
+│   ├── app/           DB-dependent scripts (seed_emergency, seed_nhp_hospitals)
+│   └── data/          Pure Python scripts — no DB needed (fetchers, extractors)
+└── .github/           GitHub Actions CI/CD
 ```
 
-Read `docs/Agent.md` first  -  it gives a complete overview of the entire application.
+---
+
+## Scripts Architecture
+
+All script folders follow the same `app/` vs `data/` split:
+
+| Folder | `app/` | `data/` |
+|---|---|---|
+| `scripts/` | 2 files (DB seeders) | 15 files (fetchers, extractors, verifiers) |
+| `backend/scripts/` | 11 files (DB/Redis/PostGIS loaders) | 5 files (pure data transforms) |
+| `chatbot_service/scripts/` | 1 file (DB wrapper) | 6 files (Pro Overpass fetchers) |
+
+> **`data/`** scripts run standalone with no database. **`app/`** scripts require a live backend stack.
+
+The `data/` scripts are also mirrored on the **[Hugging Face Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)** so researchers can reproduce the dataset without cloning the full app.
+
+Read `docs/Agent.md` first — it gives a complete overview of the entire application.
 
 ---
 
@@ -95,6 +121,7 @@ Read `docs/Agent.md` first  -  it gives a complete overview of the entire applic
 | [docs/AI_Instructions.md](docs/AI_Instructions.md) | How each AI layer works |
 | [docs/Security.md](docs/Security.md) | Auth, privacy, API security |
 | [docs/Deployment.md](docs/Deployment.md) | Step-by-step deployment guide |
+| [Hugging Face Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub) | **Intelligence Layer** (Models, Data, Notebooks) |
 | [SETUP.md](SETUP.md) | Full installation and run guide |
 
 ---
