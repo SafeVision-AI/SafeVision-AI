@@ -39,24 +39,23 @@ backend/data/chroma_db/
 # Downloaded PDF source documents
 backend/data/*.pdf
 backend/data/state_amendments/*.pdf
-# Note: chatbot_service/data/legal PDFs and CSVs are INTENTIONALLY NOT IGNORED
-# They are deployed to the server so the vectorstore can be built during startup.
-
-chatbot_service/data/legal/indian_kanoon/*.zip
-chatbot_service/data/qa_pairs/*.zip
-chatbot_service/data/accidents/*/*.pdf
-chatbot_service/data/accidents/_raw_manugupta/
-chatbot_service/data/accidents/*.csv
-chatbot_service/data/accidents/*/*.csv
-chatbot_service/data/boundaries/*.csv
-chatbot_service/data/boundaries/*.geojson
-chatbot_service/data/boundaries/*.json
-chatbot_service/data/hospitals/*.csv
-chatbot_service/data/medical/*.csv
+# Source PDFs — too large, not needed on Render
+chatbot_service/data/legal/*.pdf
 chatbot_service/data/medical/*.pdf
-chatbot_service/data/roads/*.csv
-chatbot_service/data/roads/*.geojson
-chatbot_service/data/roads/*.zip
+chatbot_service/data/legal/indian_kanoon/
+chatbot_service/data/legal/state_amendments/
+
+# Raw data CSVs — seeded to Supabase, not needed on Render
+chatbot_service/data/accidents/
+chatbot_service/data/hospitals/
+chatbot_service/data/medical/
+chatbot_service/data/roads/
+chatbot_service/data/emergency/
+chatbot_service/data/pothole_training/
+chatbot_service/data/speech_finetuning/
+chatbot_service/data/boundaries/
+chatbot_service/data/qa_pairs/
+
 # Alembic temp files
 backend/migrations/versions/*.pyc
 
@@ -179,9 +178,8 @@ chatbot_service/data/qa_pairs/mhqa-main/
 # Speech finetuning model weights (7GB Indic Seamless — download separately)
 chatbot_service/data/speech_finetuning/indic-seamless/
 
-# ChromaDB vectorstore (built locally)
-chatbot_service/data/chroma_db/
-
+# KEEP THIS — Render needs the pre-built vectorstore
+# chatbot_service/data/chroma_db/ (COMMENTED OUT SO IT COMMITS!)
 # ============================================================
 # FRONTEND MODELS (committed individually when ready)
 # ============================================================
@@ -189,5 +187,3 @@ chatbot_service/data/chroma_db/
 # frontend/public/models/yolov8n_pothole.onnx   <- commit when exported from Colab
 # frontend/public/models/maarg-risk.onnx        <- commit when trained
 
-# DB
-chatbot_service/data/chroma_db/
