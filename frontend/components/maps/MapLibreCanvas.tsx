@@ -2,17 +2,11 @@
 
 import maplibregl from 'maplibre-gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTheme } from 'next-themes';
 
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
-const MAPTILER_STYLE_ID = process.env.NEXT_PUBLIC_MAPTILER_STYLE_ID ?? 'streets-v2';
 const OPENFREEMAP_STYLE_URL =
   process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? 'https://tiles.openfreemap.org/styles/liberty';
-const MAPTILER_STYLE_URL = MAPTILER_KEY
-  ? `https://api.maptiler.com/maps/${MAPTILER_STYLE_ID}/style.json?key=${MAPTILER_KEY}`
-  : null;
-const MAPTILER_RASTER_TILE_URL = MAPTILER_KEY
-  ? `https://api.maptiler.com/maps/${MAPTILER_STYLE_ID}/256/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`
-  : null;
 const ACCURACY_SOURCE_ID = 'svai-current-location-accuracy';
 const ACCURACY_FILL_LAYER_ID = 'svai-current-location-accuracy-fill';
 const ACCURACY_LINE_LAYER_ID = 'svai-current-location-accuracy-line';
@@ -96,31 +90,7 @@ function buildFacilityCollection(
   };
 }
 
-const STYLE_CANDIDATES: MapStyleCandidate[] = [
-  ...(MAPTILER_RASTER_TILE_URL
-    ? [
-        {
-          kind: 'maptiler-raster',
-          label: 'MapTiler Streets',
-          style: buildMapTilerRasterStyle(MAPTILER_RASTER_TILE_URL),
-        } as MapStyleCandidate,
-      ]
-    : []),
-  ...(MAPTILER_STYLE_URL
-    ? [
-        {
-          kind: 'maptiler-vector',
-          label: 'MapTiler Streets vector',
-          style: MAPTILER_STYLE_URL,
-        } as MapStyleCandidate,
-      ]
-    : []),
-  {
-    kind: 'openfreemap',
-    label: 'OpenFreeMap Liberty',
-    style: OPENFREEMAP_STYLE_URL,
-  },
-];
+
 
 export interface MapLibreFacility {
   id: string;
@@ -343,6 +313,63 @@ export function MapLibreCanvas({
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [statusMessage, setStatusMessage] = useState<string>('Loading map...');
   const [styleRevision, setStyleRevision] = useState(0);
+  const { resolvedTheme } = useTheme();
+
+  const STYLE_CANDIDATES = useMemo<MapStyleCandidate[]>(() => {
+    // Read the explicit styles from the .env file!
+    const lightStyle = process.env.NEXT_PUBLIC_MAPTILER_STYLE_LIGHT ?? 'streets-v2';
+    const darkStyle = process.env.NEXT_PUBLIC_MAPTILER_STYLE_DARK ?? 'dataviz-dark';
+    
+    const styleId = resolvedTheme === 'dark' ? darkStyle : lightStyle;
+
+    const mapTilerStyleUrl = MAPTILER_KEY
+      ? `https://api.maptiler.com/maps/${styleId}/style.json?key=${MAPTILER_KEY}`
+      : null;
+    const mapTilerRasterUrl = MAPTILER_KEY
+      ? `https://api.maptiler.com/maps/${styleId}/256/{z}/{x}/{y}.png?key=${MAPTILER_KEY}`
+      : null;
+
+    return [
+      ...(mapTilerRasterUrl
+        ? [
+            {
+              kind: 'maptiler-raster',
+              label: 'MapTiler Streets',
+              style: buildMapTilerRasterStyle(mapTilerRasterUrl),
+            } as MapStyleCandidate,
+          ]
+        : []),
+      ...(mapTilerStyleUrl
+        ? [
+            {
+              kind: 'maptiler-vector',
+              label: 'MapTiler Streets vector',
+              style: mapTilerStyleUrl,
+            } as MapStyleCandidate,
+          ]
+        : []),
+      {
+        kind: 'openfreemap',
+        label: 'OpenFreeMap Liberty',
+        style: OPENFREEMAP_STYLE_URL,
+      },
+    ];
+  }, [resolvedTheme]);
+
+  const candidatesRef = useRef(STYLE_CANDIDATES);
+  useEffect(() => {
+    candidatesRef.current = STYLE_CANDIDATES;
+  }, [STYLE_CANDIDATES]);
+
+  useEffect(() => {
+    if (mapRef.current && mapRef.current.isStyleLoaded()) {
+      const activeCandidate = STYLE_CANDIDATES[activeStyleIndexRef.current];
+      if (activeCandidate) {
+        styleReadyRef.current = false;
+        mapRef.current.setStyle(activeCandidate.style as maplibregl.StyleSpecification);
+      }
+    }
+  }, [STYLE_CANDIDATES]);
 
   const liveFacilities = useMemo(
     () => facilities.filter((facility) => facility.coords),
@@ -367,7 +394,7 @@ export function MapLibreCanvas({
         return;
       }
 
-      const getActiveCandidate = () => STYLE_CANDIDATES[activeStyleIndexRef.current];
+      const getActiveCandidate = () => candidatesRef.current[activeStyleIndexRef.current];
 
       map = new maplibregl.Map({
         container: mapNodeRef.current,
@@ -388,7 +415,7 @@ export function MapLibreCanvas({
         }
 
         const nextIndex = activeStyleIndexRef.current + 1;
-        if (nextIndex >= STYLE_CANDIDATES.length) {
+        if (nextIndex >= candidatesRef.current.length) {
           setStatus('error');
           setStatusMessage('Map service is unavailable right now.');
           return;
@@ -399,7 +426,7 @@ export function MapLibreCanvas({
         setStatus('loading');
         setStatusMessage(message);
         setStyleRevision((revision) => revision + 1);
-        map.setStyle(STYLE_CANDIDATES[nextIndex].style as maplibregl.StyleSpecification);
+        map.setStyle(candidatesRef.current[nextIndex].style as maplibregl.StyleSpecification);
       };
 
       const handleMapError = (event: unknown) => {
