@@ -5,9 +5,9 @@ import { useEffect, useMemo, useRef } from 'react';
 import {
   fetchNearbyServices,
   fetchRoadIssues,
-  reverseGeocode,
 } from '@/lib/api';
 import { useGeolocation } from '@/lib/geolocation';
+import { getAddressFromGPS } from '@/lib/reverse-geocode';
 import { NearbyRoadIssue, NearbyService, useAppStore } from '@/lib/store';
 
 const SEARCH_RADIUS_STEPS = [5_000, 12_000, 20_000, 35_000, 50_000];
@@ -228,7 +228,7 @@ export default function DashboardMapBootstrap() {
           radius: serviceRadius,
           limit: 12,
         }),
-        reverseGeocode({ lat: resolvedLat, lon: resolvedLon }),
+        getAddressFromGPS(resolvedLat, resolvedLon),
       ]);
 
       if (cancelled) {
@@ -237,7 +237,7 @@ export default function DashboardMapBootstrap() {
 
       const servicesOk = servicesResult.status === 'fulfilled';
       const issuesOk = issuesResult.status === 'fulfilled';
-      const geocodeOk = geocodeResult.status === 'fulfilled';
+      const geocodeOk = geocodeResult.status === 'fulfilled' && geocodeResult.value !== null;
 
       if (servicesOk) {
         setNearbyServices(toStoreServices(servicesResult.value.services));
@@ -272,15 +272,15 @@ export default function DashboardMapBootstrap() {
       }
 
       if (geocodeOk) {
-        const geocode = geocodeResult.value;
+        const geocode = geocodeResult.value!;
         setGpsLocation({
           lat: resolvedLat,
           lon: resolvedLon,
           accuracy: gpsLocation?.accuracy ?? location?.accuracy ?? 0,
           timestamp: gpsLocation?.timestamp ?? location?.timestamp ?? Date.now(),
           city: geocode.city ?? gpsLocation?.city,
-          state: geocode.stateCode ?? geocode.state ?? gpsLocation?.state,
-          displayName: geocode.displayName ?? gpsLocation?.displayName,
+          state: geocode.state ?? gpsLocation?.state,
+          displayName: geocode.displayAddress ?? gpsLocation?.displayName,
         });
       }
 

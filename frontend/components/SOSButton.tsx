@@ -14,14 +14,14 @@ export function SOSButton() {
   const { userProfile, gpsLocation } = useAppStore();
   const [isExpanding, setIsExpanding] = useState(false);
 
-  const triggerWhatsApp = () => {
-    const link = generateSosWhatsAppLink(userProfile, gpsLocation);
+  const triggerWhatsApp = async () => {
+    const link = await generateSosWhatsAppLink(userProfile, gpsLocation);
     window.open(link, '_blank');
     setIsExpanding(false);
   };
 
-  const triggerSms = () => {
-    const link = generateSosSmsLink(userProfile, gpsLocation);
+  const triggerSms = async () => {
+    const link = await generateSosSmsLink(userProfile, gpsLocation);
     window.location.href = link;
     setIsExpanding(false);
   };

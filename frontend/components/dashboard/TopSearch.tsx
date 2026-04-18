@@ -7,6 +7,7 @@ import { motion } from 'motion/react';
 import { formatAccuracyLabel, formatLocationLabel, isApproximateLocation } from '@/lib/location-utils';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
+import { searchPlaces, GeocodingResult } from '@/lib/geocoding';
 
 interface TopSearchProps {
   isMapPage?: boolean;
@@ -47,16 +48,40 @@ const TopSearch = memo(function TopSearch({
   const [mounted, setMounted] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [results, setResults] = useState<GeocodingResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    if (!searchQuery.trim() || searchQuery.length < 2) {
+      setResults([]);
+      setIsSearching(false);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      const res = await searchPlaces(searchQuery);
+      setResults(res);
+      setIsSearching(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
+    if (results.length > 0) {
+      selectResult(results[0]);
     }
+  };
+
+  const selectResult = (r: GeocodingResult) => {
+    window.dispatchEvent(new CustomEvent('svai:fly-to', { detail: { lat: r.lat, lng: r.lon } }));
+    setIsFocused(false);
+    setSearchQuery(r.name || r.label);
+    setResults([]);
   };
 
   const locationLabel = formatLocationLabel(gpsLocation, gpsError);
@@ -135,6 +160,32 @@ const TopSearch = memo(function TopSearch({
           <button type="button" className="p-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all ml-2">
             <Mic className="w-5 h-5" />
           </button>
+          
+          {/* Autocomplete Dropdown */}
+          {isFocused && (searchQuery.length > 1 || results.length > 0) && (
+            <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white dark:bg-[#1a2133] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50">
+              {isSearching && results.length === 0 ? (
+                <div className="p-4 text-center text-sm text-slate-500">Searching...</div>
+              ) : results.length > 0 ? (
+                <ul>
+                  {results.map((r, i) => (
+                    <li key={i}>
+                      <button
+                        type="button"
+                        onClick={() => selectResult(r)}
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-[#1f283d] transition-colors flex flex-col border-b border-slate-100 dark:border-slate-800/50 last:border-0"
+                      >
+                        <span className="font-semibold text-slate-800 dark:text-[#d7e3fc]">{r.name}</span>
+                        <span className="text-xs text-slate-500 dark:text-slate-400">{r.label}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : searchQuery.length > 2 && !isSearching ? (
+                <div className="p-4 text-center text-sm text-slate-500">No places found in India.</div>
+              ) : null}
+            </div>
+          )}
         </form>
 
         {/* Right Side: Theme Toggle on Tablet/Desktop */}

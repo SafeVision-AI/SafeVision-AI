@@ -20,6 +20,8 @@ export default function EmergencyPage() {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(true);
+  const [waLink, setWaLink] = useState('');
+  const [smsLink, setSmsLink] = useState('');
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -94,9 +96,11 @@ export default function EmergencyPage() {
     setHoldProgress(0);
   };
 
-  const gpsLoc = coords ? { lat: coords.lat, lon: coords.lng, accuracy: 10, timestamp: Date.now() } : null;
-  const waLink = generateSosWhatsAppLink(null, gpsLoc);
-  const smsLink = generateSosSmsLink(null, gpsLoc);
+  useEffect(() => {
+    const gpsLoc = coords ? { lat: coords.lat, lon: coords.lng, accuracy: 10, timestamp: Date.now() } : null;
+    generateSosWhatsAppLink(null, gpsLoc).then(setWaLink).catch(() => setWaLink(''));
+    setSmsLink(generateSosSmsLink(null, gpsLoc));
+  }, [coords]);
 
   return (
     <div className="bg-slate-50 dark:bg-[#0B1121] text-slate-900 dark:text-[#d7e3fc] font-['Inter'] selection:bg-red-500/30 selection:text-red-900 dark:selection:text-[#5c0002] min-h-dvh flex flex-col relative overflow-x-hidden transition-colors duration-500">

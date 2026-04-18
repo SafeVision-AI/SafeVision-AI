@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getAddressFromGPS } from './reverse-geocode';
 
 const BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000').replace(/\/+$/, '');
 
@@ -617,8 +618,18 @@ export async function reverseGeocode(params: {
   lat: number;
   lon: number;
 }): Promise<ReverseGeocodeResponse> {
-  const { data } = await client.get('/api/v1/geocode/reverse', { params });
-  return normalizeGeocodeResult(data);
+  // Use BigDataCloud purely on the frontend to avoid backend load
+  const result = await getAddressFromGPS(params.lat, params.lon);
+  if (!result) {
+    return { displayName: 'Unknown Location', lat: params.lat, lon: params.lon };
+  }
+  return {
+    displayName: result.displayAddress,
+    city: result.city,
+    state: result.state,
+    lat: params.lat,
+    lon: params.lon,
+  };
 }
 
 export async function searchGeocode(q: string): Promise<GeocodeSearchResponse> {

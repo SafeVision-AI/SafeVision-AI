@@ -614,6 +614,21 @@ export function MapLibreCanvas({
   }, [currentLocation, styleRevision]);
 
   useEffect(() => {
+    const handleFlyTo = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && mapRef.current) {
+        mapRef.current.flyTo({
+          center: [customEvent.detail.lng, customEvent.detail.lat],
+          zoom: 16,
+          essential: true,
+        });
+      }
+    };
+    window.addEventListener('svai:fly-to', handleFlyTo);
+    return () => window.removeEventListener('svai:fly-to', handleFlyTo);
+  }, []);
+
+  useEffect(() => {
     const map = mapRef.current;
     if (!map) {
       return;
