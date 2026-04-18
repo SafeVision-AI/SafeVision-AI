@@ -1,4 +1,4 @@
-# RoadSoS Complete Project Resource Checklist
+# SafeVisionAI Complete Project Resource Checklist
 
 Generated from:
 - [RoadSoS_Complete_Resources_main.docx](C:/Hackathons/IITM/RoadSoS_Complete_Resources_main.docx)
@@ -410,7 +410,7 @@ Target root: `chatbot_service/` on the chatbot branch.
 | Chatbot Render blueprint | Chatbot implementation plan, Section 5 | `chatbot_service/render.yaml` | N/A | Future phase | High |
 | Chatbot config module | Chatbot implementation plan, Section 5 | `chatbot_service/config.py` | N/A | Future phase | Critical |
 | Chatbot service health endpoint | Chatbot implementation plan, Phase 1 | `chatbot_service/main.py` | N/A | Future phase | High |
-| Chatbot service port 8001 binding | Chatbot implementation plan, Section 5 | `chatbot_service/main.py` and `chatbot_service/.env` | `CHATBOT_SERVICE_PORT` | Future phase | High |
+| Chatbot service port 8010 binding | Chatbot implementation plan, Section 5 | `chatbot_service/main.py` and `chatbot_service/.env` | `CHATBOT_SERVICE_PORT` | Future phase | High |
 | Chroma build baked into Docker image | Chatbot implementation plan, Deployment section | `chatbot_service/Dockerfile` and `chatbot_service/data/build_vectorstore.py` | N/A | Future phase | Medium |
 
 ## 21. Chatbot service code artifacts by subsystem
@@ -436,7 +436,7 @@ Target root: `chatbot_service/` on the chatbot branch.
 | Embeddings wrapper | Chatbot implementation plan, Section 5 | `chatbot_service/rag/embeddings.py` | `EMBEDDING_MODEL` | Future phase | Critical |
 | Retriever module | Chatbot implementation plan, Section 5 | `chatbot_service/rag/retriever.py` | `TOP_K_RETRIEVAL` | Future phase | High |
 | PDF/document loader | Chatbot implementation plan, Section 5 | `chatbot_service/rag/document_loader.py` | `RAG_DATA_DIR` | Future phase | High |
-| LangGraph definition | Chatbot implementation plan, Section 5 | `chatbot_service/agent/graph.py` | N/A | Future phase | Critical |
+| ChatEngine definition | Chatbot implementation plan, Section 5 | `chatbot_service/agent/graph.py` | N/A | Future phase | Critical |
 | Agent state schema | Chatbot implementation plan, Section 5 | `chatbot_service/agent/state.py` | N/A | Future phase | High |
 | Intent detector | Chatbot implementation plan and guide | `chatbot_service/agent/intent_detector.py` | N/A | Future phase | Critical |
 | Context assembler | Chatbot implementation plan and guide | `chatbot_service/agent/context_assembler.py` | N/A | Future phase | Critical |

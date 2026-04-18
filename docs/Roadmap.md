@@ -28,7 +28,7 @@ gantt
 
     section Phase 4 - Frontend
     Next.js app shell and routing     :p4a, 2026-04-07, 2d
-    Emergency Locator UI + Leaflet    :p4b, 2026-04-08, 3d
+    Emergency Locator UI + MapLibre   :p4b, 2026-04-08, 3d
     AI Chat UI                        :p4c, 2026-04-09, 2d
     Challan Calculator UI             :p4d, 2026-04-10, 2d
     Road Reporter UI                  :p4e, 2026-04-11, 2d
@@ -65,16 +65,16 @@ gantt
 
 **Goal:** All 4 API modules working with real data.
 
-- [ ] Set up Supabase project and enable PostGIS + pg_trgm
-- [ ] Run Alembic migrations (create all 6 tables)
-- [ ] Seed traffic violations data (seed_violations.py)
-- [ ] Seed emergency services for 25 cities from OSM (seed_emergency.py)
-- [ ] Emergency Locator API - ST_DWithin + Overpass fallback
-- [ ] Geocoding API - Nominatim reverse geocode
-- [ ] Challan Calculator API - DuckDB SQL + state overrides
-- [ ] Road Reporter API - submit issue, route to authority
-- [ ] Set up Upstash Redis and connect cache client
-- [ ] Write tests for all endpoints (pytest)
+- [x] Set up Supabase project and enable PostGIS + pg_trgm
+- [x] Run Alembic migrations (create all 6 tables)
+- [x] Seed traffic violations data (seed_violations.py)
+- [x] Seed emergency services for 25 cities from OSM (seed_emergency.py)
+- [x] Emergency Locator API - ST_DWithin + Overpass fallback
+- [x] Geocoding API - Nominatim reverse geocode
+- [x] Challan Calculator API - DuckDB SQL + state overrides
+- [x] Road Reporter API - submit issue, route to authority
+- [x] Set up Upstash Redis and connect cache client
+- [x] Write tests for all endpoints (pytest)
 
 **Key files:**
 - `backend/api/v1/emergency.py`
@@ -90,14 +90,14 @@ gantt
 
 **Goal:** RAG chatbot working online with Groq + ChromaDB.
 
-- [ ] Download 3 PDFs (MV Act 1988, MV Amendment 2019, WHO Trauma)
-- [ ] Run build_vectorstore.py to index PDFs into ChromaDB
-- [ ] LangChain RAG chain with ChromaDB MMR retrieval
-- [ ] Groq llama-3.3-70b-versatile integration
-- [ ] Intent detection system (9 intent labels)
-- [ ] Chat history in Redis per session
-- [ ] Chat API endpoint - POST /api/v1/chat/message
-- [ ] Test RAG accuracy on sample queries
+- [x] Download 3 PDFs (MV Act 1988, MV Amendment 2019, WHO Trauma)
+- [x] Run build_vectorstore.py to index PDFs into ChromaDB
+- [x] LangChain RAG chain with ChromaDB MMR retrieval
+- [x] Groq llama-3.3-70b-versatile integration
+- [x] Intent detection system (9 intent labels)
+- [x] Chat history in Redis per session
+- [x] Chat API endpoint - POST /api/v1/chat/message
+- [x] Test RAG accuracy on sample queries
 
 **Key files:**
 - `backend/services/llm_service.py`
@@ -110,17 +110,17 @@ gantt
 
 **Goal:** All 4 modules working as connected UI.
 
-- [ ] Next.js App Router setup with TypeScript
-- [ ] Tailwind CSS global styles and design tokens
-- [ ] Home page with 4 module cards
-- [ ] Emergency Locator - GPS + Leaflet map + hospital markers
-- [ ] SOS button - calls nearest hospital
-- [ ] AI Chat - message bubbles, intent badges, source citations
-- [ ] Challan Calculator - violation selector, state dropdown, fine display
-- [ ] Road Reporter - photo upload, GPS tag, category select, submit
-- [ ] First Aid page - static offline guide
-- [ ] Zustand global store (location, chat history, offline status)
-- [ ] SWR data fetching with error/loading states
+- [x] Next.js App Router setup with TypeScript
+- [x] Tailwind CSS global styles and design tokens
+- [x] Home page with 4 module cards
+- [x] Emergency Locator - GPS + MapLibre GL map + hospital markers
+- [x] SOS button - calls nearest hospital
+- [x] AI Chat - message bubbles, intent badges, source citations
+- [x] Challan Calculator - violation selector, state dropdown, fine display
+- [x] Road Reporter - photo upload, GPS tag, category select, submit
+- [x] First Aid page - static offline guide
+- [x] Zustand global store (location, chat history, offline status)
+- [x] SWR data fetching with error/loading states
 
 **Key files:**
 - `frontend/app/emergency/page.tsx`
@@ -137,16 +137,16 @@ gantt
 
 **Goal:** All core features work with no internet connection.
 
-- [ ] Service worker + Workbox configuration
-- [ ] Precache app shell (HTML, JS, CSS, fonts)
-- [ ] Cache india-emergency.geojson at install time
-- [ ] DuckDB-Wasm + violations.csv for offline challan
-- [ ] WebLLM Phi-3 Mini one-time download and browser inference
-- [ ] HNSWlib.js vector search on first-aid.json
-- [ ] IndexedDB offline queue for road reports
-- [ ] Background Sync API for auto-submit when online
-- [ ] Offline status indicator in UI
-- [ ] Test all 4 modules in Chrome DevTools offline mode
+- [x] Service worker + Workbox configuration
+- [x] Precache app shell (HTML, JS, CSS, fonts)
+- [x] Cache india-emergency.geojson at install time
+- [x] DuckDB-Wasm + violations.csv for offline challan
+- [x] WebLLM Phi-3 Mini one-time download and browser inference
+- [x] HNSWlib.js vector search on first-aid.json
+- [x] IndexedDB offline queue for road reports
+- [x] Background Sync API for auto-submit when online
+- [x] Offline status indicator in UI
+- [x] Test all 4 modules in Chrome DevTools offline mode
 
 **Key files:**
 - `frontend/lib/edge-ai.ts`
@@ -160,16 +160,16 @@ gantt
 
 **Goal:** Live demo URLs working, submission ready.
 
-- [ ] Deploy FastAPI to Render.com (render.yaml)
-- [ ] Set all backend env vars in Render dashboard
-- [ ] Deploy Next.js to Vercel
-- [ ] Set all frontend env vars in Vercel dashboard
-- [ ] Test full E2E flow on live URLs
-- [ ] Test offline mode on mobile (Chrome + Firefox)
-- [ ] Test on low-end Android device
-- [ ] Lighthouse audit - target PWA score > 90
-- [ ] Record demo video
-- [ ] Final submission
+- [x] Deploy FastAPI to Render.com (render.yaml)
+- [x] Set all backend env vars in Render dashboard
+- [x] Deploy Next.js to Vercel
+- [x] Set all frontend env vars in Vercel dashboard
+- [x] Test full E2E flow on live URLs
+- [x] Test offline mode on mobile (Chrome + Firefox)
+- [x] Test on low-end Android device
+- [x] Lighthouse audit - target PWA score > 90
+- [x] Record demo video
+- [x] Final submission
 
 ---
 

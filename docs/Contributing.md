@@ -79,7 +79,7 @@ Types:
 Examples:
 ```bash
 git commit -m "feat: add challan calculator API with DuckDB SQL"
-git commit -m "fix: leaflet map not rendering on SSR"
+git commit -m "fix: maplibre map not rendering on SSR"
 git commit -m "docs: update API.md with new road reporter endpoints"
 git commit -m "test: add pytest for emergency nearby endpoint"
 ```

@@ -120,7 +120,7 @@ SafeVisionAI is an emergency app. Every design decision must prioritize:
 
 ---
 
-## Map Design Rules (Leaflet)
+## Map Design Rules (MapLibre GL)
 
 ### Tile Layer
 ```tsx
@@ -146,9 +146,9 @@ const MARKER_COLORS = {
 ```
 
 ### Critical Rules
-1. `import dynamic from 'next/dynamic'` + `ssr: false`  Leaflet needs browser
-2. Import `leaflet/dist/leaflet.css` inside the component (not layout.tsx)
-3. Copy marker icons to `public/leaflet/`  webpack breaks default icon paths
+1. `import dynamic from 'next/dynamic'` + `ssr: false`  MapLibre needs browser
+2. Import `maplibre-gl/dist/maplibre-gl.css` inside the component
+3. Place marker icons in `public/maplibre/`
 4. Add `key={lat+lon}` to MapContainer  prevents "map already initialized" error
 5. Set explicit height on MapContainer  invisible without it
 
@@ -184,7 +184,7 @@ const MARKER_COLORS = {
  [Connectivity Badge]    
 
                          
-   [LEAFLET MAP 55vh]    
+   [MAPLIBRE MAP 55vh]    
    CartoDB Dark tiles    
    Color-coded markers   
                          
