@@ -55,53 +55,22 @@ class RoutingService:
         if cached:
             return RoutePreviewResponse.model_validate(cached)
 
-        api_key = self.settings.openrouteservice_api_key
-        if not api_key:
-            raise ExternalServiceError('Routing is not configured. Add OPENROUTESERVICE_API_KEY in backend .env.')
-
-        url = f'{self.settings.openrouteservice_base_url}/v2/directions/{profile}/geojson'
-        payload = {
-            'coordinates': [
-                [origin_lon, origin_lat],
-                [destination_lon, destination_lat],
-            ],
-            'instructions': True,
-            'instructions_format': 'text',
-            'elevation': False,
-            'units': 'm',
+        # Using free public OSRM server, no API key needed.
+        url = f'https://router.project-osrm.org/route/v1/driving/{origin_lon},{origin_lat};{destination_lon},{destination_lat}'
+        params = {
+            'overview': 'full',
+            'geometries': 'geojson',
+            'steps': 'true',
         }
-        if requested_alternatives > 0 and profile == 'driving-car':
-            payload['alternative_routes'] = {
-                'target_count': requested_alternatives,
-                'share_factor': 0.6,
-                'weight_factor': 1.6,
-            }
+        if requested_alternatives > 0:
+            params['alternatives'] = str(requested_alternatives)
 
         warnings: list[str] = []
 
         try:
-            response = await self._client.post(
-                url,
-                json=payload,
-                headers={'Authorization': api_key},
-            )
+            response = await self._client.get(url, params=params)
         except httpx.HTTPError as exc:
             raise ExternalServiceError('Unable to reach routing provider right now.') from exc
-
-        if response.status_code >= 400 and requested_alternatives > 0:
-            degraded_message = self._message_from_response(response)
-            payload.pop('alternative_routes', None)
-            warnings.append(
-                f'Alternative routes unavailable: {degraded_message}. Showing the primary route only.'
-            )
-            try:
-                response = await self._client.post(
-                    url,
-                    json=payload,
-                    headers={'Authorization': api_key},
-                )
-            except httpx.HTTPError as exc:
-                raise ExternalServiceError('Unable to reach routing provider right now.') from exc
 
         if response.status_code >= 400:
             raise ExternalServiceError(self._message_from_response(response))
@@ -145,8 +114,6 @@ class RoutingService:
                 message = message.get('message')
             if isinstance(message, str) and message.strip():
                 return message.strip()
-        if response.status_code == 401:
-            return 'Routing provider rejected the API key.'
         if response.status_code == 429:
             return 'Routing provider rate limit reached. Please try again in a moment.'
         return 'Routing provider could not generate a route right now.'
@@ -162,14 +129,14 @@ class RoutingService:
         profile: RouteProfile,
         warnings: list[str] | None = None,
     ) -> RoutePreviewResponse:
-        features = payload.get('features') or []
-        if not features:
+        routes_data = payload.get('routes') or []
+        if not routes_data:
             raise ExternalServiceError('Routing provider returned no route.')
 
-        routes = [self._normalize_feature(feature, index=index) for index, feature in enumerate(features, start=1)]
+        routes = [self._normalize_osrm_route(r, index=index) for index, r in enumerate(routes_data, start=1)]
         selected_route = routes[0]
         return RoutePreviewResponse(
-            provider='openrouteservice',
+            provider='osrm',
             profile=profile,
             distance_meters=selected_route.distance_meters,
             duration_seconds=selected_route.duration_seconds,
@@ -183,15 +150,12 @@ class RoutingService:
             warnings=warnings or [],
         )
 
-    def _normalize_feature(self, feature: dict[str, Any], *, index: int) -> RouteOption:
-        geometry = feature.get('geometry') or {}
+    def _normalize_osrm_route(self, route_data: dict[str, Any], *, index: int) -> RouteOption:
+        geometry = route_data.get('geometry') or {}
         coordinates = geometry.get('coordinates') or []
-        if len(coordinates) < 2:
+        if not coordinates:
             raise ExternalServiceError('Routing provider returned an incomplete route path.')
 
-        properties = feature.get('properties') or {}
-        summary = properties.get('summary') or {}
-        segments = properties.get('segments') or []
         path = [
             RoutePoint(lat=float(coord[1]), lon=float(coord[0]))
             for coord in coordinates
@@ -201,17 +165,23 @@ class RoutingService:
             raise ExternalServiceError('Routing provider returned invalid path coordinates.')
 
         steps: list[RouteInstruction] = []
-        for segment in segments:
-            for step_index, step in enumerate(segment.get('steps') or [], start=len(steps) + 1):
+        legs = route_data.get('legs') or []
+        for leg in legs:
+            for step_index, step in enumerate(leg.get('steps') or [], start=len(steps) + 1):
+                maneuver = step.get('maneuver') or {}
+                instruction = maneuver.get('type')
+                if maneuver.get('modifier'):
+                    instruction += f" {maneuver.get('modifier')}"
+                if step.get('name'):
+                    instruction += f" on {step.get('name')}"
+
                 steps.append(
                     RouteInstruction(
                         index=step_index,
-                        instruction=str(step.get('instruction') or 'Continue'),
+                        instruction=str(instruction or 'Continue'),
                         distance_meters=float(step.get('distance') or 0.0),
                         duration_seconds=float(step.get('duration') or 0.0),
                         street_name=step.get('name') or None,
-                        instruction_type=int(step['type']) if step.get('type') is not None else None,
-                        exit_number=int(step['exit_number']) if step.get('exit_number') is not None else None,
                     )
                 )
 
@@ -219,8 +189,8 @@ class RoutingService:
         return RouteOption(
             route_id=f'route-{index}',
             label=label,
-            distance_meters=float(summary.get('distance') or 0.0),
-            duration_seconds=float(summary.get('duration') or 0.0),
+            distance_meters=float(route_data.get('distance') or 0.0),
+            duration_seconds=float(route_data.get('duration') or 0.0),
             path=path,
             bounds=self._build_bounds(path),
             steps=steps,

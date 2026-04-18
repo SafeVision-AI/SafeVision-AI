@@ -12,7 +12,7 @@ class FakeRoutingService:
             RoutePoint(lat=13.0475, lon=80.2202, label='Destination'),
         ]
         return RoutePreviewResponse(
-            provider='openrouteservice',
+            provider='osrm',
             profile='driving-car',
             distance_meters=4250.0,
             duration_seconds=540.0,
@@ -76,7 +76,7 @@ def test_routing_preview_endpoint(app):
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload['provider'] == 'openrouteservice'
+    assert payload['provider'] == 'osrm'
     assert payload['distance_meters'] == 4250.0
     assert len(payload['path']) == 2
     assert payload['selected_route_id'] == 'route-1'
