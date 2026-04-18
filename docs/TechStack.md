@@ -72,19 +72,31 @@ Total                                                ₹ 0
 
 | Technology | Version | Purpose |
 |---|---|---|
-| **FastAPI** | 0.115.0 | Async REST + WebSocket API framework |
-| **Uvicorn** | 0.30.6 | ASGI server with standard extras |
+| **FastAPI** | 0.115.0 | Async REST API framework |
+| **Uvicorn** | 0.30.6 | ASGI server |
 | **SQLAlchemy** | 2.0.35 | Async ORM (asyncio extras) |
 | **asyncpg** | 0.29.0 | Async PostgreSQL driver |
-| **GeoAlchemy2** | 0.15.2 | PostGIS geometry column types for SQLAlchemy |
-| **Alembic** | 1.13.2 | Database migration management |
-| **Redis (hiredis)** | 5.0.8 | Async Redis client for Upstash connection |
-| **httpx** | 0.27.2 | Async HTTP client for Overpass + Nominatim |
-| **DuckDB** | 0.10.3 | In-process SQL for challan calculation |
+| **GeoAlchemy2** | 0.15.2 | PostGIS geometry column types |
+| **Alembic** | 1.13.2 | Database migrations |
+| **psycopg2-binary** | 2.9.9 | Synchronous DB adapter fallback |
+| **Redis** | 5.0.8 | Async Redis client |
+| **httpx** | 0.27.2 | Async HTTP client |
+| **DuckDB** | 0.10.3 | In-process SQL computation |
 | **geopandas** | 0.14.4 | Geospatial DataFrame processing |
 | **shapely** | 2.0.6 | Geometry operations |
-| **Pydantic** | 2.9.2 | Request/response validation |
-| **pydantic-settings** | 2.5.2 | `.env` config loading with type validation |
+| **geopy** | 2.4.1 | Geocoding API helper |
+| **numpy** | 1.26.4 | Numerical compute |
+| **pandas** | 2.2.2 | Tabular data compute |
+| **Pillow** | 10.4.0 | Image processing validation |
+| **Pydantic** | 2.9.2 | Request validation |
+| **pydantic-settings** | 2.5.2 | `.env` config loading |
+| **python-dotenv** | 1.0.1 | Environment variables |
+| **python-multipart** | 0.0.12 | Form data parsing |
+| **aiofiles** | 24.1.0 | Async file operations |
+| **pypdf** | 4.3.1 | Legacy PDF utility |
+| **LangChain** | 0.3.1 | Legacy memory format support |
+| **ChromaDB** | 0.5.3 | Legacy API connector |
+| **sentence-transformers** | 3.0.1 | Legacy embeddings format support |
 
 ---
 
@@ -95,19 +107,22 @@ A **separate FastAPI service** with its own Python environment & heavy ML depend
 | Technology | Version | Purpose |
 |---|---|---|
 | **FastAPI** | 0.115.0 | Async REST API for AI chatbot |
-| **torch** | 2.3.1 | PyTorch runtime for IndicSeamless speech model |
-| **torchaudio** | 2.3.1 | Audio processing for speech pipeline |
+| **Uvicorn** | 0.30.6 | ASGI Server |
+| **torch / torchaudio** | 2.3.1 | PyTorch runtime for speech models |
 | **transformers** | 4.44.2 | Hugging Face model loading |
-| **ChromaDB** | 0.5.3 | Local vector store for RAG (SQLite-backed) |
-| **sentence-transformers** | 3.0.1 | `all-MiniLM-L6-v2` embeddings (local CPU) |
-| **LangChain** | 0.3.1 | Document loading and text splitting |
-| **langchain-google-genai** | 2.0.4 | Gemini provider integration |
-| **groq** | 0.9.0 | Groq SDK for fast inference |
-| **google-generativeai** | 0.8.6 | Google Gemini 1.5 Flash (1M context) |
-| **openai** | 1.40.0 | OpenAI-compatible API for GitHub/NVIDIA/OpenRouter |
-| **mistralai** | 0.4.2 | Mistral AI SDK |
-| **pdfplumber** | 0.11.4 | Advanced PDF text extraction for legal docs |
-| **Redis** | 5.0.8 | Conversation memory with session TTL |
+| **datasets** | 3.0.0 | Dataset loaders |
+| **ChromaDB** | 0.5.3 | Local vector store for RAG |
+| **sentence-transformers** | 3.0.1 | `all-MiniLM` embeddings |
+| **LangChain** | 0.3.1 | Document loading and tools |
+| **langchain-community / openai / google-genai** | Various | LLM Provider Wrappers |
+| **groq / openai / mistralai** | Various | Official Provider SDKs |
+| **google-generativeai** | 0.8.6 | Google Gemini Flash |
+| **Redis** | 5.0.8 | Conversation memory |
+| **httpx / requests** | Various | HTTP API Clients |
+| **pandas / numpy** | Various | Output processing |
+| **pdfplumber / pypdf** | Various | Advanced PDF text extraction |
+| **Pydantic / python-dotenv** | Various | Config and data validation |
+| **pytest / pytest-asyncio** | Various | Service testing suite |
 
 ### 11-Provider LLM Fallback Chain
 
