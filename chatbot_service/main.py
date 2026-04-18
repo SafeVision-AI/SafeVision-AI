@@ -19,13 +19,16 @@ from services import IndicSeamlessService
 from tools import (
     BackendToolClient,
     ChallanTool,
+    DrugInfoTool,
     FirstAidTool,
+    GeocodingClient,
     LegalSearchTool,
     RoadInfrastructureTool,
     RoadIssuesTool,
     SosTool,
     SubmitReportTool,
     WeatherTool,
+    What3WordsTool,
 )
 
 
@@ -43,9 +46,13 @@ def create_app() -> FastAPI:
         retriever = Retriever(vectorstore, default_top_k=settings.top_k_retrieval)
         weather_tool = WeatherTool(settings)
         speech_service = IndicSeamlessService(settings)
+        w3w_tool = What3WordsTool(api_key=settings.w3w_api_key)
+        geocode_client = GeocodingClient(opencage_key=settings.opencage_api_key)
+        drug_info_tool = DrugInfoTool()
+        
         context_assembler = ContextAssembler(
             retriever=retriever,
-            sos_tool=SosTool(backend_client),
+            sos_tool=SosTool(backend_client, w3w_tool, geocode_client),
             challan_tool=ChallanTool(backend_client),
             legal_search_tool=LegalSearchTool(retriever),
             first_aid_tool=FirstAidTool(settings),
@@ -53,6 +60,7 @@ def create_app() -> FastAPI:
             road_issues_tool=RoadIssuesTool(backend_client),
             submit_report_tool=SubmitReportTool(),
             weather_tool=weather_tool,
+            drug_info_tool=drug_info_tool,
         )
         chat_engine = ChatEngine(
             memory_store=memory_store,
@@ -72,6 +80,9 @@ def create_app() -> FastAPI:
         finally:
             await weather_tool.aclose()
             await backend_client.aclose()
+            await w3w_tool.aclose()
+            await geocode_client.aclose()
+            await drug_info_tool.aclose()
             await memory_store.close()
 
     app = FastAPI(title=settings.service_name, version='1.0.0', lifespan=lifespan)

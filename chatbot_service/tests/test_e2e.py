@@ -116,7 +116,7 @@ class FakeChallanTool:
     def __init__(self, backend_client) -> None:
         self.backend_client = backend_client
 
-    async def infer_and_calculate(self, message: str) -> dict:
+    async def infer_and_calculate(self, message: str, client_ip: str | None = None) -> dict:
         return {
             'section': '185',
             'base_fine': 10000,

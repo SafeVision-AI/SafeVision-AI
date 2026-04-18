@@ -52,6 +52,7 @@ class ChatEngine:
             intent=intent,
             lat=payload.lat,
             lon=payload.lon,
+            client_ip=payload.client_ip,
             history=history,
         )
 

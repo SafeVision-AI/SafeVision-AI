@@ -58,6 +58,8 @@ class Settings:
     openweather_api_key: str | None
     openweather_base_url: str
     openweather_units: str
+    w3w_api_key: str | None
+    opencage_api_key: str | None
     http_timeout_seconds: float
     http_user_agent: str
     session_ttl_seconds: int
@@ -98,6 +100,8 @@ def get_settings() -> Settings:
         openweather_api_key=os.getenv('OPENWEATHER_API_KEY') or None,
         openweather_base_url=os.getenv('OPENWEATHER_BASE_URL', 'https://api.openweathermap.org/data/2.5').rstrip('/'),
         openweather_units=os.getenv('OPENWEATHER_UNITS', 'metric'),
+        w3w_api_key=os.getenv('W3W_API_KEY') or None,
+        opencage_api_key=os.getenv('OPENCAGE_API_KEY') or None,
         http_timeout_seconds=float(os.getenv('HTTP_TIMEOUT_SECONDS', '20')),
         http_user_agent=os.getenv('HTTP_USER_AGENT', 'SafeVisionAIChatbot/1.0'),
         session_ttl_seconds=int(os.getenv('SESSION_TTL_SECONDS', '86400')),

@@ -11,6 +11,8 @@ from tools.sos_tool import SosTool
 from tools.submit_report_tool import SubmitReportTool
 from tools.weather_tool import WeatherTool
 
+from tools.drug_info import DrugInfoTool
+
 
 class ContextAssembler:
     def __init__(
@@ -25,6 +27,7 @@ class ContextAssembler:
         road_issues_tool: RoadIssuesTool,
         submit_report_tool: SubmitReportTool,
         weather_tool: WeatherTool,
+        drug_info_tool: DrugInfoTool,
     ) -> None:
         self.retriever = retriever
         self.sos_tool = sos_tool
@@ -35,6 +38,7 @@ class ContextAssembler:
         self.road_issues_tool = road_issues_tool
         self.submit_report_tool = submit_report_tool
         self.weather_tool = weather_tool
+        self.drug_info_tool = drug_info_tool
 
     async def assemble(
         self,
@@ -44,6 +48,7 @@ class ContextAssembler:
         intent: str,
         lat: float | None,
         lon: float | None,
+        client_ip: str | None = None,
         history: list[dict],
     ) -> ConversationContext:
         context = ConversationContext(
@@ -52,6 +57,7 @@ class ContextAssembler:
             intent=intent,
             lat=lat,
             lon=lon,
+            client_ip=client_ip,
             history=history,
         )
 
@@ -59,7 +65,7 @@ class ContextAssembler:
             await self._add_emergency_context(context)
             self._add_retrieved(context, self.retriever.retrieve(message, scopes={'medical', 'emergency', 'hospitals'}))
         elif intent == 'first_aid':
-            self._add_first_aid_context(context)
+            await self._add_first_aid_context(context)
             self._add_retrieved(context, self.retriever.retrieve(message, scopes={'medical'}))
         elif intent == 'challan':
             await self._add_challan_context(context)
@@ -82,10 +88,16 @@ class ContextAssembler:
                 services = sos_payload.get('services') or []
                 nearest_names = ', '.join(item.get('name', 'Unknown') for item in services[:3]) or 'No nearby services listed'
                 number_text = ', '.join(f'{key}:{value.get("service")}' for key, value in numbers.items())
+                
+                # Format What3Words if present
+                w3w_text = ""
+                if 'what3words' in sos_payload:
+                    w3w_text = f" What3Words: {sos_payload['what3words'].get('formatted')}."
+                    
                 context.tools.append(
                     ToolContext(
                         name='sos',
-                        summary=f'Nearby emergency services: {nearest_names}. Emergency numbers: {number_text}.',
+                        summary=f'Nearby emergency services: {nearest_names}. Emergency numbers: {number_text}.{w3w_text}',
                         payload=sos_payload,
                         sources=['tool:sos', 'backend:/api/v1/emergency/sos'],
                     )
@@ -101,7 +113,7 @@ class ContextAssembler:
                     )
                 )
 
-    def _add_first_aid_context(self, context: ConversationContext) -> None:
+    async def _add_first_aid_context(self, context: ConversationContext) -> None:
         guide = self.first_aid_tool.lookup(context.message)
         if guide:
             steps = guide.get('steps') or []
@@ -113,9 +125,25 @@ class ContextAssembler:
                     sources=['tool:first_aid'],
                 )
             )
+            
+        # Extract potential drug name from message for OpenFDA
+        words = context.message.lower().replace('?', '').replace(',', '').split()
+        potential_drugs = [w for w in words if len(w) > 4 and w not in {'please', 'about', 'effects', 'dosage', 'should', 'take'}]
+        for drug in potential_drugs[:2]:  # Try up to 2 words
+            drug_info = await self.drug_info_tool.lookup(drug)
+            if drug_info:
+                context.tools.append(
+                    ToolContext(
+                        name='drug_info',
+                        summary=f'FDA Info for {drug}: Indications: {drug_info.get("indications", "N/A")[:100]}...',
+                        payload=drug_info,
+                        sources=['tool:drug_info', 'openfda'],
+                    )
+                )
+                break
 
     async def _add_challan_context(self, context: ConversationContext) -> None:
-        challan = await self.challan_tool.infer_and_calculate(context.message)
+        challan = await self.challan_tool.infer_and_calculate(context.message, client_ip=context.client_ip)
         if challan:
             context.tools.append(
                 ToolContext(

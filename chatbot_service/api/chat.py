@@ -19,15 +19,19 @@ def get_engine(request: Request) -> ChatEngine:
 
 @router.post('/', response_model=ChatResponse)
 async def chat(
+    request: Request,
     payload: ChatRequest,
     engine: ChatEngine = Depends(get_engine),
 ) -> ChatResponse:
     """Standard blocking chat — returns full response at once."""
+    if not payload.client_ip and request.client:
+        payload.client_ip = request.client.host
     return await engine.chat(payload)
 
 
 @router.post('/stream')
 async def chat_stream(
+    request: Request,
     payload: ChatRequest,
     engine: ChatEngine = Depends(get_engine),
 ) -> StreamingResponse:
@@ -40,6 +44,8 @@ async def chat_stream(
     """
     async def event_generator():
         try:
+            if not payload.client_ip and request.client:
+                payload.client_ip = request.client.host
             # Run the chat engine (it's not a streaming LLM yet — we simulate
             # character-by-character streaming from the full response for smooth UX)
             result: ChatResponse = await engine.chat(payload)

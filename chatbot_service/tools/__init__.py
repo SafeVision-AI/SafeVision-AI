@@ -37,24 +37,33 @@ class BackendToolClient:
 
 
 from tools.challan_tool import ChallanTool
+from tools.drug_info import DrugInfoTool
 from tools.emergency_tool import EmergencyTool
 from tools.first_aid_tool import FirstAidTool
+from tools.geocoding import GeocodingClient
 from tools.legal_search_tool import LegalSearchTool
+from tools.open_meteo import OpenMeteoClient
 from tools.road_infra_tool import RoadInfrastructureTool
 from tools.road_issues_tool import RoadIssuesTool
 from tools.sos_tool import SosTool
 from tools.submit_report_tool import SubmitReportTool
 from tools.weather_tool import WeatherTool
+from tools.what3words import What3WordsTool
 
 __all__ = [
     'BackendToolClient',
     'ChallanTool',
+    'DrugInfoTool',
     'EmergencyTool',
     'FirstAidTool',
+    'GeocodingClient',
     'LegalSearchTool',
+    'OpenMeteoClient',
     'RoadInfrastructureTool',
     'RoadIssuesTool',
     'SosTool',
     'SubmitReportTool',
     'WeatherTool',
+    'What3WordsTool',
 ]
+

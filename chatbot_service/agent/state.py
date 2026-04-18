@@ -11,6 +11,7 @@ class ChatRequest(BaseModel):
     session_id: str | None = Field(default=None, min_length=1, max_length=128)
     lat: float | None = Field(default=None, ge=-90, le=90)
     lon: float | None = Field(default=None, ge=-180, le=180)
+    client_ip: str | None = Field(default=None)
 
 
 class ChatResponse(BaseModel):
@@ -44,6 +45,7 @@ class ConversationContext:
     intent: str
     lat: float | None = None
     lon: float | None = None
+    client_ip: str | None = None
     history: list[dict[str, Any]] = field(default_factory=list)
     retrieved: list[RetrievedContext] = field(default_factory=list)
     tools: list[ToolContext] = field(default_factory=list)
