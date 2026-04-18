@@ -146,7 +146,7 @@ gantt
 - [x] IndexedDB offline queue for road reports
 - [x] Background Sync API for auto-submit when online
 - [x] Offline status indicator in UI
-- [x] Test all 4 modules in Chrome DevTools offline mode
+- [/] Test all 4 modules in Chrome DevTools offline mode
 
 **Key files:**
 - `frontend/lib/edge-ai.ts`
@@ -160,16 +160,16 @@ gantt
 
 **Goal:** Live demo URLs working, submission ready.
 
-- [x] Deploy FastAPI to Render.com (render.yaml)
-- [x] Set all backend env vars in Render dashboard
-- [x] Deploy Next.js to Vercel
-- [x] Set all frontend env vars in Vercel dashboard
-- [x] Test full E2E flow on live URLs
-- [x] Test offline mode on mobile (Chrome + Firefox)
-- [x] Test on low-end Android device
-- [x] Lighthouse audit - target PWA score > 90
-- [x] Record demo video
-- [x] Final submission
+- [ ] Deploy FastAPI to Render.com (render.yaml)
+- [ ] Set all backend env vars in Render dashboard
+- [ ] Deploy Next.js to Vercel
+- [ ] Set all frontend env vars in Vercel dashboard
+- [ ] Test full E2E flow on live URLs
+- [ ] Test offline mode on mobile (Chrome + Firefox)
+- [ ] Test on low-end Android device
+- [ ] Lighthouse audit - target PWA score > 90
+- [ ] Record demo video
+- [ ] Final submission
 
 ---
 
