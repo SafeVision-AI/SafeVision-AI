@@ -8,9 +8,11 @@
 - On deny: clear error screen with instructions to enable GPS in browser settings
 - `watchPosition` auto-refreshes nearby list when user moves > 500m
 
-### F1.2  Nearby Emergency Services Map
-- Leaflet.js with CartoDB Dark tile layer (free, no API key)
+### F1.2 — Nearby Emergency Services Map
+- MapLibre GL with dark vector tiles (free, no API key)
 - Color-coded circle markers: hospitals (red), police (blue), ambulance (red+cross), fire (orange-red), towing (amber), puncture (green)
+- Each marker popup: name, distance, phone, **Tap-to-Call** button, **Directions** (Google Maps deep link)
+- Services sorted: has_trauma first → is_24hr → distance ASC
 - Each marker popup: name, distance, phone, **Tap-to-Call** button, **Directions** (Google Maps deep link)
 - Services sorted: has_trauma first  is_24hr  distance ASC
 
@@ -67,9 +69,10 @@
 | LEGAL_INFO | "speed limit", "Section 184" | ChromaDB MV Act RAG |
 | OTHER | "hello", "what can you do" | Direct LLM |
 
-### F2.2  Online RAG Chatbot
-- LangChain `ConversationalRetrievalChain`
-- Model: `groq/llama3-70b-8192` (free tier, 6000 tokens/min)
+### F2.2 — Online RAG Chatbot
+- Custom **ChatEngine** with ContextAssembler + ProviderRouter
+- Model: 11-provider fallback chain (Groq primary, 300+ tok/s)
+- Indian languages auto-routed to **Sarvam AI** (30B general, 105B legal)
 - Retriever: ChromaDB MMR search, top-5 chunks
 - Knowledge base: MV Act 1988 + MV Amendment Act 2019 + WHO Trauma Care Guidelines
 - Embeddings: `sentence-transformers/all-MiniLM-L6-v2` (local CPU, free)
@@ -81,11 +84,12 @@
 - Offline RAG: HNSWlib.js + IndexedDB with 20 pre-bundled first-aid articles
 - Response time: 3-5s (WebGPU) or 8-15s (WebAssembly)
 
-### F2.4  Multilingual Support
-- Auto-detect input language (Groq llama3-70b is multilingual natively)
-- System prompt: "Respond in the same language the user wrote in"
+### F2.4 — Multilingual Support
+- Auto-detect input language (regex-based Unicode script ranges)
+- Indian language queries routed to **Sarvam AI** (trained on 4 trillion Indic tokens)
+- English queries use default Groq/Cerebras provider
 - Supported: English, Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali, Marathi, Gujarati, Punjabi
-- Optional: language selector in chat settings
+- System prompt: "Respond in the same language the user wrote in"
 
 ### F2.5  Voice Input/Output
 - Input: Web Speech API (Chrome, Edge, Samsung Internet)
@@ -93,9 +97,9 @@
 - Output: Web Speech Synthesis API (speaker icon per bot message)
 - Graceful degradation: mic disabled with tooltip on Safari/Firefox
 
-### F2.6  Conversation Memory
-- LangChain `ConversationBufferWindowMemory(k=6)`
-- Redis storage with 24-hour TTL, key: `chat:history:{session_id}`
+### F2.6 — Conversation Memory
+- Redis-backed `ConversationMemoryStore` with configurable window
+- Session TTL: 24 hours, key: `chat:memory:{session_id}`
 
 ---
 
@@ -163,9 +167,9 @@
 - Score 0-100, decrements on phone taps + overspeeding + hard braking
 - Shareable as WhatsApp status
 
-### F5.3  Accident Blackspot Heatmap
+### F5.3 — Accident Blackspot Heatmap
 - Anonymised crash detection GPS events aggregated
-- Leaflet.heat plugin shows red clusters of dangerous road segments
+- MapLibre GL heatmap layer shows red clusters of dangerous road segments
 
 ### F5.4  Document Expiry Reminders
 - Insurance expiry, PUC certificate, driving licence renewal

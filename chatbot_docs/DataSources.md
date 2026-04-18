@@ -1,6 +1,6 @@
 # Data Sources Reference
 
-The RoadSoS Chatbot relies on high-quality, authoritative data for legal, emergency, and medical accuracy.
+The SafeVisionAI Chatbot relies on high-quality, authoritative data for legal, emergency, and medical accuracy.
 
 ## Legal Data
 - **Motor Vehicles Act 1988**: Full text, all 217 sections indexed for the RAG pipeline.

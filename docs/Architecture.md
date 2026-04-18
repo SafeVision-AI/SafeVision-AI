@@ -1,10 +1,10 @@
-# SafeVisionAI - Architecture
+# SafeVisionAI — Architecture
 
 ## System Architecture Overview
 
 ```mermaid
 graph TD
-    A[User Device - Browser] --> B[Next.js 14 PWA on Vercel CDN]
+    A[User Device - Browser] --> B[Next.js 15 PWA on Vercel CDN]
 
     B --> C[Emergency Locator]
     B --> D[AI Chat - Online]
@@ -18,67 +18,110 @@ graph TD
     G --> G4[GeoJSON + Turf.js]
     G --> G5[IndexedDB + Service Worker]
 
-    B -->|HTTPS| H[FastAPI Backend on Render.com]
+    B -->|HTTPS| H[FastAPI Backend :8000 on Render.com]
+    B -->|HTTPS| CS[FastAPI Chatbot Service :8010 on Render.com]
 
     H --> H1[Emergency API - PostGIS + Overpass]
-    H --> H2[Chat Router - LangChain + Groq]
     H --> H3[Challan Service - DuckDB SQL]
     H --> H4[RoadWatch Service - Authority Matrix]
+    H -->|proxy| CS
+
+    CS --> CS1[ChatEngine - Agentic RAG]
+    CS --> CS2[11-Provider LLM Fallback Chain]
+    CS --> CS3[9 Agent Tools]
+    CS --> CS4[Sarvam AI - Indian Language Routing]
+    CS --> CS5[ChromaDB RAG Vectorstore]
 
     H --> I[Core Services]
     I --> I1[Redis Cache - Upstash]
     I --> I2[PostGIS Queries]
-    I --> I3[ChromaDB RAG]
     I --> I4[Nominatim Geocoding]
 
     H --> J[External Free Services]
     J --> J1[Supabase PostgreSQL + PostGIS]
     J --> J2[Upstash Redis]
-    J --> J3[Groq API - llama3-70b]
     J --> J4[OSM Overpass API]
     J --> J5[HuggingFace Hub - WebLLM CDN]
 ```
 
 ---
 
+## Three-Service Architecture
+
+SafeVisionAI runs as **three independent services**:
+
+| Service | Port | Tech | Purpose |
+|---------|------|------|---------|
+| **Backend** | 8000 | FastAPI + PostGIS + Redis | Emergency locator, challan calc, road reporting, geocoding |
+| **Chatbot Service** | 8010 | FastAPI + ChromaDB + 11 LLMs | Agentic RAG chatbot, Indian language AI, speech |
+| **Frontend** | 3000 | Next.js 15 + React 19 PWA | UI, maps (MapLibre GL), offline AI (WebLLM, DuckDB-Wasm) |
+
+> **Critical:** Backend and Chatbot Service have **separate** `.venv`, `.env`, `requirements.txt`, and `Dockerfile`. Never mix their dependencies.
+
+---
+
 ## Dual-Layer AI Architecture
 
-The most technically significant decision in SafeVisionAI. Online RAG with Groq when connected, full offline AI using WebLLM when not.
+Online RAG with multi-provider fallback when connected, full offline AI using WebLLM when not.
 
 ```mermaid
 flowchart TD
     A[User sends message] --> B{Is network available?}
 
-    B -->|YES| C[FastAPI Backend]
+    B -->|YES| CS[Chatbot Service :8010]
     B -->|NO| D[WebLLM Phi-3 Mini - Runs on device]
 
-    C --> C1[Groq llama3-70b-8192]
-    C --> C2[ChromaDB RAG - top 5 law/medical chunks]
-    C --> C3[PostGIS POI search]
+    CS --> CS1[IntentDetector - classify query]
+    CS --> CS2[ContextAssembler - call 9 agent tools]
+    CS --> CS3[ChromaDB RAG - top 5 law/medical chunks]
+    CS --> CS4[ProviderRouter - 11 LLM fallback chain]
+    CS4 --> CS5{Indian language?}
+    CS5 -->|YES| CS6[Sarvam AI 30B/105B]
+    CS5 -->|NO| CS7[Groq → Cerebras → Gemini → ...]
 
     D --> D1[HNSWlib.js vector search on IndexedDB]
     D --> D2[Turf.js GeoJSON for nearby POI]
     D --> D3[First-aid.json local data]
 
-    C1 --> E[Response to user]
-    C2 --> E
-    C3 --> E
+    CS6 --> E[Response to user]
+    CS7 --> E
     D1 --> E
     D2 --> E
     D3 --> E
 ```
 
-| Aspect | Online - Layer 1 | Offline - Layer 2 |
+| Aspect | Online — Layer 1 | Offline — Layer 2 |
 |---|---|---|
-| LLM | Groq llama3-70b-8192 | WebLLM Phi-3-mini-4k (4-bit) |
-| Parameters | 70 billion | 3.8 billion |
-| Runs on | Groq cloud (free API) | User's browser (WebGPU) |
-| Context | 8,192 tokens | 4,096 tokens |
-| First token | 1-2 seconds | 3-5s (GPU) / 8-15s (CPU) |
-| RAG | ChromaDB on server | HNSWlib.js in browser |
+| LLM | 11-provider chain (Groq primary) | WebLLM Phi-3-mini-4k (4-bit) |
+| Indian Languages | Sarvam AI (30B/105B) | English only |
+| Runs on | Cloud (Groq/Gemini/etc.) | User's browser (WebGPU) |
+| RAG | ChromaDB on chatbot service | HNSWlib.js in browser |
 | POI Search | PostGIS ST_DWithin | Turf.js haversine on GeoJSON |
-| Challan | DuckDB SQL on server | DuckDB-Wasm in browser |
-| Cost | Rs. 0 (Groq free tier) | Rs. 0 (local device compute) |
+| Challan | DuckDB SQL on backend | DuckDB-Wasm in browser |
+| Cost | ₹0 (all free tiers) | ₹0 (local device compute) |
+
+---
+
+## 11-Provider LLM Fallback Chain
+
+```mermaid
+flowchart LR
+    A[User Message] --> B{Language?}
+    B -->|Indian| S[Sarvam AI]
+    S --> S1[sarvam-30b General]
+    S --> S2[sarvam-105b Legal]
+    B -->|English| C[Groq 300+ tok/s]
+    C -->|fail| D[Cerebras 2000+ tok/s]
+    D -->|fail| E[Gemini 1M context]
+    E -->|fail| F[GitHub Models]
+    F -->|fail| G[NVIDIA NIM]
+    G -->|fail| H[OpenRouter]
+    H -->|fail| I[Mistral]
+    I -->|fail| J[Together]
+    J -->|fail| K[Template - always works]
+```
+
+Language detection is regex-based (Unicode script ranges for Devanagari, Tamil, Telugu, Kannada, Bengali, etc.) — no NLTK dependency needed.
 
 ---
 
@@ -86,11 +129,11 @@ flowchart TD
 
 ```mermaid
 graph LR
-    L1[Layer 1 - App Shell] --> L1D["All UI, JS, CSS, fonts - Workbox precache at install"]
-    L2[Layer 2 - Emergency POI] --> L2D["india-emergency.geojson - 25 cities + Turf.js"]
+    L1[Layer 1 - App Shell] --> L1D["All UI, JS, CSS, fonts — Service Worker precache"]
+    L2[Layer 2 - Emergency POI] --> L2D["india-emergency.geojson — 25 cities + Turf.js"]
     L3[Layer 3 - Challan Calc] --> L3D["DuckDB-Wasm + violations.csv + state_overrides.csv"]
     L4[Layer 4 - AI Chatbot] --> L4D["WebLLM Phi-3 Mini ~2.2GB + HNSWlib.js + first-aid.json"]
-    L5[Layer 5 - Road Reports] --> L5D["IndexedDB + Background Sync API - offline queue"]
+    L5[Layer 5 - Road Reports] --> L5D["IndexedDB + Background Sync API — offline queue"]
 ```
 
 ---
@@ -100,14 +143,14 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant U as User Browser
-    participant F as FastAPI
+    participant F as Backend :8000
     participant R as Redis Cache
     participant P as PostGIS DB
     participant O as OSM Overpass
 
     U->>F: GET /api/v1/emergency/nearby?lat=X&lon=Y
     F->>R: Check cache key nearby:lat:lon
-    R-->>F: HIT - return cached result
+    R-->>F: HIT — return cached result
     F-->>U: Return cached hospitals/police
 
     Note over F,R: On cache MISS:
@@ -118,80 +161,47 @@ sequenceDiagram
     O-->>F: Additional POI from OSM
     F->>R: Cache result for 1 hour
     F-->>U: EmergencyResponse with sorted results
-    U->>U: Render Leaflet map markers by category
+    U->>U: Render MapLibre GL markers by category
 ```
 
 ---
 
-## Data Flow: AI Chatbot
+## Data Flow: AI Chatbot (Agentic RAG)
 
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant FE as Frontend
-    participant API as FastAPI Chat
-    participant G as Groq llama3-70b
+    participant FE as Frontend :3000
+    participant CS as Chatbot Service :8010
+    participant PR as ProviderRouter
     participant C as ChromaDB
     participant R as Redis
+    participant BE as Backend :8000
 
     U->>FE: Types or speaks a message
-    FE->>API: POST /api/v1/chat/message
-    API->>G: detect_intent(message) - returns one of 9 labels
-    G-->>API: Intent label e.g. FIND_HOSPITAL
+    FE->>CS: POST /api/v1/chat/
+    CS->>CS: SafetyChecker.evaluate()
+    CS->>CS: IntentDetector.detect() — classify intent
+    CS->>CS: ContextAssembler.assemble()
 
-    alt FIND_* intent
-        API->>API: Call /emergency/nearby internally
-        API->>API: Format services list as context
+    alt Emergency intent
+        CS->>BE: Call /api/v1/emergency/nearby
+        BE-->>CS: Nearby services
+    end
+    alt Legal intent
+        CS->>C: ChromaDB vector search — top 5 chunks
+        C-->>CS: Relevant law text
     end
 
-    API->>C: MMR search - top 5 diverse law/medical chunks
-    C-->>API: Relevant PDF text chunks
-    API->>R: Load chat history for session
-    R-->>API: Previous messages
-    API->>G: Prompt = system + context + history + user message
-    G-->>API: Grounded response with law section references
-    API->>R: Store updated chat history
-    API-->>FE: Answer + intent + source sections
+    CS->>R: Load conversation history
+    R-->>CS: Previous messages
+    CS->>PR: ProviderRouter.generate() with context
+    PR->>PR: Auto-detect language → route to provider
+    PR-->>CS: LLM response
+    CS->>R: Store updated history
+    CS-->>FE: ChatResponse (text + intent + sources)
     FE-->>U: Display formatted response
 ```
-
----
-
-## RAG Pipeline Architecture
-
-```mermaid
-flowchart TD
-    subgraph BUILD ["Phase 1 - Index Build (once, ~10 minutes)"]
-        P1[PDF Documents] --> P2[PyPDFLoader]
-        P2 --> P3[LangChain Documents with metadata]
-        P3 --> P4["RecursiveCharacterTextSplitter - chunk 1000, overlap 150"]
-        P4 --> P5["sentence-transformers/all-MiniLM-L6-v2 - 384-dim embeddings"]
-        P5 --> P6[ChromaDB Storage - data/chroma_db/]
-    end
-
-    subgraph QUERY ["Phase 2 - Query Handling (every message)"]
-        Q1[User message] --> Q2[all-MiniLM embedding - 384-dim vector]
-        Q2 --> Q3["ChromaDB MMR search - balance relevance + diversity"]
-        Q3 --> Q4[Top 5 law/medical chunks]
-        Q4 --> Q5["Inject into Groq prompt as context"]
-        Q5 --> Q6[Groq llama3-70b grounded response]
-    end
-```
-
----
-
-## PWA Caching Strategy
-
-| Resource Type | Strategy | Cache Name | TTL |
-|---|---|---|---|
-| App shell (HTML/JS/CSS) | Precache | app-shell | versioned |
-| /api/v1/emergency/* | NetworkFirst | emergency-api | 3600s |
-| *.geojson files | CacheFirst | geojson-data | permanent |
-| *.onnx / *.bin / *.wasm | CacheFirst | model-weights | permanent |
-| OSM tile URLs | StaleWhileRevalidate | osm-tiles | 500 entries max |
-| /api/v1/challan/* | NetworkFirst | challan-api | 86400s |
-| Road issue photos | Background Sync | IndexedDB queue | - |
-| /offline-data/*.json | CacheFirst | offline-content | permanent |
 
 ---
 
@@ -199,18 +209,20 @@ flowchart TD
 
 ```
 SafeVisionAI/
-  backend/           FastAPI Python 3.11 application
-  frontend/          Next.js 14 TypeScript PWA
-  docs/              Technical documentation
-  .github/
-    workflows/
-      ci.yml         GitHub Actions CI/CD
-  render.yaml        Render.com deployment config
-  .gitignore
-  README.md
-  SETUP.md
+├── backend/              FastAPI Python 3.11 — port 8000
+├── chatbot_service/      FastAPI Agentic RAG Chatbot — port 8010
+├── frontend/             Next.js 15 + React 19 TypeScript PWA — port 3000
+├── docs/                 Technical documentation (17 files)
+├── chatbot_docs/         Chatbot-specific documentation (14 files)
+├── notebooks/            5 Colab notebooks (YOLO, ChromaDB, Accidents, Roads, Risk)
+├── scripts/              Root-level data pipeline scripts
+├── docker-compose.yml    4 services: postgres, redis, backend, chatbot, frontend
+├── AGENTS.md             AI agent quick-reference
+├── SETUP.md              Full installation guide
+├── README.md             Project overview
+└── .github/workflows/    GitHub Actions CI/CD
 ```
 
 ---
 
-*Document version: 1.0 | IIT Madras Road Safety Hackathon 2026*
+*Document version: 2.0 | IIT Madras Road Safety Hackathon 2026*

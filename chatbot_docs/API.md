@@ -1,25 +1,37 @@
-# API Reference - Chatbot Service
+# API Reference — Chatbot Service (Port 8010)
 
-The Chatbot Service exposes a series of FastAPI endpoints designed for high-performance AI interaction, retrieval, and real-time streaming.
+The Chatbot Service exposes FastAPI endpoints for AI interaction, retrieval, and health monitoring.
 
-## Endpoint: `/api/v1/chat/message`
-- **Method**: `POST`
-- **Description**: Main chatbot interaction point. Receives user input, intent classifies, and executes the agentic graph.
+Auto-generated Swagger docs: `http://localhost:8010/docs`
+
+## Endpoint: `GET /health`
+- **Description**: Returns service health status and configuration info.
+- **Response**: `{"status": "ok", "providers_available": 7, "vectorstore_loaded": true}`
+
+## Endpoint: `POST /api/v1/chat/`
+- **Description**: Main chatbot interaction point. Receives user input, classifies intent, runs agent tools, and generates a grounded response.
 - **Request Body**:
   - `message`: User input string.
-  - `lat`: User's latitude.
+  - `lat`: User's latitude (for location-aware tools).
   - `lon`: User's longitude.
-  - `session_id`: Unique session identifier.
-- **Response**: Aggregated JSON response with assistant text, intent, and tool-gathered context.
+  - `session_id`: Unique session identifier for conversation memory.
+  - `language`: Optional language code (auto-detected if not provided).
+- **Response**: JSON with assistant text, detected intent, sources, provider used, and latency.
 
-## Endpoint: `/ws/chat/stream`
-- **Method**: `WebSocket`
-- **Description**: Real-time streaming interface for chatbot tokens. Provides smooth, low-latency token generation to the frontend.
+## Endpoint: `POST /api/v1/chat/stream`
+- **Description**: Streaming chat interface. Returns tokens as they are generated for low-latency display.
+- **Request Body**: Same as `/api/v1/chat/`.
+- **Response**: Server-Sent Events stream of tokens.
 
-## Endpoint: `/api/v1/admin/rebuild-vectorstore`
-- **Method**: `POST`
-- **Description**: Manually triggers a rebuild of the ChromaDB index when new documents are added to the `/data` folder.
+## Endpoint: `GET /api/v1/chat/history/{session_id}`
+- **Description**: Returns conversation history for a session from Redis memory.
+- **Response**: Array of message pairs (user + assistant).
 
-## Endpoint: `/api/v1/admin/provider-health`
-- **Method**: `GET`
-- **Description**: Returns the current health status of all six LLM providers based on the latest background health checks.
+## Endpoint: `POST /api/v1/speech/transcribe`
+- **Description**: Transcribes audio input using IndicSeamless speech model.
+- **Request**: Multipart form data with audio file.
+- **Response**: `{"text": "transcribed text", "language": "hi"}`
+
+## Endpoint: `GET /api/v1/admin/provider-health`
+- **Description**: Returns the current health status of all configured LLM providers.
+- **Response**: Object mapping provider names to availability status.

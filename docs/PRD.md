@@ -7,7 +7,7 @@
 | Module | Problem Statement | Core Value |
 |--------|------------------|------------|
 | Emergency Locator | SafeVisionAI | Find nearest hospital/police/ambulance instantly, even offline |
-| AI Chatbot | SafeVisionAI + DriveLegal | Groq llama3-70b online + Phi-3 Mini offline  legal Q&A + first aid |
+| AI Chatbot | SafeVisionAI + DriveLegal | 11-provider online fallback + Phi-3 Mini offline  legal Q&A + first aid |
 | Challan Calculator | DriveLegal | Deterministic MVA 2019 fine calculation with state overrides |
 | Road Reporter | RoadWatch | Geotagged issue reporting with automatic authority routing |
 
@@ -55,7 +55,7 @@ India has over 450,000 km of national and state highways with poor pothole repor
 
 ### Module 2  AI Chatbot
 - [ ] 9-intent detection: FIND_HOSPITAL, FIND_POLICE, FIND_AMBULANCE, FIND_TOW, FIRST_AID_INFO, CHALLAN_QUERY, ROAD_REPORT, LEGAL_INFO, OTHER
-- [ ] Online RAG: LangChain + Groq llama3-70b + ChromaDB (MV Act + WHO Guidelines)
+- [ ] Online RAG: ChatEngine + 11-Provider Fallback + ChromaDB (MV Act + WHO Guidelines)
 - [ ] Offline AI: WebLLM Phi-3 Mini (3.8B, 4-bit) + HNSWlib.js + IndexedDB
 - [ ] Multilingual: auto-detect and respond in Hindi, Tamil, Telugu, Kannada, Malayalam, Bengali
 - [ ] Voice input via Web Speech API + voice output via Speech Synthesis

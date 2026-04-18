@@ -1,20 +1,21 @@
-# SafeVisionAI  Tech Stack
+# SafeVisionAI — Tech Stack
 
 ## Overview
 
-SafeVisionAI uses a **dual-layer AI architecture**  the only road safety app globally with in-browser LLM inference as a fallback for offline use.
+SafeVisionAI uses a **three-service architecture** with in-browser AI inference as an offline fallback — the only road safety app globally with client-side LLM, SQL, and vector search running entirely in the user's browser.
 
 ```
 Layer            Technology                          Cost
 
-Frontend         Next.js 14 + TypeScript + Tailwind  Free (Vercel)
+Frontend         Next.js 15 + React 19 + Tailwind    Free (Vercel)
 Backend          FastAPI + Python 3.11 + Uvicorn     Free (Render.com)
-Online LLM       Groq llama3-70b-8192 (LangChain)   Free (6000 tok/min)
+Chatbot Service  FastAPI + 11 LLM providers + RAG    Free (Render.com)
+Online LLM       Groq / Gemini / Sarvam AI (chain)   Free (multi-provider)
 Offline LLM      WebLLM Phi-3 Mini 4-bit (WebGPU)   Free (device compute)
 Vector Store     ChromaDB (local persistent)         Free (server disk)
 Spatial DB       PostgreSQL 16 + PostGIS 3.4         Free (Supabase)
 Cache            Redis via Upstash                   Free (10K cmds/day)
-Maps             Leaflet.js + OpenStreetMap          Free (no API key)
+Maps             MapLibre GL (vector tiles)          Free (no API key)
 POI Data         Overpass API (OSM)                  Free (fair use)
 Geocoding        Nominatim (OSM)                     Free (1 req/sec)
 Embeddings       sentence-transformers/all-MiniLM    Free (local CPU)
@@ -22,7 +23,7 @@ Edge SQL         DuckDB-Wasm (browser)               Free (device compute)
 Edge Vector      HNSWlib.js (browser)                Free (device compute)
 Edge Vision      Transformers.js + YOLOv8n ONNX      Free (device compute)
 CI/CD            GitHub Actions                      Free (2000 min/mo)
-Total                                                0
+Total                                                ₹ 0
 ```
 
 ---
@@ -31,25 +32,26 @@ Total                                                0
 
 | Technology | Version | Purpose |
 |---|---|---|
-| **Next.js** | 14.2.5 | App Router, SSR, PWA, automatic code splitting |
-| **React** | 18.3.1 | UI component framework |
+| **Next.js** | 15.3.1 | App Router, SSR, PWA, automatic code splitting |
+| **React** | 19.1.0 | UI component framework |
 | **TypeScript** | 5.5.3 | Type safety across entire frontend |
 | **Tailwind CSS** | 3.4.10 | Utility-first styling, dark navy theme |
-| **Leaflet.js** | 1.9.4 | Interactive map  dynamic import (no SSR) |
-| **react-leaflet** | 4.2.1 | React wrapper for Leaflet |
+| **MapLibre GL** | 5.22.0 | Vector map rendering — `dynamic({ssr:false})` |
 | **@mlc-ai/web-llm** | 0.2.73 | Phi-3 Mini inference in browser via WebGPU/Wasm |
-| **@huggingface/transformers** | 3.0.0 | YOLOv8n ONNX pothole detection + embeddings |
+| **@huggingface/transformers** | 4.0.1 | YOLOv8n ONNX pothole detection + embeddings |
 | **@duckdb/duckdb-wasm** | 1.29.0 | SQL engine in browser for offline challan calc |
 | **hnswlib-wasm** | latest | ANN vector search for offline RAG pipeline |
 | **@turf/turf** | 6.5.0 | Haversine distance filter on offline GeoJSON |
 | **idb** | 8.0.0 | IndexedDB wrapper for offline storage |
-| **next-pwa** | 5.6.0 | Service Worker, precache, runtime caching |
 | **zustand** | 4.5.4 | Global state: GPS, services, AI mode, profile |
 | **swr** | 2.2.5 | Data fetching with stale-while-revalidate cache |
 | **axios** | 1.7.7 | HTTP client for backend API calls |
-| **framer-motion** | 11.3.24 | Animations (SOS countdown, loading states) |
+| **motion** | 12.7.3 | Animations (SOS countdown, loading states) |
 | **react-hot-toast** | 2.4.1 | Toast notifications for offline queue, errors |
 | **lucide-react** | 0.427.0 | Icon set |
+| **shadcn** | 4.2.0 | Accessible UI component primitives |
+| **three.js** | 0.169.0 | 3D rendering (landing page visuals) |
+| **@react-three/fiber** | 9.1.0 | React renderer for Three.js |
 
 ### Offline Frontend Technologies (Browser-Native)
 | API | Purpose | Browser Support |
@@ -66,16 +68,12 @@ Total                                                0
 
 ---
 
-## Backend Stack
+## Backend Stack (Port 8000)
 
 | Technology | Version | Purpose |
 |---|---|---|
 | **FastAPI** | 0.115.0 | Async REST + WebSocket API framework |
 | **Uvicorn** | 0.30.6 | ASGI server with standard extras |
-| **LangChain** | 0.3.1 | ConversationalRetrievalChain orchestration |
-| **langchain-groq** | 0.2.0 | Groq LLM integration for LangChain |
-| **ChromaDB** | 0.5.3 | Local vector store for RAG (SQLite-backed) |
-| **sentence-transformers** | 3.0.1 | `all-MiniLM-L6-v2` embeddings (local CPU) |
 | **SQLAlchemy** | 2.0.35 | Async ORM (asyncio extras) |
 | **asyncpg** | 0.29.0 | Async PostgreSQL driver |
 | **GeoAlchemy2** | 0.15.2 | PostGIS geometry column types for SQLAlchemy |
@@ -83,8 +81,49 @@ Total                                                0
 | **Redis (hiredis)** | 5.0.8 | Async Redis client for Upstash connection |
 | **httpx** | 0.27.2 | Async HTTP client for Overpass + Nominatim |
 | **DuckDB** | 0.10.3 | In-process SQL for challan calculation |
+| **geopandas** | 0.14.4 | Geospatial DataFrame processing |
+| **shapely** | 2.0.6 | Geometry operations |
 | **Pydantic** | 2.9.2 | Request/response validation |
 | **pydantic-settings** | 2.5.2 | `.env` config loading with type validation |
+
+---
+
+## Chatbot Service Stack (Port 8010)
+
+A **separate FastAPI service** with its own Python environment & heavy ML dependencies.
+
+| Technology | Version | Purpose |
+|---|---|---|
+| **FastAPI** | 0.115.0 | Async REST API for AI chatbot |
+| **torch** | 2.3.1 | PyTorch runtime for IndicSeamless speech model |
+| **torchaudio** | 2.3.1 | Audio processing for speech pipeline |
+| **transformers** | 4.44.2 | Hugging Face model loading |
+| **ChromaDB** | 0.5.3 | Local vector store for RAG (SQLite-backed) |
+| **sentence-transformers** | 3.0.1 | `all-MiniLM-L6-v2` embeddings (local CPU) |
+| **LangChain** | 0.3.1 | Document loading and text splitting |
+| **langchain-google-genai** | 2.0.4 | Gemini provider integration |
+| **groq** | 0.9.0 | Groq SDK for fast inference |
+| **google-generativeai** | 0.8.6 | Google Gemini 1.5 Flash (1M context) |
+| **openai** | 1.40.0 | OpenAI-compatible API for GitHub/NVIDIA/OpenRouter |
+| **mistralai** | 0.4.2 | Mistral AI SDK |
+| **pdfplumber** | 0.11.4 | Advanced PDF text extraction for legal docs |
+| **Redis** | 5.0.8 | Conversation memory with session TTL |
+
+### 11-Provider LLM Fallback Chain
+
+| Provider | Model | Speed | Use Case |
+|----------|-------|-------|----------|
+| **Groq** | llama-3.3-70b-versatile | 300+ tok/s | Primary English |
+| **Cerebras** | llama3.1-8b | 2000+ tok/s | Speed overflow |
+| **Gemini** | 1.5 Flash | Varies | Large context (1M tokens) |
+| **Sarvam AI** | sarvam-30b | Varies | Indian languages (Hindi, Tamil, etc.) |
+| **Sarvam AI** | sarvam-105b | Varies | Legal queries in Indian languages |
+| **GitHub Models** | Various | Varies | Free with GitHub account |
+| **NVIDIA NIM** | Various | Varies | GPU-optimized inference |
+| **OpenRouter** | 20+ models | Varies | Gateway to many providers |
+| **Mistral** | Various | Varies | 1B tok/month free |
+| **Together** | Various | Varies | $25 credit bank |
+| **Template** | Deterministic | Instant | Always-works fallback |
 
 ---
 
@@ -92,12 +131,13 @@ Total                                                0
 
 | Model | Parameters | Size | Runtime | Use Case |
 |---|---|---|---|---|
-| `Groq llama3-70b-8192` | 70B | Cloud | Groq API | Online chatbot  max intelligence |
-| `Phi-3-mini-4k-instruct-q4f16_1-MLC` | 3.8B | ~2.2GB | WebGPU | Offline chatbot  primary |
-| `gemma-2b-it-q4f16_1-MLC` | 2B | ~1.4GB | WebAssembly | Offline chatbot  CPU fallback |
+| `Groq llama-3.3-70b-versatile` | 70B | Cloud | Groq API | Online chatbot — max intelligence |
+| `Phi-3-mini-4k-instruct-q4f16_1-MLC` | 3.8B | ~2.2GB | WebGPU | Offline chatbot — primary |
+| `gemma-2b-it-q4f16_1-MLC` | 2B | ~1.4GB | WebAssembly | Offline chatbot — CPU fallback |
 | `sentence-transformers/all-MiniLM-L6-v2` | 22M | ~90MB | Server CPU | Server-side embeddings for ChromaDB |
 | `Xenova/all-MiniLM-L6-v2` | 22M | ~25MB | Browser Wasm | Browser-side embeddings for offline RAG |
 | `Xenova/yolov8n` | ~6M | ~15MB | Browser Wasm | In-browser pothole detection from photos |
+| `ai4bharat/indic-seamless` | Large | ~7GB | Server GPU/CPU | Indian language speech (ASR/TTS) |
 
 ---
 
@@ -116,17 +156,18 @@ Total                                                0
 
 | Service | Provider | Free Tier | Use |
 |---|---|---|---|
-| Frontend hosting | Vercel | 100GB/month CDN | Next.js PWA |
-| Backend hosting | Render.com | 750 hrs/month | FastAPI |
+| Frontend hosting | Vercel | 100GB/month CDN | Next.js 15 PWA |
+| Backend hosting | Render.com | 750 hrs/month | FastAPI (port 8000) |
+| Chatbot hosting | Render.com | 750 hrs/month | FastAPI (port 8010) |
 | Database | Supabase | 500MB PostgreSQL | All tables |
 | Cache | Upstash | 10K commands/day | Redis |
-| LLM API | Groq | 6,000 tokens/min | llama3-70b |
+| LLM APIs | Groq + 10 more | Free tiers | 11-provider chain |
 | Model CDN | Hugging Face | Unlimited public | WebLLM weights |
-| Maps | OpenStreetMap CDN | Unlimited fair use | Leaflet tiles |
+| Maps | MapLibre GL + OSM | Free (open source) | Vector map tiles |
 | Geocoding | Nominatim | 1 req/sec | Address lookup |
 | POI data | Overpass API | Fair use | Emergency services |
 | CI/CD | GitHub Actions | 2,000 min/month | Tests + deploy |
 
 ---
 
-*Document version: 1.0 | IIT Madras Road Safety Hackathon 2026*
+*Document version: 2.0 | IIT Madras Road Safety Hackathon 2026*

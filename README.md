@@ -65,11 +65,12 @@ Verify: http://localhost:3000
 
 ```
 SafeVisionAI/
-├── backend/           FastAPI Python 3.11 + PostgreSQL/PostGIS + ChromaDB
-├── chatbot_service/   FastAPI Chatbot/Voice Service + Custom RAG pipelines
-├── frontend/          Next.js 14 TypeScript PWA + WebLLM/DuckDB-Wasm UI
+├── backend/           FastAPI Python 3.11 + PostgreSQL/PostGIS (port 8000)
+├── chatbot_service/   FastAPI Agentic RAG Chatbot + 11 LLM Providers (port 8010)
+├── frontend/          Next.js 15 + React 19 TypeScript PWA (port 3000)
 ├── docs/              Complete technical documentation
 ├── chatbot_docs/      Documentation specifically for Chatbot Service
+├── notebooks/         5 Colab notebooks (YOLO, ChromaDB, Accidents, Roads, Risk)
 ├── scripts/           Global data pipeline scripts
 │   ├── app/           DB-dependent scripts (seed_emergency, seed_nhp_hospitals)
 │   └── data/          Pure Python scripts — no DB needed (fetchers, extractors)
@@ -98,9 +99,11 @@ Read `docs/Agent.md` first — it gives a complete overview of the entire applic
 
 ## Tech Stack
 
-**Backend:** FastAPI, SQLAlchemy, PostGIS, ChromaDB, LangChain, Groq, Redis
+**Backend:** FastAPI, SQLAlchemy, PostGIS, Redis, DuckDB, Overpass/Nominatim
 
-**Frontend:** Next.js 14, TypeScript, Tailwind CSS, Leaflet.js, WebLLM, DuckDB-Wasm, Transformers.js
+**Chatbot Service:** FastAPI, ChromaDB, LangChain, 11 LLM Providers (Groq, Gemini, Sarvam AI, etc.), IndicSeamless Speech
+
+**Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS, MapLibre GL, WebLLM, DuckDB-Wasm, Transformers.js
 
 **Infra:** Vercel, Render.com, Supabase, Upstash, GitHub Actions  -  all free tier
 

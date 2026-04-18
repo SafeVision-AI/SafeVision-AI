@@ -153,12 +153,12 @@ Edit `chatbot_service/.env` with your API keys (Gemini, Groq, Twilio if needed).
 ## Step 5.3 — Run the Chatbot Service
 
 ```bash
-uvicorn main:app --reload --port 8001
+uvicorn main:app --reload --port 8010
 ```
 
 ✅ **Verify:**
-- Health check: [http://localhost:8001/health](http://localhost:8001/health)
-- Swagger API docs: [http://localhost:8001/docs](http://localhost:8001/docs)
+- Health check: [http://localhost:8010/health](http://localhost:8010/health)
+- Swagger API docs: [http://localhost:8010/docs](http://localhost:8010/docs)
 
 ---
 
@@ -251,7 +251,7 @@ uvicorn main:app --reload --port 8000
 # Terminal 2: Chatbot Service
 cd SafeVisionAI/chatbot_service
 .venv\Scripts\activate         # Windows
-uvicorn main:app --reload --port 8001
+uvicorn main:app --reload --port 8010
 
 # Terminal 3: Frontend
 cd SafeVisionAI/frontend
@@ -259,7 +259,7 @@ npm run dev
 
 # All running:
 # Backend:  http://localhost:8000
-# Chatbot:  http://localhost:8001
+# Chatbot:  http://localhost:8010
 # API Docs: http://localhost:8000/docs
 # Frontend: http://localhost:3000
 ```

@@ -113,7 +113,7 @@ Send a message to the AI chatbot.
   "sources": [
     {"document": "who_trauma_care_guidelines.pdf", "page": 45}
   ],
-  "model_used": "groq-llama3-70b",
+  "model_used": "groq-llama-3.3-70b",
   "latency_ms": 1240
 }
 ```
@@ -267,7 +267,7 @@ Returns GeoJSON bundle of emergency services for a specific city (for offline pr
 | 422 | Validation error (e.g., lat out of range -90 to 90) |
 | 429 | Rate limited (Nominatim 1 req/sec) |
 | 500 | Internal server error |
-| 503 | LLM service unavailable (Groq down  use offline fallback) |
+| 503 | LLM service unavailable (All 11 providers down  use offline fallback) |
 
 ---
 
@@ -275,7 +275,7 @@ Returns GeoJSON bundle of emergency services for a specific city (for offline pr
 
 | Service | Limit | Our Handling |
 |---|---|---|
-| Groq LLM API | 6,000 tokens/min | Redis queuing + graceful degradation to offline AI |
+| Main LLM APIs | Varies per provider | 11-provider fallback chain + offline AI |
 | Nominatim geocoder | 1 req/sec | Redis cache (86400s TTL) + rate limiter |
 | Overpass API | Fair use ~1 req/sec | Redis cache (3600s TTL) per coordinate |
 | Upstash Redis | 10,000 commands/day | Efficient cache keys, no redundant writes |

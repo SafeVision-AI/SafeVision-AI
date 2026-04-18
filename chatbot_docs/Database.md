@@ -21,5 +21,5 @@ The chatbot service doesn't have its own primary database but interacts with thr
 - **Setup**:
   - `Documents`: Motor Vehicles Act (1988, 2019), WHO Guidelines, state amendments.
   - `Embeddings`: Using `sentence-transformers/all-MiniLM-L6-v2` for vectorized indexing.
-  - `Storage`: Stored on disk in the `data/chroma_db` folder (added to `.gitignore`).
-- **Management**: Rebuilt automatically during the Docker build process or via an admin endpoint.
+  - `Storage`: Stored on disk in the `data/chroma_db` folder — **committed to git** (Render needs it).
+- **Management**: Rebuilt locally via `python data/build_vectorstore.py` when new PDFs are added. Commit the updated `chroma_db/` directory.

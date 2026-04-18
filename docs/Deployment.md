@@ -4,13 +4,14 @@
 
 | Service | Provider | URL | Purpose |
 |---|---|---|---|
-| Frontend | Vercel | `safevisionai.vercel.app` | Next.js PWA, global CDN |
-| Backend | Render.com | `safevisionai-api.onrender.com` | FastAPI, 750h/month free |
+| Frontend | Vercel | `safevisionai.vercel.app` | Next.js 15 PWA, global CDN |
+| Backend | Render.com | `safevisionai-api.onrender.com` | FastAPI :8000, 750h/month free |
+| Chatbot Service | Render.com | `safevisionai-chatbot.onrender.com` | FastAPI :8010, Agentic RAG AI |
 | Database | Supabase | `[project].supabase.co` | PostgreSQL + PostGIS |
 | Cache | Upstash | `[host].upstash.io` | Redis, 10K commands/day |
-| LLM API | Groq | `api.groq.com` | llama3-70b, 6000 tok/min |
+| LLM APIs | Groq + 10 more | Various | 11-provider fallback chain |
 | Model CDN | Hugging Face | `huggingface.co` | WebLLM weights |
-| CI/CD | GitHub Actions |  | Auto-deploy on push |
+| CI/CD | GitHub Actions | | Auto-deploy on push |
 
 ---
 
@@ -179,6 +180,29 @@ python data/build_vectorstore.py  # 10 minutes
 
 ---
 
+## Step 5b: Deploy Chatbot Service to Render.com
+
+The chatbot service is a **separate** Render web service.
+
+Render.com → New → Web Service:
+- **Name:** `safevisionai-chatbot`
+- **Root Directory:** `chatbot_service`
+- **Runtime:** Python 3.11
+- **Build Command:** `pip install -r requirements.txt`
+- **Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1`
+- **Health Check Path:** `/health`
+
+Set environment variables:
+- `DEFAULT_LLM_PROVIDER`, `DEFAULT_LLM_MODEL`
+- All LLM provider API keys (GROQ, GEMINI, SARVAM, etc.)
+- `MAIN_BACKEND_BASE_URL` = your Render backend URL
+- `REDIS_URL` = Upstash Redis URL
+- `CHROMA_PERSIST_DIR` = `./data/chroma_db`
+
+> **Note:** `chatbot_service/data/chroma_db/` is committed to git, so Render gets the vectorstore automatically on deploy. No build-time vectorstore creation needed.
+
+---
+
 ## Step 6: Deploy Frontend to Vercel
 
 ### Via GitHub Integration (Recommended)
@@ -242,17 +266,12 @@ Configured in `.github/workflows/ci.yml`:
 ```bash
 # Database
 DATABASE_URL=postgresql+asyncpg://postgres:[PASSWORD]@db.[PROJECT].supabase.co:5432/postgres
-SUPABASE_URL=https://[PROJECT].supabase.co
-SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 # Cache
 REDIS_URL=rediss://default:[TOKEN]@[HOST].upstash.io:6379
 
-# AI
-GROQ_API_KEY=gsk_...
-GROQ_MODEL=llama3-70b-8192
-CHROMA_PATH=data/chroma_db
+# Chatbot
+CHATBOT_SERVICE_URL=http://localhost:8010
 
 # App
 ENVIRONMENT=production
@@ -261,12 +280,33 @@ MAX_RADIUS=50000
 CACHE_TTL=3600
 ```
 
+### Chatbot Service (`chatbot_service/.env`)
+
+```bash
+# LLM
+DEFAULT_LLM_PROVIDER=groq
+DEFAULT_LLM_MODEL=llama-3.3-70b-versatile
+GROQ_API_KEY=gsk_...
+CEREBRAS_API_KEY=...
+GEMINI_API_KEY=...
+SARVAM_API_KEY=...
+
+# Backend connection
+MAIN_BACKEND_BASE_URL=http://localhost:8000
+
+# RAG
+CHROMA_PERSIST_DIR=./data/chroma_db
+EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+
+# Cache
+REDIS_URL=rediss://default:[TOKEN]@[HOST].upstash.io:6379
+```
+
 ### Frontend (`frontend/.env.local`)
 
 ```bash
-NEXT_PUBLIC_API_URL=https://safevisionai-api.onrender.com
-NEXT_PUBLIC_SUPABASE_URL=https://[PROJECT].supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+NEXT_PUBLIC_BACKEND_URL=https://safevisionai-api.onrender.com
+NEXT_PUBLIC_CHATBOT_URL=https://safevisionai-chatbot.onrender.com
 ```
 
 ---

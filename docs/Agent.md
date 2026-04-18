@@ -9,7 +9,7 @@
 **SafeVisionAI** is a full-stack, AI-powered road safety Progressive Web App (PWA) built for the IIT Madras Road Safety Hackathon 2026. It is one unified application that solves three problem statements:
 
 1. **Emergency Locator**  Find the nearest hospital, police station, ambulance, towing service using GPS. Works offline for 25 Indian cities.
-2. **AI Chatbot**  Answer questions about traffic laws (Motor Vehicles Act 2019) and first aid. Uses Groq llama3-70b online, Phi-3 Mini entirely in the browser when offline.
+2. **AI Chatbot**  Answer questions about traffic laws (Motor Vehicles Act 2019) and first aid. Uses 11-Provider online fallback, Phi-3 Mini entirely in the browser when offline.
 3. **Challan Calculator**  Calculate exact traffic fines under MVA 2019 with state-specific overrides. Deterministic SQL  never hallucinates.
 4. **Road Reporter**  Let citizens report potholes, flooding, broken roads. Automatically routes the complaint to the correct government authority (NHAI, State PWD, District Collector, PMGSY).
 
@@ -29,9 +29,10 @@
 
 ## Tech Stack in One Line
 
-**Frontend**: Next.js 14 (TypeScript) + Tailwind CSS + Leaflet.js (maps) + WebLLM (offline AI) + DuckDB-Wasm (offline SQL) + Transformers.js (browser vision)  
-**Backend**: FastAPI (Python 3.11) + PostgreSQL with PostGIS + Redis + ChromaDB + Groq API  
-**Infra**: Vercel (frontend) + Render.com (backend) + Supabase (DB) + Upstash (Redis)
+**Frontend**: Next.js 15 (TypeScript) + Tailwind CSS + MapLibre GL (maps) + WebLLM (offline AI) + DuckDB-Wasm (offline SQL) + Transformers.js (browser vision)  
+**Backend**: FastAPI (Python 3.11) + PostgreSQL with PostGIS + Redis + DuckDB  
+**Chatbot Service**: FastAPI (Python 3.11) + ChromaDB + 11 LLM Providers (Groq, Sarvam AI, Gemini, etc.) + IndicSeamless Speech  
+**Infra**: Vercel (frontend) + Render.com (backend + chatbot) + Supabase (DB) + Upstash (Redis)
 
 ---
 
@@ -40,8 +41,16 @@
 ```
 SafeVisionAI/
 
- chatbot_service/             Standalone FastAPI Voice & Chatbot Service
- backend/                     FastAPI Python 3.11 application
+ chatbot_service/             Standalone FastAPI AI Chatbot Service (port 8010)
+    agent/                   ChatEngine, IntentDetector, SafetyChecker, ContextAssembler
+    providers/               11 LLM providers + ProviderRouter (auto-fallback chain)
+    rag/                     LocalVectorStore (ChromaDB), Retriever, document_loader
+    tools/                   9 tools: SOS, Challan, Legal, FirstAid, Weather, RoadInfra, etc.
+    memory/                  Redis conversation memory with session TTL
+    services/                IndicSeamlessService (Indian language speech)
+    data/chroma_db/          Pre-built vectorstore (COMMITTED — Render needs it)
+
+ backend/                     FastAPI Python 3.11 application (port 8000)
     main.py                  App entry point  CORS, routers, health check
     requirements.txt         All pinned Python dependencies
     Dockerfile               For Render.com deployment
@@ -93,22 +102,25 @@ SafeVisionAI/
         test_challan.py        7 tests for fine calculation
         test_chatbot.py        6 tests for AI responses
 
- frontend/                    Next.js 14 TypeScript PWA
+ frontend/                    Next.js 15 + React 19 TypeScript PWA
     app/
        layout.tsx            Root: PWA meta, ConnectivityProvider, Toaster
-       page.tsx              Home: 4 module cards + emergency numbers bar
-       emergency/page.tsx    Map + service list + SOS button
-       chat/page.tsx         Online/Offline AI chat tabs
+       page.tsx              Home: dashboard with module cards
+       assistant/page.tsx    AI chat interface
+       locator/page.tsx      MapLibre GL emergency locator
+       emergency/page.tsx    Emergency services + SOS
        challan/page.tsx      Fine calculator + violations browser
        report/page.tsx       Road issue report form
        first-aid/page.tsx    8 static offline first-aid cards
+       sos/page.tsx          Emergency SOS page
+       profile/page.tsx      User profile
        settings/page.tsx     Blood group, contacts, vehicle number
    
     components/
-       EmergencyMap.tsx       Leaflet map (dynamic, no-SSR)
+       EmergencyMap.tsx       MapLibre GL map (dynamic, no-SSR)
        SOSButton.tsx         Fixed red SOS  WhatsApp deep link
        EmergencyNumbers.tsx  Fixed bottom bar: 112, 102, 100, 1033
-       ChatInterface.tsx     Online chat UI (Groq)
+       ChatInterface.tsx     Online chat UI (multi-provider)
        VoiceInput.tsx        Web Speech API microphone
        OfflineChat.tsx       Offline WebLLM chat UI
        ModelLoader.tsx       WebLLM 2GB download progress bar
@@ -117,6 +129,8 @@ SafeVisionAI/
        PotholeDetector.tsx    YOLOv8n in-browser pothole detection
        AuthorityCard.tsx     Auto-routed authority display (NHAI/PWD/etc.)
        ConnectivityProvider.tsx  React context for online/offline state
+       GlobalSOS.tsx         Floating SOS component on all pages
+       AppSidebar.tsx        Main navigation sidebar
    
     lib/
        store.ts               Zustand global state (GPS, services, AI mode)
@@ -132,7 +146,7 @@ SafeVisionAI/
     public/
        manifest.json         PWA manifest (standalone mode, app shortcuts)
        icons/                PWA icons (192px, 512px)
-       leaflet/              Leaflet marker icons (webpack workaround)
+       leaflet/              Map marker icon assets
        offline-data/
            india-emergency.geojson   25-city POI bundle (generated by seed_emergency.py)
            violations.csv            Challan data for DuckDB-Wasm
@@ -179,10 +193,10 @@ SafeVisionAI/
 - Always cast to `::geography` (meters), never `::geometry` (degrees)
 - PostGIS must be enabled in Supabase **before** running migrations
 
-### 3. Leaflet in Next.js Requires 3 Things
-- `dynamic(() => import(...), { ssr: false })` on all Leaflet components
-- `import 'leaflet/dist/leaflet.css'` inside the component (not in layout)
-- Copy marker icons to `public/leaflet/` (webpack breaks default icon paths)
+### 2. Leaflet/MapLibre in Next.js Requires 3 Things
+- `dynamic(() => import(...), { ssr: false })` on all map components
+- `import 'maplibre-gl/dist/maplibre-gl.css'` inside the component (not in layout)
+- MapLibre GL replaces Leaflet — all map components use `maplibre-gl` now
 
 ### 4. ChromaDB Must Be Built Before Server Starts
 - Run `python data/build_vectorstore.py` once after downloading the PDFs
@@ -191,7 +205,7 @@ SafeVisionAI/
 
 ### 5. WebLLM Downloads On-Demand Only
 - The 2.2GB Phi-3 Mini model is only downloaded when user clicks "Use Offline AI"
-- `next-pwa` runs Service Worker only in production (`npm run build && npm start`)
+- Service Worker runs only in production (`npm run build && npm start`)
 - Test offline mode with production build, not `npm run dev`
 
 ### 6. DuckDB Is Used Twice (Different Places)
@@ -290,7 +304,7 @@ npm run dev
 |---|---|
 | `ST_MakePoint(lat, lon)` | `ST_MakePoint(lon, lat)`  longitude FIRST |
 | Using `::geometry` in ST_DWithin | Use `::geography`  gives distances in meters |
-| Importing Leaflet in layout.tsx | Import only in components with `dynamic({ssr:false})` |
+| Importing Leaflet/MapLibre in layout.tsx | Import only in components with `dynamic({ssr:false})` |
 | Deleting `data/chroma_db/` | Never delete  rebuild = 10 minutes |
 | Testing PWA offline with `npm run dev` | Run `npm run build && npm start` for Service Worker |
 | Calling Nominatim without User-Agent | Always set `User-Agent: SafeVisionAI/1.0` header |

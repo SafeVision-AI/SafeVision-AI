@@ -5,7 +5,7 @@ To maintain high architectural standards and prevent merge conflicts in the `cha
 ## Team Assignments
 Assign ownership of specific modules before writing code.
 - **Member A**: Providers, Memory, API endpoints.
-- **Member B**: RAG, Agent (LangGraph), Tools.
+- **Member B**: RAG, Agent (ChatEngine), Tools.
 - **Member C**: Frontend Voice UI, Voice Output, and Multi-language setup.
 
 ## Workflow Rules

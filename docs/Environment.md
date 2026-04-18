@@ -1,10 +1,10 @@
-# SafeVisionAI - Environment Variables
+# SafeVisionAI — Environment Variables
 
-All environment variables needed to run the project locally and in production.
+All environment variables needed to run the project's **three services** locally and in production.
 
 ---
 
-## Backend - `backend/.env`
+## Backend — `backend/.env`
 
 Copy `backend/.env.example` and fill in each value.
 
@@ -16,44 +16,34 @@ cp backend/.env.example backend/.env
 
 | Variable | Description | Where to get it |
 |---|---|---|
-| `DATABASE_URL` | PostgreSQL connection string with asyncpg driver | Supabase -> Settings -> Database -> URI (replace `postgresql://` with `postgresql+asyncpg://`) |
-| `SUPABASE_URL` | Your Supabase project URL | Supabase -> Settings -> API -> Project URL |
-| `SUPABASE_ANON_KEY` | Public anon key (read-only) | Supabase -> Settings -> API -> anon public |
-| `SUPABASE_SERVICE_ROLE_KEY` | Secret service role key (admin access) | Supabase -> Settings -> API -> service_role |
+| `DATABASE_URL` | PostgreSQL connection string with asyncpg driver | Supabase → Settings → Database → URI (replace `postgresql://` with `postgresql+asyncpg://`) |
 
 Example format:
 ```
 DATABASE_URL=postgresql+asyncpg://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.co:5432/postgres
-SUPABASE_URL=https://[PROJECT-REF].supabase.co
-SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### Cache (Redis)
 
 | Variable | Description | Where to get it |
 |---|---|---|
-| `REDIS_URL` | Upstash Redis connection string with TLS | Upstash -> Database -> Connect -> .env tab |
+| `REDIS_URL` | Upstash Redis connection string with TLS | Upstash → Database → Connect → .env tab |
 
-Example format:
-```
-REDIS_URL=rediss://default:[TOKEN]@[HOST].upstash.io:6379
-```
+> Optional — falls back to in-memory cache if missing.
 
-### AI / Groq
+### Service Connection
 
-| Variable | Description | Where to get it |
+| Variable | Description | Default |
 |---|---|---|
-| `GROQ_API_KEY` | Groq API key for llama3-70b | console.groq.com -> API Keys -> Create Key |
-| `GROQ_MODEL` | Model name to use | Set to: `llama3-70b-8192` |
-| `CHROMA_PATH` | Local path where ChromaDB stores vector index | Set to: `data/chroma_db` |
+| `CHATBOT_SERVICE_URL` | URL of the chatbot service | `http://localhost:8010` |
 
-Example format:
-```
-GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
-GROQ_MODEL=llama3-70b-8192
-CHROMA_PATH=data/chroma_db
-```
+### External APIs
+
+| Variable | Required | Description |
+|---|---|---|
+| `OVERPASS_URLS` | No | Comma-separated Overpass API endpoints |
+| `OPENROUTESERVICE_API_KEY` | No | For routing (free tier available) |
+| `DATA_GOV_API_KEY` | No | For government data endpoints |
 
 ### App Config
 
@@ -64,19 +54,57 @@ CHROMA_PATH=data/chroma_db
 | `MAX_RADIUS` | Maximum expandable radius in meters | `50000` |
 | `CACHE_TTL` | Default Redis cache expiry in seconds | `3600` |
 
-Example format:
+---
+
+## Chatbot Service — `chatbot_service/.env`
+
+Copy `chatbot_service/.env.example` and fill in each value.
+
+```bash
+cp chatbot_service/.env.example chatbot_service/.env
 ```
-ENVIRONMENT=development
-DEFAULT_RADIUS=5000
-MAX_RADIUS=50000
-CACHE_TTL=3600
-```
+
+### LLM Provider API Keys
+
+| Variable | Required | Provider |
+|---|---|---|
+| `DEFAULT_LLM_PROVIDER` | Yes | Default: `groq` |
+| `DEFAULT_LLM_MODEL` | Yes | Model ID for chosen provider |
+| `GROQ_API_KEY` | For Groq | Primary English provider (300+ tok/s) |
+| `CEREBRAS_API_KEY` | For Cerebras | Speed overflow (2000+ tok/s) |
+| `GEMINI_API_KEY` | For Gemini | Google Gemini 1.5 Flash (1M context) |
+| `SARVAM_API_KEY` | For Sarvam | Indian language specialist |
+| `GITHUB_TOKEN` | For GitHub Models | Free with GitHub account |
+| `NVIDIA_API_KEY` | For NVIDIA NIM | GPU-optimized inference |
+| `OPENROUTER_API_KEY` | For OpenRouter | Gateway to 20+ models |
+| `MISTRAL_API_KEY` | For Mistral | 1B tokens/month free |
+| `TOGETHER_API_KEY` | For Together | $25 free credit |
+
+> You only need keys for providers you want to enable. The ProviderRouter auto-skips providers without keys.
+
+### Backend Connection
+
+| Variable | Description | Default |
+|---|---|---|
+| `MAIN_BACKEND_BASE_URL` | URL of the main backend API | `http://localhost:8000` |
+
+### RAG Configuration
+
+| Variable | Description | Default |
+|---|---|---|
+| `CHROMA_PERSIST_DIR` | Path to ChromaDB vectorstore | `./data/chroma_db` |
+| `EMBEDDING_MODEL` | Sentence-transformers model name | `sentence-transformers/all-MiniLM-L6-v2` |
+
+### Other Services
+
+| Variable | Required | Description |
+|---|---|---|
+| `REDIS_URL` | No | Redis for conversation memory (falls back to in-memory) |
+| `OPENWEATHER_API_KEY` | No | Required for the WeatherTool |
 
 ---
 
-## Frontend - `frontend/.env.local`
-
-Copy `frontend/.env.local.example` and fill in each value.
+## Frontend — `frontend/.env.local`
 
 ```bash
 cp frontend/.env.local.example frontend/.env.local
@@ -84,20 +112,10 @@ cp frontend/.env.local.example frontend/.env.local
 
 | Variable | Description | Value |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | URL of the running FastAPI backend | `http://localhost:8000` (local) or your Render.com URL (production) |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Same as backend `SUPABASE_URL` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key only - never service role | Same as backend `SUPABASE_ANON_KEY` |
+| `NEXT_PUBLIC_BACKEND_URL` | URL of backend API | `http://localhost:8000` (local) or Render URL (prod) |
+| `NEXT_PUBLIC_CHATBOT_URL` | URL of chatbot service | `http://localhost:8010` (local) or Render URL (prod) |
 
-Example format:
-```
-NEXT_PUBLIC_API_URL=http://localhost:8000
-NEXT_PUBLIC_SUPABASE_URL=https://[PROJECT-REF].supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
-> IMPORTANT: Never put `SUPABASE_SERVICE_ROLE_KEY` in the frontend .env. That key has admin access and must stay in the backend only.
-
-> IMPORTANT: All frontend env variables must start with `NEXT_PUBLIC_` to be accessible in the browser.
+> **IMPORTANT:** All frontend env variables must start with `NEXT_PUBLIC_` to be accessible in the browser.
 
 ---
 
@@ -105,28 +123,27 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 When deploying, set these in the hosting dashboards instead of .env files.
 
-### Render.com (Backend)
+### Render.com — Backend Service
 
-Go to: Render Dashboard -> Your Service -> Environment
+Set all backend variables with production values:
+- `DATABASE_URL` — Supabase PostgreSQL connection string
+- `REDIS_URL` — Upstash Redis URL
+- `CHATBOT_SERVICE_URL` — Render chatbot service URL (internal)
+- `ENVIRONMENT` — set to `production`
 
-Set all backend variables from the list above with production values:
-- `DATABASE_URL` - same Supabase URL (it's already production)
-- `REDIS_URL` - same Upstash URL (already production)
-- `GROQ_API_KEY` - same key
-- `CHROMA_PATH` - set to `data/chroma_db`
-- `ENVIRONMENT` - set to `production`
-- `DEFAULT_RADIUS` - `5000`
-- `MAX_RADIUS` - `50000`
-- `CACHE_TTL` - `3600`
+### Render.com — Chatbot Service
 
-### Vercel (Frontend)
+Set all chatbot variables:
+- `DEFAULT_LLM_PROVIDER`, `DEFAULT_LLM_MODEL`
+- All LLM provider API keys you want active
+- `MAIN_BACKEND_BASE_URL` — Render backend URL
+- `REDIS_URL` — same Upstash URL
+- `CHROMA_PERSIST_DIR` — `./data/chroma_db`
 
-Go to: Vercel Dashboard -> Project -> Settings -> Environment Variables
+### Vercel — Frontend
 
-Set:
-- `NEXT_PUBLIC_API_URL` - your Render.com service URL e.g. `https://safevisionai-api.onrender.com`
-- `NEXT_PUBLIC_SUPABASE_URL` - your Supabase URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - your Supabase anon key
+- `NEXT_PUBLIC_BACKEND_URL` — your Render backend URL
+- `NEXT_PUBLIC_CHATBOT_URL` — your Render chatbot URL
 
 ---
 
@@ -136,9 +153,10 @@ Set:
 |---|---|---|---|
 | Supabase | supabase.com | PostgreSQL + PostGIS database | 500MB DB, 2GB bandwidth |
 | Upstash | upstash.com | Redis cache | 10,000 commands/day |
-| Groq | console.groq.com | llama3-70b LLM API | 14,400 requests/day |
+| Groq | console.groq.com | Primary LLM API | 14,400 requests/day |
+| Sarvam AI | sarvam.ai | Indian language LLM | Free tier available |
 | Vercel | vercel.com | Frontend hosting | Unlimited for personal |
-| Render.com | render.com | Backend hosting | 750 hours/month free |
+| Render.com | render.com | Backend + chatbot hosting | 750 hours/month free |
 
 All services have free tiers sufficient for a hackathon demo. No credit card needed for any of them.
 
@@ -146,10 +164,10 @@ All services have free tiers sufficient for a hackathon demo. No credit card nee
 
 ## Security Notes
 
-- `.env` and `.env.local` are in `.gitignore` - they will never be committed
+- `.env` and `.env.local` are in `.gitignore` — they will never be committed
 - Never log or print API keys in your code
-- Never put secrets in frontend code - only `NEXT_PUBLIC_*` vars in frontend
-- The `SUPABASE_SERVICE_ROLE_KEY` bypasses Row Level Security - use it only on the backend and only when absolutely necessary
+- Never put secrets in frontend code — only `NEXT_PUBLIC_*` vars in frontend
+- Backend and chatbot service each have their **own** `.env` — don't mix them
 
 ---
 

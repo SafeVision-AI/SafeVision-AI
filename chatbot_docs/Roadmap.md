@@ -1,37 +1,45 @@
-# RoadSoS Chatbot - Implementation Roadmap
+# SafeVisionAI Chatbot — Implementation Roadmap
 
-The development of the chatbot service is divided into nine phases to ensure build consistency and avoid conflicts.
+The development of the chatbot service was divided into nine phases to ensure build consistency and avoid conflicts.
 
-## Phase 1: Foundation (Days 1-3)
-- Create `chatbot_service/` folder and setup base directories.
-- Configure all six LLM provider API wrappers.
-- Verify health checks for all providers.
+## Phase 1: Foundation ✅
+- Created `chatbot_service/` folder and setup base directories.
+- Configured all 11 LLM provider API wrappers with auto-fallback.
+- Verified health checks for all providers.
 
-## Phase 2: RAG Pipeline (Days 4-7)
-- Index Motor Vehicles Act and WHO PDFs into ChromaDB.
-- Build the document retriever with MMR (Maximal Marginal Relevance) search.
+## Phase 2: RAG Pipeline ✅
+- Indexed Motor Vehicles Act and WHO PDFs into ChromaDB.
+- Built the document retriever with MMR (Maximal Marginal Relevance) search.
+- Committed `data/chroma_db/` to git for Render deployment.
 
-## Phase 3: Intent Detection (Days 8-10)
-- Categorize user messages into one of 10 intents using `llama3-8b`.
-- Support for Hindi, Tamil, and Hinglish.
+## Phase 3: Intent Detection ✅
+- Built rule-based `IntentDetector` using keyword matching and regex patterns.
+- 9 intent categories with support for multilingual input.
+- No separate LLM call — instant classification (<1ms).
 
-## Phase 4: Agent Tools (Days 11-15)
-- Implementation of emergency, challan, and legal search tools.
-- Connection of tools to the main backend APIs.
+## Phase 4: Agent Tools ✅
+- Implemented 9 tools: SOS, Challan, Legal, FirstAid, Weather, RoadInfra, RoadIssues, SubmitReport, GeoFencing.
+- Connected all tools to the main backend APIs via `httpx` async client.
 
-## Phase 5: Agent Assembly (Days 16-19)
-- Wire everything into a LangGraph state machine.
-- Implement conversation memory with Redis.
+## Phase 5: Agent Assembly ✅
+- Wired everything into a custom `ChatEngine` class (`agent/graph.py`).
+- Implemented conversation memory with Redis (`memory/store.py`).
+- Built `ContextAssembler` to orchestrate parallel tool calls.
 
-## Phase 6: Streaming (Days 20-22)
-- Add WebSocket token streaming for low-latency feedback.
+## Phase 6: Multi-Provider Routing ✅
+- Implemented `ProviderRouter` with 11-provider fallback chain.
+- Added Sarvam AI auto-routing for Indian languages (regex Unicode detection).
+- Added `TemplateProvider` as always-works fallback.
 
-## Phase 7: Real-Time Data (Days 23-26)
-- Connect to live road issues via PostgreSQL triggers and Redis Pub/Sub.
+## Phase 7: Indian Language Support ✅
+- Integrated Sarvam AI (30B general, 105B legal) for Hindi, Tamil, Telugu, etc.
+- Added IndicSeamless speech model for Indian language ASR/TTS.
 
-## Phase 8: Voice Integration (Days 27-30)
-- Add voice input/output on the frontend.
-- Implement auto-read logic for emergency responses.
+## Phase 8: Voice Integration ✅
+- Added voice input/output on the frontend (Web Speech API).
+- Implemented auto-read logic for emergency responses.
 
-## Phase 9: Safety and Hardening (Days 31-35)
-- Safety check nodes, rate limits, and provider health monitoring.
+## Phase 9: Safety and Hardening ✅
+- `SafetyChecker` node with pre/post validation.
+- Rate limits and provider health monitoring.
+- All phases complete — production-ready for hackathon.

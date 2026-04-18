@@ -93,7 +93,7 @@ gantt
 - [ ] Download 3 PDFs (MV Act 1988, MV Amendment 2019, WHO Trauma)
 - [ ] Run build_vectorstore.py to index PDFs into ChromaDB
 - [ ] LangChain RAG chain with ChromaDB MMR retrieval
-- [ ] Groq llama3-70b integration
+- [ ] Groq llama-3.3-70b-versatile integration
 - [ ] Intent detection system (9 intent labels)
 - [ ] Chat history in Redis per session
 - [ ] Chat API endpoint - POST /api/v1/chat/message
@@ -137,7 +137,7 @@ gantt
 
 **Goal:** All core features work with no internet connection.
 
-- [ ] next-pwa + Workbox service worker configuration
+- [ ] Service worker + Workbox configuration
 - [ ] Precache app shell (HTML, JS, CSS, fonts)
 - [ ] Cache india-emergency.geojson at install time
 - [ ] DuckDB-Wasm + violations.csv for offline challan

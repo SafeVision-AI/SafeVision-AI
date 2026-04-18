@@ -1,16 +1,16 @@
-# Deployment Guide - Chatbot Service
+# Deployment Guide — Chatbot Service
 
-The Chatbot Service runs on its own independent instance on [Render.com](https://render.com). This separation ensures high availability and performance.
+The Chatbot Service runs on its own independent instance on [Render.com](https://render.com). This separation ensures the heavy ML dependencies (torch ~2GB) don't bloat the main backend.
 
 ## Prerequisites
-- A GitHub organization account connected to Render.
-- Access to all primary LLM API keys (Groq, Gemini, etc.).
-- A running Redis instance for conversation memory.
+- A GitHub account connected to Render.
+- Access to LLM API keys (Groq, Sarvam AI, Gemini, etc. — only enabled providers need keys).
+- A running Redis instance for conversation memory (optional — falls back to in-memory).
 
 ## Steps for Deployment
 1. **New Web Service**: Click `New` → `Web Service` on Render.
 2. **Setup**:
-   - **Root Directory**: `SafeVisionAI/chatbot_service`
+   - **Root Directory**: `chatbot_service`
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1`
    - **Instance Type**: `Free tier` (512MB RAM, shared CPU) is sufficient for initial testing.
@@ -18,12 +18,16 @@ The Chatbot Service runs on its own independent instance on [Render.com](https:/
 4. **Health Check**: Set health check path to `/health`.
 
 ## Production ChromaDB Strategy
-For the hackathon, ChromaDB is stored as part of the Docker image:
-- **Dockerfile**: Includes a step to run `build_vectorstore.py` during the build phase.
-- **Persistence**: Baked-in vector data avoids reliance on ephemeral disk storage.
-- **Startup**: Loads from the local baked-in index in under 5 seconds.
+The ChromaDB vectorstore is **committed to git** at `chatbot_service/data/chroma_db/`:
+- **No build-time step needed**: Render gets the vectorstore automatically on `git clone`.
+- **Startup**: Loads from the committed index in under 5 seconds.
+- **Updates**: To update the vectorstore, rebuild locally and commit the new `chroma_db/` directory.
+
+> **Important**: Never `.gitignore` the `chatbot_service/data/chroma_db/` directory — Render's ephemeral disk means the vectorstore must be in the git repo.
 
 ## CI/CD Pipeline
-- **Staging**: Merges to `develop` trigger a deployment to the staging environment.
 - **Production**: Merges to `main` trigger a deployment to the production environment.
-- **Testing**: Deployment only occurs if all `pytest` suites in `/tests` pass.
+- **Testing**: Deployment only occurs if all `pytest` suites in `chatbot_service/tests/` pass.
+
+## Port Configuration
+The chatbot service runs on **port 8010** locally. On Render, it uses `$PORT` (automatically assigned). The main backend connects to it via the `CHATBOT_SERVICE_URL` environment variable.
