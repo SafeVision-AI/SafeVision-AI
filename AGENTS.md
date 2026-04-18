@@ -8,7 +8,7 @@
 ## Identity
 
 **SafeVisionAI** is a full-stack, AI-powered road safety PWA for the IIT Madras Road Safety Hackathon 2026.
-It solves 3 problem statements with one app: Emergency Locator, AI Chatbot (traffic law + first aid), Challan Calculator, and Road Reporter.
+Solves 3 problem statements: Emergency Locator, AI Chatbot (traffic law + first aid), Challan Calculator, and Road Reporter.
 Total infra cost: ₹0. All free/open-source.
 
 ---
@@ -92,7 +92,7 @@ SafeVisionAI/
 │
 ├── docs/                    17 markdown docs — START with docs/Agent.md
 ├── notebooks/               5 Jupyter notebooks (YOLO training, ChromaDB build, Accident EDA, Roads, Risk Model)
-├── docker-compose.yml       4 services: postgres (PostGIS 16), redis 7, backend, chatbot, frontend
+├── docker-compose.yml       5 services: postgres (PostGIS 16), redis 7, backend, chatbot, frontend
 └── SETUP.md                 Complete install guide with exact commands
 ```
 
@@ -106,8 +106,8 @@ SafeVisionAI/
 - PostGIS extension must exist before Alembic migrations: `CREATE EXTENSION IF NOT EXISTS postgis;`
 
 ### Map Components (Frontend)
-- MapLibre GL components must be loaded with `dynamic(() => import(...), { ssr: false })` — they use `window` APIs
-- Import `maplibre-gl/dist/maplibre-gl.css` inside the component file, not in `layout.tsx`
+- MapLibre GL components using `window` APIs must be loaded with `dynamic(() => import(...), { ssr: false })`
+- `maplibre-gl/dist/maplibre-gl.css` is imported globally in `layout.tsx` (line 1)
 - Marker icon paths break on Next.js webpack — copy icons to `public/leaflet/` and reference from there
 
 ### ChromaDB Vectorstore
@@ -123,6 +123,11 @@ SafeVisionAI/
 ### Safety Rule (Never Remove)
 - Any AI response about injuries **must** start with "Call 112 immediately" — check `agent/safety_checker.py`
 
+### Package Manager Conflict
+- **Locally:** Uses **npm** — `package-lock.json` is the lockfile
+- **CI (`frontend.yml`):** Uses **pnpm 9** with `pnpm-lock.yaml` — if CI breaks, check lockfile sync
+- The `pnpm-lock.yaml` is `.gitignored` locally. CI generates its own. This may cause drift.
+
 ---
 
 ## Environment Variables
@@ -132,7 +137,7 @@ SafeVisionAI/
 |----------|----------|-------|
 | `DATABASE_URL` | Yes | `postgresql+asyncpg://...` — auto-normalized from `postgres://` |
 | `REDIS_URL` | No | Falls back to in-memory cache if missing |
-| `CHATBOT_SERVICE_URL` | Yes | Default: `http://localhost:8010` |
+| `CHATBOT_SERVICE_URL` | Yes | Default: `http://localhost:8010/api/v1` |
 | `OVERPASS_URLS` | No | Comma-separated; falls back to `https://overpass-api.de/api/interpreter` |
 | `OPENROUTESERVICE_API_KEY` | No | For routing; free tier available |
 | `DATA_GOV_API_KEY` | No | For government data endpoints |
@@ -142,6 +147,7 @@ SafeVisionAI/
 |----------|----------|-------|
 | `DEFAULT_LLM_PROVIDER` | Yes | `groq`, `gemini`, `cerebras`, `sarvam`, `template`, etc. |
 | `DEFAULT_LLM_MODEL` | Yes | Model ID for the chosen provider |
+| `HF_TOKEN` | No | HuggingFace token — used as Sarvam fallback + Shuka/BharatGen/Whisper via HF Inference API. Not needed for core chatbot flow |
 | `CHROMA_PERSIST_DIR` | No | Default: `./data/chroma_db` |
 | `EMBEDDING_MODEL` | No | Default: `sentence-transformers/all-MiniLM-L6-v2` |
 | `REDIS_URL` | No | Falls back to in-memory store |
@@ -179,11 +185,17 @@ User message
   → ChatResponse
 ```
 
-### 11-Provider LLM Fallback Chain
+### LLM Provider Routing
 
+**Fallback chain** (tried in order when a provider fails):
 ```
 Groq → Cerebras → Gemini → GitHub Models → NVIDIA NIM → OpenRouter → Mistral → Together → Template
 ```
+
+**Indian language auto-routing** (separate path, not in the chain):
+- Sarvam-30B for general Indian language queries
+- Sarvam-105B for legal/challan queries in Indian languages
+- If `SARVAM_API_KEY` is set → uses direct Sarvam API; otherwise falls back to `HF_TOKEN` via HuggingFace Inference API
 
 **Auto-routing rules:**
 1. Indian language input (Hindi, Tamil, Telugu, etc.) → **Sarvam-30B** (Indic specialist)
@@ -205,12 +217,14 @@ pytest tests/ -v                                          # All tests
 pytest tests/test_challan.py -v                           # Single file
 pytest tests/test_challan.py::test_drunk_driving_fine -v  # Single test
 ```
+**pytest config:** `asyncio_mode = auto` — async tests run automatically without `@pytest.mark.asyncio`
 
 ### Chatbot Service
 ```bash
 cd chatbot_service && .venv\Scripts\activate
 pytest tests/ -v
 ```
+**pytest config:** `asyncio_mode = strict` — async tests **require** `@pytest.mark.asyncio` decorator
 
 ### Frontend
 ```bash
@@ -242,8 +256,6 @@ All script folders follow the same `app/` vs `data/` convention:
 
 **Rule:** `data/` scripts always run without a database. `app/` scripts require a live backend stack.
 
-The `data/` scripts are also mirrored on the [Hugging Face Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub).
-
 ---
 
 ## Deployment
@@ -256,16 +268,12 @@ The `data/` scripts are also mirrored on the [Hugging Face Dataset Hub](https://
 | Database | Supabase | PostgreSQL 16 + PostGIS. Enable extension manually |
 | Redis | Upstash | Serverless Redis; set `REDIS_URL` in both services |
 
-**Live URLs:**
-- Frontend: `https://safevisionai.vercel.app`
-- Backend API: `https://safevisionai-api.onrender.com/docs`
-
 ---
 
 ## Docker (Local Full Stack)
 
 ```bash
-docker compose up --build    # Starts all 4 services
+docker compose up --build    # Starts all 5 services
 # postgres:5432  redis:6379  backend:8000  chatbot:8010  frontend:3000
 ```
 
@@ -285,12 +293,13 @@ Backend connects to chatbot at `http://chatbot:8010` (Docker network name).
 - **Offline AI:** `@mlc-ai/web-llm` (Phi-3 Mini) + `@huggingface/transformers` (YOLO)
 - **Offline SQL:** `@duckdb/duckdb-wasm` for challan calculations
 - **shadcn/ui:** Configured via `components.json` — components in `components/ui/`
+- **Fonts:** Inter + Space Grotesk (loaded in `layout.tsx` via Google Fonts)
 
 ### Webpack Quirk
 `next.config.js` enables `asyncWebAssembly` and `layers` experiments for WASM modules (Transformers.js, DuckDB-Wasm). The `worker-loader` rule handles `@xenova/transformers` web workers.
 
 ### Package Manager
-Uses **npm** (not pnpm). `package-lock.json` is the lockfile. The `pnpm-lock.yaml` is `.gitignored`.
+Uses **npm** locally (`package-lock.json` is the lockfile). CI uses **pnpm 9** — see "Package Manager Conflict" gotcha above.
 
 ---
 
@@ -316,10 +325,23 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 
 - **Separate Python app** — its own `.venv`, `.env`, `requirements.txt`
 - **Heavy dependencies:** `torch`, `torchaudio`, `transformers`, `datasets` (for speech)
-- **Config:** Vanilla `dataclass` + `os.getenv()` — NOT pydantic-settings
+- **Config:** Vanilla `dataclass` + `os.getenv()` in `config.py` — NOT pydantic-settings (despite `pydantic-settings` being in requirements.txt, it's unused here)
 - **Embedding model:** `all-MiniLM-L6-v2` (384 dims) loaded at startup
 - **ChromaDB path:** `chatbot_service/data/chroma_db/` — this is committed (Render needs it)
 - **Port:** 8010 (not 8001 as some docs may say — trust `config.py`)
+
+---
+
+## CI Workflows (`.github/workflows/`)
+
+| Workflow | Trigger | Runner | Key Steps |
+|----------|---------|--------|-----------|
+| `backend.yml` | `backend/**` changes | ubuntu-latest, Python 3.11 | `pip install` → `pytest tests/ -v` |
+| `chatbot.yml` | `chatbot_service/**` changes | ubuntu-latest, Python 3.11 | `pip install` → `pytest tests/ -v` |
+| `frontend.yml` | `frontend/**` changes | ubuntu-latest, Node 20 | **pnpm 9** → `pnpm run lint` → `npx tsc --noEmit` |
+| `e2e.yml` | Full stack E2E | ubuntu-latest | Integration tests |
+| `security.yml` | Security scanning | ubuntu-latest | Dependency audits |
+| `system.yml` | System-level checks | ubuntu-latest | Cross-service validation |
 
 ---
 
@@ -358,7 +380,7 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 |-------|-------|
 | `ST_MakePoint(lat, lon)` | `ST_MakePoint(lon, lat)` — longitude first |
 | `::geometry` in `ST_DWithin` | `::geography` — gives meters not degrees |
-| Import MapLibre in `layout.tsx` | Import only inside `dynamic({ssr:false})` components |
+| Import MapLibre with SSR enabled | Use `dynamic({ssr:false})` for map components |
 | Delete `chatbot_service/data/chroma_db/` | Never delete — committed for Render deployment |
 | Test PWA offline with `npm run dev` | Use `npm run build && npm start` for Service Worker |
 | Mix backend and chatbot `.venv` | They are separate apps with separate virtual environments |
@@ -366,3 +388,5 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 | Hardcode API keys | All secrets go in `.env` files (gitignored) |
 | Skip 112 prompt for injury queries | Safety rule: always prepend "Call 112 immediately" |
 | Assume chatbot port is 8001 | Actual port is **8010** (check `config.py`) |
+| Write async test in chatbot_service without `@pytest.mark.asyncio` | Chatbot uses `asyncio_mode = strict` (backend uses `auto`) |
+| Assume `HF_TOKEN` is needed for core chatbot | Only needed for Sarvam HF fallback, Shuka, BharatGen, Whisper — core flow uses Groq/Gemini/etc. |

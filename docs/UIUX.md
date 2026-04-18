@@ -146,8 +146,8 @@ const MARKER_COLORS = {
 ```
 
 ### Critical Rules
-1. `import dynamic from 'next/dynamic'` + `ssr: false`  MapLibre needs browser
-2. Import `maplibre-gl/dist/maplibre-gl.css` inside the component
+1. `import dynamic from 'next/dynamic'` + `ssr: false` → MapLibre needs browser
+2. `maplibre-gl/dist/maplibre-gl.css` is imported globally in `layout.tsx` (not per-component)
 3. Place marker icons in `public/maplibre/`
 4. Add `key={lat+lon}` to MapContainer  prevents "map already initialized" error
 5. Set explicit height on MapContainer  invisible without it

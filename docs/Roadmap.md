@@ -57,7 +57,7 @@ gantt
 - [x] requirements.txt and package.json with pinned versions
 - [x] .gitignore, README.md, SETUP.md
 - [x] GitHub repo created and initial push done
-- [x] CI/CD workflow stub (.github/workflows/ci.yml)
+- [x] CI/CD workflow stubs (.github/workflows/backend.yml, chatbot.yml, frontend.yml, etc.)
 
 ---
 
@@ -93,16 +93,29 @@ gantt
 - [x] Download 3 PDFs (MV Act 1988, MV Amendment 2019, WHO Trauma)
 - [x] Run build_vectorstore.py to index PDFs into ChromaDB
 - [x] LangChain RAG chain with ChromaDB MMR retrieval
-- [x] Groq llama-3.3-70b-versatile integration
+- [x] Groq llama3-70b-8192 integration
 - [x] Intent detection system (9 intent labels)
 - [x] Chat history in Redis per session
 - [x] Chat API endpoint - POST /api/v1/chat/message
 - [x] Test RAG accuracy on sample queries
 
 **Key files:**
-- `backend/services/llm_service.py`
-- `backend/api/v1/chat.py`
-- `backend/data/build_vectorstore.py`
+- `chatbot_service/providers/router.py`
+- `chatbot_service/agent/graph.py`
+- `chatbot_service/data/build_vectorstore.py`
+
+---
+
+## Phase 3b - External Integrations (API Expansion)
+
+**Goal:** Integrate rich external data sources to power backend logic and fallback workflows.
+
+- [x] Integrate **Open-Meteo API** (Free) for visibility and precipitation logic.
+- [x] Integrate **Photon & BigDataCloud** (Free) for robust zero-key frontend geocoding.
+- [x] Setup **OSRM** for driving navigation and **ip-api** for dynamic state detection.
+- [x] Connect **What3Words** (Key) and **OpenCage** (Key) fallbacks for critical SOS geolocation.
+- [x] Connect **Open FDA** medical API tools for the first-aid persona.
+- [x] Create **Healthsites.io** manual seeder script for the PostGIS backend.
 
 ---
 
@@ -184,4 +197,4 @@ gantt
 
 ---
 
-*Last updated: March 31, 2026*
+*Last updated: April 18, 2026*

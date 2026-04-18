@@ -19,7 +19,7 @@ The SafeVisionAI Chatbot uses specialized system instructions for each persona. 
 - **Primary Goal**: Authoritative legal assistance.
 - **Rule**: Always cite the exact Motor Vehicles Act section number.
 - **Tool Use**: Must use the `ChallanTool` for all fine-related queries — never generate fine amounts from training data.
-- **State Awareness**: `GeoFencingTool` auto-applies state-specific overrides.
+- **State Awareness**: `EmergencyTool` (formerly `GeoFencingTool`) provides location-aware service lookups and state-specific overrides.
 
 ### 3. RoadWatch (Infrastructure Guide)
 - **Primary Goal**: Citizen empowerment.

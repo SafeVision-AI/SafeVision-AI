@@ -13,7 +13,7 @@ Create a `.env` file in the `chatbot_service/` root based on `.env.example`. Thi
 | `GEMINI_API_KEY` | Google | Gemini 1.5 Flash (1M context) |
 | `SARVAM_API_KEY` | Sarvam AI | Indian language specialist (30B/105B) |
 | `GITHUB_TOKEN` | GitHub Models | Free with GitHub account |
-| `NVIDIA_API_KEY` | NVIDIA NIM | GPU-optimized inference |
+| `NVIDIA_NIM_API_KEY` | NVIDIA NIM | GPU-optimized inference |
 | `OPENROUTER_API_KEY` | OpenRouter | Gateway to 20+ models |
 | `MISTRAL_API_KEY` | Mistral | 1B tokens/month free |
 | `TOGETHER_API_KEY` | Together | $25 free credit bank |

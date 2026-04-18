@@ -53,7 +53,7 @@ out body center;
 - **URL**: `https://api.groq.com/openai/v1`
 - **Authentication**: API key (gsk_...) from [console.groq.com](https://console.groq.com)
 - **Rate limit**: 6,000 tokens/minute free tier
-- **Use in SafeVisionAI**: Online AI chatbot  llama-3.3-70b-versatile model
+- **Use in SafeVisionAI**: Online AI chatbot — llama3-70b-8192 model
 
 ### Overpass Turbo (Testing Only)
 - **URL**: [overpass-turbo.eu](https://overpass-turbo.eu)

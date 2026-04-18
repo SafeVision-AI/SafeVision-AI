@@ -50,11 +50,11 @@ Change `postgresql://` to `postgresql+asyncpg://` for async driver.
 cd SafeVisionAI/backend
 
 # 2. Create and activate Python virtual environment
-python -m venv venv
+python -m venv .venv
 # Windows:
-venv\Scripts\activate
+.venv\Scripts\activate
 # Linux/Mac:
-source venv/bin/activate
+source .venv/bin/activate
 
 # 3. Install all dependencies
 pip install -r requirements.txt
@@ -250,11 +250,12 @@ curl "https://safevisionai-api.onrender.com/api/v1/challan/calculate?violation_c
 
 ## CI/CD (GitHub Actions)
 
-Configured in `.github/workflows/ci.yml`:
+Configured in `.github/workflows/` (separate workflow files per service):
 
-- **Triggers:** Push to `main` or `develop`, any Pull Request to `main`
-- **Backend job:** Runs pytest with PostGIS and Redis services
-- **Frontend job:** Runs `npm run build` to verify no build errors
+- **Triggers:** Push to `main`, any Pull Request to `main` (path-filtered per service)
+- **`backend.yml`:** Runs `pytest tests/ -v` with Python 3.11
+- **`chatbot.yml`:** Runs `pytest tests/ -v` with Python 3.11
+- **`frontend.yml`:** Runs `pnpm run lint` + `npx tsc --noEmit` with Node 20
 - **Auto-deploy:** Vercel and Render both watch the `main` branch
 
 ---
@@ -285,7 +286,7 @@ CACHE_TTL=3600
 ```bash
 # LLM
 DEFAULT_LLM_PROVIDER=groq
-DEFAULT_LLM_MODEL=llama-3.3-70b-versatile
+DEFAULT_LLM_MODEL=llama3-70b-8192
 GROQ_API_KEY=gsk_...
 CEREBRAS_API_KEY=...
 GEMINI_API_KEY=...

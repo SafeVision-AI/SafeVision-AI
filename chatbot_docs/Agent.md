@@ -38,6 +38,8 @@ The agent follows a deterministic yet flexible execution sequence defined in `ag
 | SubmitReportTool | Submits road damage reports | Backend API → PostgreSQL |
 | GeoFencingTool | Determines state-specific legal variations | GPS → reverse geocode |
 
+> **Note**: The `GeoFencingTool` name is historical. In the current codebase, its functionality is handled by `EmergencyTool` (`tools/emergency_tool.py`), which also provides direct emergency service lookups.
+
 ## Key Capabilities
 - **Parallel Tool Calling**: Reduces response time for complex queries (e.g., finding both hospitals and police simultaneously).
 - **11-Provider LLM Fallback**: Groq → Cerebras → Gemini → Sarvam AI → GitHub → NVIDIA → OpenRouter → Mistral → Together → Template.

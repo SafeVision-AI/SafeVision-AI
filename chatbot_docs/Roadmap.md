@@ -18,7 +18,7 @@ The development of the chatbot service was divided into nine phases to ensure bu
 - No separate LLM call — instant classification (<1ms).
 
 ## Phase 4: Agent Tools ✅
-- Implemented 9 tools: SOS, Challan, Legal, FirstAid, Weather, RoadInfra, RoadIssues, SubmitReport, GeoFencing.
+- Implemented 9 tools: SOS, Challan, Legal, FirstAid, Weather, RoadInfra, RoadIssues, SubmitReport, Emergency.
 - Connected all tools to the main backend APIs via `httpx` async client.
 
 ## Phase 5: Agent Assembly ✅

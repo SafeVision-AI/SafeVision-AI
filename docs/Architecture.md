@@ -213,10 +213,10 @@ SafeVisionAI/
 ├── chatbot_service/      FastAPI Agentic RAG Chatbot — port 8010
 ├── frontend/             Next.js 15 + React 19 TypeScript PWA — port 3000
 ├── docs/                 Technical documentation (17 files)
-├── chatbot_docs/         Chatbot-specific documentation (14 files)
+├── chatbot_docs/         Chatbot-specific documentation (15 files)
 ├── notebooks/            5 Colab notebooks (YOLO, ChromaDB, Accidents, Roads, Risk)
 ├── scripts/              Root-level data pipeline scripts
-├── docker-compose.yml    4 services: postgres, redis, backend, chatbot, frontend
+├── docker-compose.yml    5 services: postgres, redis, backend, chatbot, frontend
 ├── AGENTS.md             AI agent quick-reference
 ├── SETUP.md              Full installation guide
 ├── README.md             Project overview

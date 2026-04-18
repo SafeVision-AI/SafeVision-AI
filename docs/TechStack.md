@@ -128,8 +128,8 @@ A **separate FastAPI service** with its own Python environment & heavy ML depend
 
 | Provider | Model | Speed | Use Case |
 |----------|-------|-------|----------|
-| **Groq** | llama-3.3-70b-versatile | 300+ tok/s | Primary English |
-| **Cerebras** | llama3.1-8b | 2000+ tok/s | Speed overflow |
+| **Groq** | llama3-70b-8192 | 300+ tok/s | Primary English |
+| **Cerebras** | llama-3.3-70b | 2000+ tok/s | Speed overflow |
 | **Gemini** | 1.5 Flash | Varies | Large context (1M tokens) |
 | **Sarvam AI** | sarvam-30b | Varies | Indian languages (Hindi, Tamil, etc.) |
 | **Sarvam AI** | sarvam-105b | Varies | Legal queries in Indian languages |
@@ -146,7 +146,7 @@ A **separate FastAPI service** with its own Python environment & heavy ML depend
 
 | Model | Parameters | Size | Runtime | Use Case |
 |---|---|---|---|---|
-| `Groq llama-3.3-70b-versatile` | 70B | Cloud | Groq API | Online chatbot — max intelligence |
+| `Groq llama3-70b-8192` | 70B | Cloud | Groq API | Online chatbot — max intelligence |
 | `Phi-3-mini-4k-instruct-q4f16_1-MLC` | 3.8B | ~2.2GB | WebGPU | Offline chatbot — primary |
 | `gemma-2b-it-q4f16_1-MLC` | 2B | ~1.4GB | WebAssembly | Offline chatbot — CPU fallback |
 | `sentence-transformers/all-MiniLM-L6-v2` | 22M | ~90MB | Server CPU | Server-side embeddings for ChromaDB |

@@ -18,7 +18,7 @@ Focused on critical life-saving tasks. It prioritizes nearby service location an
 
 ### 2. DriveLegal — Traffic Law Expert
 A high-authority legal assistant designed to provide accurate fine and regulation info.
-- **Key Tools**: `ChallanTool`, `LegalSearchTool`, `GeoFencingTool`.
+- **Key Tools**: `ChallanTool`, `LegalSearchTool`, `EmergencyTool` (formerly GeoFencingTool).
 - **Knowledge Base**: Motor Vehicles Act (1988, 2019), state gazette notifications.
 - **Precision**: Fine amounts use deterministic DuckDB SQL — never LLM-generated.
 

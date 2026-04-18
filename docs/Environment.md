@@ -35,7 +35,7 @@ DATABASE_URL=postgresql+asyncpg://postgres:[PASSWORD]@db.[PROJECT-REF].supabase.
 
 | Variable | Description | Default |
 |---|---|---|
-| `CHATBOT_SERVICE_URL` | URL of the chatbot service | `http://localhost:8010` |
+| `CHATBOT_SERVICE_URL` | URL of the chatbot service | `http://localhost:8010/api/v1` |
 
 ### External APIs
 
@@ -75,12 +75,14 @@ cp chatbot_service/.env.example chatbot_service/.env
 | `GEMINI_API_KEY` | For Gemini | Google Gemini 1.5 Flash (1M context) |
 | `SARVAM_API_KEY` | For Sarvam | Indian language specialist |
 | `GITHUB_TOKEN` | For GitHub Models | Free with GitHub account |
-| `NVIDIA_API_KEY` | For NVIDIA NIM | GPU-optimized inference |
+| `NVIDIA_NIM_API_KEY` | For NVIDIA NIM | GPU-optimized inference |
 | `OPENROUTER_API_KEY` | For OpenRouter | Gateway to 20+ models |
 | `MISTRAL_API_KEY` | For Mistral | 1B tokens/month free |
 | `TOGETHER_API_KEY` | For Together | $25 free credit |
 
 > You only need keys for providers you want to enable. The ProviderRouter auto-skips providers without keys.
+
+| `HF_TOKEN` | No | HuggingFace — fallback for Sarvam, Shuka, BharatGen, Whisper via HF Inference API. Not needed for core chatbot flow |
 
 ### Backend Connection
 

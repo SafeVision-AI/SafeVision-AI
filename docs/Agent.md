@@ -172,7 +172,7 @@ SafeVisionAI/
 
   chatbot_docs/                Mirrored or customized docs for the chatbot infrastructure
 
- .github/workflows/ci.yml    GitHub Actions: test backend + build frontend
+ .github/workflows/        GitHub Actions: backend.yml, chatbot.yml, frontend.yml, e2e.yml, security.yml, system.yml
  render.yaml                 Render.com deployment config
  .gitignore                  Excludes .env, venv, node_modules, chroma_db, PDFs
  README.md                   Quick start for team members
@@ -194,7 +194,7 @@ SafeVisionAI/
 
 ### 2. Leaflet/MapLibre in Next.js Requires 3 Things
 - `dynamic(() => import(...), { ssr: false })` on all map components
-- `import 'maplibre-gl/dist/maplibre-gl.css'` inside the component (not in layout)
+- `import 'maplibre-gl/dist/maplibre-gl.css'` is imported globally in `layout.tsx` (line 1)
 - MapLibre GL replaces Leaflet — all map components use `maplibre-gl` now
 
 ### 4. ChromaDB Must Be Built Before Server Starts
@@ -212,7 +212,7 @@ SafeVisionAI/
 - Browser-side: `@duckdb/duckdb-wasm` npm package in `lib/duckdb-challan.ts` (offline)
 
 ### 7. Safety Rule (Never Remove)
-Any chat response about injuries must start with "Call 112 immediately."  check `services/llm_service.py` for the safety check function.
+Any chat response about injuries must start with “Call 112 immediately.” — check `agent/safety_checker.py` for the safety check function.
 
 ---
 
@@ -227,8 +227,8 @@ cd SafeVisionAI
 
 # 2. Backend setup
 cd backend
-python -m venv venv
-venv\Scripts\activate     # Windows
+python -m venv .venv
+.venv\Scripts\activate     # Windows
 pip install -r requirements.txt
 cp .env.example .env      # Fill in all values
 
@@ -303,7 +303,7 @@ npm run dev
 |---|---|
 | `ST_MakePoint(lat, lon)` | `ST_MakePoint(lon, lat)`  longitude FIRST |
 | Using `::geometry` in ST_DWithin | Use `::geography`  gives distances in meters |
-| Importing MapLibre in layout.tsx | Import only in components with `dynamic({ssr:false})` |
+| Importing MapLibre in SSR-enabled component | Use `dynamic({ssr:false})` for map components (CSS is imported globally in `layout.tsx`) |
 | Deleting `data/chroma_db/` | Never delete  rebuild = 10 minutes |
 | Testing PWA offline with `npm run dev` | Run `npm run build && npm start` for Service Worker |
 | Calling Nominatim without User-Agent | Always set `User-Agent: SafeVisionAI/1.0` header |
