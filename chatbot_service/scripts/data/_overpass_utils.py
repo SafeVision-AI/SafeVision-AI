@@ -3,15 +3,11 @@ from __future__ import annotations
 import argparse
 import csv
 import json
-import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Iterable
 
-
-ROOT_DIR = Path(__file__).resolve().parents[2]
-CHATBOT_SERVICE_DIR = ROOT_DIR / 'chatbot_service'
 
 DEFAULT_ENDPOINTS = (
     'https://overpass-api.de/api/interpreter',
@@ -20,24 +16,21 @@ DEFAULT_ENDPOINTS = (
 )
 DEFAULT_HEADERS = {
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'User-Agent': 'SafeVisionAI chatbot data fetcher/1.0',
+    'User-Agent': 'SafeVisionAI bootstrap scripts/1.0',
 }
 CSV_COLUMNS = [
+    'osm_id',
+    'osm_type',
     'name',
     'lat',
     'lon',
     'phone',
-    'address',
+    'type',
     'city',
     'state',
-    'operator',
-    'osm_id',
-    'osm_type',
-    'category',
+    'address',
     'opening_hours',
     'website',
-    'email',
-    'postcode',
     'source',
 ]
 
@@ -52,58 +45,43 @@ def build_arg_parser(description: str, default_output: Path) -> argparse.Argumen
     )
     parser.add_argument(
         '--endpoint',
-        help='Optional Overpass endpoint override. Defaults to the built-in endpoint fallback list.',
+        help='Optional Overpass endpoint override. Defaults to a built-in fallback list.',
     )
     parser.add_argument(
         '--timeout',
         type=int,
-        default=180,
-        help='HTTP timeout in seconds. Defaults to 180.',
-    )
-    parser.add_argument(
-        '--retries',
-        type=int,
-        default=2,
-        help='Retries per endpoint before failing over. Defaults to 2.',
+        default=300,
+        help='HTTP timeout in seconds. Defaults to 300.',
     )
     return parser
 
 
 def build_india_query(selectors: Iterable[str], *, timeout: int) -> str:
-    joined = '\n  '.join(selector.strip() for selector in selectors if selector.strip())
+    joined_selectors = '\n  '.join(selector.strip() for selector in selectors if selector.strip())
     return (
         f'[out:json][timeout:{timeout}];\n'
-        'area["ISO3166-1"="IN"][admin_level=2]->.india;\n'
+        'area["ISO3166-1"="IN"][admin_level=2]->.searchArea;\n'
         '(\n'
-        f'  {joined}\n'
+        f'  {joined_selectors}\n'
         ');\n'
         'out center tags;'
     )
 
 
-def fetch_elements(
-    query: str,
-    *,
-    endpoint: str | None,
-    timeout: int,
-    retries: int,
-) -> list[dict]:
+def fetch_elements(query: str, *, endpoint: str | None, timeout: int, **kwargs) -> list[dict]:
     payload = urllib.parse.urlencode({'data': query}).encode('utf-8')
     endpoints = [endpoint] if endpoint else list(DEFAULT_ENDPOINTS)
     last_error: Exception | None = None
 
     for url in endpoints:
-        for attempt in range(1, retries + 1):
-            request = urllib.request.Request(url, data=payload, headers=DEFAULT_HEADERS, method='POST')
-            try:
-                with urllib.request.urlopen(request, timeout=timeout) as response:
-                    decoded = response.read().decode('utf-8')
-                data = json.loads(decoded)
-                return list(data.get('elements', []))
-            except Exception as exc:  # pragma: no cover - network path
-                last_error = exc
-                if attempt < retries:
-                    time.sleep(min(attempt, 3))
+        request = urllib.request.Request(url, data=payload, headers=DEFAULT_HEADERS, method='POST')
+        try:
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                decoded = response.read().decode('utf-8')
+            data = json.loads(decoded)
+            return list(data.get('elements', []))
+        except Exception as exc:  # pragma: no cover - network failure path
+            last_error = exc
 
     raise SystemExit(f'Unable to fetch data from Overpass. Last error: {last_error}')
 
@@ -119,63 +97,37 @@ def extract_point(element: dict) -> tuple[float | None, float | None]:
     return None, None
 
 
-def first_non_empty(*values: str | None) -> str:
-    for value in values:
-        if value is None:
-            continue
-        text = str(value).strip()
-        if text:
-            return text
-    return ''
-
-
 def compose_address(tags: dict[str, str]) -> str:
-    return first_non_empty(
-        tags.get('addr:full'),
-        ', '.join(
-            part
-            for part in [
-                tags.get('addr:housenumber'),
-                tags.get('addr:street'),
-                tags.get('addr:suburb'),
-                first_non_empty(tags.get('addr:city'), tags.get('addr:town'), tags.get('addr:village')),
-                first_non_empty(tags.get('addr:district'), tags.get('addr:county')),
-                tags.get('addr:state'),
-                tags.get('addr:postcode'),
-            ]
-            if part
-        ),
-    )
+    parts = [
+        tags.get('addr:housenumber'),
+        tags.get('addr:street'),
+        tags.get('addr:suburb'),
+        tags.get('addr:city') or tags.get('addr:town') or tags.get('addr:village'),
+        tags.get('addr:state'),
+    ]
+    return ', '.join(part for part in parts if part)
 
 
-def normalize_row(element: dict, *, default_category: str, fallback_name: str) -> dict | None:
+def normalize_row(element: dict, *, default_type: str, fallback_name: str, **kwargs) -> dict | None:
     lat, lon = extract_point(element)
     if lat is None or lon is None:
         return None
 
     tags = element.get('tags', {})
+    amenity_type = tags.get('amenity') or tags.get('healthcare') or tags.get('emergency') or default_type
     return {
-        'name': first_non_empty(tags.get('name'), fallback_name),
-        'lat': f'{lat:.6f}',
-        'lon': f'{lon:.6f}',
-        'phone': first_non_empty(tags.get('phone'), tags.get('contact:phone'), tags.get('emergency:phone')),
-        'address': compose_address(tags),
-        'city': first_non_empty(tags.get('addr:city'), tags.get('addr:town'), tags.get('addr:village')),
-        'state': first_non_empty(tags.get('addr:state')),
-        'operator': first_non_empty(tags.get('operator')),
         'osm_id': str(element.get('id', '')),
         'osm_type': str(element.get('type', '')),
-        'category': first_non_empty(
-            tags.get('amenity'),
-            tags.get('healthcare'),
-            tags.get('office'),
-            tags.get('emergency'),
-            default_category,
-        ),
-        'opening_hours': first_non_empty(tags.get('opening_hours')),
-        'website': first_non_empty(tags.get('website'), tags.get('contact:website')),
-        'email': first_non_empty(tags.get('email'), tags.get('contact:email')),
-        'postcode': first_non_empty(tags.get('addr:postcode')),
+        'name': tags.get('name') or fallback_name,
+        'lat': f'{lat:.6f}',
+        'lon': f'{lon:.6f}',
+        'phone': tags.get('phone') or tags.get('contact:phone') or tags.get('emergency:phone') or '',
+        'type': amenity_type,
+        'city': tags.get('addr:city') or tags.get('addr:town') or tags.get('addr:village') or '',
+        'state': tags.get('addr:state') or '',
+        'address': compose_address(tags),
+        'opening_hours': tags.get('opening_hours') or '',
+        'website': tags.get('website') or tags.get('contact:website') or '',
         'source': 'overpass',
     }
 
@@ -186,7 +138,7 @@ def dedupe_rows(rows: Iterable[dict]) -> list[dict]:
     for row in rows:
         key = (
             row.get('name', '').strip().lower(),
-            row.get('category', '').strip().lower(),
+            row.get('type', '').strip().lower(),
             row.get('lat', ''),
             row.get('lon', ''),
         )
@@ -194,7 +146,7 @@ def dedupe_rows(rows: Iterable[dict]) -> list[dict]:
             continue
         seen.add(key)
         deduped.append(row)
-    deduped.sort(key=lambda item: (item.get('state', ''), item.get('city', ''), item.get('name', '')))
+    deduped.sort(key=lambda item: (item['state'], item['city'], item['name']))
     return deduped
 
 
@@ -206,7 +158,3 @@ def write_rows(path: Path, rows: Iterable[dict]) -> int:
         writer.writeheader()
         writer.writerows(materialized)
     return len(materialized)
-
-
-def print_summary(*, label: str, count: int, output: Path) -> None:
-    print(f'Saved {count} {label} records to {output}')
