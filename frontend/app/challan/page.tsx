@@ -14,6 +14,8 @@ import SystemHeader from '@/components/dashboard/SystemHeader';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import { useTheme } from '@/components/ThemeProvider';
 import { useAppStore } from '@/lib/store';
+import useSWR from 'swr';
+import { calculateChallan } from '@/lib/api';
 
 const STATES = [
   'Tamil Nadu (TN)',
@@ -24,19 +26,20 @@ const STATES = [
   'West Bengal (WB)',
 ];
 
+// Mapped to backend violation_codes
 const VIOLATIONS = [
-  { id: 'speeding', label: 'Speeding (>20km/h Limit)', mva: '§112/183', fine2w: 1000, fine4w: 2000, max: '4000' },
-  { id: 'redlight', label: 'Red Light Violation', mva: '§119/177', fine2w: 1000, fine4w: 1000, max: '5000' },
-  { id: 'dui', label: 'Section 185 — Drunk driving', mva: '§185', fine2w: 10000, fine4w: 10000, max: '25000 + Imprisonment', danger: 'Up to 6 months imprisonment' },
-  { id: 'nolicense', label: 'Driving Without License', mva: '§3/181', fine2w: 5000, fine4w: 5000, max: '5000 + 3 Months' },
-  { id: 'helmet_seatbelt', label: 'No Seatbelt/Helmet', mva: '§129/194D', fine2w: 1000, fine4w: 1000, max: '1000 + Disqualification' },
+  { id: '183', label: 'Speeding (>20km/h Limit)', mva: '§112/183', max: '4000' },
+  { id: '179', label: 'Disobedience / Red Light', mva: '§179', max: '4000' },
+  { id: '185', label: 'Section 185 — Drunk driving', mva: '§185', max: '15000 + Imprisonment', danger: 'Up to 6 months imprisonment' },
+  { id: '181', label: 'Driving Without License', mva: '§3/181', max: '10000 + 3 Months' },
+  { id: '194D', label: 'No Seatbelt/Helmet', mva: '§129/194D', max: '2000 + Disqualification' },
 ];
 
 const VEHICLE_CLASSES = [
-  { id: '2w', icon: <Bike size={28} />, title: '2-Wheeler', subtitle: 'Motorcycle / Scooter' },
-  { id: '4w', icon: <Car size={28} />, title: 'Car/LMV', subtitle: 'Light Motor Vehicle' },
-  { id: 'htv', icon: <Truck size={28} />, title: 'Truck', subtitle: 'Heavy Goods Vehicle' },
-  { id: 'bus', icon: <Bus size={28} />, title: 'Bus/COMM', subtitle: 'Public Transport' },
+  { id: '2W', icon: <Bike size={28} />, title: '2-Wheeler', subtitle: 'Motorcycle / Scooter' },
+  { id: '4W', icon: <Car size={28} />, title: 'Car/LMV', subtitle: 'Light Motor Vehicle' },
+  { id: 'HTV', icon: <Truck size={28} />, title: 'Truck', subtitle: 'Heavy Goods Vehicle' },
+  { id: 'BUS', icon: <Bus size={28} />, title: 'Bus/COMM', subtitle: 'Public Transport' },
 ];
 
 export default function ChallanPage() {
@@ -44,19 +47,39 @@ export default function ChallanPage() {
   
   // Use shared store instead of local state so values don't reset upon tab change
   const { challanState, setChallanState } = useAppStore();
-  const { violation, vehicle, jurisdiction, isRepeat } = challanState;
   
+  // Backwards compatibility for old cached local storage values
+  const violationId = (challanState.violation === 'dui') ? '185' : 
+                      (challanState.violation === 'speeding') ? '183' :
+                      (challanState.violation === 'nolicense') ? '181' :
+                      (challanState.violation === 'helmet_seatbelt') ? '194D' :
+                      (challanState.violation === 'redlight') ? '179' :
+                      challanState.violation;
+                      
+  const vehicleId = challanState.vehicle.toUpperCase();
+  const { jurisdiction, isRepeat } = challanState;
+  
+  const stateCodeMatch = jurisdiction.match(/\((.*?)\)/);
+  const stateCode = stateCodeMatch ? stateCodeMatch[1] : 'TN';
+
   const [showDetailToast, setShowDetailToast] = useState(false);
 
   useEffect(() => { document.title = 'Challan Calculator | SafeVisionAI'; }, []);
 
-  const activeViolation = VIOLATIONS.find(v => v.id === violation) || VIOLATIONS[0];
+  const activeViolation = VIOLATIONS.find(v => v.id === violationId) || VIOLATIONS[0];
   
-  let baseFine = (vehicle === '2w') ? activeViolation.fine2w : activeViolation.fine4w;
-  if (['htv', 'bus'].includes(vehicle)) baseFine = Math.round(baseFine * 2.5);
+  const { data: result, isLoading } = useSWR(
+    ['challan', violationId, vehicleId, stateCode, isRepeat],
+    () => calculateChallan({
+      violation_code: activeViolation.id,
+      vehicle_class: vehicleId,
+      state_code: stateCode,
+      is_repeat: isRepeat
+    }),
+    { keepPreviousData: true }
+  );
   
-  // Repeat offence logic: doubling the fine per standard MVA 2019 amendments
-  const finalFine = isRepeat ? baseFine * 2 : baseFine;
+  const finalFine = result ? (isRepeat && result.repeat_fine ? result.repeat_fine : result.base_fine) : 0;
 
   return (
     <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
@@ -99,7 +122,7 @@ export default function ChallanPage() {
                    key={finalFine}
                    initial={{ opacity: 0, scale: 0.9 }}
                    animate={{ opacity: 1, scale: 1 }}
-                   className="text-5xl sm:text-7xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter"
+                   className={`text-5xl sm:text-7xl font-black text-emerald-600 dark:text-emerald-400 tracking-tighter ${isLoading ? 'opacity-50 blur-sm transition-all' : ''}`}
                  >
                    ₹{finalFine.toLocaleString('en-IN')}
                  </motion.h2>
@@ -185,7 +208,7 @@ export default function ChallanPage() {
 
               <div className="relative group">
                 <select 
-                  value={violation}
+                  value={violationId}
                   onChange={(e) => setChallanState({ violation: e.target.value })}
                   className="w-full bg-transparent border-2 border-slate-200 dark:border-white/10 rounded-3xl p-6 text-lg font-black text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
                 >
@@ -212,20 +235,20 @@ export default function ChallanPage() {
                      key={cls.id}
                      onClick={() => setChallanState({ vehicle: cls.id })}
                      className={`flex flex-col items-center justify-center gap-4 p-6 rounded-[2rem] border-2 transition-all duration-300 active:scale-95 ${
-                       vehicle === cls.id 
+                       vehicleId === cls.id 
                         ? 'bg-emerald-500 border-emerald-600/30 text-slate-900 shadow-xl shadow-emerald-500/20 ring-2 ring-emerald-500/20' 
                         : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-400 hover:border-slate-400 dark:hover:border-white/10 hover:shadow-md'
                      }`}
                    >
-                     <div className={`p-4 rounded-2xl ${vehicle === cls.id ? 'bg-white/30' : 'bg-slate-100 dark:bg-white/5'}`}>
+                     <div className={`p-4 rounded-2xl ${vehicleId === cls.id ? 'bg-white/30' : 'bg-slate-100 dark:bg-white/5'}`}>
                        {cls.icon}
                      </div>
                      <div className="flex flex-col items-center">
-                       <span className={`text-xs font-black uppercase tracking-widest ${vehicle === cls.id ? 'text-slate-900' : 'text-slate-900 dark:text-white'}`}>
+                       <span className={`text-xs font-black uppercase tracking-widest ${vehicleId === cls.id ? 'text-slate-900' : 'text-slate-900 dark:text-white'}`}>
                          {cls.title}
                        </span>
-                       <span className={`text-[8px] font-bold uppercase mt-1 opacity-60 ${vehicle === cls.id ? 'text-slate-900' : 'text-slate-400'}`}>
-                         {cls.id === 'htv' ? 'Heavy' : cls.id === '2w' ? 'Light' : 'Standard'}
+                       <span className={`text-[8px] font-bold uppercase mt-1 opacity-60 ${vehicleId === cls.id ? 'text-slate-900' : 'text-slate-400'}`}>
+                         {cls.id === 'HTV' ? 'Heavy' : cls.id === '2W' ? 'Light' : 'Standard'}
                        </span>
                      </div>
                    </button>
@@ -283,7 +306,7 @@ export default function ChallanPage() {
               <div className="flex flex-col gap-1">
                 <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">AI Tactical Insight</p>
                 <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Based on recent MVA amendments, high-risk offences like DUI ({activeViolation.mva}) have immediate license disqualification protocols active in {jurisdiction.split(' ')[0]}.
+                  {result?.description || `Based on recent MVA amendments, high-risk offences like DUI (${activeViolation.mva}) have immediate license disqualification protocols active in ${jurisdiction.split(' ')[0]}.`}
                 </p>
               </div>
            </div>

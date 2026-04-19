@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Loader2 } from 'lucide-react';
 
 export default function EmergencyPage() {
-  const { crashDetectionEnabled } = useAppStore();
+  const { crashDetectionEnabled, userProfile } = useAppStore();
   const [holding, setHolding] = useState(false);
   const [holdProgress, setHoldProgress] = useState(0);
   const [activated, setActivated] = useState(false);
@@ -268,21 +268,36 @@ export default function EmergencyPage() {
             <div className="grid grid-cols-2 gap-y-6 gap-x-4 relative z-10">
               <div>
                 <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Blood Group</p>
-                <p className="text-xl font-black text-red-600 dark:text-[#ffb4aa]">O- (Negative)</p>
+                <p className="text-xl font-black text-red-600 dark:text-[#ffb4aa]">
+                  {userProfile.bloodGroup || <span className="text-slate-400 text-sm font-bold normal-case">Not set — add in Profile</span>}
+                </p>
               </div>
               <div>
                 <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Primary Contact</p>
-                <p className="text-lg font-bold text-slate-900 dark:text-[#d7e3fc] truncate">Sarah Thorne</p>
+                <p className="text-lg font-bold text-slate-900 dark:text-[#d7e3fc] truncate">
+                  {userProfile.emergencyContact || <span className="text-slate-400 text-sm font-bold normal-case">Not set</span>}
+                </p>
               </div>
               <div>
                 <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Vehicle ID</p>
-                <p className="text-base font-mono font-bold text-blue-600 dark:text-[#adc6ff]">SV-2024-AI</p>
+                <p className="text-base font-mono font-bold text-blue-600 dark:text-[#adc6ff]">
+                  {userProfile.vehicleNumber || <span className="text-slate-400 text-sm font-bold font-sans normal-case">Not set</span>}
+                </p>
               </div>
               <div>
-                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Medical Notes</p>
-                <p className="text-sm font-medium text-slate-800 dark:text-[#d7e3fc] italic">&quot;No known allergies&quot;</p>
+                <p className="text-slate-500 dark:text-[#e4bebc] text-[10px] font-black uppercase tracking-widest mb-1">Operator</p>
+                <p className="text-sm font-bold text-slate-800 dark:text-[#d7e3fc]">
+                  {userProfile.name || <span className="text-slate-400 italic">Set name in Profile</span>}
+                </p>
               </div>
             </div>
+            {/* Prompt to fill profile if empty */}
+            {!userProfile.name && !userProfile.bloodGroup && (
+              <a href="/profile" className="mt-5 flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-blue-600 dark:text-[#adc6ff] hover:underline">
+                <span className="material-symbols-outlined text-[14px]">edit</span>
+                Complete your profile for accurate SOS dispatch
+              </a>
+            )}
           </div>
         </section>
       </main>
