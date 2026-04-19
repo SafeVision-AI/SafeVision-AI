@@ -11,6 +11,9 @@ on:
     paths:
       - 'chatbot_service/**'
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Chatbot Pytests

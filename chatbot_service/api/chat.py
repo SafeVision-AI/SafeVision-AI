@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import json
 import asyncio
+import logging
+
+logger = logging.getLogger(__name__)
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import StreamingResponse
@@ -70,7 +73,8 @@ async def chat_stream(
             yield f'data: {done_data}\n\n'
 
         except Exception as exc:
-            err_data = json.dumps({'type': 'error', 'message': str(exc)})
+            logger.error(f"Chat stream error: {exc}", exc_info=True)
+            err_data = json.dumps({'type': 'error', 'message': 'An internal error occurred while processing your request.'})
             yield f'data: {err_data}\n\n'
 
     return StreamingResponse(

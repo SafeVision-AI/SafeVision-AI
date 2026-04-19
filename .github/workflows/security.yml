@@ -6,6 +6,9 @@ on:
   schedule:
     - cron: '0 0 * * 0' # Run weekly on Sundays
 
+permissions:
+  contents: read
+
 jobs:
   security-audit:
     name: Full Stack Security Scan

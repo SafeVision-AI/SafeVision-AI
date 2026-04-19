@@ -3,9 +3,22 @@ import { getAddressFromGPS } from './reverse-geocode';
 
 const BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000').replace(/\/+$/, '');
 
+// Chatbot service runs on a separate port/service
+const CHATBOT_URL = (process.env.NEXT_PUBLIC_CHATBOT_URL ?? 'http://localhost:8010').replace(/\/+$/, '');
+
+// Warn in production when chatbot URL is not configured
+if (typeof window !== 'undefined' && !process.env.NEXT_PUBLIC_CHATBOT_URL && process.env.NODE_ENV === 'production') {
+  console.error('[SafeVisionAI] NEXT_PUBLIC_CHATBOT_URL is not set — chatbot features will fail. Set this in your Render/Vercel environment variables.');
+}
+
 const client = axios.create({
   baseURL: BASE_URL,
   timeout: 8_000,
+});
+
+const chatbotClient = axios.create({
+  baseURL: CHATBOT_URL,
+  timeout: 15_000, // LLM responses can take longer
 });
 
 export type EmergencyServiceCategory =
@@ -756,7 +769,7 @@ export interface ChatResponse {
 }
 
 export async function sendChatMessage(req: ChatRequest): Promise<ChatResponse> {
-  const { data } = await client.post('/api/v1/chat/', req);
+  const { data } = await chatbotClient.post('/api/v1/chat/', req);
   return data;
 }
 

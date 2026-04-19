@@ -73,6 +73,9 @@
       "protobufjs",
       "sharp",
       "unrs-resolver"
-    ]
+    ],
+    "overrides": {
+      "protobufjs": "^7.4.0"
+    }
   }
 }
