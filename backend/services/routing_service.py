@@ -160,12 +160,25 @@ class RoutingService:
 
         steps: list[RouteInstruction] = []
         guidance = route_data.get('guidance') or {}
+        previous_offset_meters = 0.0
         for step_index, inst in enumerate(guidance.get('instructions') or [], start=1):
+            offset_value = inst.get('routeOffsetInMeters')
+            try:
+                current_offset_meters = float(offset_value) if offset_value is not None else None
+            except (TypeError, ValueError):
+                current_offset_meters = None
+
+            if current_offset_meters is None:
+                step_distance_meters = 0.0
+            else:
+                step_distance_meters = max(0.0, current_offset_meters - previous_offset_meters)
+                previous_offset_meters = current_offset_meters
+
             steps.append(
                 RouteInstruction(
                     index=step_index,
                     instruction=str(inst.get('message') or 'Continue'),
-                    distance_meters=float(inst.get('routeOffsetInMeters') or 0.0), # Note: offset vs distance in step
+                    distance_meters=step_distance_meters,
                     duration_seconds=float(inst.get('travelTimeInSeconds') or 0.0),
                     street_name=inst.get('street') or None,
                 )

@@ -73,7 +73,9 @@ function buildFacilityCollection(
 ): GeoJSON.FeatureCollection<GeoJSON.Point> {
   return {
     type: 'FeatureCollection',
-    features: facilities.map((facility) => ({
+    features: facilities
+      .filter((facility) => facility.coords && facility.coords.length >= 2)
+      .map((facility) => ({
       type: 'Feature',
       properties: {
         id: facility.id,
@@ -87,7 +89,7 @@ function buildFacilityCollection(
       },
       geometry: {
         type: 'Point',
-        coordinates: facility.coords ? [facility.coords[1], facility.coords[0]] : [0, 0],
+        coordinates: [facility.coords![1], facility.coords![0]],
       },
     })),
   };
@@ -551,7 +553,7 @@ export function MapLibreCanvas({
       activeStyleIndexRef.current = 0;
       styleReadyRef.current = false;
     };
-  }, [center, navigationPosition, zoom]);
+  }, [center, navigationPosition, zoom, showTraffic]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -1148,17 +1150,25 @@ export function MapLibreCanvas({
   }, [showTraffic, styleRevision]);
 
   useEffect(() => {
-    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+    if (!mapRef.current || !mapRef.current.isStyleLoaded() || !currentLocation) return;
     
-    if (showSafeSpaces && currentLocation) {
-      addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch(console.error);
+    if (showSafeSpaces) {
+      addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch((err) => {
+        console.error(err);
+        setStatus('error');
+        setStatusMessage('Failed to load safe spaces overlay. Please try again later.');
+      });
     }
+  }, [showSafeSpaces, currentLocation, styleRevision]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
     
     const hasLayer = mapRef.current.getLayer('safe-spaces-circles');
     if (hasLayer) {
       mapRef.current.setLayoutProperty('safe-spaces-circles', 'visibility', showSafeSpaces ? 'visible' : 'none');
     }
-  }, [showSafeSpaces, currentLocation, styleRevision]);
+  }, [showSafeSpaces, styleRevision]);
 
   return (
     <div className={className}>

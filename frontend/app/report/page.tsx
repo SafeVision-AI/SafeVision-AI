@@ -104,7 +104,7 @@ export default function ReportPage() {
   const [severity, setSeverity] = useState<number>(3);
   const [notes, setNotes] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [photoBlobUrl, setphotoBlobUrl] = useState<string | undefined>();
+  const [photoBlobUrl, setPhotoBlobUrl] = useState<string | undefined>();
   const [authorityPreview, setAuthorityPreview] = useState<AuthorityPreviewResponse | null>(null);
   const [infrastructure, setInfrastructure] = useState<RoadInfrastructureResponse | null>(null);
   const [locationDisplay, setLocationDisplay] = useState<string | null>(null);
@@ -123,11 +123,11 @@ export default function ReportPage() {
 
   useEffect(() => {
     if (!photoFile) {
-      setphotoBlobUrl(undefined);
+      setPhotoBlobUrl(undefined);
       return;
     }
     const nextUrl = URL.createObjectURL(photoFile);
-    setphotoBlobUrl(nextUrl);
+    setPhotoBlobUrl(nextUrl);
     return () => URL.revokeObjectURL(nextUrl);
   }, [photoFile]);
 
