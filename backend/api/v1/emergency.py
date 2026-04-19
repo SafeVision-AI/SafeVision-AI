@@ -55,3 +55,10 @@ async def get_sos_payload(
 @router.get('/numbers', response_model=EmergencyNumbersResponse)
 async def get_emergency_numbers() -> EmergencyNumbersResponse:
     return EMERGENCY_NUMBERS
+
+
+@router.get('/safe-spaces')
+async def safe_spaces(lat: float, lon: float, radius: int = 1000):
+    """Returns nearby safe public spaces for women safety use case."""
+    from services.safe_spaces import get_safe_spaces
+    return await get_safe_spaces(lat, lon, radius)

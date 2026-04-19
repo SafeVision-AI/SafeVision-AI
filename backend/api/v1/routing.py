@@ -37,3 +37,25 @@ async def preview_route(
         raise HTTPException(status_code=422, detail=str(exc)) from exc
     except ExternalServiceError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+
+@router.get('/safe-route')
+async def get_safe_route_endpoint(
+    origin_lat: float = Query(..., ge=-90, le=90),
+    origin_lon: float = Query(..., ge=-180, le=180),
+    destination_lat: float = Query(..., ge=-90, le=90),
+    destination_lon: float = Query(..., ge=-180, le=180),
+    prefer_safety: bool = Query(default=False),
+):
+    """
+    Returns a safe route prioritizing well-lit, non-isolated roads using ORS.
+    """
+    from services.safe_routing import get_safe_route
+    try:
+        return await get_safe_route(
+            origin=(origin_lat, origin_lon),
+            dest=(destination_lat, destination_lon),
+            prefer_safety=prefer_safety,
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail=f"Safe routing unavailable: {str(exc)}") from exc

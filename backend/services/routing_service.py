@@ -55,17 +55,29 @@ class RoutingService:
         if cached:
             return RoutePreviewResponse.model_validate(cached)
 
-        # Using free public OSRM server, no API key needed.
-        url = f'https://router.project-osrm.org/route/v1/driving/{origin_lon},{origin_lat};{destination_lon},{destination_lat}'
-        params = {
-            'overview': 'full',
-            'geometries': 'geojson',
-            'steps': 'true',
-        }
-        if requested_alternatives > 0:
-            params['alternatives'] = str(requested_alternatives)
-
+        # Check if TomTom API is available, otherwise fallback to OSRM
         warnings: list[str] = []
+        is_tomtom = bool(self.settings.tomtom_api_key)
+
+        if is_tomtom:
+            url = f'https://api.tomtom.com/routing/1/calculateRoute/{origin_lat},{origin_lon}:{destination_lat},{destination_lon}/json'
+            params = {
+                'key': self.settings.tomtom_api_key,
+                'routeRepresentation': 'polyline',
+                'traffic': 'true',
+                'instructionsType': 'text',
+            }
+            if requested_alternatives > 0:
+                params['maxAlternatives'] = str(requested_alternatives)
+        else:
+            url = f'https://router.project-osrm.org/route/v1/driving/{origin_lon},{origin_lat};{destination_lon},{destination_lat}'
+            params = {
+                'overview': 'full',
+                'geometries': 'geojson',
+                'steps': 'true',
+            }
+            if requested_alternatives > 0:
+                params['alternatives'] = str(requested_alternatives)
 
         try:
             response = await self._client.get(url, params=params)
@@ -76,15 +88,32 @@ class RoutingService:
             raise ExternalServiceError(self._message_from_response(response))
 
         data = response.json()
-        route = self._normalize_response(
-            data,
-            origin_lat=origin_lat,
-            origin_lon=origin_lon,
-            destination_lat=destination_lat,
-            destination_lon=destination_lon,
+        
+        routes_data = data.get('routes') or []
+        if not routes_data:
+            raise ExternalServiceError('Routing provider returned no route.')
+
+        if is_tomtom:
+            routes = [self._normalize_tomtom_route(r, index=idx) for idx, r in enumerate(routes_data, start=1)]
+        else:
+            routes = [self._normalize_osrm_route(r, index=idx) for idx, r in enumerate(routes_data, start=1)]
+            
+        selected_route = routes[0]
+        route = RoutePreviewResponse(
+            provider='tomtom' if is_tomtom else 'osrm',
             profile=profile,
-            warnings=warnings,
+            distance_meters=selected_route.distance_meters,
+            duration_seconds=selected_route.duration_seconds,
+            path=selected_route.path,
+            bounds=selected_route.bounds,
+            origin=RoutePoint(lat=origin_lat, lon=origin_lon, label='Current location'),
+            destination=RoutePoint(lat=destination_lat, lon=destination_lon, label='Destination'),
+            steps=selected_route.steps,
+            routes=routes,
+            selected_route_id=selected_route.route_id,
+            warnings=warnings or [],
         )
+
         await self.cache.set_json(
             cache_key,
             route.model_dump(mode='json'),
@@ -118,36 +147,39 @@ class RoutingService:
             return 'Routing provider rate limit reached. Please try again in a moment.'
         return 'Routing provider could not generate a route right now.'
 
-    def _normalize_response(
-        self,
-        payload: dict[str, Any],
-        *,
-        origin_lat: float,
-        origin_lon: float,
-        destination_lat: float,
-        destination_lon: float,
-        profile: RouteProfile,
-        warnings: list[str] | None = None,
-    ) -> RoutePreviewResponse:
-        routes_data = payload.get('routes') or []
-        if not routes_data:
-            raise ExternalServiceError('Routing provider returned no route.')
+    def _normalize_tomtom_route(self, route_data: dict[str, Any], *, index: int) -> RouteOption:
+        summary = route_data.get('summary') or {}
+        
+        path: list[RoutePoint] = []
+        for leg in route_data.get('legs') or []:
+            for pt in leg.get('points') or []:
+                path.append(RoutePoint(lat=float(pt['latitude']), lon=float(pt['longitude'])))
+                
+        if len(path) < 2:
+            raise ExternalServiceError('Routing provider returned invalid path coordinates.')
 
-        routes = [self._normalize_osrm_route(r, index=index) for index, r in enumerate(routes_data, start=1)]
-        selected_route = routes[0]
-        return RoutePreviewResponse(
-            provider='osrm',
-            profile=profile,
-            distance_meters=selected_route.distance_meters,
-            duration_seconds=selected_route.duration_seconds,
-            path=selected_route.path,
-            bounds=selected_route.bounds,
-            origin=RoutePoint(lat=origin_lat, lon=origin_lon, label='Current location'),
-            destination=RoutePoint(lat=destination_lat, lon=destination_lon, label='Destination'),
-            steps=selected_route.steps,
-            routes=routes,
-            selected_route_id=selected_route.route_id,
-            warnings=warnings or [],
+        steps: list[RouteInstruction] = []
+        guidance = route_data.get('guidance') or {}
+        for step_index, inst in enumerate(guidance.get('instructions') or [], start=1):
+            steps.append(
+                RouteInstruction(
+                    index=step_index,
+                    instruction=str(inst.get('message') or 'Continue'),
+                    distance_meters=float(inst.get('routeOffsetInMeters') or 0.0), # Note: offset vs distance in step
+                    duration_seconds=float(inst.get('travelTimeInSeconds') or 0.0),
+                    street_name=inst.get('street') or None,
+                )
+            )
+
+        label = 'Primary route' if index == 1 else f'Alternative {index - 1}'
+        return RouteOption(
+            route_id=f'route-{index}',
+            label=label,
+            distance_meters=float(summary.get('lengthInMeters') or 0.0),
+            duration_seconds=float(summary.get('travelTimeInSeconds') or 0.0),
+            path=path,
+            bounds=self._build_bounds(path),
+            steps=steps,
         )
 
     def _normalize_osrm_route(self, route_data: dict[str, Any], *, index: int) -> RouteOption:

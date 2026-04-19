@@ -3,6 +3,9 @@
 import maplibregl from 'maplibre-gl';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
+import { addTrafficLayer, toggleTrafficLayer } from '@/lib/traffic-layer';
+import { addSafeSpacesLayer } from '@/lib/safe-spaces-layer';
+import { startLocationTracking } from '@/lib/location-tracker';
 
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
 const OPENFREEMAP_STYLE_URL =
@@ -313,6 +316,8 @@ export function MapLibreCanvas({
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [statusMessage, setStatusMessage] = useState<string>('Loading map...');
   const [styleRevision, setStyleRevision] = useState(0);
+  const [showTraffic, setShowTraffic] = useState(false);
+  const [showSafeSpaces, setShowSafeSpaces] = useState(false);
   const { resolvedTheme } = useTheme();
 
   const STYLE_CANDIDATES = useMemo<MapStyleCandidate[]>(() => {
@@ -500,6 +505,11 @@ export function MapLibreCanvas({
           center: [center[1], center[0]],
           zoom,
         });
+        if (map) {
+          addTrafficLayer(map);
+          toggleTrafficLayer(map, showTraffic);
+          startLocationTracking(map);
+        }
       });
       map.on('idle', syncReadyState);
       map.on('sourcedata', syncReadyState);
@@ -1131,6 +1141,25 @@ export function MapLibreCanvas({
     };
   }, []);
 
+  useEffect(() => {
+    if (mapRef.current && mapRef.current.isStyleLoaded()) {
+      toggleTrafficLayer(mapRef.current, showTraffic);
+    }
+  }, [showTraffic, styleRevision]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+    
+    if (showSafeSpaces && currentLocation) {
+      addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch(console.error);
+    }
+    
+    const hasLayer = mapRef.current.getLayer('safe-spaces-circles');
+    if (hasLayer) {
+      mapRef.current.setLayoutProperty('safe-spaces-circles', 'visibility', showSafeSpaces ? 'visible' : 'none');
+    }
+  }, [showSafeSpaces, currentLocation, styleRevision]);
+
   return (
     <div className={className}>
       <div ref={mapNodeRef} className="absolute inset-0 h-full w-full overflow-hidden" />
@@ -1144,6 +1173,33 @@ export function MapLibreCanvas({
           </div>
         </div>
       ) : null}
+      
+      {/* Toggles Overlay */}
+      {status === 'ready' && (
+        <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
+          <button
+            onClick={() => setShowTraffic(t => !t)}
+            className={`px-3 py-2 rounded-full text-xs font-bold shadow-lg transition-colors border ${
+              showTraffic 
+                ? 'bg-amber-500 text-white border-amber-600' 
+                : 'bg-white text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
+            }`}
+          >
+            {showTraffic ? '🚦 Traffic: ON' : '🚦 Traffic: OFF'}
+          </button>
+          
+          <button
+            onClick={() => setShowSafeSpaces(s => !s)}
+            className={`px-3 py-2 rounded-full text-xs font-bold shadow-lg transition-colors border ${
+              showSafeSpaces 
+                ? 'bg-emerald-500 text-white border-emerald-600' 
+                : 'bg-white text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
+            }`}
+          >
+            {showSafeSpaces ? '🛡️ Safe Spaces: ON' : '🛡️ Safe Spaces: OFF'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
