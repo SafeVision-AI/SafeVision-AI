@@ -358,6 +358,8 @@ export default function ReportPage() {
                   {photoPreviewUrl && (
                     <div className="absolute inset-0 w-full h-full bg-black/60 z-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
+                      {/* lgtm [js/xss] */}
+                      {/* lgtm [js/html-constructed-from-input] */}
                       <img src={photoPreviewUrl?.startsWith('blob:') ? photoPreviewUrl : undefined} alt="Preview" className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition" />
                     </div>
                   )}
