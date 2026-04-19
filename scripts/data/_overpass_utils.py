@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Iterable
 
 
-ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_ENDPOINTS = (
     'https://overpass-api.de/api/interpreter',
     'https://overpass.kumi.systems/api/interpreter',
