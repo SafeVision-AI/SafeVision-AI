@@ -442,7 +442,7 @@ export function MapLibreCanvas({
         const message = (errorEvent?.error?.message ?? '').toLowerCase();
         const activeCandidate = getActiveCandidate();
         const isMapTilerFailure =
-          message.includes('api.maptiler.com') ||
+          message.includes('maptiler') ||
           message.includes('401') ||
           message.includes('403') ||
           message.includes('sprite') ||
