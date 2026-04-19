@@ -18,13 +18,6 @@
 
 ---
 
-## 🛡️ Data Intelligence
-
-The "Intelligence Layer" of SafeVisionAI (3.3GB of pre-trained models, road damage datasets, and legal archives) is hosted on the **Hugging Face Dataset Hub** for high-performance delivery.
-
-**[👉 Explore the SafeVisionAI Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)**
-
----
 
 ## Quick Start
 
@@ -78,10 +71,15 @@ SafeVisionAI/
 
 ---
 
-## 📓 Research Notebooks — Open in Colab
+## 🛡️ Data Intelligence
+
+The "Intelligence Layer" of SafeVisionAI (3.3GB of pre-trained models, road damage datasets, and legal archives) is hosted on the **Hugging Face Dataset Hub** for high-performance delivery.
+
+**[👉 Explore the SafeVisionAI Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)**
+
+### 📓 Research Notebooks — Open in Colab
 
 > Run all notebooks through **Google Colab** for the easiest setup — free T4 GPU, no local install needed.
-> Notebooks and datasets are hosted on the **[SafeVisionAI Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)**.
 
 | # | Notebook | What It Produces | Open in Colab |
 |---|---|---|---|
