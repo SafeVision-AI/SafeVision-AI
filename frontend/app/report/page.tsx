@@ -3,6 +3,7 @@
 
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   AlertTriangle,
@@ -103,7 +104,7 @@ export default function ReportPage() {
   const [severity, setSeverity] = useState<number>(3);
   const [notes, setNotes] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
-  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | undefined>();
+  const [photoBlobUrl, setphotoBlobUrl] = useState<string | undefined>();
   const [authorityPreview, setAuthorityPreview] = useState<AuthorityPreviewResponse | null>(null);
   const [infrastructure, setInfrastructure] = useState<RoadInfrastructureResponse | null>(null);
   const [locationDisplay, setLocationDisplay] = useState<string | null>(null);
@@ -122,11 +123,11 @@ export default function ReportPage() {
 
   useEffect(() => {
     if (!photoFile) {
-      setPhotoPreviewUrl(undefined);
+      setphotoBlobUrl(undefined);
       return;
     }
     const nextUrl = URL.createObjectURL(photoFile);
-    setPhotoPreviewUrl(nextUrl);
+    setphotoBlobUrl(nextUrl);
     return () => URL.revokeObjectURL(nextUrl);
   }, [photoFile]);
 
@@ -317,7 +318,7 @@ export default function ReportPage() {
           <section className="space-y-6">
             <SurfaceCard className="overflow-hidden p-0">
               <div className="min-h-[360px] sm:min-h-[420px]">
-                <HazardViewfinder imageSrc={photoPreviewUrl} isDetecting={contextLoading || submitting} confidence={submittedReport ? 99.4 : contextLoading ? 96.2 : 97.8} statusLabel={submittedReport ? 'Dispatch confirmed' : contextLoading ? 'Syncing live road intel' : photoFile ? 'Photo attached and ready' : 'Live hazard viewport'} signalLabel={accuracyLabel ?? (locating ? 'Acquiring GPS' : 'Awaiting GPS')} locationLabel={gpsLocation ? `${gpsLocation.lat.toFixed(5)}, ${gpsLocation.lon.toFixed(5)}` : 'Awaiting live coordinates'} viewportId={submittedReport ? submittedReport.uuid : 'RW-LIVE-REPORT-01'} />
+                <HazardViewfinder imageSrc={photoBlobUrl} isDetecting={contextLoading || submitting} confidence={submittedReport ? 99.4 : contextLoading ? 96.2 : 97.8} statusLabel={submittedReport ? 'Dispatch confirmed' : contextLoading ? 'Syncing live road intel' : photoFile ? 'Photo attached and ready' : 'Live hazard viewport'} signalLabel={accuracyLabel ?? (locating ? 'Acquiring GPS' : 'Awaiting GPS')} locationLabel={gpsLocation ? `${gpsLocation.lat.toFixed(5)}, ${gpsLocation.lon.toFixed(5)}` : 'Awaiting live coordinates'} viewportId={submittedReport ? submittedReport.uuid : 'RW-LIVE-REPORT-01'} />
               </div>
             </SurfaceCard>
 
@@ -355,18 +356,17 @@ export default function ReportPage() {
                   <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 text-slate-600 dark:border-slate-800/80 dark:bg-slate-950/55 dark:text-slate-200"><Camera size={18} /></div>
                 </div>
                 <label htmlFor="hazard-photo" className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/70 dark:border-slate-800/80 dark:bg-slate-950/45 dark:hover:border-blue-400/20 dark:hover:bg-blue-500/10 relative overflow-hidden group">
-                  {photoPreviewUrl && (
+                  {photoBlobUrl && (
                     <div className="absolute inset-0 w-full h-full bg-black/60 z-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      {/* lgtm [js/xss] */}
-                      {/* lgtm [js/html-constructed-from-input] */}
-                      <img src={photoPreviewUrl?.startsWith('blob:') ? photoPreviewUrl : undefined} alt="Preview" className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition" />
+                      {photoBlobUrl ? (
+                        <Image src={photoBlobUrl} alt="Preview" fill unoptimized className="object-cover opacity-60 group-hover:opacity-40 transition" />
+                      ) : null}
                     </div>
                   )}
                   <div className="relative z-10 flex flex-col items-center">
                     <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700 dark:bg-blue-500/16 dark:text-blue-100 shadow-sm"><Upload size={22} /></div>
-                    <div className={`mt-4 text-sm font-black uppercase tracking-[0.18em] ${photoPreviewUrl ? 'text-white' : 'text-slate-800 dark:text-slate-100'}`}>{photoFile ? 'Replace photo' : 'Attach road image'}</div>
-                    <p className={`mt-2 max-w-xs text-sm ${photoPreviewUrl ? 'text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>{photoHint}</p>
+                    <div className={`mt-4 text-sm font-black uppercase tracking-[0.18em] ${photoBlobUrl ? 'text-white' : 'text-slate-800 dark:text-slate-100'}`}>{photoFile ? 'Replace photo' : 'Attach road image'}</div>
+                    <p className={`mt-2 max-w-xs text-sm ${photoBlobUrl ? 'text-slate-200' : 'text-slate-500 dark:text-slate-400'}`}>{photoHint}</p>
                   </div>
                 </label>
                 <input id="hazard-photo" type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={handlePhotoChange} />
