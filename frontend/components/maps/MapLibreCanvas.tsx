@@ -73,23 +73,25 @@ function buildFacilityCollection(
 ): GeoJSON.FeatureCollection<GeoJSON.Point> {
   return {
     type: 'FeatureCollection',
-    features: facilities.map((facility) => ({
-      type: 'Feature',
-      properties: {
-        id: facility.id,
-        name: facility.name,
-        type: facility.type,
-        accentColor: facility.accentColor,
-        distance: facility.distance ?? '',
-        address: facility.address ?? '',
-        phone: facility.phone ?? '',
-        selected: facility.id === selectedFacilityId ? 1 : 0,
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: facility.coords ? [facility.coords[1], facility.coords[0]] : [0, 0],
-      },
-    })),
+    features: facilities
+      .filter((facility) => facility.coords !== null)
+      .map((facility) => ({
+        type: 'Feature',
+        properties: {
+          id: facility.id,
+          name: facility.name,
+          type: facility.type,
+          accentColor: facility.accentColor,
+          distance: facility.distance ?? '',
+          address: facility.address ?? '',
+          phone: facility.phone ?? '',
+          selected: facility.id === selectedFacilityId ? 1 : 0,
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [facility.coords[1], facility.coords[0]],
+        },
+      })),
   };
 }
 
@@ -551,7 +553,7 @@ export function MapLibreCanvas({
       activeStyleIndexRef.current = 0;
       styleReadyRef.current = false;
     };
-  }, [center, navigationPosition, zoom]);
+  }, [center, navigationPosition, zoom, showTraffic]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -1147,21 +1149,38 @@ export function MapLibreCanvas({
     }
   }, [showTraffic, styleRevision]);
 
+  const [safeSpacesError, setSafeSpacesError] = useState<string | null>(null);
+
   useEffect(() => {
     if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
-    
+
     if (showSafeSpaces && currentLocation) {
-      addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch(console.error);
+      setSafeSpacesError(null);
+      addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch((error) => {
+        console.error(error);
+        setSafeSpacesError('Failed to load safe spaces. Please try again.');
+      });
+    } else {
+      setSafeSpacesError(null);
     }
-    
+  }, [showSafeSpaces, currentLocation, styleRevision]);
+
+  useEffect(() => {
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) return;
+
     const hasLayer = mapRef.current.getLayer('safe-spaces-circles');
     if (hasLayer) {
       mapRef.current.setLayoutProperty('safe-spaces-circles', 'visibility', showSafeSpaces ? 'visible' : 'none');
     }
-  }, [showSafeSpaces, currentLocation, styleRevision]);
+  }, [showSafeSpaces, styleRevision]);
 
   return (
     <div className={className}>
+      {safeSpacesError ? (
+        <div className="absolute left-4 top-4 z-10 rounded-md bg-red-600/90 px-3 py-2 text-xs text-white shadow">
+          {safeSpacesError}
+        </div>
+      ) : null}
       <div ref={mapNodeRef} className="absolute inset-0 h-full w-full overflow-hidden" />
       {status !== 'ready' ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/18 backdrop-blur-[1px]">

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from models.schemas import RoutePreviewResponse, RouteProfile
 from services.exceptions import ExternalServiceError, ServiceValidationError
 from services.routing_service import RoutingService
+from services.safe_routing import get_safe_route
 
 
 router = APIRouter(prefix='/api/v1/routing', tags=['Routing'])
@@ -50,7 +51,6 @@ async def get_safe_route_endpoint(
     """
     Returns a safe route prioritizing well-lit, non-isolated roads using ORS.
     """
-    from services.safe_routing import get_safe_route
     try:
         return await get_safe_route(
             origin=(origin_lat, origin_lon),
