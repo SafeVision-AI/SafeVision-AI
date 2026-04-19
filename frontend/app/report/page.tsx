@@ -358,9 +358,7 @@ export default function ReportPage() {
                 <label htmlFor="hazard-photo" className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[1.5rem] border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/70 dark:border-slate-800/80 dark:bg-slate-950/45 dark:hover:border-blue-400/20 dark:hover:bg-blue-500/10 relative overflow-hidden group">
                   {photoBlobUrl && (
                     <div className="absolute inset-0 w-full h-full bg-black/60 z-0">
-                      {photoBlobUrl ? (
-                        <Image src={photoBlobUrl} alt="Preview" fill unoptimized className="object-cover opacity-60 group-hover:opacity-40 transition" />
-                      ) : null}
+                      <Image src={photoBlobUrl} alt="Preview" fill unoptimized className="object-cover opacity-60 group-hover:opacity-40 transition" />
                     </div>
                   )}
                   <div className="relative z-10 flex flex-col items-center">

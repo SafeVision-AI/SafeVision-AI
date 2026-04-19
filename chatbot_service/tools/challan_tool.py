@@ -54,7 +54,6 @@ class ChallanTool:
         vehicle_class = self._infer_vehicle_class(message)
         is_repeat = any(term in message.lower() for term in ('repeat', 'second time', 'again'))
         
-        state_code = 'TN'
         if state_match:
             state_code = state_match.group(0).upper()
         else:
