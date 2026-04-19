@@ -87,11 +87,10 @@ SafeVisionAI/
 │   └── public/              manifest.json, offline-data/ (GeoJSON, CSV for DuckDB-Wasm)
 │
 ├── scripts/                 Root-level data pipeline scripts
-│   ├── app/                 2 DB seeders (seed_emergency, seed_nhp_hospitals)
-│   └── data/                15 standalone fetchers/extractors (Overpass, Kaggle, PDF extraction)
+│   ├── app/                 3 DB seeders (seed_emergency, seed_nhp_hospitals, seed_healthsites)
+│   └── data/                16 standalone fetchers/extractors (Overpass, Kaggle, PDF extraction, restore_data)
 │
 ├── docs/                    17 markdown docs — START with docs/Agent.md
-├── notebooks/               5 Jupyter notebooks (YOLO training, ChromaDB build, Accident EDA, Roads, Risk Model)
 ├── docker-compose.yml       5 services: postgres (PostGIS 16), redis 7, backend, chatbot, frontend
 └── SETUP.md                 Complete install guide with exact commands
 ```
@@ -250,7 +249,7 @@ All script folders follow the same `app/` vs `data/` convention:
 
 | Location | `app/` (needs DB) | `data/` (standalone) |
 |----------|-------------------|---------------------|
-| `scripts/` | 2 seeders | 15 fetchers/extractors |
+| `scripts/` | 3 seeders | 16 fetchers/extractors |
 | `backend/scripts/` | 11 DB/Redis loaders | 5 data transforms |
 | `chatbot_service/scripts/` | 1 DB wrapper | 6 Pro Overpass fetchers |
 

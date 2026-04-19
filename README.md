@@ -70,12 +70,26 @@ SafeVisionAI/
 ├── frontend/          Next.js 15 + React 19 TypeScript PWA (port 3000)
 ├── docs/              Complete technical documentation
 ├── chatbot_docs/      Documentation specifically for Chatbot Service
-├── notebooks/         5 Colab notebooks (YOLO, ChromaDB, Accidents, Roads, Risk)
 ├── scripts/           Global data pipeline scripts
 │   ├── app/           DB-dependent scripts (seed_emergency, seed_nhp_hospitals)
 │   └── data/          Pure Python scripts — no DB needed (fetchers, extractors)
 └── .github/           GitHub Actions CI/CD
 ```
+
+---
+
+## 📓 Research Notebooks — Open in Colab
+
+> Run all notebooks through **Google Colab** for the easiest setup — free T4 GPU, no local install needed.
+> Notebooks and datasets are hosted on the **[SafeVisionAI Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)**.
+
+| # | Notebook | What It Produces | Open in Colab |
+|---|---|---|---|
+| 1 | **YOLOv8 Pothole Detector Training** | ONNX road damage model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1oe4Gk899lFB_vbRMUuOh4dqpsa3bbycI) |
+| 2 | **ChromaDB RAG Vectorstore Build** | ChromaDB index for legal RAG | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1AzPdN9xjcjW20ko0shTYn0mvbxTUw57Q) |
+| 3 | **Accident EDA & Hotspot Generator** | Blackspot seed CSV + heatmap | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1xh_lwv_B_jc0_83dvuNppWQRtVhqExTS) |
+| 4 | **Roads Data Processing** | Sampled PMGSY GeoJSON | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/10_WfTlbbxW9A7ceQBZGaKF5UkydlUDin#scrollTo=z4XxGZmx0ymX) |
+| 5 | **Risk Model ONNX Training** | Risk scoring ONNX model | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/16IH-rn3CedYtfIpJP4iLa_KUjvfy8hAY) |
 
 ---
 
