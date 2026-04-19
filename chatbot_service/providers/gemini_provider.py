@@ -9,8 +9,6 @@ from __future__ import annotations
 
 import os
 
-import httpx
-
 from providers.base import ProviderRequest, ProviderResult, TemplateProvider, build_messages, SYSTEM_PROMPT
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"

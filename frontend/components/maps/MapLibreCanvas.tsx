@@ -76,22 +76,22 @@ function buildFacilityCollection(
     features: facilities
       .filter((facility) => facility.coords && facility.coords.length >= 2)
       .map((facility) => ({
-      type: 'Feature',
-      properties: {
-        id: facility.id,
-        name: facility.name,
-        type: facility.type,
-        accentColor: facility.accentColor,
-        distance: facility.distance ?? '',
-        address: facility.address ?? '',
-        phone: facility.phone ?? '',
-        selected: facility.id === selectedFacilityId ? 1 : 0,
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [facility.coords![1], facility.coords![0]],
-      },
-    })),
+        type: 'Feature',
+        properties: {
+          id: facility.id,
+          name: facility.name,
+          type: facility.type,
+          accentColor: facility.accentColor,
+          distance: facility.distance ?? '',
+          address: facility.address ?? '',
+          phone: facility.phone ?? '',
+          selected: facility.id === selectedFacilityId ? 1 : 0,
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [facility.coords![1], facility.coords![0]],
+        },
+      })),
   };
 }
 

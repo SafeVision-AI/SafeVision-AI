@@ -8,7 +8,6 @@ import math
 import shutil
 import struct
 import sys
-import tempfile
 import zipfile
 from pathlib import Path
 

@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from core.config import get_settings
 from core.database import Base
-from models import EmergencyService, RoadInfrastructure, RoadIssue  # noqa: F401
+from models import RoadIssue  # noqa: F401
 
 
 config = context.config

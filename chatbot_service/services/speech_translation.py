@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from io import BytesIO
-from pathlib import Path
 from typing import Any
 
 from config import Settings

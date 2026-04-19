@@ -4,7 +4,7 @@ Env vars: GROQ_API_KEY, GROQ_MODEL (optional, default: llama-3.1-8b-instant)
 """
 from __future__ import annotations
 
-from providers.base import HttpProvider, ProviderRequest, ProviderResult
+from providers.base import HttpProvider
 
 
 class GroqProvider(HttpProvider):

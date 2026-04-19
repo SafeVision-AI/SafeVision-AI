@@ -1,8 +1,6 @@
 import argparse
 import asyncio
 import logging
-from pathlib import Path
-
 from core.config import get_settings
 from core.database import AsyncSessionLocal
 from core.redis_client import create_cache

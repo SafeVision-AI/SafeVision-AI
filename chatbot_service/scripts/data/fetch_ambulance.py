@@ -34,7 +34,7 @@ def main() -> None:
     rows = [
         row
         for element in elements
-        if (row := normalize_row(element, default_category='ambulance', fallback_name='Unnamed ambulance station')) is not None
+        if (row := normalize_row(element, fallback_name='Unnamed ambulance station')) is not None
     ]
     count = write_rows(args.output, rows)
     print_summary(label='ambulance station', count=count, output=args.output)
