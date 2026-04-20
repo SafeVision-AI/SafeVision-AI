@@ -7,14 +7,14 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-# Shared long-lived client — avoids creating a new TCP connection on every request
-_CLIENT = httpx.AsyncClient(timeout=20.0)
+# Shared long-lived client — lazily initialized to avoid import-time async setup issues
+_CLIENT: httpx.AsyncClient | None = None
 
 
 async def close_safe_spaces_client():
     """Cleanup the global HTTP client on application shutdown."""
     global _CLIENT
-    if not _CLIENT.is_closed:
+    if _CLIENT is not None and not _CLIENT.is_closed:
         await _CLIENT.aclose()
 
 
@@ -25,7 +25,7 @@ async def get_safe_spaces(lat: float, lon: float, radius_m: int = 1000) -> dict:
     Falls back to an empty list with a warning if all endpoints are rate-limited.
     """
     global _CLIENT
-    if _CLIENT.is_closed:
+    if _CLIENT is None or _CLIENT.is_closed:
         _CLIENT = httpx.AsyncClient(timeout=20.0)
 
     query = f"""

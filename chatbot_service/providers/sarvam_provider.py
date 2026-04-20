@@ -32,6 +32,7 @@ from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_
 
 logger = logging.getLogger(__name__)
 
+SARVAM_DIRECT_BASE = "https://api.sarvam.ai/v1"
 _MAX_TOKENS = 800
 _TEMPERATURE = 0.5
 
