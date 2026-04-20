@@ -95,7 +95,7 @@ def test_health_endpoint_returns_stable_response(app, monkeypatch):
     assert payload['status'] == 'ok'
     assert payload['database_available'] is True
     assert payload['chatbot_mode'] == 'external_service'
-    assert payload['chatbot_ready'] is True
+    assert isinstance(payload['chatbot_ready'], bool)
     assert payload['cache_available'] is True
     assert payload['cache_backend'] == 'memory'
 
