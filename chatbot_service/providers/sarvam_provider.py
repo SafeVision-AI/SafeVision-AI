@@ -10,6 +10,8 @@ Supported Indian languages (ISO 639-1 codes):
   sa=Sanskrit  mai=Maithili  kok=Konkani  doi=Dogri  ks=Kashmiri
 """
 
+from __future__ import annotations
+
 INDIAN_LANGUAGE_CODES = {
     'hi', 'ta', 'te', 'kn', 'ml', 'mr', 'gu', 'bn', 'pa', 'or', 'as', 'ur',
     'sa', 'mai', 'kok', 'doi', 'ks'
@@ -18,8 +20,6 @@ INDIAN_LANGUAGE_CODES = {
 HIGH_STAKES_INTENTS = {
     'LEGAL_ADVICE', 'EMERGENCY_REPORT', 'FIR_FILING', 'CHALLAN_DISPUTE'
 }
-
-from __future__ import annotations
 
 import logging
 import os
