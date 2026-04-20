@@ -34,6 +34,24 @@ UPLOAD_EXTENSION_BY_CONTENT_TYPE = {
     'image/webp': '.webp',
 }
 
+# Known image file signatures (magic bytes)
+_IMAGE_MAGIC_SIGNATURES: list[bytes] = [
+    b'\xff\xd8\xff',                     # JPEG
+    b'\x89PNG\r\n\x1a\n',               # PNG
+    b'RIFF',                             # WebP (RIFF....WEBP)
+]
+
+
+def _is_valid_image_magic(header: bytes) -> bool:
+    """Returns True if the first bytes match a known image format signature."""
+    for sig in _IMAGE_MAGIC_SIGNATURES:
+        if header.startswith(sig):
+            # Extra check for WebP: bytes 8-11 must be 'WEBP'
+            if sig == b'RIFF' and header[8:12] != b'WEBP':
+                continue
+            return True
+    return False
+
 
 class RoadWatchService:
     def __init__(
@@ -274,10 +292,19 @@ class RoadWatchService:
             written = 0
 
             async with aiofiles.open(target, 'wb') as handle:
+                first_chunk = True
                 while True:
                     chunk = await photo.read(1024 * 1024)
                     if not chunk:
                         break
+                    # Validate magic bytes on first chunk before writing anything to disk
+                    if first_chunk:
+                        first_chunk = False
+                        header = chunk[:12]
+                        if not _is_valid_image_magic(header):
+                            raise ServiceValidationError(
+                                'Uploaded file does not appear to be a valid JPEG, PNG, or WebP image.'
+                            )
                     written += len(chunk)
                     if written > max_bytes:
                         raise ServiceValidationError(

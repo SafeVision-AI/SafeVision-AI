@@ -121,7 +121,7 @@ class CacheHelper:
             return True
         except Exception:
             self._redis_healthy = False
-            return True
+            return False
 
     async def close(self) -> None:
         if not self._client:

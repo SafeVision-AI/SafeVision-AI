@@ -107,7 +107,7 @@ def create_app() -> FastAPI:
         if cache is not None:
             cache_available = await cache.ping()
             cache_backend = getattr(cache, 'backend_name', 'unknown')
-        return HealthResponse(
+        resp = HealthResponse(
             status='ok' if database_available else 'degraded',
             database_available=database_available,
             chatbot_ready=settings.chatbot_ready,
@@ -117,6 +117,11 @@ def create_app() -> FastAPI:
             environment=settings.environment,
             version=settings.version,
         )
+        if not database_available:
+            from fastapi import Response
+            from fastapi.responses import JSONResponse
+            return JSONResponse(status_code=503, content=resp.model_dump())
+        return resp
 
     app.include_router(api_router)
     return app

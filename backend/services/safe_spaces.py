@@ -3,6 +3,9 @@ from __future__ import annotations
 
 import httpx
 
+# Shared long-lived client — avoids creating a new TCP connection on every request
+_CLIENT = httpx.AsyncClient(timeout=20.0)
+
 
 async def get_safe_spaces(lat: float, lon: float, radius_m: int = 1000) -> dict:
     """
@@ -30,8 +33,7 @@ out body;
     last_error: str = ''
     for endpoint in endpoints:
         try:
-            async with httpx.AsyncClient(timeout=20.0) as client:
-                r = await client.post(endpoint, data={'data': query})
+            r = await _CLIENT.post(endpoint, data={'data': query})
 
             # Rate limit — try next mirror
             if r.status_code in (406, 429, 503):
@@ -75,6 +77,6 @@ out body;
         'source': 'openstreetmap',
         'warning': (
             'Safe spaces data temporarily unavailable '
-            f'(Overpass API rate limit). Try again shortly. Detail: {last_error}'
+            f'(Overpass API rate limit). Try again shortly.'
         ),
     }

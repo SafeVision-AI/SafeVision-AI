@@ -74,6 +74,11 @@ class Settings(BaseSettings):
         if value is None or value == '':
             return ['*']
         if value.strip() == '*':
+            if self.environment == 'production':
+                import logging
+                logging.getLogger(__name__).warning(
+                    'CORS_ORIGINS=* in production — set it to your frontend URL in Render env vars.'
+                )
             return ['*']
         return [item.strip() for item in value.split(',') if item.strip()]
 

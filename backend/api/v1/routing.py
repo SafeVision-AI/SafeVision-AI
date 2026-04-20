@@ -58,4 +58,6 @@ async def get_safe_route_endpoint(
             prefer_safety=prefer_safety,
         )
     except Exception as exc:
-        raise HTTPException(status_code=503, detail=f"Safe routing unavailable: {str(exc)}") from exc
+        import logging
+        logging.getLogger(__name__).warning('Safe routing error: %s', exc)
+        raise HTTPException(status_code=503, detail='Safe routing service temporarily unavailable.') from exc
