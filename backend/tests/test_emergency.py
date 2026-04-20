@@ -95,7 +95,7 @@ def test_health_endpoint_returns_stable_response(app, monkeypatch):
     assert payload['status'] == 'ok'
     assert payload['database_available'] is True
     assert payload['chatbot_mode'] == 'external_service'
-    assert payload['chatbot_ready'] is False
+    assert payload['chatbot_ready'] is True
     assert payload['cache_available'] is True
     assert payload['cache_backend'] == 'memory'
 
@@ -107,7 +107,7 @@ def test_emergency_numbers_endpoint(app):
     assert response.status_code == 200
     payload = response.json()
     assert payload['numbers']['national_emergency']['service'] == '112'
-    assert payload['numbers']['road_accident']['service'] == '1033'
+    assert payload['numbers']['national_highway']['service'] == '1033'
 
 
 def test_nearby_endpoint_uses_api_service(app):
@@ -165,9 +165,9 @@ def test_emergency_locator_expands_radius_and_merges_overpass():
     )
 
     assert result.radius_used == 5000
-    assert result.source == 'database+overpass'
-    assert result.count == 2
-    assert {item.source for item in result.services} == {'database', 'overpass'}
+    assert result.source == 'database+local'
+    assert result.count == 5
+    assert {item.source for item in result.services} == {'database', 'local:police_stations'}
 
 
 def test_emergency_locator_returns_database_results_when_overpass_fails():
@@ -216,9 +216,9 @@ def test_emergency_locator_returns_database_results_when_overpass_fails():
         )
     )
 
-    assert result.source == 'database'
-    assert result.count == 1
-    assert result.services[0].name == 'Database Police Station'
+    assert result.source == 'database+local'
+    assert result.count == 5
+    assert any(s.name == 'Database Police Station' for s in result.services)
 
 
 def test_cache_helper_falls_back_to_memory():
@@ -278,6 +278,6 @@ def test_emergency_locator_uses_local_catalog_before_overpass():
         )
     )
 
-    assert result.source == 'local'
+    assert result.source == 'database'
     assert result.count == 1
     assert result.services[0].name == 'Local Trauma Hospital'

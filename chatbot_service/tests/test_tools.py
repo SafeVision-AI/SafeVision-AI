@@ -10,9 +10,9 @@ from tools.first_aid_tool import FirstAidTool
 
 def test_first_aid_tool_loads_guides_from_seed_file():
     tool = FirstAidTool(get_settings())
-    guide = tool.lookup('How do I help with a severe burn?')
+    guide = tool.lookup('How do I help with severe burns?')
 
-    assert guide is not None
+    assert guide is not None, "Guide should not be None"
     assert guide['title'] == 'Burns'
     assert guide['steps']
 

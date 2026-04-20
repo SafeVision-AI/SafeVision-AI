@@ -85,7 +85,7 @@ class FakeRetriever:
 
 
 class FakeSosTool:
-    def __init__(self, backend_client) -> None:
+    def __init__(self, backend_client, w3w_tool=None, geocode_client=None) -> None:
         self.backend_client = backend_client
 
     async def get_payload(self, *, lat: float, lon: float) -> dict:

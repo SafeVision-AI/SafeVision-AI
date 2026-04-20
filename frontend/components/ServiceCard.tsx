@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+
 import { NearbyService } from '@/lib/store';
 
 const ACCENT_COLORS: Record<NearbyService['category'], string> = {

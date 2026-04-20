@@ -1,4 +1,4 @@
-import * as duckdb from '@duckdb/duckdb-wasm';
+
 
 // Abstracted helper: initialize duckdb wasm for offline challan calculation
 export async function initOfflineChallanDB() {

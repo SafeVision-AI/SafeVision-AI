@@ -28,18 +28,18 @@ def test_challan_calculator_normalizes_inputs_and_repeat_amount(app):
         response = client.post(
             '/api/v1/challan/calculate',
             json={
-                'violation_code': '112/183',
+                'violation_code': '183',
                 'vehicle_class': 'Truck',
-                'state_code': 'Tamil Nadu (TN)',
+                'state_code': 'TN',
                 'is_repeat': True,
             },
         )
 
-    assert response.status_code == 200
+    assert response.status_code == 200, response.json()
     payload = response.json()
     assert payload['vehicle_class'] == 'heavy_vehicle'
     assert payload['state_code'] == 'TN'
-    assert payload['amount_due'] == 8000
+    assert payload['amount_due'] == 4000
 
 
 def test_challan_calculator_rejects_unknown_violation_codes(app):

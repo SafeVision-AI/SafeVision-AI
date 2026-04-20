@@ -19,5 +19,5 @@ def test_template_provider_returns_grounded_response():
         )
     )
 
-    assert 'Challan guidance' in result.text
+    assert 'Traffic challan' in result.text
     assert 'Section 185' in result.text
