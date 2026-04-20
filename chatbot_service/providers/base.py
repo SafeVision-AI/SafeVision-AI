@@ -36,6 +36,10 @@ class ProviderResult:
     text: str
     provider: str
     model: str
+    provider_used: str | None = None
+    detected_lang: str | None = None
+    india_badge: bool = False
+    fallback_from: str | None = None
 
 
 def build_messages(request: ProviderRequest) -> list[dict]:

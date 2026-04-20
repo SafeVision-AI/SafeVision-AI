@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from collections.abc import AsyncIterator
 
@@ -15,6 +15,9 @@ class Base(DeclarativeBase):
 
 settings = get_settings()
 
+# NOTE: Use `prepared_statement_cache_size=0` (not `statement_cache_size`) in
+# the DATABASE_URL query string — that is the correct SQLAlchemy asyncpg
+# dialect parameter for Supabase's transaction pooler.
 engine: AsyncEngine = create_async_engine(
     settings.database_url,
     pool_pre_ping=True,
