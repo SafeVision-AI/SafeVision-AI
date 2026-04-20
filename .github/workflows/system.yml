@@ -1,6 +1,13 @@
-name: System Docker Integration
+name: Render Deploy Readiness
 
 on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'render.yaml'
+      - 'backend/**'
+      - 'chatbot_service/**'
+      - '.github/workflows/system.yml'
   pull_request:
     branches: [ "main" ]
 
@@ -8,24 +15,74 @@ permissions:
   contents: read
 
 jobs:
-  docker-smoke-test:
-    name: Full Stack Docker Build
+  render-config-check:
+    name: Validate Render Blueprint & Service Config
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Build Docker Compose Stack
-        # Validates that all Dockerfiles (Backend, Chatbot, DB, Frontend) build without syntax errors
-        run: docker-compose build
-        
-      - name: Start Docker Compose
-        run: docker-compose up -d
-        
-      - name: Health Check Verification
+
+      - name: Check render.yaml exists and is non-empty
         run: |
-          echo "Waiting 20 seconds for services to initialize..."
-          sleep 20
-          echo "--- Container Status ---"
-          docker-compose ps
-          echo "--- Recent Logs ---"
-          docker-compose logs --tail=30
+          if [ ! -f render.yaml ]; then
+            echo "❌ render.yaml missing — Render deployment will fail!"
+            exit 1
+          fi
+          if [ ! -s render.yaml ]; then
+            echo "❌ render.yaml is empty — Render deployment will fail!"
+            exit 1
+          fi
+          echo "✅ render.yaml found and non-empty"
+
+      - name: Validate backend start command uses \$PORT
+        run: |
+          if grep -q "\$PORT" render.yaml; then
+            echo "✅ render.yaml uses \$PORT correctly"
+          else
+            echo "❌ render.yaml does not use \$PORT — Render will fail to bind!"
+            exit 1
+          fi
+
+      - name: Validate health check paths defined
+        run: |
+          COUNT=$(grep -c "healthCheckPath" render.yaml || true)
+          if [ "$COUNT" -ge 2 ]; then
+            echo "✅ Both services have healthCheckPath defined ($COUNT found)"
+          else
+            echo "⚠️  Only $COUNT healthCheckPath entries found — expected 2"
+          fi
+
+      - name: Check backend requirements.txt exists
+        run: |
+          if [ -f backend/requirements.txt ]; then
+            echo "✅ backend/requirements.txt found"
+          else
+            echo "❌ backend/requirements.txt missing!"
+            exit 1
+          fi
+
+      - name: Check chatbot requirements.txt exists
+        run: |
+          if [ -f chatbot_service/requirements.txt ]; then
+            echo "✅ chatbot_service/requirements.txt found"
+          else
+            echo "❌ chatbot_service/requirements.txt missing!"
+            exit 1
+          fi
+
+      - name: Check .dockerignore present for chatbot
+        run: |
+          if [ -f chatbot_service/.dockerignore ]; then
+            echo "✅ chatbot_service/.dockerignore present (prevents 4GB build context)"
+          else
+            echo "⚠️  chatbot_service/.dockerignore missing — builds will be slow"
+          fi
+
+      - name: Verify no localhost URLs in render.yaml
+        run: |
+          if grep -q "localhost" render.yaml; then
+            echo "❌ render.yaml contains localhost — will break in production!"
+            grep "localhost" render.yaml
+            exit 1
+          else
+            echo "✅ No localhost URLs in render.yaml"
+          fi

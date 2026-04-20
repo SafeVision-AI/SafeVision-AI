@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main" ]
   schedule:
-    - cron: '0 0 * * 0' # Run weekly on Sundays
+    - cron: '0 0 * * 0'  # Weekly on Sundays
 
 permissions:
   contents: read
@@ -15,25 +15,49 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Frontend NPM Audit (High/Critical)
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Frontend Dependencies
         working-directory: ./frontend
-        # Runs basic vulnerability check; ignores low/moderate to avoid noise
-        run: npm audit --audit-level=high || echo "NPM high vulnerabilities found - Please review."
+        run: npm ci
+
+      - name: Frontend NPM Audit (High/Critical only)
+        working-directory: ./frontend
+        run: npm audit --audit-level=high || echo "High/Critical npm vulnerabilities found — review required."
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          
+
       - name: Install Python Security Tools
         run: pip install bandit safety
-        
-      - name: Bandit SAST Scan (Backend)
+
+      - name: Bandit SAST — Backend
         working-directory: ./backend
-        # -lll filters only High confidence + High severity issues
-        run: bandit -r . -lll || echo "Backend SAST warnings found."
-        
-      - name: Bandit SAST Scan (Chatbot)
+        # -lll = High confidence + High severity only (ignores low-noise warnings)
+        run: bandit -r . -lll --exclude ./tests || echo "Backend SAST warnings found — review required."
+
+      - name: Bandit SAST — Chatbot Service
         working-directory: ./chatbot_service
-        run: bandit -r . -lll || echo "Chatbot SAST warnings found."
+        run: bandit -r . -lll --exclude ./tests || echo "Chatbot SAST warnings found — review required."
+
+      - name: Safety — Backend Dependency CVE Scan
+        working-directory: ./backend
+        run: |
+          if [ -f requirements.txt ]; then
+            safety check -r requirements.txt || echo "Safety CVE warnings — review required."
+          fi
+
+      - name: Safety — Chatbot Dependency CVE Scan
+        working-directory: ./chatbot_service
+        run: |
+          if [ -f requirements.txt ]; then
+            safety check -r requirements.txt || echo "Safety CVE warnings — review required."
+          fi

@@ -16,31 +16,26 @@ permissions:
 
 jobs:
   lint-and-typecheck:
-    name: Frontend Lint & TS
+    name: Frontend Lint & TypeScript
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 9
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: frontend/pnpm-lock.yaml
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Run ESLint
         working-directory: ./frontend
-        run: pnpm run lint
+        run: npm run lint
 
       - name: Run TypeScript validation
         working-directory: ./frontend

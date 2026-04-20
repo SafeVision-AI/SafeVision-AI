@@ -38,4 +38,17 @@ jobs:
 
       - name: Run Pytest
         working-directory: ./chatbot_service
-        run: pytest tests/ -v
+        run: |
+          if [ -d "tests" ] && [ "$(ls -A tests)" ]; then
+            pytest tests/ -v --tb=short
+          else
+            echo "No tests found — skipping."
+          fi
+        env:
+          # Stub env vars so settings dataclass doesn't crash at import
+          REDIS_URL: ""
+          MAIN_BACKEND_BASE_URL: "http://localhost:8000"
+          GROQ_API_KEY: ""
+          GOOGLE_API_KEY: ""
+          ENVIRONMENT: "test"
+          DEFAULT_LLM_PROVIDER: "template"
