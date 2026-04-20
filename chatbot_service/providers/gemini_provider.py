@@ -10,7 +10,7 @@ from __future__ import annotations
 import os
 
 import httpx
-from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_messages, SYSTEM_PROMPT
+from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_messages
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 

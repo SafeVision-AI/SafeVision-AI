@@ -118,7 +118,6 @@ def create_app() -> FastAPI:
             version=settings.version,
         )
         if not database_available:
-            from fastapi import Response
             from fastapi.responses import JSONResponse
             return JSONResponse(status_code=503, content=resp.model_dump())
         return resp

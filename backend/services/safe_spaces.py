@@ -66,7 +66,7 @@ out body;
             }
 
         except (httpx.HTTPError, httpx.TimeoutException) as exc:
-            last_error = str(exc)
+            logger.warning('Overpass API request failed: %s', exc)
             continue
 
     # All endpoints failed — return graceful empty response (never 500)
