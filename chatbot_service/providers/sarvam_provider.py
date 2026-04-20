@@ -12,8 +12,13 @@ Supported Indian languages (ISO 639-1 codes):
 
 from __future__ import annotations
 
+import logging
 import os
-from providers.base import TemplateProvider
+
+import httpx
+from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_messages
+
+logger = logging.getLogger(__name__)
 
 # Languages that should auto-route to Sarvam
 INDIAN_LANGUAGE_CODES = {
@@ -30,46 +35,84 @@ SARVAM_DIRECT_BASE = "https://api.sarvam.ai/v1"
 # HuggingFace Inference API base URL (fallback)
 HF_INFERENCE_BASE = "https://api-inference.huggingface.co/models"
 
+_MAX_TOKENS = 800
+_TEMPERATURE = 0.5
 
-class SarvamProvider(TemplateProvider):
+
+class SarvamProvider(HttpProvider):
     """Sarvam-2B via Direct API (primary) → HuggingFace (fallback).
 
     Priority:
-      1. If SARVAM_API_KEY is set → use console.sarvam.ai directly (fastest)
+      1. If SARVAM_API_KEY is set → use api.sarvam.ai directly (fastest)
       2. Otherwise → use HF_TOKEN via api-inference.huggingface.co (free, works now)
     """
 
+    name = "sarvam"
+    _client: httpx.AsyncClient | None = None
+
     def __init__(self, model_size: str = "30b") -> None:
-        super().__init__()
         self.model_size = model_size
 
     def _use_direct_api(self) -> bool:
         key = os.environ.get("SARVAM_API_KEY", "").strip()
         return bool(key and not key.startswith("YOUR_"))
 
-    def api_key_setting(self) -> str:
-        # Use direct Sarvam key if available, else HF token
-        return "sarvam_api_key" if self._use_direct_api() else "hf_token"
-
-    def model_setting(self) -> str:
-        return "sarvam_105b_model" if self.model_size == "105b" else "sarvam_30b_model"
+    def _get_api_key(self) -> str:  # type: ignore[override]
+        if self._use_direct_api():
+            return os.environ.get("SARVAM_API_KEY", "").strip()
+        token = os.environ.get("HF_TOKEN", "").strip()
+        if not token:
+            raise RuntimeError("SarvamProvider: Neither SARVAM_API_KEY nor HF_TOKEN is set")
+        return token
 
     def default_model(self) -> str:
         return "sarvamai/sarvam-105b" if self.model_size == "105b" else "sarvamai/sarvam-2b"
 
-    def build_headers(self, api_key: str) -> dict:
-        return {
+    def base_url(self) -> str:
+        if self._use_direct_api():
+            return f"{SARVAM_DIRECT_BASE}/chat/completions"
+        # HuggingFace Inference API — OpenAI-compatible endpoint
+        model = self.default_model()
+        return f"https://api-inference.huggingface.co/v1/chat/completions"
+
+    def api_key_env(self) -> str:
+        return "SARVAM_API_KEY" if self._use_direct_api() else "HF_TOKEN"
+
+    def extra_headers(self) -> dict:
+        if not self._use_direct_api():
+            # HuggingFace requires explicit model routing via x-use-cache header
+            return {"x-use-cache": "false"}
+        return {}
+
+    async def generate(self, request: ProviderRequest) -> ProviderResult:
+        """Call Sarvam direct API or HuggingFace inference endpoint."""
+        api_key = self._get_api_key()
+        model = self.default_model()
+
+        headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
+            **self.extra_headers(),
         }
 
-    def build_url(self) -> str:
-        model = self.default_model()
-        if self._use_direct_api():
-            # Direct Sarvam API endpoint
-            return f"{SARVAM_DIRECT_BASE}/chat/completions"
-        # HuggingFace Inference API fallback
-        return f"{HF_INFERENCE_BASE}/{model}"
+        # HuggingFace chat completions need the model in the body
+        payload = {
+            "model": model,
+            "messages": build_messages(request),
+            "max_tokens": _MAX_TOKENS,
+            "temperature": _TEMPERATURE,
+        }
+
+        url = self.base_url()
+        client = self._get_client()
+
+        logger.debug("SarvamProvider → %s (model=%s, direct=%s)", url, model, self._use_direct_api())
+        resp = await client.post(url, headers=headers, json=payload)
+        resp.raise_for_status()
+
+        data = resp.json()
+        text = data["choices"][0]["message"]["content"]
+        return ProviderResult(text=text, provider=self.name, model=model, india_badge=True)
 
 
 class Sarvam105BProvider(SarvamProvider):

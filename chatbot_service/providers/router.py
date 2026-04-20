@@ -161,11 +161,8 @@ class ProviderRouter:
         """Generate a response using the selected provider with automatic fallback."""
 
         # Auto-detect language from request content if not provided
-        if detected_lang is None and hasattr(request, 'messages') and request.messages:
-            last_content = str(request.messages[-1].get('content', ''))
-            detected_lang = detect_lang(last_content)
-        elif detected_lang is None and hasattr(request, 'prompt'):
-            detected_lang = detect_lang(request.prompt or '')
+        if detected_lang is None:
+            detected_lang = detect_lang(request.message or '')
 
         primary = self._select_provider_name(request, detected_lang=detected_lang)
         provider = self.providers.get(primary, self.providers['groq'])

@@ -28,7 +28,8 @@ async def detect_state_from_ip(
         Dict with keys: state, city, country, lat, lon
     """
     try:
-        url = f"http://ip-api.com/json/{ip}" if ip else "http://ip-api.com/json"
+        # ip-api.com supports HTTPS on /json endpoint (free plan)
+        url = f"https://ip-api.com/json/{ip}" if ip else "https://ip-api.com/json"
         async with httpx.AsyncClient(timeout=timeout) as client:
             response = await client.get(url)
             response.raise_for_status()

@@ -66,14 +66,14 @@ class ConversationMemoryStore:
 
     async def ping(self) -> bool:
         if self._client is None:
-            return True
+            return True  # in-memory fallback is always available
         try:
             await self._client.ping()
             self._redis_healthy = True
             return True
         except Exception:
             self._redis_healthy = False
-            return True
+            return False  # Redis is genuinely unreachable
 
     async def close(self) -> None:
         if self._client is None:

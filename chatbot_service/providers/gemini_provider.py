@@ -9,12 +9,13 @@ from __future__ import annotations
 
 import os
 
-from providers.base import ProviderRequest, ProviderResult, TemplateProvider, build_messages, SYSTEM_PROMPT
+import httpx
+from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_messages, SYSTEM_PROMPT
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
 
-class GeminiProvider(TemplateProvider):
+class GeminiProvider(HttpProvider):
     """Gemini 1.5 Flash — used for large-context queries (legal PDFs, long conversations)."""
 
     name = "gemini"

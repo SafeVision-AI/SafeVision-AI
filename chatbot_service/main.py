@@ -94,6 +94,17 @@ def create_app() -> FastAPI:
         allow_headers=['*'],
     )
 
+    @app.get('/health', tags=['System'])
+    async def health() -> dict:
+        """Root health check for Render/load-balancer liveness probes."""
+        memory_store = getattr(app.state, 'memory_store', None)
+        memory_ok = await memory_store.ping() if memory_store else True
+        return {
+            'status': 'ok',
+            'service': 'safevisionai-chatbot',
+            'memory_available': memory_ok,
+        }
+
     @app.get('/', tags=['System'])
     async def root() -> dict:
         return {

@@ -27,8 +27,10 @@ async def chat(
     engine: ChatEngine = Depends(get_engine),
 ) -> ChatResponse:
     """Standard blocking chat — returns full response at once."""
-    if not payload.client_ip and request.client:
-        payload.client_ip = request.client.host
+    if not payload.client_ip:
+        # X-Forwarded-For is set by Render's reverse proxy; prefer it over the direct socket IP
+        forwarded = request.headers.get('x-forwarded-for', '')
+        payload.client_ip = forwarded.split(',')[0].strip() or (request.client.host if request.client else None)
     return await engine.chat(payload)
 
 

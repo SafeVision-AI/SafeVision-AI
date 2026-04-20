@@ -1,0 +1,39 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Environment files (never ship secrets in image)
+.env
+.env.*
+!.env.example
+
+# Large local data directories — these are ~4GB and must NOT be in Docker build context
+data/roads/
+data/pothole_training/
+data/qa_pairs/
+data/chroma_db/
+data/offline_bundles/
+
+# Development tools
+.git/
+.gitignore
+*.md
+!requirements.txt
+
+# Test artifacts
+tests/
+*.test.py
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Editor
+.vscode/
+.idea/
+*.swp
