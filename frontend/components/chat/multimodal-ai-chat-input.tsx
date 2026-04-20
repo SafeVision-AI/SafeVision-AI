@@ -207,7 +207,7 @@ function PureSendButton({
       onClick={(event) => {
         event.preventDefault();
         if (!isDisabled) {
-          try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) {}
+          try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { }
           submitForm();
         }
       }}

@@ -1,7 +1,11 @@
 """Fetches nearby safe public spaces using Overpass API with graceful fallback."""
 from __future__ import annotations
 
+import logging
+
 import httpx
+
+logger = logging.getLogger(__name__)
 
 # Shared long-lived client — avoids creating a new TCP connection on every request
 _CLIENT = httpx.AsyncClient(timeout=20.0)
@@ -30,19 +34,16 @@ out body;
         'https://overpass.private.coffee/api/interpreter',
     ]
 
-    last_error: str = ''
     for endpoint in endpoints:
         try:
             r = await _CLIENT.post(endpoint, data={'data': query})
 
             # Rate limit — try next mirror
             if r.status_code in (406, 429, 503):
-                last_error = f'Rate limited by {endpoint} (HTTP {r.status_code})'
                 continue
 
             # Any other HTTP error
             if r.status_code >= 400:
-                last_error = f'HTTP {r.status_code} from {endpoint}'
                 continue
 
             elements = r.json().get('elements', [])

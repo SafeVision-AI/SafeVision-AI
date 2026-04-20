@@ -20,16 +20,6 @@ from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_
 
 logger = logging.getLogger(__name__)
 
-# Languages that should auto-route to Sarvam
-INDIAN_LANGUAGE_CODES = {
-    'hi', 'ta', 'te', 'kn', 'ml', 'mr', 'gu', 'bn',
-    'pa', 'or', 'as', 'ur', 'sa', 'mai', 'kok', 'doi',
-    'ks', 'sd', 'ne', 'si', 'mni', 'brx',
-}
-
-# High-stakes intents → use Sarvam-105B (larger, more accurate for legal)
-HIGH_STAKES_INTENTS = {'LEGAL_INFO', 'CHALLAN_QUERY', 'MV_ACT_SECTION'}
-
 # Sarvam Direct API base URL
 SARVAM_DIRECT_BASE = "https://api.sarvam.ai/v1"
 # HuggingFace Inference API base URL (fallback)
@@ -72,7 +62,6 @@ class SarvamProvider(HttpProvider):
         if self._use_direct_api():
             return f"{SARVAM_DIRECT_BASE}/chat/completions"
         # HuggingFace Inference API — OpenAI-compatible endpoint
-        model = self.default_model()
         return f"https://api-inference.huggingface.co/v1/chat/completions"
 
     def api_key_env(self) -> str:
@@ -87,6 +76,7 @@ class SarvamProvider(HttpProvider):
     async def generate(self, request: ProviderRequest) -> ProviderResult:
         """Call Sarvam direct API or HuggingFace inference endpoint."""
         api_key = self._get_api_key()
+        model = self.default_model()
 
         headers = {
             "Authorization": f"Bearer {api_key}",
