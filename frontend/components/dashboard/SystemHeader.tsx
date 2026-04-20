@@ -45,8 +45,7 @@ const SystemHeader = memo(function SystemHeader({
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
-      // Implement actual search navigation later
+      // TODO: implement search navigation
     }
   };
 

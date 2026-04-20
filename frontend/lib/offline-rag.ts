@@ -20,7 +20,6 @@ export interface LawDoc {
  * In production, this uses HNSWlib-wasm for true similarity search.
  */
 export async function searchLocalLawIndex(query: string): Promise<LawDoc[]> {
-  console.log('Searching Offline RAG index (Local Index DB)...');
   
   // Simulate latency
   await new Promise(r => setTimeout(r, 600));

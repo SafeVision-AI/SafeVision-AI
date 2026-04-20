@@ -150,8 +150,7 @@ function PureMicButton({ disabled }: { disabled?: boolean }) {
       onClick={(event) => {
         event.preventDefault();
         setIsActive(!isActive);
-        // Stub for Web Speech API
-        console.log(isActive ? 'Web Speech API stub: Stopped recording' : 'Web Speech API stub: Started recording');
+        // Web Speech API integration pending
       }}
       disabled={disabled}
       aria-label="Use microphone"
@@ -346,9 +345,6 @@ export function PureMultimodalInput({
   // Placeholder File Upload Function
   const uploadFile = async (file: File): Promise<Attachment | undefined> => {
     return new Promise((resolve) => {
-      // Stub for File Upload
-      console.log('File upload stub: Uploading', file.name, file.size, 'bytes');
-
       setTimeout(() => {
         try {
           const mockUrl = URL.createObjectURL(file);

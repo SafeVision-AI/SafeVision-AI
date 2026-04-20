@@ -390,6 +390,7 @@ export function MapLibreCanvas({
 
     let disposed = false;
     let map: maplibregl.Map | null = null;
+    let stopLocationTracking: (() => void) | null = null;
 
     async function initializeMap() {
       setStatus('loading');
@@ -510,7 +511,7 @@ export function MapLibreCanvas({
         if (map) {
           addTrafficLayer(map);
           toggleTrafficLayer(map, showTraffic);
-          startLocationTracking(map);
+          stopLocationTracking = startLocationTracking(map);
         }
       });
       map.on('idle', syncReadyState);
@@ -546,6 +547,7 @@ export function MapLibreCanvas({
 
     return () => {
       disposed = true;
+      stopLocationTracking?.();   // clear geolocation.watchPosition
       map?.remove();
       markerRefs.current.forEach((marker) => marker.remove());
       markerRefs.current = [];

@@ -8,11 +8,23 @@ interface FirstAidCardProps {
   steps: string[];
 }
 
+/** Converts **bold** markers to React <strong> elements — no dangerouslySetInnerHTML. */
+function renderStep(step: string): ReactNode {
+  const parts = step.split(/\*\*(.*?)\*\*/g);
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} style={{ color: 'var(--text-primary)' }}>{part}</strong>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+}
+
 export function FirstAidCard({ title, icon, steps }: FirstAidCardProps) {
   return (
-    <div 
+    <div
       className="card-glass"
-      style={{ 
+      style={{
         position: 'relative',
         padding: '1.5rem',
         background: 'var(--surface-container-low)',
@@ -22,11 +34,11 @@ export function FirstAidCard({ title, icon, steps }: FirstAidCardProps) {
         display: 'flex',
         flexDirection: 'column',
         gap: '1rem',
-        overflow: 'hidden'
+        overflow: 'hidden',
       }}
     >
       {/* Accent Glow */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           top: '-20px',
@@ -35,42 +47,70 @@ export function FirstAidCard({ title, icon, steps }: FirstAidCardProps) {
           height: '100px',
           background: 'radial-gradient(circle, var(--accent-red) 0%, transparent 70%)',
           opacity: 0.15,
-          pointerEvents: 'none'
+          pointerEvents: 'none',
         }}
       />
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ fontSize: '2rem', padding: '0.5rem', background: 'var(--surface-container-lowest)', borderRadius: '12px' }}>
+          <div
+            style={{
+              fontSize: '2rem',
+              padding: '0.5rem',
+              background: 'var(--surface-container-lowest)',
+              borderRadius: '12px',
+            }}
+          >
             {icon}
           </div>
           <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             {title}
           </h3>
         </div>
-        
+
         {/* Offline Badge */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '4px',
-          padding: '4px 8px',
-          background: 'var(--surface-container-highest)',
-          borderRadius: '12px',
-          border: '1px solid rgba(83, 225, 111, 0.2)'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '4px 8px',
+            background: 'var(--surface-container-highest)',
+            borderRadius: '12px',
+            border: '1px solid rgba(83, 225, 111, 0.2)',
+          }}
+        >
           <span className="conn-dot" style={{ background: 'var(--accent-green)', width: '6px', height: '6px' }} />
-          <span style={{ fontSize: '0.625rem', fontWeight: 600, color: 'var(--accent-green)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          <span
+            style={{
+              fontSize: '0.625rem',
+              fontWeight: 600,
+              color: 'var(--accent-green)',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+            }}
+          >
             Offline
           </span>
         </div>
       </div>
 
       <div style={{ marginTop: '0.5rem' }}>
-        <ol style={{ margin: 0, paddingLeft: '1.25rem', color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.6, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <ol
+          style={{
+            margin: 0,
+            paddingLeft: '1.25rem',
+            color: 'var(--text-secondary)',
+            fontSize: '0.875rem',
+            lineHeight: 1.6,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
+          }}
+        >
           {steps.map((step, idx) => (
             <li key={idx} style={{ paddingLeft: '0.5rem' }}>
-              <span dangerouslySetInnerHTML={{ __html: step.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--text-primary)">$1</strong>') }} />
+              {renderStep(step)}
             </li>
           ))}
         </ol>

@@ -91,10 +91,27 @@ export default function EmergencyPage() {
     }
   };
 
+  const [dispatchState, setDispatchState] = useState<'idle' | 'dispatching' | 'dispatched' | 'failed'>('idle');
+
   const cancelDispatch = () => {
     setActivated(false);
     setHoldProgress(0);
+    setDispatchState('idle');
   };
+
+  // Fire backend SOS call on activation
+  useEffect(() => {
+    if (!activated) return;
+    if (!isOnline || !coords) return; // offline → user uses share links below
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+    setDispatchState('dispatching');
+    fetch(`${API_URL}/api/v1/emergency/sos?lat=${coords.lat}&lon=${coords.lng}`)
+      .then(r => {
+        setDispatchState(r.ok ? 'dispatched' : 'failed');
+      })
+      .catch(() => setDispatchState('failed'));
+  }, [activated, coords, isOnline]);
 
   useEffect(() => {
     const gpsLoc = coords ? { lat: coords.lat, lon: coords.lng, accuracy: 10, timestamp: Date.now() } : null;
@@ -159,8 +176,25 @@ export default function EmergencyPage() {
           <div className="text-center min-h-[80px]">
             {activated ? (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-                <span className="text-emerald-600 dark:text-[#53e16f] font-black tracking-[0.2em] uppercase text-xs">Emergency Declared</span>
-                <p className="text-emerald-700/80 dark:text-[#e4bebc] text-xs mt-1 font-medium">Services have been notified of your location.</p>
+                {dispatchState === 'dispatching' && (
+                  <span className="text-yellow-500 font-black tracking-[0.2em] uppercase text-xs flex items-center justify-center gap-2">
+                    <Loader2 size={14} className="animate-spin" /> Contacting Emergency Services...
+                  </span>
+                )}
+                {dispatchState === 'dispatched' && (
+                  <>
+                    <span className="text-emerald-600 dark:text-[#53e16f] font-black tracking-[0.2em] uppercase text-xs">Emergency Declared</span>
+                    <p className="text-emerald-700/80 dark:text-[#e4bebc] text-xs mt-1 font-medium">Nearest emergency services located. Use share links below to send your exact location.</p>
+                  </>
+                )}
+                {(dispatchState === 'failed' || dispatchState === 'idle') && (
+                  <>
+                    <span className="text-orange-500 font-black tracking-[0.2em] uppercase text-xs">SOS Activated — Use Share Links</span>
+                    <p className="text-slate-500 dark:text-[#e4bebc] text-xs mt-1 font-medium">
+                      {!isOnline ? 'Offline mode — share your location via WhatsApp or SMS below.' : 'Backend unreachable — share your location manually using the links below.'}
+                    </p>
+                  </>
+                )}
                 <button onClick={cancelDispatch} className="mt-4 px-5 py-2 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white rounded-full font-bold uppercase text-[10px] tracking-wider hover:bg-slate-300 dark:hover:bg-white/20 transition-colors">
                   Cancel Dispatch
                 </button>

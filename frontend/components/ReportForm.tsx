@@ -50,13 +50,15 @@ const ReportForm: React.FC = () => {
       if (connectivity === 'online') {
         await submitReport(payload);
       } else {
-        // Offline simulation logic preserved
-        console.log('Saved to offline buffer', payload);
-        await new Promise(r => setTimeout(r, 1000));
+        // Save to offline queue in localStorage — synced when connectivity returns
+        const existing = JSON.parse(localStorage.getItem('roadsos_offline_queue') ?? '[]');
+        existing.push({ ...payload, savedAt: new Date().toISOString() });
+        localStorage.setItem('roadsos_offline_queue', JSON.stringify(existing));
+        await new Promise(r => setTimeout(r, 500)); // brief UX delay
       }
       setSubmitted(true);
     } catch (err) {
-      console.error('Report failed:', err);
+      toast.error('Failed to submit report. Please try again.');
     } finally {
       setLoading(false);
     }

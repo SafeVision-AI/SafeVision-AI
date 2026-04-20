@@ -9,7 +9,6 @@ export async function initOfflineChallanDB() {
   try {
     // Check if browser
     if (typeof window !== 'undefined') {
-      console.log('Would initialize DuckDB-Wasm for offline challan here');
       isReady = true;
     }
   } catch (err) {
@@ -20,7 +19,6 @@ export async function initOfflineChallanDB() {
 
 export async function calculateOfflineChallan(violationCode: string, vehicleClass: string, isRepeat: boolean) {
   // Simulated offline database lookup against DuckDB
-  console.log('Querying offline duckdb for', violationCode, vehicleClass);
   
   const db = {
     '177': { base: 100, repeat: 300, desc: 'General Provision', section: '177' },
