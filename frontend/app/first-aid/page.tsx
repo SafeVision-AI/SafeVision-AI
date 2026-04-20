@@ -1,22 +1,17 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   HeartPulse, Activity, Flame, Bone, Droplets, 
-  Search, Play, ArrowLeft, X, CheckCircle2, 
+  Search, ArrowLeft, X, CheckCircle2, 
   Phone, Clock, AlertTriangle, ShieldAlert,
-  ChevronRight, ChevronLeft, Menu, Camera,
-  Globe, CameraOff, Mic, Sun, Moon, ShieldCheck
+  ChevronRight, Camera, Globe, CameraOff,
 } from 'lucide-react';
-import { useTheme } from '@/components/ThemeProvider';
 import TopSearch from '@/components/dashboard/TopSearch';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
-import { useAppStore } from '@/lib/store';
 
 interface Message {
   id: string;
@@ -209,9 +204,6 @@ export default function FirstAidPage() {
   const [emergencyMode, setEmergencyMode] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
-  const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
-  const { theme, setTheme } = useTheme();
-
   const [isScanning, setIsScanning] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const modalScrollRef = useRef<HTMLDivElement>(null);

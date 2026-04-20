@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-  User, Shield, CheckCircle, Activity, 
-  Droplet, Car, Globe, Bell, 
-  CloudOff, Zap, ShieldAlert, Award,
-  ArrowRight, Heart, Star, Edit3, Save, X
+  User, Shield, CheckCircle, 
+  Car,
+  CloudOff, ShieldAlert, Award,
+  Heart, Star, Edit3, Save, X, Bell
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import BottomNav from '@/components/dashboard/BottomNav';

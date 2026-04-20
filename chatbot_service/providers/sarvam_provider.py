@@ -32,11 +32,6 @@ from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_
 
 logger = logging.getLogger(__name__)
 
-# Sarvam Direct API base URL
-SARVAM_DIRECT_BASE = "https://api.sarvam.ai/v1"
-# HuggingFace Inference API base URL (fallback)
-HF_INFERENCE_BASE = "https://api-inference.huggingface.co/models"
-
 _MAX_TOKENS = 800
 _TEMPERATURE = 0.5
 

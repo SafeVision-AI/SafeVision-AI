@@ -14,7 +14,6 @@ import {
   User,
   Settings,
   Phone,
-  ChevronRight
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import Link from 'next/link';

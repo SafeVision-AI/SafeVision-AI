@@ -1,6 +1,7 @@
 violation_code,section,description,base_fine,base_fine_2w,base_fine_4w,base_fine_htv,base_fine_bus,repeat_fine,repeat_fine_2w,repeat_fine_4w,repeat_fine_htv,repeat_fine_bus,aliases
 177,Section 177,General traffic rule violation where no specific penalty is prescribed,500,,,,,1500,,,,,
 177A,Section 177A,Violation of road regulations or road markings,500,,,,,1000,,,,,
+178,Section 178,Traveling without valid ticket or pass on public transport,500,,,,,500,,,,,
 179,Section 179,Disobedience of lawful direction or refusal to share required information,2000,,,,,2000,,,,,
 180,Sections 5/180,Allowing an unauthorised or unlicensed person to drive,5000,,,,,5000,,,,,
 181,Sections 3/181,Driving without a valid driving licence,5000,,,,,5000,,,,,

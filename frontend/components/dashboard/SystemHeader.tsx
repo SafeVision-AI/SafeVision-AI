@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { ArrowLeft, Search, Mic, Sun, Moon, Monitor, Menu, ShieldCheck } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
-import { motion } from 'motion/react';
 
 interface SystemHeaderProps {
   title?: string;

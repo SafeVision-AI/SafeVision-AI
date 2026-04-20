@@ -1175,11 +1175,14 @@ export function MapLibreCanvas({
     if (!mapRef.current || !mapRef.current.isStyleLoaded() || !currentLocation) return;
     
     if (showSafeSpaces) {
-      addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch((err) => {
-        console.error(err);
-        setStatus('error');
-        setStatusMessage('Failed to load safe spaces overlay. Please try again later.');
-      });
+      // Only add the layer if it doesn't already exist (prevents duplicate on re-render)
+      if (!mapRef.current.getLayer('safe-spaces-circles')) {
+        addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch((err) => {
+          console.error(err);
+          setStatus('error');
+          setStatusMessage('Failed to load safe spaces overlay. Please try again later.');
+        });
+      }
     }
   }, [showSafeSpaces, currentLocation, styleRevision]);
 
