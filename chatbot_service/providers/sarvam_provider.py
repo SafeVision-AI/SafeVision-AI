@@ -32,6 +32,11 @@ from providers.base import HttpProvider, ProviderRequest, ProviderResult, build_
 
 logger = logging.getLogger(__name__)
 
+# Primary: Sarvam Direct API (use when SARVAM_API_KEY is set — 100 free credits)
+SARVAM_DIRECT_BASE = "https://api.sarvam.ai/v1"
+# Fallback: HuggingFace OpenAI-compatible Inference API (used when Sarvam credits exhausted or key missing)
+HF_INFERENCE_BASE = "https://api-inference.huggingface.co/v1"
+
 _MAX_TOKENS = 800
 _TEMPERATURE = 0.5
 
@@ -40,8 +45,8 @@ class SarvamProvider(HttpProvider):
     """Sarvam-2B via Direct API (primary) → HuggingFace (fallback).
 
     Priority:
-      1. If SARVAM_API_KEY is set → use api.sarvam.ai directly (fastest)
-      2. Otherwise → use HF_TOKEN via api-inference.huggingface.co (free, works now)
+      1. If SARVAM_API_KEY is set → use api.sarvam.ai directly (fastest, 100 free credits)
+      2. Otherwise → use HF_TOKEN via api-inference.huggingface.co (free, OpenAI-compatible)
     """
 
     name = "sarvam"
@@ -68,8 +73,8 @@ class SarvamProvider(HttpProvider):
     def base_url(self) -> str:
         if self._use_direct_api():
             return f"{SARVAM_DIRECT_BASE}/chat/completions"
-        # HuggingFace Inference API — OpenAI-compatible endpoint
-        return "https://api-inference.huggingface.co/v1/chat/completions"
+        # HuggingFace fallback — OpenAI-compatible endpoint (activates when Sarvam credits exhausted)
+        return f"{HF_INFERENCE_BASE}/chat/completions"
 
     def api_key_env(self) -> str:
         return "SARVAM_API_KEY" if self._use_direct_api() else "HF_TOKEN"
