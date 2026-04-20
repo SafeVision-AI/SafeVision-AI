@@ -191,4 +191,4 @@ if __name__ == "__main__":
     print(f"\n[OK] Manifest written: {manifest_path.relative_to(ROOT)}")
     print(f"     Contains {len(sources)} source(s)")
     print("\nNow run:")
-    print(f"  python scripts/import_official_road_sources.py --manifest scripts/road_sources.json")
+    print("  python scripts/import_official_road_sources.py --manifest scripts/road_sources.json")

@@ -17,7 +17,7 @@ import { Loader2 as LoaderIcon, X as XIcon, Mic, Send } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
-const clsx = (...args: any[]) => args.filter(Boolean).join(' ');
+const clsx = (...args: unknown[]) => args.filter(Boolean).join(' ');
 
 // Type Definitions
 export interface Attachment {
@@ -37,8 +37,8 @@ export interface UIMessage {
 export type VisibilityType = 'public' | 'private' | 'unlisted' | string;
 
 // Utility Functions
-const cn = (...inputs: any[]) => {
-  return twMerge(clsx(inputs));
+const cn = (...inputs: unknown[]) => {
+  return twMerge(clsx(...inputs));
 };
 
 // Button variants using cva (Integrated with SafeVisionAI UI look)
@@ -207,7 +207,7 @@ function PureSendButton({
       onClick={(event) => {
         event.preventDefault();
         if (!isDisabled) {
-          try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { }
+          try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { console.error('Vibration failed:', e); }
           submitForm();
         }
       }}

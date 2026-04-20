@@ -62,7 +62,7 @@ class SarvamProvider(HttpProvider):
         if self._use_direct_api():
             return f"{SARVAM_DIRECT_BASE}/chat/completions"
         # HuggingFace Inference API — OpenAI-compatible endpoint
-        return f"https://api-inference.huggingface.co/v1/chat/completions"
+        return "https://api-inference.huggingface.co/v1/chat/completions"
 
     def api_key_env(self) -> str:
         return "SARVAM_API_KEY" if self._use_direct_api() else "HF_TOKEN"
@@ -106,7 +106,7 @@ class SarvamProvider(HttpProvider):
 
 class Sarvam105BProvider(SarvamProvider):
     """Sarvam-105B — legal queries in Indian languages.
-    More accurate but slower than 30B. Activates for HIGH_STAKES_INTENTS.
+    More accurate but slower than 2B. Activates for HIGH_STAKES_INTENTS.
     """
     def __init__(self) -> None:
         super().__init__(model_size="105b")

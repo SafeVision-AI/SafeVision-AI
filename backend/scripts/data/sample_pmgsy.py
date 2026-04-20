@@ -63,4 +63,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     sample(args.limit, args.per_state)
     print("\nDone. Now update scripts/road_sources.json to use:")
-    print(f"  datasets/roads/pmgsy_sampled.geojson")
+    print("  datasets/roads/pmgsy_sampled.geojson")

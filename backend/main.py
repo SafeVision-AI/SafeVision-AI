@@ -54,6 +54,8 @@ def create_app() -> FastAPI:
         try:
             yield
         finally:
+            from services.safe_spaces import close_safe_spaces_client
+            await close_safe_spaces_client()
             await llm_service.aclose()
             await routing_service.aclose()
             await geocoding_service.aclose()

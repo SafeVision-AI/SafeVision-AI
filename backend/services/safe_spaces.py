@@ -11,12 +11,23 @@ logger = logging.getLogger(__name__)
 _CLIENT = httpx.AsyncClient(timeout=20.0)
 
 
+async def close_safe_spaces_client():
+    """Cleanup the global HTTP client on application shutdown."""
+    global _CLIENT
+    if not _CLIENT.is_closed:
+        await _CLIENT.aclose()
+
+
 async def get_safe_spaces(lat: float, lon: float, radius_m: int = 1000) -> dict:
     """
     Returns nearby safe spaces: restaurants, cafes, pharmacies, hospitals, police.
     Uses Overpass API — free, no key, real-time OSM data.
     Falls back to an empty list with a warning if all endpoints are rate-limited.
     """
+    global _CLIENT
+    if _CLIENT.is_closed:
+        _CLIENT = httpx.AsyncClient(timeout=20.0)
+
     query = f"""
 [out:json][timeout:15];
 (
@@ -78,6 +89,6 @@ out body;
         'source': 'openstreetmap',
         'warning': (
             'Safe spaces data temporarily unavailable '
-            f'(Overpass API rate limit). Try again shortly.'
+            '(Overpass API rate limit). Try again shortly.'
         ),
     }

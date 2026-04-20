@@ -82,6 +82,7 @@ function buildFacilityCollection(
           name: facility.name,
           type: facility.type,
           accentColor: facility.accentColor,
+          icon: facility.icon || iconForType(facility.type),
           distance: facility.distance ?? '',
           address: facility.address ?? '',
           phone: facility.phone ?? '',
@@ -1075,7 +1076,26 @@ export function MapLibreCanvas({
           .addTo(map)
       );
     });
-  }, [currentLocation, issues, styleRevision]);
+
+    if (selectedFacilityId) {
+      const selected = liveFacilities.find((f) => f.id === selectedFacilityId);
+      if (selected && selected.coords) {
+        markerRefs.current.push(
+          new maplibregl.Marker({
+            element: buildMarkerElement({
+              color: selected.accentColor,
+              icon: selected.icon || iconForType(selected.type),
+              kind: 'standard',
+              selected: true,
+            }),
+            anchor: 'center',
+          })
+            .setLngLat([selected.coords[1], selected.coords[0]])
+            .addTo(map)
+        );
+      }
+    }
+  }, [currentLocation, issues, styleRevision, liveFacilities, selectedFacilityId]);
 
   useEffect(() => {
     const map = mapRef.current;
