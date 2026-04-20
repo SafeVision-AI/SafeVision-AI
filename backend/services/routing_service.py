@@ -55,52 +55,72 @@ class RoutingService:
         if cached:
             return RoutePreviewResponse.model_validate(cached)
 
-        # Check if TomTom API is available, otherwise fallback to OSRM
         warnings: list[str] = []
-        is_tomtom = bool(self.settings.tomtom_api_key)
+        is_ors = bool(self.settings.openrouteservice_api_key)
 
-        if is_tomtom:
-            url = f'https://api.tomtom.com/routing/1/calculateRoute/{origin_lat},{origin_lon}:{destination_lat},{destination_lon}/json'
-            params = {
-                'key': self.settings.tomtom_api_key,
-                'routeRepresentation': 'polyline',
-                'traffic': 'true',
-                'instructionsType': 'text',
+        if is_ors:
+            # ORS — needs API key, supports alternatives
+            url = (
+                f'{self.settings.openrouteservice_base_url}'
+                f'/v2/directions/{profile}/json'
+            )
+            body: dict = {
+                'coordinates': [
+                    [origin_lon, origin_lat],
+                    [destination_lon, destination_lat],
+                ],
+                'preference': 'recommended',
+                'instructions': True,
             }
             if requested_alternatives > 0:
-                params['maxAlternatives'] = str(requested_alternatives)
+                body['alternative_routes'] = {
+                    'target_count': requested_alternatives,
+                    'weight_factor': 1.4,
+                }
+            try:
+                response = await self._client.post(
+                    url,
+                    json=body,
+                    headers={'Authorization': self.settings.openrouteservice_api_key},
+                )
+            except httpx.HTTPError as exc:
+                raise ExternalServiceError('Unable to reach ORS routing provider.') from exc
         else:
-            url = f'https://router.project-osrm.org/route/v1/driving/{origin_lon},{origin_lat};{destination_lon},{destination_lat}'
-            params = {
+            # OSRM — free, no API key needed
+            warnings.append('Using public OSRM routing (no ORS key configured).')
+            url = (
+                f'https://router.project-osrm.org/route/v1/driving/'
+                f'{origin_lon},{origin_lat};{destination_lon},{destination_lat}'
+            )
+            params: dict = {
                 'overview': 'full',
                 'geometries': 'geojson',
                 'steps': 'true',
             }
             if requested_alternatives > 0:
                 params['alternatives'] = str(requested_alternatives)
+            try:
+                response = await self._client.get(url, params=params)
+            except httpx.HTTPError as exc:
+                raise ExternalServiceError('Unable to reach OSRM routing provider.') from exc
 
-        try:
-            response = await self._client.get(url, params=params)
-        except httpx.HTTPError as exc:
-            raise ExternalServiceError('Unable to reach routing provider right now.') from exc
-
+        data = response.json()
         if response.status_code >= 400:
             raise ExternalServiceError(self._message_from_response(response))
 
-        data = response.json()
-        
+        # ORS wraps routes under 'routes', OSRM under 'routes' too
         routes_data = data.get('routes') or []
         if not routes_data:
             raise ExternalServiceError('Routing provider returned no route.')
 
-        if is_tomtom:
-            routes = [self._normalize_tomtom_route(r, index=idx) for idx, r in enumerate(routes_data, start=1)]
+        if is_ors:
+            routes = [self._normalize_ors_route(r, index=idx) for idx, r in enumerate(routes_data, start=1)]
         else:
             routes = [self._normalize_osrm_route(r, index=idx) for idx, r in enumerate(routes_data, start=1)]
-            
+
         selected_route = routes[0]
         route = RoutePreviewResponse(
-            provider='tomtom' if is_tomtom else 'osrm',
+            provider='ors' if is_ors else 'osrm',
             profile=profile,
             distance_meters=selected_route.distance_meters,
             duration_seconds=selected_route.duration_seconds,
@@ -195,17 +215,99 @@ class RoutingService:
             steps=steps,
         )
 
-    def _normalize_osrm_route(self, route_data: dict[str, Any], *, index: int) -> RouteOption:
-        geometry = route_data.get('geometry') or {}
-        coordinates = geometry.get('coordinates') or []
-        if not coordinates:
-            raise ExternalServiceError('Routing provider returned an incomplete route path.')
+    @staticmethod
+    def _decode_polyline(encoded: str, precision: int = 5) -> list[tuple[float, float]]:
+        """Decode a Google-encoded polyline string into (lat, lon) tuples."""
+        factor = 10 ** precision
+        result: list[tuple[float, float]] = []
+        index = lat = lng = 0
+        while index < len(encoded):
+            for is_lng in (False, True):
+                shift = result_val = 0
+                while True:
+                    b = ord(encoded[index]) - 63
+                    index += 1
+                    result_val |= (b & 0x1F) << shift
+                    shift += 5
+                    if b < 0x20:
+                        break
+                delta = ~(result_val >> 1) if result_val & 1 else result_val >> 1
+                if is_lng:
+                    lng += delta
+                else:
+                    lat += delta
+            result.append((lat / factor, lng / factor))
+        return result
 
-        path = [
-            RoutePoint(lat=float(coord[1]), lon=float(coord[0]))
-            for coord in coordinates
-            if isinstance(coord, list) and len(coord) >= 2
-        ]
+    def _normalize_ors_route(self, route_data: dict[str, Any], *, index: int) -> RouteOption:
+        """Normalize an ORS /v2/directions/json route object."""
+        geometry = route_data.get('geometry', '')
+        path: list[RoutePoint] = []
+
+        if isinstance(geometry, str) and geometry:
+            for lat, lon in self._decode_polyline(geometry):
+                try:
+                    path.append(RoutePoint(lat=lat, lon=lon))
+                except (TypeError, ValueError):
+                    continue
+        elif isinstance(geometry, dict):
+            for coord in geometry.get('coordinates') or []:
+                try:
+                    path.append(RoutePoint(lat=float(coord[1]), lon=float(coord[0])))
+                except (TypeError, IndexError, ValueError):
+                    continue
+
+        if len(path) < 2:
+            raise ExternalServiceError('ORS returned invalid route geometry.')
+
+        summary = route_data.get('summary') or {}
+        steps: list[RouteInstruction] = []
+        for seg in route_data.get('segments') or []:
+            for step_index, step in enumerate(seg.get('steps') or [], start=len(steps) + 1):
+                steps.append(
+                    RouteInstruction(
+                        index=step_index,
+                        instruction=str(step.get('instruction') or 'Continue'),
+                        distance_meters=float(step.get('distance') or 0.0),
+                        duration_seconds=float(step.get('duration') or 0.0),
+                        street_name=step.get('name') or None,
+                    )
+                )
+
+        label = 'Primary route' if index == 1 else f'Alternative {index - 1}'
+        return RouteOption(
+            route_id=f'route-{index}',
+            label=label,
+            distance_meters=float(summary.get('distance') or 0.0),
+            duration_seconds=float(summary.get('duration') or 0.0),
+            path=path,
+            bounds=self._build_bounds(path),
+            steps=steps,
+        )
+
+    def _normalize_osrm_route(self, route_data: dict[str, Any], *, index: int) -> RouteOption:
+        geometry = route_data.get('geometry')
+        path: list[RoutePoint] = []
+
+        # Primary: GeoJSON geometry dict with [lon, lat] coordinate pairs
+        if isinstance(geometry, dict):
+            for coord in geometry.get('coordinates') or []:
+                try:
+                    path.append(RoutePoint(lat=float(coord[1]), lon=float(coord[0])))
+                except (TypeError, IndexError, ValueError):
+                    continue
+
+        # Fallback: encoded polyline string — extract points from step maneuver locations
+        if len(path) < 2:
+            for leg in route_data.get('legs') or []:
+                for step in leg.get('steps') or []:
+                    loc = (step.get('maneuver') or {}).get('location')
+                    if loc and len(loc) >= 2:
+                        try:
+                            path.append(RoutePoint(lat=float(loc[1]), lon=float(loc[0])))
+                        except (TypeError, ValueError):
+                            continue
+
         if len(path) < 2:
             raise ExternalServiceError('Routing provider returned invalid path coordinates.')
 
