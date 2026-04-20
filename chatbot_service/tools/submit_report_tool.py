@@ -62,6 +62,10 @@ class SubmitReportTool:
             payload['latitude'] = lat
             payload['longitude'] = lon
 
+        # Guard: truncate description if it somehow contains an oversized encoded blob
+        if len(payload.get('description', '')) > _MAX_B64_PHOTO_LEN:
+            payload['description'] = payload['description'][:_MAX_B64_PHOTO_LEN]
+
         try:
             resp = await self._get_client().post(
                 f'{self._base_url}/api/v1/roads/report',

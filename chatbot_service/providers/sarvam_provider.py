@@ -21,6 +21,9 @@ HIGH_STAKES_INTENTS = {
     'LEGAL_ADVICE', 'EMERGENCY_REPORT', 'FIR_FILING', 'CHALLAN_DISPUTE'
 }
 
+# Exported symbols — used by providers/router.py for language-based routing decisions
+__all__ = ['INDIAN_LANGUAGE_CODES', 'HIGH_STAKES_INTENTS', 'SarvamProvider', 'Sarvam105BProvider']
+
 import logging
 import os
 
