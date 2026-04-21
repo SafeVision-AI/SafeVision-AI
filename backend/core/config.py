@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
@@ -170,7 +170,10 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     settings = Settings()
-    settings.data_dir.mkdir(parents=True, exist_ok=True)
-    settings.upload_dir.mkdir(parents=True, exist_ok=True)
-    settings.offline_bundle_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        settings.data_dir.mkdir(parents=True, exist_ok=True)
+        settings.upload_dir.mkdir(parents=True, exist_ok=True)
+        settings.offline_bundle_dir.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        pass
     return settings
