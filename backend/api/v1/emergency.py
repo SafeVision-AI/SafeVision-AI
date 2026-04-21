@@ -41,12 +41,30 @@ async def get_nearby_services(
 
 @router.get('/sos', response_model=SosResponse)
 async def get_sos_payload(
+    request: Request,
     lat: float = Query(..., ge=-90, le=90),
     lon: float = Query(..., ge=-180, le=180),
     db: AsyncSession = Depends(get_db),
     emergency_service: EmergencyLocatorService = Depends(get_emergency_service),
 ) -> SosResponse:
     try:
+        from sqlalchemy import text
+        # Ensure table exists
+        await db.execute(text("""
+            CREATE TABLE IF NOT EXISTS sos_incidents (
+                id SERIAL PRIMARY KEY,
+                lat FLOAT NOT NULL,
+                lon FLOAT NOT NULL,
+                user_agent TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """))
+        # Insert incident
+        await db.execute(
+            text("INSERT INTO sos_incidents (lat, lon, user_agent) VALUES (:lat, :lon, :ua)"),
+            {"lat": lat, "lon": lon, "ua": request.headers.get('user-agent', '')[:255]}
+        )
+        await db.commit()
         return await emergency_service.build_sos_payload(db=db, lat=lat, lon=lon)
     except ExternalServiceError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc

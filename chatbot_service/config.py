@@ -109,3 +109,14 @@ def get_settings() -> Settings:
     settings.chroma_persist_dir.mkdir(parents=True, exist_ok=True)
     settings.rag_data_dir.mkdir(parents=True, exist_ok=True)
     return settings
+
+import logging
+
+_settings = get_settings()
+_active_keys = [
+    k for k in ["GROQ_API_KEY", "GOOGLE_API_KEY", "OPENROUTER_API_KEY", "HF_TOKEN", "MISTRAL_API_KEY", "SARVAM_API_KEY", "NVIDIA_NIM_API_KEY", "CEREBRAS_API_KEY"]
+    if os.getenv(k)
+]
+if not _active_keys:
+    raise RuntimeError("FATAL: No real LLM provider configured. Set at least one API key (e.g. GROQ_API_KEY, GOOGLE_API_KEY).")
+logging.getLogger(__name__).info(f"Active LLM keys found: {len(_active_keys)}")

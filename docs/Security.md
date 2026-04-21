@@ -15,18 +15,8 @@ SafeVisionAI handles sensitive user data (GPS location, blood group, emergency c
 - Supabase service role key used only on backend (never exposed to browser)
 
 ### Supabase Row Level Security (RLS)
-```sql
--- Users can only read their own road issue reports
-ALTER TABLE road_issues ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public read for community map"
-ON road_issues FOR SELECT
-USING (status != 'rejected');
-
-CREATE POLICY "Users own their reports"
-ON road_issues FOR INSERT
-WITH CHECK (reporter_id = auth.uid() OR reporter_id IS NULL);
-```
+*(Planned for V2 - Post Hackathon)*
+Row Level Security will be enabled on the database tables to ensure users can only access reports they have submitted. Currently, for the V1 Hackathon MVP, all data access relies on backend API filtering.
 
 ---
 
@@ -87,7 +77,7 @@ RATE_LIMITS = {
 | Chat messages (online) | Yes | Redis (24hr TTL) | Session-only, auto-deleted |
 | Chat messages (offline) | No | Never leaves device | WebLLM runs fully locally |
 | Crash detection events | Anonymised lat/lon only | PostgreSQL crash_events | No user ID, no timestamp precision |
-| Photos (road reports) | Yes | Supabase Storage | User-submitted evidence |
+| Photos (road reports) | Yes | Local/Render Disk | User-submitted evidence (Supabase Storage in V2) |
 
 ### Anonymized Crash Heatmap
 ```python
@@ -146,9 +136,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...   # Anon key only (read-only)
 
 ### Photo Upload Safety
 - Filetype validated by MIME type AND file extension
-- Image resized server-side before storing (prevents polyglot attacks)
-- Supabase Storage serves from CDN  isolated from application server
-- Virus scanning: TODO for production (not required for hackathon)
+- *(Planned V2)* Image resized server-side before storing (prevents polyglot attacks)
+- *(Planned V2)* Supabase Storage serves from CDN  isolated from application server
+- *(Planned V2)* Virus scanning: TODO for production
 
 ### AI Output Safety
 ```python

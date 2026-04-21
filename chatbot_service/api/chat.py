@@ -16,11 +16,17 @@ from agent.state import ChatRequest, ChatResponse
 router = APIRouter(prefix='/api/v1/chat', tags=['Chat'])
 
 
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+limiter = Limiter(key_func=get_remote_address)
+
+
 def get_engine(request: Request) -> ChatEngine:
     return request.app.state.chat_engine
 
 
 @router.post('/', response_model=ChatResponse)
+@limiter.limit("20/minute")
 async def chat(
     request: Request,
     payload: ChatRequest,
@@ -35,6 +41,7 @@ async def chat(
 
 
 @router.post('/stream')
+@limiter.limit("20/minute")
 async def chat_stream(
     request: Request,
     payload: ChatRequest,

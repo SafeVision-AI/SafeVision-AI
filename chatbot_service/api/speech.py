@@ -26,7 +26,13 @@ async def speech_status(request: Request) -> dict:
     return service.status()
 
 
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+limiter = Limiter(key_func=get_remote_address)
+
+
 @router.post('/translate')
+@limiter.limit("20/minute")
 async def translate_speech(
     request: Request,
     target_language: str | None = Query(default=None),
