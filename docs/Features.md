@@ -1,6 +1,6 @@
-# SafeVisionAI  Features Specification
+# SafeVixAI  Features Specification
 
-## Module 1: Emergency Locator (SafeVisionAI Core)
+## Module 1: Emergency Locator (SafeVixAI Core)
 
 ### F1.1  GPS Auto-Detection
 - Uses `navigator.geolocation.getCurrentPosition` with `enableHighAccuracy: true`

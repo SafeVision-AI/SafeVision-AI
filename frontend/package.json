@@ -1,7 +1,7 @@
 {
-  "name": "safevisionai-frontend",
+  "name": "safevixai-frontend",
   "version": "1.0.0",
-  "description": "SafeVisionAI - AI Emergency Navigator PWA (IIT Madras Road Safety Hackathon 2026)",
+  "description": "SafeVixAI - AI Emergency Navigator PWA (IIT Madras Road Safety Hackathon 2026)",
   "private": true,
   "scripts": {
     "dev": "next dev",

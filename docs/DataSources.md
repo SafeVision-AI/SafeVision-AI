@@ -1,8 +1,8 @@
-# SafeVisionAI  Data Sources
+# SafeVixAI  Data Sources
 
 ## Overview
 
-All data sources used in SafeVisionAI are free and open. This document lists every data source, its URL, how to access it, and what it's used for.
+All data sources used in SafeVixAI are free and open. This document lists every data source, its URL, how to access it, and what it's used for.
 
 ---
 
@@ -24,7 +24,7 @@ All data sources used in SafeVisionAI are free and open. This document lists eve
 - **URL**: `https://overpass-api.de/api/interpreter`
 - **Authentication**: None (fair use)
 - **Rate limit**: ~1 request/second
-- **Use in SafeVisionAI**: Live queries for emergency service locations worldwide
+- **Use in SafeVixAI**: Live queries for emergency service locations worldwide
 - **Data**: Hospitals, police stations, ambulance stations, petrol pumps, pharmacies, ATMs
 
 ```
@@ -41,10 +41,10 @@ out body center;
 - **URL**: `https://nominatim.openstreetmap.org`
 - **Authentication**: None (User-Agent header required)
 - **Rate limit**: 1 request/second strictly enforced
-- **Use in SafeVisionAI**: GPS coordinates  city/state name, address  coordinates
+- **Use in SafeVixAI**: GPS coordinates  city/state name, address  coordinates
 
 ```
-# Required header: User-Agent: SafeVisionAI/1.0 (hackathon@rbg.iitm.ac.in)
+# Required header: User-Agent: SafeVixAI/1.0 (hackathon@rbg.iitm.ac.in)
 # Reverse: GET /reverse?lat=13.0827&lon=80.2707&format=json&addressdetails=1
 # Forward: GET /search?q=Apollo+Hospital+Chennai&format=json&limit=1
 ```
@@ -53,7 +53,7 @@ out body center;
 - **URL**: `https://api.groq.com/openai/v1`
 - **Authentication**: API key (gsk_...) from [console.groq.com](https://console.groq.com)
 - **Rate limit**: 6,000 tokens/minute free tier
-- **Use in SafeVisionAI**: Online AI chatbot — llama3-70b-8192 model
+- **Use in SafeVixAI**: Online AI chatbot — llama3-70b-8192 model
 
 ### Overpass Turbo (Testing Only)
 - **URL**: [overpass-turbo.eu](https://overpass-turbo.eu)
@@ -66,7 +66,7 @@ out body center;
 ### data.gov.in
 - **URL**: [api.data.gov.in](https://api.data.gov.in)
 - **Authentication**: Free API key after registration at [data.gov.in](https://data.gov.in)
-- **Use in SafeVisionAI**: NHAI road project data (contractor names, budgets, construction dates)
+- **Use in SafeVixAI**: NHAI road project data (contractor names, budgets, construction dates)
 - **Key datasets**:
   - NHAI National Highway Projects
   - Accident data by state and district
@@ -75,12 +75,12 @@ out body center;
 ### PMGSY OMMAS
 - **URL**: [ommas.nic.in](https://ommas.nic.in)
 - **Authentication**: Public portal, no API  scrape or use exported data
-- **Use in SafeVisionAI**: Rural road infrastructure data (contractor, exec engineer, budget)
+- **Use in SafeVixAI**: Rural road infrastructure data (contractor, exec engineer, budget)
 
 ### National Health Facility Registry
 - **URL**: [healthfacilities.in](https://healthfacilities.in)
 - **Authentication**: Public API available
-- **Use in SafeVisionAI**: Government hospital locations, contact numbers, specializations
+- **Use in SafeVixAI**: Government hospital locations, contact numbers, specializations
 
 ---
 

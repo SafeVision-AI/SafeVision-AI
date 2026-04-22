@@ -1,6 +1,6 @@
 # Dataset Placement
 
-This file is the project-wide placement guide for every dataset, legal corpus file, and offline data asset mentioned in the RoadSoS data and chatbot documents.
+This file is the project-wide placement guide for every dataset, legal corpus file, and offline data asset mentioned in the SafeVixAI data and chatbot documents.
 
 Use this file when downloading or copying resources into the repo.
 

@@ -1,6 +1,6 @@
 # Agent Specialization Overview
 
-The SafeVisionAI Chatbot operates as a unified interface but adapts its persona and tools dynamically according to the user's current context: Emergency (RoadSoS), Legal (DriveLegal), or Infrastructure (RoadWatch).
+The SafeVixAI Chatbot operates as a unified interface but adapts its persona and tools dynamically according to the user's current context: Emergency (SafeVixAI), Legal (DriveLegal), or Infrastructure (RoadWatch).
 
 ## Unified Agent Interface
 - **Brain**: Driven by the **ProviderRouter** — 11 LLM providers with automatic fallback.
@@ -10,7 +10,7 @@ The SafeVisionAI Chatbot operates as a unified interface but adapts its persona 
 
 ## Specialized Agent Personas
 
-### 1. RoadSoS — Emergency Navigator
+### 1. SafeVixAI — Emergency Navigator
 Focused on critical life-saving tasks. It prioritizes nearby service location and first-aid instructions.
 - **Key Tools**: `SosTool`, `FirstAidTool`, `WeatherTool`.
 - **Knowledge Base**: WHO Trauma Care Guidelines, PostGIS emergency data.
@@ -32,8 +32,8 @@ The chatbot dynamically switches personas using a rule-based `IntentDetector` (`
 
 | Intent | Persona |
 |--------|---------|
-| `FIND_HOSPITAL`, `FIND_AMBULANCE`, `FIND_POLICE`, `FIND_TOW` | RoadSoS |
-| `FIRST_AID_INFO` | RoadSoS |
+| `FIND_HOSPITAL`, `FIND_AMBULANCE`, `FIND_POLICE`, `FIND_TOW` | SafeVixAI |
+| `FIRST_AID_INFO` | SafeVixAI |
 | `CHALLAN_QUERY`, `LEGAL_INFO` | DriveLegal |
 | `ROAD_REPORT` | RoadWatch |
 | `OTHER` | General Assistant |

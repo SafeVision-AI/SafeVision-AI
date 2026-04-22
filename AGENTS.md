@@ -1,4 +1,4 @@
-# AGENTS.md — SafeVisionAI
+# AGENTS.md — SafeVixAI
 
 > Compact instruction file for AI coding agents (OpenCode, Copilot, Cursor, etc.).
 > Every section answers: "Would an agent likely get this wrong without help?"
@@ -7,7 +7,7 @@
 
 ## Identity
 
-**SafeVisionAI** is a full-stack, AI-powered road safety PWA for the IIT Madras Road Safety Hackathon 2026.
+**SafeVixAI** is a full-stack, AI-powered road safety PWA for the IIT Madras Road Safety Hackathon 2026.
 Solves 3 problem statements: Emergency Locator, AI Chatbot (traffic law + first aid), Challan Calculator, and Road Reporter.
 Total infra cost: ₹0. All free/open-source.
 
@@ -58,7 +58,7 @@ Verify: `GET http://localhost:8000/health` and `GET http://localhost:8010/health
 ## Repository Map
 
 ```
-SafeVisionAI/
+SafeVixAI/
 ├── backend/                 FastAPI :8000
 │   ├── main.py              App factory (create_app → lifespan → services)
 │   ├── api/v1/              7 route modules (emergency, chat, challan, roadwatch, geocode, routing, offline)
@@ -383,7 +383,7 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 | Delete `chatbot_service/data/chroma_db/` | Never delete — committed for Render deployment |
 | Test PWA offline with `npm run dev` | Use `npm run build && npm start` for Service Worker |
 | Mix backend and chatbot `.venv` | They are separate apps with separate virtual environments |
-| Call Nominatim without User-Agent | Always set `User-Agent: SafeVisionAI/1.0` header |
+| Call Nominatim without User-Agent | Always set `User-Agent: SafeVixAI/1.0` header |
 | Hardcode API keys | All secrets go in `.env` files (gitignored) |
 | Skip 112 prompt for injury queries | Safety rule: always prepend "Call 112 immediately" |
 | Assume chatbot port is 8001 | Actual port is **8010** (check `config.py`) |

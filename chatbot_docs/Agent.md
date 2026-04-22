@@ -1,6 +1,6 @@
-# SafeVisionAI Chatbot — Agent Documentation
+# SafeVixAI Chatbot — Agent Documentation
 
-The SafeVisionAI Chatbot is designed as an **Agentic AI Assistant**, moving beyond simple chat interfaces to a system that can take real-world actions in emergencies.
+The SafeVixAI Chatbot is designed as an **Agentic AI Assistant**, moving beyond simple chat interfaces to a system that can take real-world actions in emergencies.
 
 ## Core Architecture: RAG + Agent Tools
 

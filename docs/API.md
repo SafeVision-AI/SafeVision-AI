@@ -1,4 +1,4 @@
-# SafeVisionAI  API Reference
+# SafeVixAI  API Reference
 
 ## Base URLs
 
@@ -6,8 +6,8 @@
 |---|---|
 | Development (Backend) | `http://localhost:8000` |
 | Development (Frontend) | `http://localhost:3000` |
-| Production (Backend) | `https://safevisionai-api.onrender.com` |
-| Production (Frontend) | `https://safevisionai.vercel.app` |
+| Production (Backend) | `https://safevixai-api.onrender.com` |
+| Production (Frontend) | `https://safevixai.vercel.app` |
 
 Auto-generated Swagger docs available at: `{BASE_URL}/docs`
 

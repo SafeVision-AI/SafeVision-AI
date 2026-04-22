@@ -7,18 +7,18 @@ import { PageShell } from '@/components/PageShell';
 
 
 export const metadata: Metadata = {
-  title: 'SafeVisionAI - AI-Powered Road Safety',
+  title: 'SafeVixAI - AI-Powered Road Safety',
   description:
     'Find nearest hospitals, police stations and ambulances instantly. AI chatbot for road laws and first aid. Works offline. IIT Madras Road Safety Hackathon 2026.',
   keywords: ['road safety', 'emergency', 'hospital finder', 'traffic laws', 'first aid', 'accident help', 'India'],
-  authors: [{ name: 'SafeVisionAI Team' }],
+  authors: [{ name: 'SafeVixAI Team' }],
   manifest: '/manifest.json',
   appleWebApp: {
     statusBarStyle: 'black-translucent',
-    title: 'SafeVisionAI',
+    title: 'SafeVixAI',
   },
   openGraph: {
-    title: 'SafeVisionAI - AI-Powered Road Safety',
+    title: 'SafeVixAI - AI-Powered Road Safety',
     description: 'Emergency help, AI legal assistant and road reporter. Works offline.',
     type: 'website',
   },

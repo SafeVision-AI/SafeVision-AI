@@ -1,7 +1,7 @@
 [
   {
     "name": "pmgsy_rural_roads",
-    "path": "C:\\Hackathons\\IITM\\SafeVisionAI\\backend\\datasets\\roads\\pmgsy_sampled.geojson",
+    "path": "C:\\Hackathons\\IITM\\SafeVixAI\\backend\\datasets\\roads\\pmgsy_sampled.geojson",
     "format": "json",
     "default_state_code": "IN",
     "default_project_source": "PMGSY GeoSadak — datameet/pmgsy-geosadak",
@@ -9,7 +9,7 @@
   },
   {
     "name": "nhai_toll_plazas",
-    "path": "C:\\Hackathons\\IITM\\SafeVisionAI\\backend\\datasets\\roads\\toll_plazas_linestring.geojson",
+    "path": "C:\\Hackathons\\IITM\\SafeVixAI\\backend\\datasets\\roads\\toll_plazas_linestring.geojson",
     "format": "json",
     "default_state_code": "IN",
     "default_project_source": "NHAI Toll Plazas — geohacker/toll-plazas-india",

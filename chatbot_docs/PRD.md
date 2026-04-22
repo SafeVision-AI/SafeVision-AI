@@ -1,6 +1,6 @@
-# Product Requirements Document (PRD) — SafeVisionAI Chatbot
+# Product Requirements Document (PRD) — SafeVixAI Chatbot
 
-The SafeVisionAI AI Chatbot is a core component of the SafeVisionAI safety platform, designed to provide real-time, authoritative assistant services for road users in India.
+The SafeVixAI AI Chatbot is a core component of the SafeVixAI safety platform, designed to provide real-time, authoritative assistant services for road users in India.
 
 ## Problem Statement
 Road accidents in India are often followed by critical delays in locating emergency services, lack of legal clarity on traffic fines, and a lack of transparency in infrastructure reporting. Users need an intelligent, high-availability assistant to bridge these gaps.

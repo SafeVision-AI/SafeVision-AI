@@ -1,5 +1,5 @@
 -- ============================================
--- RoadSoS / SafeVisionAI - Supabase Migration
+-- SafeVixAI / SafeVixAI - Supabase Migration
 -- Paste this entire script into your Supabase
 -- Dashboard > SQL Editor > New Query > Run
 -- ============================================

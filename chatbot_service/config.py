@@ -69,7 +69,7 @@ class Settings:
 def get_settings() -> Settings:
     settings = Settings(
         environment=os.getenv('ENVIRONMENT', 'development'),
-        service_name=os.getenv('CHATBOT_SERVICE_NAME', 'SafeVisionAI Chatbot Service'),
+        service_name=os.getenv('CHATBOT_SERVICE_NAME', 'SafeVixAI Chatbot Service'),
         service_port=int(os.getenv('CHATBOT_SERVICE_PORT', '8010')),
         cors_origins=_split_csv(
             os.getenv('CORS_ORIGINS'),
@@ -103,7 +103,7 @@ def get_settings() -> Settings:
         w3w_api_key=os.getenv('W3W_API_KEY') or None,
         opencage_api_key=os.getenv('OPENCAGE_API_KEY') or None,
         http_timeout_seconds=float(os.getenv('HTTP_TIMEOUT_SECONDS', '20')),
-        http_user_agent=os.getenv('HTTP_USER_AGENT', 'SafeVisionAIChatbot/1.0'),
+        http_user_agent=os.getenv('HTTP_USER_AGENT', 'SafeVixAIChatbot/1.0'),
         session_ttl_seconds=int(os.getenv('SESSION_TTL_SECONDS', '86400')),
     )
     settings.chroma_persist_dir.mkdir(parents=True, exist_ok=True)

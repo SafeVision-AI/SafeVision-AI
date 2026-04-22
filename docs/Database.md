@@ -1,4 +1,4 @@
-# SafeVisionAI  Database Design
+# SafeVixAI  Database Design
 
 ## Database: PostgreSQL 16 + PostGIS 3.4 (via Supabase)
 

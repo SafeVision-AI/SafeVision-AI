@@ -1,8 +1,8 @@
-# SafeVisionAI — Tech Stack
+# SafeVixAI — Tech Stack
 
 ## Overview
 
-SafeVisionAI uses a **three-service architecture** with in-browser AI inference as an offline fallback — the only road safety app globally with client-side LLM, SQL, and vector search running entirely in the user's browser.
+SafeVixAI uses a **three-service architecture** with in-browser AI inference as an offline fallback — the only road safety app globally with client-side LLM, SQL, and vector search running entirely in the user's browser.
 
 ```
 Layer            Technology                          Cost

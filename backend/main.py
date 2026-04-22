@@ -75,7 +75,7 @@ def create_app() -> FastAPI:
     @app.get('/', tags=['System'])
     async def root() -> dict:
         return {
-            'service': 'RoadSoS / SafeVisionAI — Backend API',
+            'service': 'SafeVixAI / SafeVixAI — Backend API',
             'version': settings.version,
             'status': 'online',
             'description': (

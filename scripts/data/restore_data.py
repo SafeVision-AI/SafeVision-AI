@@ -3,7 +3,7 @@ import os
 from huggingface_hub import snapshot_download
 
 snapshot_download(
-    repo_id='YOUR_HF_USERNAME/roadsos-datasets',
+    repo_id='YOUR_HF_USERNAME/safevixai-datasets',
     repo_type='dataset',
     local_dir='chatbot_service/data/',
     token=os.getenv('HF_TOKEN'),

@@ -16,7 +16,7 @@ DEFAULT_ENDPOINTS = (
 )
 DEFAULT_HEADERS = {
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'User-Agent': 'SafeVisionAI bootstrap scripts/1.0',
+    'User-Agent': 'SafeVixAI bootstrap scripts/1.0',
 }
 CSV_COLUMNS = [
     'osm_id',

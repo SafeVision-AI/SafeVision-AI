@@ -53,7 +53,7 @@ async function checkSystemAI(): Promise<boolean> {
       if (caps?.available === 'readily') {
         _systemSession = await win.ai.languageModel.create({
           systemPrompt:
-            'You are RoadSoS, an emergency road safety AI. ' +
+            'You are SafeVixAI, an emergency road safety AI. ' +
             'Answer concisely in the same language the user writes in. ' +
             'Prioritize safety, first aid, and emergency contacts.',
         });
@@ -188,7 +188,7 @@ export async function askOfflineAI(
             {
               role: 'system',
               content:
-                'You are RoadSoS, an emergency road safety AI assistant. ' +
+                'You are SafeVixAI, an emergency road safety AI assistant. ' +
                 'Always answer in the same language the user writes in. ' +
                 'Be concise and prioritize safety information.',
             },

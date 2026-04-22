@@ -8,7 +8,7 @@ const CHATBOT_URL = (process.env.NEXT_PUBLIC_CHATBOT_URL ?? 'http://localhost:80
 
 // Warn in production when chatbot URL is not configured
 if (typeof window !== 'undefined' && !process.env.NEXT_PUBLIC_CHATBOT_URL && process.env.NODE_ENV === 'production') {
-  console.error('[SafeVisionAI] NEXT_PUBLIC_CHATBOT_URL is not set — chatbot features will fail. Set this in your Render/Vercel environment variables.');
+  console.error('[SafeVixAI] NEXT_PUBLIC_CHATBOT_URL is not set — chatbot features will fail. Set this in your Render/Vercel environment variables.');
 }
 
 const client = axios.create({

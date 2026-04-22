@@ -1,8 +1,8 @@
-# SafeVisionAI  Security
+# SafeVixAI  Security
 
 ## Security Overview
 
-SafeVisionAI handles sensitive user data (GPS location, blood group, emergency contacts) and makes calls to emergency services. Security is critical even for a hackathon MVP.
+SafeVixAI handles sensitive user data (GPS location, blood group, emergency contacts) and makes calls to emergency services. Security is critical even for a hackathon MVP.
 
 ---
 
@@ -28,7 +28,7 @@ Row Level Security will be enabled on the database tables to ensure users can on
 from fastapi.middleware.cors import CORSMiddleware
 
 ALLOWED_ORIGINS = [
-    "https://safevisionai.vercel.app",
+    "https://safevixai.vercel.app",
     "http://localhost:3000",  # dev only
 ]
 

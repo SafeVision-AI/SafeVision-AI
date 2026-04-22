@@ -70,7 +70,7 @@ export function ChatInterface() {
       id: 'greeting',
       role: 'assistant',
       content:
-        'Hello! I am your SafeVisionAI assistant. Ask me about traffic rules, emergency procedures, first aid, challan fines, or pothole reporting.',
+        'Hello! I am your SafeVixAI assistant. Ask me about traffic rules, emergency procedures, first aid, challan fines, or pothole reporting.',
     },
   ]);
   const [input, setInput] = useState('');
@@ -180,7 +180,7 @@ export function ChatInterface() {
             <Bot size={16} className="text-blue-600 dark:text-blue-400" />
           </div>
           <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
-            SafeVisionAI Chat
+            SafeVixAI Chat
           </span>
           <ConnectivityBadge />
         </div>

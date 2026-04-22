@@ -1,6 +1,6 @@
-# Security and Safety — SafeVisionAI Chatbot
+# Security and Safety — SafeVixAI Chatbot
 
-Since the SafeVisionAI Chatbot operates in emergency and legal contexts, security and safety are non-negotiable.
+Since the SafeVixAI Chatbot operates in emergency and legal contexts, security and safety are non-negotiable.
 
 ## Safety Check Pipeline
 The `ChatEngine` includes a mandatory `SafetyChecker` node (`agent/safety_checker.py`):

@@ -210,7 +210,7 @@ export default function FirstAidPage() {
   
   useEffect(() => {
     setMounted(true);
-    document.title = 'First Aid Guide | SafeVisionAI';
+    document.title = 'First Aid Guide | SafeVixAI';
   }, []);
 
   useEffect(() => {

@@ -9,13 +9,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    app_name: str = 'SafeVisionAI Backend'
+    app_name: str = 'SafeVixAI Backend'
     version: str = '1.0.0'
     environment: str = 'development'
     api_v1_prefix: str = '/api/v1'
     cors_origins_env: str = Field(default='*', validation_alias='CORS_ORIGINS')
 
-    database_url: str = 'postgresql+asyncpg://postgres:postgres@localhost:5432/safevisionai'
+    database_url: str = 'postgresql+asyncpg://postgres:postgres@localhost:5432/safevixai'
     redis_url: str | None = None
     db_pool_size: int = 10
     db_max_overflow: int = 20
@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     nominatim_url: str = 'https://nominatim.openstreetmap.org'
     openrouteservice_base_url: str = 'https://api.openrouteservice.org'
     openrouteservice_api_key: str | None = None
-    http_user_agent: str = 'SafeVisionAI/1.0'
+    http_user_agent: str = 'SafeVixAI/1.0'
     request_timeout_seconds: float = 20.0
     upstream_retry_attempts: int = 2
     upstream_retry_backoff_seconds: float = 1.5

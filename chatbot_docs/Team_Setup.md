@@ -1,6 +1,6 @@
 # Chatbot Team — Setup & Workflow Guide
 
-Welcome to the SafeVisionAI Chatbot development team. To ensure a smooth collaboration and protect the stability of the `SafeVisionAI` platform, please follow these standardized workflow rules.
+Welcome to the SafeVixAI Chatbot development team. To ensure a smooth collaboration and protect the stability of the `SafeVixAI` platform, please follow these standardized workflow rules.
 
 ## 1. Local Environment Setup
 Before writing any code, prepare your local environment in the `chatbot_service/` folder.
@@ -86,7 +86,7 @@ infsh app run falai/flux-dev --input '{"prompt": "a realistic pothole on a rainy
 ```
 
 ## 4. Module Ownership
-To avoid merge conflicts, ensure you are working on the module assigned to you in the [Contributing.md](file:///C:/Hackathons/IITM/SafeVisionAI/chatbot_docs/Contributing.md) file.
+To avoid merge conflicts, ensure you are working on the module assigned to you in the [Contributing.md](file:///C:/Hackathons/IITM/SafeVixAI/chatbot_docs/Contributing.md) file.
 - **Member A**: Providers, Memory, API endpoints.
 - **Member B**: RAG, Agent (ChatEngine), Tools.
 - **Member C**: Frontend UI/Voice and Multi-language.

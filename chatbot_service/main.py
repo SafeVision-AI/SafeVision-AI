@@ -110,14 +110,14 @@ def create_app() -> FastAPI:
         memory_ok = await memory_store.ping() if memory_store else True
         return {
             'status': 'ok',
-            'service': 'safevisionai-chatbot',
+            'service': 'safevixai-chatbot',
             'memory_available': memory_ok,
         }
 
     @app.get('/', tags=['System'])
     async def root() -> dict:
         return {
-            'service': 'RoadSoS / SafeVisionAI — Chatbot Service',
+            'service': 'SafeVixAI / SafeVixAI — Chatbot Service',
             'version': '1.0.0',
             'status': 'online',
             'description': (

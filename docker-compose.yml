@@ -9,7 +9,7 @@ services:
     container_name: svai_postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: safevisionai
+      POSTGRES_DB: safevixai
       POSTGRES_USER: svai
       POSTGRES_PASSWORD: svai_dev_password
     ports:
@@ -17,7 +17,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U svai -d safevisionai"]
+      test: ["CMD-SHELL", "pg_isready -U svai -d safevixai"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -55,7 +55,7 @@ services:
         condition: service_healthy
     env_file: ./backend/.env
     environment:
-      DATABASE_URL: postgresql+asyncpg://svai:svai_dev_password@postgres:5432/safevisionai
+      DATABASE_URL: postgresql+asyncpg://svai:svai_dev_password@postgres:5432/safevixai
       REDIS_URL: redis://redis:6379/0
       CHATBOT_SERVICE_URL: http://chatbot:8010
       ENVIRONMENT: development

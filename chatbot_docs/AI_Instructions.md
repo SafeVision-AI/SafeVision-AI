@@ -1,6 +1,6 @@
 # AI Instruction Guidelines
 
-The SafeVisionAI Chatbot uses specialized system instructions for each persona. These instructions govern the model's behavior, tone, and response format.
+The SafeVixAI Chatbot uses specialized system instructions for each persona. These instructions govern the model's behavior, tone, and response format.
 
 ## General Persona Requirements
 - **Emergency**: Direct, urgent, action-first. "Call 112 immediately."
@@ -9,7 +9,7 @@ The SafeVisionAI Chatbot uses specialized system instructions for each persona. 
 
 ## Prompt Variants
 
-### 1. RoadSoS (Emergency Navigator)
+### 1. SafeVixAI (Emergency Navigator)
 - **Primary Goal**: Save time and lives.
 - **Rule**: If injury is mentioned, the first sentence MUST be "Call 112 immediately."
 - **Focus**: WHO trauma care guidelines and nearby services.

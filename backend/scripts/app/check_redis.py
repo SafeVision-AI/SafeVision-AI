@@ -20,7 +20,7 @@ async def check_redis():
         print(f"Ping: {pong}")
         
         # Test set/get
-        await client.set("test_key", "RoadSoS_alive", ex=60)
+        await client.set("test_key", "SafeVixAI_alive", ex=60)
         val = await client.get("test_key")
         print(f"Set/Get test: {val}")
         

@@ -23,6 +23,6 @@ class OpenRouterProvider(HttpProvider):
 
     def extra_headers(self) -> dict:
         return {
-            "HTTP-Referer": "https://github.com/SafeVision-AI/SafeVision-AI",
-            "X-Title": "RoadSoS",
+            "HTTP-Referer": "https://github.com/SafeVixAI/SafeVixAI",
+            "X-Title": "SafeVixAI",
         }

@@ -33,7 +33,7 @@ type MapStyleCandidate = {
 function buildMapTilerRasterStyle(tileUrl: string) {
   return {
     version: 8,
-    name: 'SafeVisionAI MapTiler Streets Raster Fallback',
+    name: 'SafeVixAI MapTiler Streets Raster Fallback',
     glyphs: MAPTILER_KEY
       ? `https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=${MAPTILER_KEY}`
       : undefined,

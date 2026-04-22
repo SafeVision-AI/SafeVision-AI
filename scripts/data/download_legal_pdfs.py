@@ -80,7 +80,7 @@ def download_first_working(sources: list[str], destination: Path) -> bool:
             req = urllib.request.Request(
                 url,
                 headers={
-                    "User-Agent": "Mozilla/5.0 (RoadSoS-DataPipeline/1.0; +https://github.com)"
+                    "User-Agent": "Mozilla/5.0 (SafeVixAI-DataPipeline/1.0; +https://github.com)"
                 },
             )
             with urllib.request.urlopen(req, timeout=60) as response:

@@ -1,6 +1,6 @@
 # Data Sources Reference
 
-The SafeVisionAI Chatbot relies on high-quality, authoritative data for legal, emergency, and medical accuracy.
+The SafeVixAI Chatbot relies on high-quality, authoritative data for legal, emergency, and medical accuracy.
 
 ## Geographic & Routing Data
 - **Nominatim (OpenStreetMap)**: Free, primary reverse geocoding to find road and city names from coordinates.

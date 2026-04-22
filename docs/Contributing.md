@@ -1,4 +1,4 @@
-# SafeVisionAI - Contributing Guide
+# SafeVixAI - Contributing Guide
 
 How the team works together on this project.
 
@@ -204,4 +204,4 @@ Before opening a PR, confirm:
 
 ---
 
-*SafeVisionAI | IIT Madras Road Safety Hackathon 2026*
+*SafeVixAI | IIT Madras Road Safety Hackathon 2026*

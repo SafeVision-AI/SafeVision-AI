@@ -1,4 +1,4 @@
-# SafeVisionAI - Roadmap
+# SafeVixAI - Roadmap
 
 Build phases for the IIT Madras Road Safety Hackathon 2026 submission.
 
@@ -8,7 +8,7 @@ Build phases for the IIT Madras Road Safety Hackathon 2026 submission.
 
 ```mermaid
 gantt
-    title SafeVisionAI Build Phases
+    title SafeVixAI Build Phases
     dateFormat  YYYY-MM-DD
     section Phase 1 - Foundation
     Project setup and scaffolding     :done, p1a, 2026-03-30, 2d

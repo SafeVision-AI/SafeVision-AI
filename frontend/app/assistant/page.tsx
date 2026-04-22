@@ -111,7 +111,7 @@ export default function ChatPage() {
     // Guard against React StrictMode double-mount
     if (welcomeAdded.current) return;
     welcomeAdded.current = true;
-    document.title = 'AI Assistant | SafeVisionAI';
+    document.title = 'AI Assistant | SafeVixAI';
     const welcomeMsg: Message = {
       id: 'ai-1',
       role: 'ai',

@@ -114,7 +114,7 @@ export default function EmergencyProtocolsPage() {
 
   useEffect(() => {
     setMounted(true);
-    document.title = 'Emergency Protocols | SafeVisionAI';
+    document.title = 'Emergency Protocols | SafeVixAI';
   }, []);
 
   const filtered = PROTOCOLS.filter(

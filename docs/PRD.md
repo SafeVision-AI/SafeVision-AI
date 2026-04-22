@@ -1,13 +1,13 @@
-# SafeVisionAI  Product Requirements Document (PRD)
+# SafeVixAI  Product Requirements Document (PRD)
 
 ## 1. Product Overview
 
-**SafeVisionAI** is an AI-powered road safety platform built for the **IIT Madras Road Safety Hackathon 2026**. It addresses three problem statements in one unified application:
+**SafeVixAI** is an AI-powered road safety platform built for the **IIT Madras Road Safety Hackathon 2026**. It addresses three problem statements in one unified application:
 
 | Module | Problem Statement | Core Value |
 |--------|------------------|------------|
-| Emergency Locator | SafeVisionAI | Find nearest hospital/police/ambulance instantly, even offline |
-| AI Chatbot | SafeVisionAI + DriveLegal | 11-provider online fallback + Phi-3 Mini offline  legal Q&A + first aid |
+| Emergency Locator | SafeVixAI | Find nearest hospital/police/ambulance instantly, even offline |
+| AI Chatbot | SafeVixAI + DriveLegal | 11-provider online fallback + Phi-3 Mini offline  legal Q&A + first aid |
 | Challan Calculator | DriveLegal | Deterministic MVA 2019 fine calculation with state overrides |
 | Road Reporter | RoadWatch | Geotagged issue reporting with automatic authority routing |
 
@@ -17,14 +17,14 @@
 
 ## 2. Problem Statements
 
-### 2.1 SafeVisionAI  Emergency Response
-India has over 150,000 road accident deaths annually (WHO 2023). The critical window for emergency response is the first 10 minutes. Existing apps (HumSafar, Rakshak) cover limited geographies, have no AI, and fail offline. SafeVisionAI solves this with instant GPS-based emergency service locator that works offline on remote highways.
+### 2.1 SafeVixAI  Emergency Response
+India has over 150,000 road accident deaths annually (WHO 2023). The critical window for emergency response is the first 10 minutes. Existing apps (HumSafar, Rakshak) cover limited geographies, have no AI, and fail offline. SafeVixAI solves this with instant GPS-based emergency service locator that works offline on remote highways.
 
 ### 2.2 DriveLegal  Traffic Law Education
-Most Indians are unaware of traffic fine amounts under the MV Amendment Act 2019. Legal information is buried in gazette notifications. SafeVisionAI provides a deterministic challan calculator + RAG-powered legal assistant grounded in the actual Motor Vehicles Act text.
+Most Indians are unaware of traffic fine amounts under the MV Amendment Act 2019. Legal information is buried in gazette notifications. SafeVixAI provides a deterministic challan calculator + RAG-powered legal assistant grounded in the actual Motor Vehicles Act text.
 
 ### 2.3 RoadWatch  Road Infrastructure Accountability
-India has over 450,000 km of national and state highways with poor pothole reporting mechanisms. Citizens have no way to know which government authority is responsible for a specific road or what the maintenance budget was. SafeVisionAI routes complaints to the correct executive engineer automatically.
+India has over 450,000 km of national and state highways with poor pothole reporting mechanisms. Citizens have no way to know which government authority is responsible for a specific road or what the maintenance budget was. SafeVixAI routes complaints to the correct executive engineer automatically.
 
 ---
 

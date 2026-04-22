@@ -1,9 +1,9 @@
-# SafeVisionAI Complete Project Resource Checklist
+# SafeVixAI Complete Project Resource Checklist
 
 Generated from:
-- [RoadSoS_Complete_Resources_main.docx](C:/Hackathons/IITM/RoadSoS_Complete_Resources_main.docx)
-- [RoadSoS_Chatbot_Impl_Plan.txt](C:/Hackathons/IITM/RoadSoS_Chatbot_Impl_Plan.txt)
-- [RoadSoS_Chatbot_Guide.txt](C:/Hackathons/IITM/RoadSoS_Chatbot_Guide.txt)
+- [SafeVixAI_Complete_Resources_main.docx](C:/Hackathons/IITM/SafeVixAI_Complete_Resources_main.docx)
+- [SafeVixAI_Chatbot_Impl_Plan.txt](C:/Hackathons/IITM/SafeVixAI_Chatbot_Impl_Plan.txt)
+- [SafeVixAI_Chatbot_Guide.txt](C:/Hackathons/IITM/SafeVixAI_Chatbot_Guide.txt)
 - [doc_text.txt](C:/Hackathons/IITM/doc_text.txt)
 
 Cross-checked against the current repository on 2026-04-07.
@@ -18,7 +18,7 @@ This file is the single source of truth for:
 
 Important notes:
 - Do not commit secrets into git.
-- Keep large datasets outside normal source control. Suggested local folder: `SafeVisionAI/backend/datasets/`.
+- Keep large datasets outside normal source control. Suggested local folder: `SafeVixAI/backend/datasets/`.
 - Chatbot rows point to `chatbot_service/.env` even though the latest chatbot env template currently lives on the chatbot branch.
 
 ## Status legend
@@ -50,7 +50,7 @@ Important notes:
 
 ## 2. Backend env values and config
 
-Target file: [backend/.env.example](C:/Hackathons/IITM/SafeVisionAI/backend/.env.example) -> copy to `backend/.env`
+Target file: [backend/.env.example](C:/Hackathons/IITM/SafeVixAI/backend/.env.example) -> copy to `backend/.env`
 
 | Item | Source | Local save path | Env variable name | Status | Priority |
 |---|---|---|---|---|---|
@@ -96,7 +96,7 @@ Target file: [backend/.env.example](C:/Hackathons/IITM/SafeVisionAI/backend/.env
 
 ## 3. Frontend env values and config
 
-Target file: [frontend/.env.example](C:/Hackathons/IITM/SafeVisionAI/frontend/.env.example) -> copy to `frontend/.env`
+Target file: [frontend/.env.example](C:/Hackathons/IITM/SafeVixAI/frontend/.env.example) -> copy to `frontend/.env`
 
 | Item | Source | Local save path | Env variable name | Status | Priority |
 |---|---|---|---|---|---|
@@ -152,21 +152,21 @@ Target file: `chatbot_service/.env` on the chatbot branch.
 
 | Item | Source | Local save path | Env variable name | Status | Priority |
 |---|---|---|---|---|---|
-| MapLibre GL JS | https://maplibre.org and npm | [frontend/package.json](C:/Hackathons/IITM/SafeVisionAI/frontend/package.json) | N/A | Wired now | Critical |
-| OpenFreeMap Liberty style | https://tiles.openfreemap.org/styles/liberty | [frontend/components/maps/MapLibreCanvas.tsx](C:/Hackathons/IITM/SafeVisionAI/frontend/components/maps/MapLibreCanvas.tsx) and `frontend/.env` | `NEXT_PUBLIC_MAP_STYLE_URL` | Wired now | Critical |
+| MapLibre GL JS | https://maplibre.org and npm | [frontend/package.json](C:/Hackathons/IITM/SafeVixAI/frontend/package.json) | N/A | Wired now | Critical |
+| OpenFreeMap Liberty style | https://tiles.openfreemap.org/styles/liberty | [frontend/components/maps/MapLibreCanvas.tsx](C:/Hackathons/IITM/SafeVixAI/frontend/components/maps/MapLibreCanvas.tsx) and `frontend/.env` | `NEXT_PUBLIC_MAP_STYLE_URL` | Wired now | Critical |
 | OpenFreeMap Positron style | https://tiles.openfreemap.org/styles/positron | Future style toggle or theme config | N/A | Future phase | Low |
 | Carto Voyager backup style | https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json | Future fallback in `frontend/components/maps/MapLibreCanvas.tsx` | N/A | Future phase | High |
 | Carto Dark Matter style | Carto CDN | Future dark-mode style toggle | N/A | Future phase | Medium |
-| Photon search geocoder | https://photon.komoot.io/api | [backend/core/config.py](C:/Hackathons/IITM/SafeVisionAI/backend/core/config.py), `backend/.env` | `PHOTON_URL` | Wired now | Critical |
-| Nominatim reverse geocoder | https://nominatim.openstreetmap.org | [backend/core/config.py](C:/Hackathons/IITM/SafeVisionAI/backend/core/config.py), `backend/.env` | `NOMINATIM_URL` | Wired now | Critical |
-| Overpass API | https://overpass-api.de/api/interpreter | [backend/core/config.py](C:/Hackathons/IITM/SafeVisionAI/backend/core/config.py), `backend/.env` | `OVERPASS_URL` | Wired now | Critical |
+| Photon search geocoder | https://photon.komoot.io/api | [backend/core/config.py](C:/Hackathons/IITM/SafeVixAI/backend/core/config.py), `backend/.env` | `PHOTON_URL` | Wired now | Critical |
+| Nominatim reverse geocoder | https://nominatim.openstreetmap.org | [backend/core/config.py](C:/Hackathons/IITM/SafeVixAI/backend/core/config.py), `backend/.env` | `NOMINATIM_URL` | Wired now | Critical |
+| Overpass API | https://overpass-api.de/api/interpreter | [backend/core/config.py](C:/Hackathons/IITM/SafeVixAI/backend/core/config.py), `backend/.env` | `OVERPASS_URL` | Wired now | Critical |
 | Overpass mirror list | `overpass.kumi.systems`, `overpass.private.coffee` | `backend/.env` | `OVERPASS_URLS` | Wired now | High |
-| openrouteservice routing | https://api.openrouteservice.org | [backend/services/routing_service.py](C:/Hackathons/IITM/SafeVisionAI/backend/services/routing_service.py), `backend/.env` | `OPENROUTESERVICE_BASE_URL`, `OPENROUTESERVICE_API_KEY` | Partially wired | Critical |
+| openrouteservice routing | https://api.openrouteservice.org | [backend/services/routing_service.py](C:/Hackathons/IITM/SafeVixAI/backend/services/routing_service.py), `backend/.env` | `OPENROUTESERVICE_BASE_URL`, `OPENROUTESERVICE_API_KEY` | Partially wired | Critical |
 | PMTiles runtime | https://github.com/protomaps/PMTiles | `frontend/public/maps/india.pmtiles` and future PMTiles loader | N/A | Future phase | Medium |
 
 ## 6. Government and public datasets for maps and reporting
 
-Suggested local dataset root: `SafeVisionAI/backend/datasets/`
+Suggested local dataset root: `SafeVixAI/backend/datasets/`
 
 | Item | Source | Local save path | Env variable name | Status | Priority |
 |---|---|---|---|---|---|
@@ -224,8 +224,8 @@ Keep raw training datasets outside git if possible.
 |---|---|---|---|---|---|
 | all-MiniLM-L6-v2 embeddings | `sentence-transformers/all-MiniLM-L6-v2` on Hugging Face | `chatbot_service/.env` plus future `chatbot_service/rag/embeddings.py` | `EMBEDDING_MODEL` | Future phase | Critical |
 | multilingual MiniLM embeddings | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` | Future `chatbot_service/rag/embeddings.py` | `EMBEDDING_MODEL` or upgrade path | Future phase | High |
-| Gemma 4 E2B | `google/gemma-4-E2B-it` | [frontend/lib/edge-ai.ts](C:/Hackathons/IITM/SafeVisionAI/frontend/lib/edge-ai.ts) | N/A | Future phase | Critical |
-| Gemma 4 E4B | `google/gemma-4-E4B-it` | [frontend/lib/edge-ai.ts](C:/Hackathons/IITM/SafeVisionAI/frontend/lib/edge-ai.ts) or future offline vision module | N/A | Future phase | High |
+| Gemma 4 E2B | `google/gemma-4-E2B-it` | [frontend/lib/edge-ai.ts](C:/Hackathons/IITM/SafeVixAI/frontend/lib/edge-ai.ts) | N/A | Future phase | Critical |
+| Gemma 4 E4B | `google/gemma-4-E4B-it` | [frontend/lib/edge-ai.ts](C:/Hackathons/IITM/SafeVixAI/frontend/lib/edge-ai.ts) or future offline vision module | N/A | Future phase | High |
 | Gemma 4 26B A4B | `google/gemma-4-26B-A4B-it` | Future server-side inference path only | N/A | Future phase | Low |
 | Gemma 4 31B Dense | `google/gemma-4-31B-it` | Future server-side inference path only | N/A | Future phase | Low |
 | Sarvam-30B | AI Kosh / Hugging Face inference | Future `chatbot_service/providers/sarvam_provider.py` | `HF_TOKEN` | Future phase | Critical |

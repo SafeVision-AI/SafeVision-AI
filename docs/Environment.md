@@ -1,4 +1,4 @@
-# SafeVisionAI — Environment Variables
+# SafeVixAI — Environment Variables
 
 All environment variables needed to run the project's **three services** locally and in production.
 

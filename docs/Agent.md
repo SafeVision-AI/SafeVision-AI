@@ -1,12 +1,12 @@
-# SafeVisionAI  Agent Guide
+# SafeVixAI  Agent Guide
 
 > **READ THIS FIRST.** This document is written for any developer, AI agent, or team member who opens this codebase for the first time. After reading this, you should understand the complete application  what it does, how it works, which files do what, and where to start coding.
 
 ---
 
-## What Is SafeVisionAI?
+## What Is SafeVixAI?
 
-**SafeVisionAI** is a full-stack, AI-powered road safety Progressive Web App (PWA) built for the IIT Madras Road Safety Hackathon 2026. It is one unified application that solves three problem statements:
+**SafeVixAI** is a full-stack, AI-powered road safety Progressive Web App (PWA) built for the IIT Madras Road Safety Hackathon 2026. It is one unified application that solves three problem statements:
 
 1. **Emergency Locator**  Find the nearest hospital, police station, ambulance, towing service using GPS. Works offline for 25 Indian cities.
 2. **AI Chatbot**  Answer questions about traffic laws (Motor Vehicles Act 2019) and first aid. Uses 11-Provider online fallback, Phi-3 Mini entirely in the browser when offline.
@@ -39,7 +39,7 @@
 ## Folder Structure
 
 ```
-SafeVisionAI/
+SafeVixAI/
 
  chatbot_service/             Standalone FastAPI AI Chatbot Service (port 8010)
     agent/                   ChatEngine, IntentDetector, SafetyChecker, ContextAssembler
@@ -68,7 +68,7 @@ SafeVisionAI/
        redis_client.py      Async Redis pool + CacheHelper
    
     services/
-       llm_service.py        SafeVisionAIChatbot  the main AI brain
+       llm_service.py        SafeVixAIChatbot  the main AI brain
        overpass_service.py  Queries OSM for live emergency service locations
        geocoding_service.py Nominatim: GPS  city/state name
        challan_service.py   DuckDB SQL fine calculation with state overrides
@@ -222,8 +222,8 @@ Any chat response about injuries must start with “Call 112 immediately.” —
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/[org]/SafeVisionAI.git
-cd SafeVisionAI
+git clone https://github.com/[org]/SafeVixAI.git
+cd SafeVixAI
 
 # 2. Backend setup
 cd backend
@@ -306,7 +306,7 @@ npm run dev
 | Importing MapLibre in SSR-enabled component | Use `dynamic({ssr:false})` for map components (CSS is imported globally in `layout.tsx`) |
 | Deleting `data/chroma_db/` | Never delete  rebuild = 10 minutes |
 | Testing PWA offline with `npm run dev` | Run `npm run build && npm start` for Service Worker |
-| Calling Nominatim without User-Agent | Always set `User-Agent: SafeVisionAI/1.0` header |
+| Calling Nominatim without User-Agent | Always set `User-Agent: SafeVixAI/1.0` header |
 | Hardcoding API keys in code | Always use environment variables |
 | Answering injury queries without 112 prompt | Always prepend "Call 112 immediately" |
 

@@ -51,9 +51,9 @@ const ReportForm: React.FC = () => {
         await submitReport(payload);
       } else {
         // Save to offline queue in localStorage — synced when connectivity returns
-        const existing = JSON.parse(localStorage.getItem('roadsos_offline_queue') ?? '[]');
+        const existing = JSON.parse(localStorage.getItem('safevixai_offline_queue') ?? '[]');
         existing.push({ ...payload, savedAt: new Date().toISOString() });
-        localStorage.setItem('roadsos_offline_queue', JSON.stringify(existing));
+        localStorage.setItem('safevixai_offline_queue', JSON.stringify(existing));
         await new Promise(r => setTimeout(r, 500)); // brief UX delay
       }
       setSubmitted(true);

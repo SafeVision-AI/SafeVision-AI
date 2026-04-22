@@ -1,4 +1,4 @@
-# SafeVisionAI — Architecture
+# SafeVixAI — Architecture
 
 ## System Architecture Overview
 
@@ -48,7 +48,7 @@ graph TD
 
 ## Three-Service Architecture
 
-SafeVisionAI runs as **three independent services**:
+SafeVixAI runs as **three independent services**:
 
 | Service | Port | Tech | Purpose |
 |---------|------|------|---------|
@@ -208,7 +208,7 @@ sequenceDiagram
 ## Monorepo Folder Structure
 
 ```
-SafeVisionAI/
+SafeVixAI/
 ├── backend/              FastAPI Python 3.11 — port 8000
 ├── chatbot_service/      FastAPI Agentic RAG Chatbot — port 8010
 ├── frontend/             Next.js 15 + React 19 TypeScript PWA — port 3000

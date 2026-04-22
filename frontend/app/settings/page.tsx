@@ -34,7 +34,7 @@ export default function SettingsPage() {
     type: 'info'
   });
 
-  useEffect(() => { document.title = 'Settings | SafeVisionAI'; }, []);
+  useEffect(() => { document.title = 'Settings | SafeVixAI'; }, []);
 
   const showToast = (message: string, type: 'success'|'info'|'error' = 'info') => {
     setToastConfig({ show: true, message, type });

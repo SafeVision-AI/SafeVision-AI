@@ -76,7 +76,7 @@ class FakeRetriever:
         return [
             SimpleNamespace(
                 source=source,
-                title='SafeVisionAI Knowledge Base',
+                title='SafeVixAI Knowledge Base',
                 category=category,
                 content=f'Reference for: {query}',
                 score=0.98,

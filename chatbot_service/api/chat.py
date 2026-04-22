@@ -107,4 +107,4 @@ async def get_history(
 
 @router.get('/health')
 async def health() -> dict:
-    return {'status': 'ok', 'service': 'safevisionai-chatbot'}
+    return {'status': 'ok', 'service': 'safevixai-chatbot'}

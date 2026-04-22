@@ -25,7 +25,7 @@ export default function EmergencyPage() {
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    document.title = 'SOS Emergency | SafeVisionAI';
+    document.title = 'SOS Emergency | SafeVixAI';
     setIsOnline(navigator.onLine);
     const up = () => setIsOnline(true);
     const dn = () => setIsOnline(false);

@@ -25,7 +25,7 @@ class GeocodingClient:
         *,
         opencage_key: str | None = None,
         timeout: float = 10.0,
-        user_agent: str = "RoadSoS/1.0 (team@roadsos.in)",
+        user_agent: str = "SafeVixAI/1.0 (team@safevixai.in)",
     ) -> None:
         self.opencage_key = opencage_key or os.getenv("OPENCAGE_API_KEY", "")
         self._client = httpx.AsyncClient(

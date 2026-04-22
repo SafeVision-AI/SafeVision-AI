@@ -1,12 +1,12 @@
-# SafeVisionAI  Deployment Guide
+# SafeVixAI  Deployment Guide
 
 ## Infrastructure Overview (All Free Tier)
 
 | Service | Provider | URL | Purpose |
 |---|---|---|---|
-| Frontend | Vercel | `safevisionai.vercel.app` | Next.js 15 PWA, global CDN |
-| Backend | Render.com | `safevisionai-api.onrender.com` | FastAPI :8000, 750h/month free |
-| Chatbot Service | Render.com | `safevisionai-chatbot.onrender.com` | FastAPI :8010, Agentic RAG AI |
+| Frontend | Vercel | `safevixai.vercel.app` | Next.js 15 PWA, global CDN |
+| Backend | Render.com | `safevixai-api.onrender.com` | FastAPI :8000, 750h/month free |
+| Chatbot Service | Render.com | `safevixai-chatbot.onrender.com` | FastAPI :8010, Agentic RAG AI |
 | Database | Supabase | `[project].supabase.co` | PostgreSQL + PostGIS |
 | Cache | Upstash | `[host].upstash.io` | Redis, 10K commands/day |
 | LLM APIs | Groq + 10 more | Various | 11-provider fallback chain |
@@ -47,7 +47,7 @@ Change `postgresql://` to `postgresql+asyncpg://` for async driver.
 
 ```bash
 # 1. Navigate to backend directory
-cd SafeVisionAI/backend
+cd SafeVixAI/backend
 
 # 2. Create and activate Python virtual environment
 python -m venv .venv
@@ -109,7 +109,7 @@ uvicorn main:app --reload --port 8000
 
 ```bash
 # 1. Navigate to frontend directory
-cd SafeVisionAI/frontend
+cd SafeVixAI/frontend
 
 # 2. Install all npm packages
 npm install
@@ -161,7 +161,7 @@ The `render.yaml` at the project root configures automatic deployment.
 ### Manual Setup (Alternative)
 
 Render.com  New  Web Service:
-- **Name:** `safevisionai-api`
+- **Name:** `safevixai-api`
 - **Root Directory:** `backend`
 - **Runtime:** Python 3.11
 - **Build Command:** `pip install -r requirements.txt`
@@ -185,7 +185,7 @@ python data/build_vectorstore.py  # 10 minutes
 The chatbot service is a **separate** Render web service.
 
 Render.com → New → Web Service:
-- **Name:** `safevisionai-chatbot`
+- **Name:** `safevixai-chatbot`
 - **Root Directory:** `chatbot_service`
 - **Runtime:** Python 3.11
 - **Build Command:** `pip install -r requirements.txt`
@@ -208,11 +208,11 @@ Set environment variables:
 ### Via GitHub Integration (Recommended)
 
 1. Vercel Dashboard  New Project  Import from GitHub
-2. Select `SafeVisionAI` repository
+2. Select `SafeVixAI` repository
 3. **Framework Preset:** Next.js (auto-detected)
 4. **Root Directory:** `frontend`
 5. Add Environment Variables:
-   - `NEXT_PUBLIC_API_URL` = `https://safevisionai-api.onrender.com`
+   - `NEXT_PUBLIC_API_URL` = `https://safevixai-api.onrender.com`
    - `NEXT_PUBLIC_SUPABASE_URL` = your Supabase URL
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = your anon key
 
@@ -231,19 +231,19 @@ npx vercel --prod
 
 ```bash
 # Backend health check
-curl https://safevisionai-api.onrender.com/health
+curl https://safevixai-api.onrender.com/health
 # Expected: {"status":"ok","chatbot_ready":true}
 
 # Emergency API test
-curl "https://safevisionai-api.onrender.com/api/v1/emergency/nearby?lat=13.0827&lon=80.2707"
+curl "https://safevixai-api.onrender.com/api/v1/emergency/nearby?lat=13.0827&lon=80.2707"
 # Expected: {"services":[...],"count":N}
 
 # Challan API test
-curl "https://safevisionai-api.onrender.com/api/v1/challan/calculate?violation_code=MVA_185"
+curl "https://safevixai-api.onrender.com/api/v1/challan/calculate?violation_code=MVA_185"
 # Expected: {"final_fine_inr":10000,"section":"185"}
 
 # Frontend PWA check
-# Chrome  visit safevisionai.vercel.app  check "Add to Home Screen" prompt
+# Chrome  visit safevixai.vercel.app  check "Add to Home Screen" prompt
 ```
 
 ---
@@ -306,8 +306,8 @@ REDIS_URL=rediss://default:[TOKEN]@[HOST].upstash.io:6379
 ### Frontend (`frontend/.env.local`)
 
 ```bash
-NEXT_PUBLIC_BACKEND_URL=https://safevisionai-api.onrender.com
-NEXT_PUBLIC_CHATBOT_URL=https://safevisionai-chatbot.onrender.com
+NEXT_PUBLIC_BACKEND_URL=https://safevixai-api.onrender.com
+NEXT_PUBLIC_CHATBOT_URL=https://safevixai-chatbot.onrender.com
 ```
 
 ---

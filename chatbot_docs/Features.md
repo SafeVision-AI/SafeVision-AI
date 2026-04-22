@@ -1,8 +1,8 @@
-# SafeVisionAI Chatbot — Key Features
+# SafeVixAI Chatbot — Key Features
 
-The SafeVisionAI AI chatbot provides a robust set of features categorized by module: RoadSoS (Emergency), DriveLegal (Traffic Law), and RoadWatch (Infrastructure).
+The SafeVixAI AI chatbot provides a robust set of features categorized by module: SafeVixAI (Emergency), DriveLegal (Traffic Law), and RoadWatch (Infrastructure).
 
-## Emergency Response (RoadSoS)
+## Emergency Response (SafeVixAI)
 - **Service Locator**: Finds the nearest hospital, police station, or ambulance center in real-time via PostGIS + Overpass API.
 - **SOS Creation**: Generates WhatsApp emergency messages with GPS coordinates and nearby contacts.
 - **First Aid Guidance**: Provides step-by-step, WHO-based instructions for accidents and injuries.

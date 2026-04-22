@@ -64,7 +64,7 @@ export default function ChallanPage() {
 
   const [showDetailToast, setShowDetailToast] = useState(false);
 
-  useEffect(() => { document.title = 'Challan Calculator | SafeVisionAI'; }, []);
+  useEffect(() => { document.title = 'Challan Calculator | SafeVixAI'; }, []);
 
   const activeViolation = VIOLATIONS.find(v => v.id === violationId) || VIOLATIONS[0];
   

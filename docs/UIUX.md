@@ -1,8 +1,8 @@
-# SafeVisionAI  UI/UX Design Guide
+# SafeVixAI  UI/UX Design Guide
 
 ## Design Philosophy
 
-SafeVisionAI is an emergency app. Every design decision must prioritize:
+SafeVixAI is an emergency app. Every design decision must prioritize:
 1. **Speed**  information in 1 tap, not 3
 2. **Clarity**  readable in sunlight, readable with shaking hands
 3. **Trust**  no fake data, no spinner loops, always show what's real
@@ -159,7 +159,7 @@ const MARKER_COLORS = {
 ### Home Page (`/`)
 ```
 
-  SafeVisionAI Logo + Tagline 
+  SafeVixAI Logo + Tagline 
   Connectivity Badge     
 
   [Emergency Locator]       Red card, largest

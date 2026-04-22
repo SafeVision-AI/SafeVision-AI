@@ -1,8 +1,8 @@
-# SafeVisionAI — AI Instructions
+# SafeVixAI — AI Instructions
 
 ## Overview of AI Components
 
-SafeVisionAI uses AI at **five distinct layers** — each with a specific purpose and technical implementation. This document explains how each AI component works, why it was chosen, and how to implement or extend it.
+SafeVixAI uses AI at **five distinct layers** — each with a specific purpose and technical implementation. This document explains how each AI component works, why it was chosen, and how to implement or extend it.
 
 ---
 
@@ -34,7 +34,7 @@ Groq → Cerebras → Gemini → GitHub Models → NVIDIA NIM → OpenRouter →
 
 ```python
 SYSTEM_PROMPT = (
-    "You are RoadSoS, an AI assistant built for Indian road safety and emergency response. "
+    "You are SafeVixAI, an AI assistant built for Indian road safety and emergency response. "
     "Help users with: emergency contacts, first aid, pothole/accident reporting, traffic challans, "
     "navigation, and road authority escalation. "
     "Always answer concisely in the SAME language the user writes in (Hindi, Tamil, Telugu, etc.). "
@@ -250,7 +250,7 @@ vectorstore = Chroma.from_documents(
     chunks,
     embeddings,
     persist_directory="data/chroma_db",
-    collection_name="safevisionai_docs"
+    collection_name="safevixai_docs"
 )
 ```
 

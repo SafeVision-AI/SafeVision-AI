@@ -24,7 +24,7 @@ import csv
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]          # SafeVisionAI/backend/
+ROOT = Path(__file__).resolve().parents[1]          # SafeVixAI/backend/
 CHATBOT_DATA = ROOT.parent / "chatbot_service" / "data"
 OUT_DIR = ROOT / "datasets" / "roads"
 OUT_DIR.mkdir(parents=True, exist_ok=True)

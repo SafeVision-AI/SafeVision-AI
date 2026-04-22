@@ -1,4 +1,4 @@
-# SafeVisionAI Chatbot Service — Python 3.11 dependencies
+# SafeVixAI Chatbot Service — Python 3.11 dependencies
 # Configured for Maximum Performance (Hackathon Demo Mode with Local ML capabilities)
 
 # --- Heavy ML / Speech ---

@@ -19,7 +19,7 @@ export async function generateSosWhatsAppLink(
     addressLine = addr?.displayAddress || `${location.lat.toFixed(5)}, ${location.lon.toFixed(5)}`;
   }
 
-  const message = `🚨 EMERGENCY SOS - SafeVisionAI 🚨
+  const message = `🚨 EMERGENCY SOS - SafeVixAI 🚨
 I need immediate assistance!
 
 📍 Location: ${location ? `https://www.google.com/maps?q=${location.lat},${location.lon}` : "Unknown (GPS Signal Lost)"}
@@ -43,7 +43,7 @@ export function generateSosWhatsAppLinkSync(
   location: GpsLocation | null
 ): string {
   const base = "https://wa.me/?text=";
-  const message = `🚨 EMERGENCY SOS - SafeVisionAI 🚨
+  const message = `🚨 EMERGENCY SOS - SafeVixAI 🚨
 I need immediate assistance!
 
 📍 Location: ${location ? `https://www.google.com/maps?q=${location.lat},${location.lon}` : "Unknown (GPS Signal Lost)"}

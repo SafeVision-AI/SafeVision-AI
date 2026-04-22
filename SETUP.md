@@ -1,4 +1,4 @@
-# SafeVisionAI — Setup & Installation Guide
+# SafeVixAI — Setup & Installation Guide
 
 Complete guide to install dependencies and run both backend and frontend locally.
 
@@ -24,10 +24,10 @@ cd C:\Hackathons\IITM           # Windows
 # cd ~/projects                 # Linux/Mac
 
 # Clone the repository
-git clone https://github.com/SafeVision-AI/SafeVision-AI.git
+git clone https://github.com/SafeVixAI/SafeVixAI.git
 
 # Enter the project folder
-cd SafeVisionAI
+cd SafeVixAI
 ```
 
 After cloning, verify the structure:
@@ -217,7 +217,7 @@ npm run dev
 
 ✅ App opens at: [http://localhost:3000](http://localhost:3000)
 
-You should see the SafeVisionAI tactical dashboard with the map, search bar, and bottom navigation.
+You should see the SafeVixAI tactical dashboard with the map, search bar, and bottom navigation.
 
 ---
 
@@ -243,18 +243,18 @@ Once installed, you only need:
 
 ```bash
 # Terminal 1: Backend
-cd SafeVisionAI/backend
+cd SafeVixAI/backend
 .venv\Scripts\activate         # Windows
 # source .venv/bin/activate    # Linux/Mac
 uvicorn main:app --reload --port 8000
 
 # Terminal 2: Chatbot Service
-cd SafeVisionAI/chatbot_service
+cd SafeVixAI/chatbot_service
 .venv\Scripts\activate         # Windows
 uvicorn main:app --reload --port 8010
 
 # Terminal 3: Frontend
-cd SafeVisionAI/frontend
+cd SafeVixAI/frontend
 npm run dev
 
 # All running:

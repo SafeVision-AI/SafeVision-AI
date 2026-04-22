@@ -22,4 +22,4 @@ class GitHubModelsProvider(HttpProvider):
         return "Meta-Llama-3.1-8B-Instruct"
 
     def extra_headers(self) -> dict:
-        return {"User-Agent": "SafeVisionAI/1.0"}
+        return {"User-Agent": "SafeVixAI/1.0"}

@@ -31,7 +31,7 @@ export default function ProfilePage() {
   const [editDraft, setEditDraft] = useState({ ...userProfile });
   const [saveFlash, setSaveFlash] = useState(false);
 
-  useEffect(() => { document.title = 'Profile | SafeVisionAI'; }, []);
+  useEffect(() => { document.title = 'Profile | SafeVixAI'; }, []);
 
   // Sync draft when not editing (e.g. external store update)
   useEffect(() => {

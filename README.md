@@ -1,4 +1,4 @@
-# SafeVisionAI
+# SafeVixAI
 
 **AI Emergency Response + DriveLegal + RoadWatch  -  Three Problem Statements, One App**
 
@@ -7,7 +7,7 @@
 
 ---
 
-## What SafeVisionAI Does
+## What SafeVixAI Does
 
 | Module | What it does | Works Offline? |
 |---|---|---|
@@ -57,7 +57,7 @@ Verify: http://localhost:3000
 ## Project Structure
 
 ```
-SafeVisionAI/
+SafeVixAI/
 ├── backend/           FastAPI Python 3.11 + PostgreSQL/PostGIS (port 8000)
 ├── chatbot_service/   FastAPI Agentic RAG Chatbot + 11 LLM Providers (port 8010)
 ├── frontend/          Next.js 15 + React 19 TypeScript PWA (port 3000)
@@ -73,9 +73,9 @@ SafeVisionAI/
 
 ## 🛡️ Data Intelligence
 
-The "Intelligence Layer" of SafeVisionAI (3.3GB of pre-trained models, road damage datasets, and legal archives) is hosted on the **Hugging Face Dataset Hub** for high-performance delivery.
+The "Intelligence Layer" of SafeVixAI (3.3GB of pre-trained models, road damage datasets, and legal archives) is hosted on the **Hugging Face Dataset Hub** for high-performance delivery.
 
-**[👉 Explore the SafeVisionAI Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)**
+**[👉 Explore the SafeVixAI Dataset Hub](https://huggingface.co/datasets/SafeVixAI/SafeVixAI-Dataset-Hub)**
 
 ### 📓 Research Notebooks — Open in Colab
 
@@ -103,7 +103,7 @@ All script folders follow the same `app/` vs `data/` split:
 
 > **`data/`** scripts run standalone with no database. **`app/`** scripts require a live backend stack.
 
-The `data/` scripts are also mirrored on the **[Hugging Face Dataset Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub)** so researchers can reproduce the dataset without cloning the full app.
+The `data/` scripts are also mirrored on the **[Hugging Face Dataset Hub](https://huggingface.co/datasets/SafeVixAI/SafeVixAI-Dataset-Hub)** so researchers can reproduce the dataset without cloning the full app.
 
 Read `docs/Agent.md` first — it gives a complete overview of the entire application.
 
@@ -136,15 +136,15 @@ Read `docs/Agent.md` first — it gives a complete overview of the entire applic
 | [docs/AI_Instructions.md](docs/AI_Instructions.md) | How each AI layer works |
 | [docs/Security.md](docs/Security.md) | Auth, privacy, API security |
 | [docs/Deployment.md](docs/Deployment.md) | Step-by-step deployment guide |
-| [Hugging Face Hub](https://huggingface.co/datasets/rohith083/SafeVisionAI-Dataset-Hub) | **Intelligence Layer** (Models, Data, Notebooks) |
+| [Hugging Face Hub](https://huggingface.co/datasets/SafeVixAI/SafeVixAI-Dataset-Hub) | **Intelligence Layer** (Models, Data, Notebooks) |
 | [SETUP.md](SETUP.md) | Full installation and run guide |
 
 ---
 
 ## Live Demo
 
-- Frontend: https://safevisionai.vercel.app
-- Backend API: https://safevisionai-api.onrender.com/docs
+- Frontend: https://safevixai.vercel.app
+- Backend API: https://safevixai-api.onrender.com/docs
 
 ---
 

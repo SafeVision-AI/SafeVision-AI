@@ -22,4 +22,4 @@ class NvidiaNimProvider(HttpProvider):
         return "meta/llama-3.1-8b-instruct"
 
     def extra_headers(self) -> dict:
-        return {"User-Agent": "SafeVisionAI/1.0"}
+        return {"User-Agent": "SafeVixAI/1.0"}

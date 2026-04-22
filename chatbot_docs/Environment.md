@@ -21,7 +21,7 @@ Create a `.env` file in the `chatbot_service/` root based on `.env.example`. Thi
 > Only keys for providers you want to enable are needed. The `ProviderRouter` auto-skips providers without keys.
 
 ## Backend Connection
-- `MAIN_BACKEND_BASE_URL`: URL of the main SafeVisionAI backend (e.g., `http://localhost:8000` for local, or `https://safevisionai-api.onrender.com` for production).
+- `MAIN_BACKEND_BASE_URL`: URL of the main SafeVixAI backend (e.g., `http://localhost:8000` for local, or `https://safevixai-api.onrender.com` for production).
 
 ## RAG Configuration
 - `CHROMA_PERSIST_DIR`: Path to ChromaDB vectorstore (default: `./data/chroma_db`).

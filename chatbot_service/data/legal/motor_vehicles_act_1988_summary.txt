@@ -386,5 +386,5 @@ For the complete text: https://indiacode.nic.in
 For official notifications: https://morth.nic.in
 For traffic violation information: https://parivahan.gov.in/echallan
 
-This summary is intended for the RoadSoS RAG knowledge base to answer user queries about traffic laws and road safety regulations in India.
+This summary is intended for the SafeVixAI RAG knowledge base to answer user queries about traffic laws and road safety regulations in India.
 """

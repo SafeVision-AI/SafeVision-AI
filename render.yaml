@@ -1,7 +1,7 @@
 services:
   # ── Main FastAPI Backend ─────────────────────────────────────────────────
   - type: web
-    name: safevisionai-backend
+    name: safevixai-backend
     env: python
     rootDir: backend
     buildCommand: pip install -r requirements.txt
@@ -35,7 +35,7 @@ services:
 
   # ── Chatbot / RAG Service ────────────────────────────────────────────────
   - type: web
-    name: safevisionai-chatbot
+    name: safevixai-chatbot
     env: python
     rootDir: chatbot_service
     buildCommand: pip install -r requirements.txt
