@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     environment: str = 'development'
     api_v1_prefix: str = '/api/v1'
     cors_origins_env: str = Field(default='*', validation_alias='CORS_ORIGINS')
+    admin_secret: str | None = None
 
     database_url: str = 'postgresql+asyncpg://postgres:postgres@localhost:5432/safevixai'
     redis_url: str | None = None

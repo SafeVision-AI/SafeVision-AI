@@ -5,6 +5,7 @@ import os
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 
 from agent.graph import ChatEngine
+from config import get_settings
 from memory.redis_memory import ConversationMemoryStore
 
 
@@ -21,7 +22,7 @@ def get_memory(request: Request) -> ConversationMemoryStore:
 
 def _require_admin(x_admin_key: str = Header(default='')) -> None:
     """Validate admin API key from X-Admin-Key header."""
-    secret = os.getenv('ADMIN_SECRET', '').strip()
+    secret = get_settings().admin_secret
     if not secret:
         raise HTTPException(status_code=503, detail='Admin endpoint is disabled (ADMIN_SECRET not configured).')
     if x_admin_key != secret:

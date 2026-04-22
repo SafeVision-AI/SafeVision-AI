@@ -63,6 +63,7 @@ class Settings:
     http_timeout_seconds: float
     http_user_agent: str
     session_ttl_seconds: int
+    admin_secret: str | None
 
 
 @lru_cache
@@ -105,6 +106,7 @@ def get_settings() -> Settings:
         http_timeout_seconds=float(os.getenv('HTTP_TIMEOUT_SECONDS', '20')),
         http_user_agent=os.getenv('HTTP_USER_AGENT', 'SafeVixAIChatbot/1.0'),
         session_ttl_seconds=int(os.getenv('SESSION_TTL_SECONDS', '86400')),
+        admin_secret=os.getenv('ADMIN_SECRET') or None,
     )
     settings.chroma_persist_dir.mkdir(parents=True, exist_ok=True)
     settings.rag_data_dir.mkdir(parents=True, exist_ok=True)
