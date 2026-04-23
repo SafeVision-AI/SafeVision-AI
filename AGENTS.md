@@ -296,7 +296,7 @@ Backend connects to chatbot at `http://chatbot:8010` (Docker network name).
 - **Offline AI:** `@mlc-ai/web-llm` (Phi-3 Mini) + `@huggingface/transformers` (YOLO)
 - **Offline SQL:** `@duckdb/duckdb-wasm` for challan calculations
 - **shadcn/ui:** Configured via `components.json` — components in `components/ui/`
-- **Fonts:** Inter + Space Grotesk (loaded in `layout.tsx` via Google Fonts)
+- **Fonts:** Inter + Space Grotesk + JetBrains Mono (loaded in `layout.tsx` via Google Fonts)
 
 ### Webpack Quirk
 `next.config.js` enables `asyncWebAssembly` and `layers` experiments for WASM modules (Transformers.js, DuckDB-Wasm). The `worker-loader` rule handles `@xenova/transformers` web workers.
