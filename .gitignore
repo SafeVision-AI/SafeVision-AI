@@ -140,9 +140,8 @@ frontend/public/offline-data/translations/
 # TypeScript build cache
 *.tsbuildinfo
 
-# Local prototypes and skill notes
+# Local prototypes
 ui_design/
-SKILL.md
 
 # Frontend uses npm lockfile as source of truth
 frontend/pnpm-lock.yaml

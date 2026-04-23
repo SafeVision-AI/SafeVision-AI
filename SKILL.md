@@ -1,0 +1,161 @@
+---
+name: SafeVixAI Frontend
+description: Development guide for the SafeVixAI Next.js 15 frontend — a tactical command terminal, mobile-first road safety platform with AI features built for IIT Madras 2026 Hackathon.
+---
+
+# SafeVixAI Frontend Skill
+
+## What it is
+A **Next.js 15** (App Router) + **React 19** + **TypeScript** + **Tailwind CSS** frontend for an AI-powered road safety platform. The design system is called **"Tactical Safety Command Terminal"** — a dark-mode-first interface with emerald-green brand accents and red emergency signals, influenced by Linear (sidebar precision) and VoltAgent (terminal energy).
+
+## Design System — Tactical Safety Command Terminal
+
+> **Source of truth:** `DESIGN.md` at project root. Always consult that file for the complete spec. This section is a quick reference.
+
+### Color Palette
+- **Background (Dark):** `#0A0E14` (page canvas) · Light: `#F0F2F5`
+- **Surfaces:** `#111520` (cards), `#181D2A` (hover), `#1F2535` (active), `#252B3A` (modals)
+- **Brand green:** `#1A5C38` (primary) / `#00C896` (active states, online indicators)
+- **Emergency red:** `#DC2626` — used for SOS, emergencies. **Never decorative.**
+- **Challan amount:** `#00E676` (monospace fine display)
+- **Text (dark):** `#F0F4F8` (primary), `#A8B4C4` (secondary), `#6B7A8D` (tertiary)
+- **Text (light):** `#0F1A2E` / `#4A5568` / `#8A95A3`
+- **Borders:** `rgba(255,255,255,0.07)` (default dark), `rgba(255,255,255,0.12)` (medium)
+- **Warning:** `#D97706` · **Info:** `#3B82F6` · **Ambulance:** `#EA580C`
+
+### Typography
+- **Font families:** `Inter Variable` (body/UI) with `font-feature-settings: "cv01", "ss03"`, `Space Grotesk` (headings/compressed titles), `JetBrains Mono` (monospace: IDs, coordinates, fine amounts)
+- **Terminal overlines:** `text-[11px] font-semibold uppercase tracking-widest text-slate-400 font-space` — "SENTINEL ACTIVE", section headers
+- **Page codename:** `text-2xl font-bold tracking-tight` — compressed hero headings
+- **Section labels:** `text-[13px] font-semibold uppercase tracking-[0.05em]` — "LOCATION LOCK", "VEHICLE IDENTIFICATION"
+- **Body text:** `text-sm font-normal` (weight 400)
+- **Caption/micro:** `text-xs font-semibold uppercase tracking-widest` (weight 600, NOT font-black)
+
+**Critical rule:** `font-black` (900 weight) is ONLY for page hero titles and large amounts (₹10,000). Everything else uses `font-semibold` (600) or `font-normal` (400).
+
+### Components & Shapes
+- **Cards/panels:** `rounded-lg` (8px) with `bg-[#111520] border border-white/[0.07]`
+- **Feature cards (challan vehicles):** `rounded-[10px]` (10px)
+- **Buttons/inputs:** `rounded-md` (6px)
+- **Emergency SOS hero card:** `rounded-2xl` (16px) — only exception for large radius
+- **Micro badges:** `rounded-[4px]` (OFFLINE, PRIORITY P0)
+- **Pills/chips:** `rounded-full` (9999px)
+- **Avatars/icon buttons:** `rounded-full` (50%)
+
+**Critical rule:** No `rounded-3xl` anywhere. No `rounded-2xl` on regular cards. Cards = `rounded-lg` (8px).
+
+### Letter Spacing
+- Terminal overlines: `tracking-widest` (0.1em) — NOT `tracking-[0.3em]`
+- Section labels: `tracking-[0.05em]`
+- Body text: `tracking-normal`
+- Compressed headings: `tracking-tight` (-0.02em)
+
+### Iconography
+- **Primary:** Lucide React icons (`lucide-react`)
+
+## Project Structure
+```
+frontend/
+├── app/
+│   ├── page.tsx              ← Dashboard / Map Home
+│   ├── layout.tsx            ← Root layout (fonts, providers, theme)
+│   ├── globals.css           ← Design tokens + CSS variables + Tailwind config
+│   ├── assistant/page.tsx    ← AI Chat Assistant (SSE streaming)
+│   ├── locator/page.tsx      ← Emergency Service Locator + Map
+│   ├── first-aid/page.tsx    ← First Aid Guide + AI Vision
+│   ├── report/page.tsx       ← Road Hazard Reporter
+│   ├── challan/page.tsx      ← Traffic Challan Calculator
+│   ├── emergency/page.tsx    ← Emergency Protocol Terminal
+│   ├── sos/page.tsx          ← SOS Dispatch Terminal
+│   ├── profile/page.tsx      ← Operator Identity Matrix (+ QR Emergency Card)
+│   ├── login/page.tsx        ← Operator Authentication (OTP flow)
+│   ├── emergency-card/[userId]/page.tsx ← Public QR Emergency Card (no login)
+│   └── settings/page.tsx     ← System Settings
+├── components/
+│   ├── dashboard/
+│   │   ├── BottomNav.tsx     ← Mobile bottom nav (5-tab, animated pill)
+│   │   ├── SystemHeader.tsx  ← Desktop header (search, theme, connectivity, SECURE badge)
+│   │   ├── SystemSidebar.tsx ← Mobile slide-out nav (grid + emergency quick dial)
+│   │   ├── TopSearch.tsx     ← Mobile search bar + filter chips
+│   │   ├── FloatingSidebarControls.tsx ← Map HUD (driving score, relocate, SOS)
+│   │   ├── ProfileCard.tsx   ← Reusable avatar + vitals card
+│   │   ├── SkeletonCard.tsx  ← Loading skeleton
+│   │   ├── Toast.tsx         ← Notification toast component
+│   │   └── RecentAlertsOverlay.tsx ← Road alert pills overlay
+│   ├── profile/
+│   │   └── QREmergencyCard.tsx ← QR code for emergency identification
+│   ├── chat/
+│   │   └── multimodal-ai-chat-input.tsx ← AI chat input with voice
+│   ├── maps/
+│   │   └── MapLibreCanvas.tsx ← Main map component (dynamic import, SSR disabled)
+│   ├── report/
+│   │   └── HazardViewfinder.tsx ← Camera viewport for AI road scan
+│   ├── GlobalSOS.tsx         ← Floating SOS button (all pages except map/sos)
+│   ├── ChatInterface.tsx     ← Chat UI (online/offline toggle)
+│   ├── ClientAppHooks.tsx    ← Global sensor listeners (crash detection, offline sync)
+│   ├── PageShell.tsx         ← Layout wrapper with GlobalSOS
+│   └── ...                   ← Feature-specific components
+└── lib/
+    ├── store.ts              ← Zustand global state (GPS, services, AI mode, auth)
+    ├── api.ts                ← Backend API client (JWT Bearer token injected)
+    ├── geolocation.ts        ← GPS utilities
+    ├── sos-share.ts          ← SOS link generators
+    ├── offline-sos-queue.ts  ← IndexedDB queue for offline SOS dispatch
+    ├── crash-detection.ts    ← DeviceMotionEvent crash detection engine
+    ├── analytics-provider.tsx ← PostHog analytics wrapper
+    ├── offline-ai.ts         ← WebLLM Phi-3 offline AI
+    └── duckdb-challan.ts     ← DuckDB-Wasm offline challan calculator
+```
+
+## Navigation Architecture
+- **Mobile:** `TopSearch` (top) + `BottomNav` (bottom, 64px) + `SystemSidebar` (hamburger drawer)
+- **Desktop (lg+):** `SystemHeader` (top bar 52px with search/theme/connectivity) + full sidebar 192px
+- **SOS:** `GlobalSOS` component floats on all interior pages; hidden on `/`, `/sos`, `/emergency`
+
+## Key Conventions
+1. Every page is `'use client'` (client-side interactivity required everywhere)
+2. Use **Tailwind utility classes** exclusively (no inline `style={}`)
+3. Bottom nav auto-detects active route via `usePathname()`
+4. All pages use `pb-44` on `<main>` to clear the floating BottomNav
+5. Fixed header: `z-50`, `backdrop-blur`, content starts at `pt-28 lg:pt-24`
+6. Map components use `dynamic(() => import(...), { ssr: false })` to avoid hydration issues
+7. Theme: dark-mode-first, `data-theme` attribute set via blocking script in layout
+8. Emergency numbers: 112 (universal), 102 (ambulance), 100 (police), 101 (fire), 1033 (NHAI)
+9. **No login button in header** — login is only accessible via `/login` URL
+10. CSS variables defined in `:root` of `globals.css` — always use these, not hardcoded hex
+
+## CSS Variables (Quick Reference)
+```css
+:root {
+  --navbar-bottom-h: 64px;
+  --card-radius:     8px;   /* rounded-lg */
+  --btn-radius:      6px;   /* rounded-md */
+  --sidebar-width:   192px;
+}
+```
+
+## Dependencies
+| Package | Version | Purpose |
+|---------|---------|---------|
+| Next.js | 15.x | React framework (App Router) |
+| React | 19.x | UI library |
+| Tailwind CSS | 3.x | Utility-first CSS |
+| `motion` | 12.x | Animations (framer-motion v12) |
+| `maplibre-gl` | 5.x | Vector map rendering |
+| `zustand` | 5.x | Global state management |
+| `lucide-react` | 0.4x | Icon library |
+| `@mlc-ai/web-llm` | - | Offline AI (browser-based LLM) |
+| `@turf/turf` | - | Geospatial utilities |
+| `qrcode.react` | - | QR code generation for Emergency Card |
+
+## Instructions for building new pages
+1. Import the shared layout components: `SystemHeader`, `TopSearch`, `SystemSidebar`, `BottomNav`
+2. Use theme-consistent backgrounds via CSS variables (never hardcode hex colors)
+3. Wrap content in `<main className="flex-1 w-full max-w-2xl mx-auto pt-28 lg:pt-24 pb-44 px-6">`
+4. Use section overline labels: `text-[11px] font-semibold uppercase tracking-widest text-slate-400 font-space`
+5. Use standard cards: `rounded-lg bg-[#111520] dark:bg-[#111520] border border-white/[0.07]`
+6. Test at 390px (mobile), 768px (tablet), and 1440px (desktop) breakpoints
+7. All interactive elements must have `active:scale-95 transition-all` and min 44×44px touch targets
+8. **Never use `font-black`** for labels, captions, or body text — only for page hero titles
+9. **Never use `rounded-2xl` or `rounded-3xl`** for cards — use `rounded-lg` (8px)
+10. **Never use `tracking-[0.3em]`** — use `tracking-widest` (0.1em) for overlines
