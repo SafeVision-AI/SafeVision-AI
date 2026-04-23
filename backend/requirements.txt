@@ -36,6 +36,9 @@ numpy==2.4.4
 pandas==3.0.2
 Pillow==12.2.0
 
+# --- Auth / JWT ---
+python-jose[cryptography]==3.4.0
+
 # --- Config / Utils ---
 pydantic==2.13.2
 pydantic-settings==2.13.1
