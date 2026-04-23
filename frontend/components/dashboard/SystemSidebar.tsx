@@ -12,6 +12,7 @@ import {
   Scale,
   ShieldAlert,
   User,
+  Users,
   Settings,
   Phone,
 } from 'lucide-react';
@@ -44,6 +45,7 @@ const SystemSidebar = memo(function SystemSidebar() {
     { icon: <MapPin size={24} />, label: 'Map', href: '/', color: 'text-[#1A5C38] dark:text-[#00C896]' },
     { icon: <BotMessageSquare size={24} />, label: 'AI Assistant', href: '/assistant', color: 'text-[#1A5C38] dark:text-[#00C896]' },
     { icon: <MapPinPlus size={24} />, label: 'Locator', href: '/locator', color: 'text-emerald-500' },
+    { icon: <Users size={24} />, label: 'Tracking', href: '/tracking', color: 'text-indigo-500' },
     { icon: <HeartPulse size={24} />, label: 'First Aid', href: '/first-aid', color: 'text-red-500' },
     { icon: <AlertTriangle size={24} />, label: 'Report Road Issue', href: '/report', color: 'text-orange-500' },
     { icon: <Scale size={24} />, label: 'Challan Calculator', href: '/challan', color: 'text-slate-500' },
