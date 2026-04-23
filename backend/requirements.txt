@@ -3,6 +3,7 @@
 # --- Web Framework ---
 fastapi==0.136.0
 uvicorn[standard]==0.44.0
+slowapi==0.1.9
 
 # --- AI / LLM / RAG ---
 langchain==1.2.15

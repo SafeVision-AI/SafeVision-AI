@@ -9,6 +9,9 @@ from fastapi.staticfiles import StaticFiles
 from api.v1 import api_router
 from core.config import get_settings
 from core.database import check_database
+from core.limiter import limiter
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 from core.redis_client import create_cache
 from models.schemas import HealthResponse
 from services.authority_router import AuthorityRouter
@@ -63,6 +66,8 @@ def create_app() -> FastAPI:
             await cache.close()
 
     app = FastAPI(title=settings.app_name, version=settings.version, lifespan=lifespan)
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
