@@ -1,4 +1,4 @@
-# SafeVixAI Backend â€” Python 3.11 dependencies (pinned for reproducibility)
+# SafeVixAI Backend - Python 3.11 dependencies (pinned for reproducibility)
 
 # --- Web Framework ---
 fastapi==0.136.0

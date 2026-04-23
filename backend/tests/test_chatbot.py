@@ -22,6 +22,7 @@ def test_chat_endpoint_returns_backend_chat_payload(app):
                 'message': 'What is Section 185?',
                 'session_id': 'session-123',
             },
+            headers={'Authorization': 'Bearer mock-jwt-token-for-hackathon'},
         )
 
     assert response.status_code == 200

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from datetime import timedelta
-from ..core.security import create_access_token
+from core.security import create_access_token
 
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
