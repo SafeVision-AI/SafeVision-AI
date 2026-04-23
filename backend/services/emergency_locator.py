@@ -294,8 +294,6 @@ class EmergencyLocatorService:
             'source': source,
         }
         await self.cache.set_json(cache_key, bundle, self.settings.cache_ttl_seconds)
-        bundle_path = self.settings.offline_bundle_dir / f'{lookup_key}.json'
-        bundle_path.write_text(json.dumps(bundle, indent=2), encoding='utf-8')
         return bundle
 
     async def _find_nearby_uncached(

@@ -54,7 +54,6 @@ class Settings(BaseSettings):
 
     data_dir: Path = Field(default_factory=lambda: Path(__file__).resolve().parents[1] / 'data')
     upload_dir: Path = Field(default_factory=lambda: Path(__file__).resolve().parents[1] / 'data' / 'uploads')
-    offline_bundle_dir: Path = Field(default_factory=lambda: Path(__file__).resolve().parents[1] / 'data' / 'offline_bundles')
     local_upload_base_url: str | None = None
     max_upload_bytes: int = 5 * 1024 * 1024
     allowed_upload_content_types_env: str = Field(
@@ -140,21 +139,6 @@ class Settings(BaseSettings):
             return 'https://api.openrouteservice.org'
         return normalized.rstrip('/')
 
-    @field_validator('offline_bundle_dir', mode='before')
-    @classmethod
-    def normalize_offline_bundle_dir(cls, value: Any) -> Path:
-        default = Path(__file__).resolve().parents[1] / 'data' / 'offline_bundles'
-        if value is None:
-            return default
-        if isinstance(value, Path):
-            return value
-        if isinstance(value, str):
-            normalized = value.strip()
-            if not normalized:
-                return default
-            return Path(normalized)
-        raise ValueError('offline_bundle_dir must be a path-like string')
-
     @field_validator('chatbot_service_url', mode='before')
     @classmethod
     def normalize_chatbot_service_url(cls, value: Any) -> str:
@@ -174,7 +158,6 @@ def get_settings() -> Settings:
     try:
         settings.data_dir.mkdir(parents=True, exist_ok=True)
         settings.upload_dir.mkdir(parents=True, exist_ok=True)
-        settings.offline_bundle_dir.mkdir(parents=True, exist_ok=True)
     except OSError:
         pass
     return settings

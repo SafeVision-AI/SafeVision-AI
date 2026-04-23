@@ -27,11 +27,3 @@ def test_settings_parse_overpass_urls():
 
     assert settings.overpass_urls == ['https://a.example/api', 'https://b.example/api']
 
-
-def test_settings_blank_offline_bundle_dir_uses_default():
-    settings = Settings(
-        _env_file=None,
-        offline_bundle_dir='',
-    )
-
-    assert settings.offline_bundle_dir.name == 'offline_bundles'
