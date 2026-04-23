@@ -20,6 +20,26 @@ SYSTEM_PROMPT = (
 MAX_HISTORY = 10          # messages to include in context window
 MAX_RESPONSE_TOKENS = 800
 
+PROHIBITED_PATTERNS = [
+    "ignore all previous",
+    "ignore previous",
+    "disregard",
+    "bypass",
+    "system prompt",
+    "you are now",
+    "you are no longer",
+    "forget instructions",
+    "jailbreak",
+    "forget everything",
+    "new instructions",
+    "hypothetical scenario where you ignore"
+]
+
+def check_prompt_injection(message: str) -> bool:
+    """Returns True if a prompt injection attack is detected."""
+    msg_lower = message.lower()
+    return any(pattern in msg_lower for pattern in PROHIBITED_PATTERNS)
+
 
 @dataclass(slots=True)
 class ProviderRequest:
@@ -107,6 +127,14 @@ class HttpProvider:
         return self._client
 
     async def generate(self, request: ProviderRequest) -> ProviderResult:
+        if check_prompt_injection(request.message):
+            logger.warning(f"Prompt injection blocked in HttpProvider. Message: {request.message[:50]}...")
+            return ProviderResult(
+                text="I cannot fulfill this request. I am SafeVixAI, an AI assistant focused strictly on Indian road safety and emergency response.",
+                provider=self.name,
+                model="safety-filter"
+            )
+
         import os
         api_key = self._get_api_key()
         model = os.getenv(f"{self.api_key_env().replace('_API_KEY', '_MODEL')}", "").strip() or self.default_model()
@@ -141,6 +169,14 @@ class TemplateProvider:
     model = "deterministic-rag"
 
     async def generate(self, request: ProviderRequest) -> ProviderResult:
+        if check_prompt_injection(request.message):
+            logger.warning(f"Prompt injection blocked in TemplateProvider. Message: {request.message[:50]}...")
+            return ProviderResult(
+                text="I cannot fulfill this request. I am SafeVixAI, an AI assistant focused strictly on Indian road safety and emergency response.",
+                provider=self.name,
+                model="safety-filter"
+            )
+
         lines: list[str] = []
         if request.intent == "emergency":
             lines.append("🚨 Emergency: Call 112 (universal) or 102 (ambulance) immediately.")

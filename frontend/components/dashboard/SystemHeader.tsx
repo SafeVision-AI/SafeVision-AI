@@ -2,7 +2,7 @@
 
 import React, { memo, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Search, Mic, Sun, Moon, Monitor, Menu, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Search, Mic, Sun, Moon, Monitor, Menu, ShieldCheck, User } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -14,7 +14,7 @@ interface SystemHeaderProps {
 }
 
 const SystemHeader = memo(function SystemHeader({
-  title = 'SafeVision AI',
+  title = 'SafeVixAI',
   showBack = true,
   backHref = '/',
   isOnlineInitial = true
@@ -23,6 +23,8 @@ const SystemHeader = memo(function SystemHeader({
   const [isOnline, setIsOnline] = useState(isOnlineInitial);
   const { theme, setTheme } = useTheme();
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  const operatorName = useAppStore((s) => s.operatorName);
 
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -49,7 +51,7 @@ const SystemHeader = memo(function SystemHeader({
   };
 
   return (
-    <header className="hidden lg:flex fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-2xl border-b border-slate-200 dark:border-white/5 shadow-sm px-6 h-16 items-center justify-between transition-colors duration-500">
+    <header className="hidden lg:flex fixed top-0 left-0 w-full z-50 bg-white/80 dark:bg-[#0D1117]/80 backdrop-blur-2xl border-b border-slate-200 dark:border-white/5 shadow-sm px-6 h-16 items-center justify-between transition-colors duration-500">
       <div className="flex items-center gap-4 flex-1">
         {showBack && (
           <Link 
@@ -69,7 +71,7 @@ const SystemHeader = memo(function SystemHeader({
           </h1>
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[9px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Sentinel Active</span>
+            <span className="text-[9px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Sentinel Active</span>
           </div>
         </div>
       </div>
@@ -79,7 +81,7 @@ const SystemHeader = memo(function SystemHeader({
         onSubmit={handleSearch}
         role="search"
         aria-label="Search"
-        className="flex-1 max-w-md mx-8 flex h-11 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-2 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_20px_rgba(59,130,246,0.15)] focus-within:bg-white dark:focus-within:bg-[#1f283d] focus-within:border-blue-500/30"
+        className="flex-1 max-w-md mx-8 flex h-11 bg-slate-100 dark:bg-[#1a2133] rounded-full border border-slate-200 dark:border-white/5 items-center px-2 overflow-hidden transition-all duration-300 focus-within:shadow-[0_0_20px_rgba(0,200,150,0.12)] focus-within:bg-white dark:focus-within:bg-[#1f283d] focus-within:border-[#1A5C38]/40"
       >
         <button
           type="button"
@@ -102,7 +104,7 @@ const SystemHeader = memo(function SystemHeader({
         />
         <button 
           type="button"
-          className="p-2 mr-1 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 transition-all"
+          className="p-2 mr-1 rounded-full bg-[#1A5C38]/10 text-[#1A5C38] dark:text-[#00C896] hover:bg-[#1A5C38]/20 transition-all"
         >
           <Mic className="w-4 h-4" />
         </button>
@@ -139,11 +141,19 @@ const SystemHeader = memo(function SystemHeader({
                 key={t.id}
                 onClick={() => setTheme(t.id as any)}
                 title={t.title}
-                className={`p-1.5 rounded-full transition-all ${theme === t.id ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400 shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                className={`p-1.5 rounded-full transition-all ${theme === t.id ? 'bg-emerald-100 text-emerald-700 dark:bg-[#1A5C38]/20 dark:text-[#00C896] shadow-sm' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
               >
                 {t.icon}
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Operator Chip (only when authenticated) */}
+        {isAuthenticated && operatorName && (
+          <div className="hidden xl:flex items-center gap-2 bg-[#1A5C38]/10 dark:bg-[#1A5C38]/20 px-3 py-2 rounded-full border border-[#1A5C38]/20 dark:border-[#1A5C38]/30">
+            <User size={12} className="text-[#1A5C38] dark:text-[#00C896]" />
+            <span className="text-[10px] uppercase tracking-widest font-black text-[#1A5C38] dark:text-[#00C896] max-w-[120px] truncate">{operatorName}</span>
           </div>
         )}
 

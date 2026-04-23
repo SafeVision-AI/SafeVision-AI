@@ -69,7 +69,7 @@ const ReportForm: React.FC = () => {
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-[#142032]/60 backdrop-blur-3xl border border-[#40e56c]/20 p-8 rounded-[2rem] text-center"
+        className="bg-[#0D1117]/60 backdrop-blur-3xl border border-[#40e56c]/20 p-8 rounded-[2rem] text-center"
       >
         <div className="w-16 h-16 bg-[#40e56c]/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#40e56c]/30">
           <svg className="w-8 h-8 text-[#40e56c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,12 +77,12 @@ const ReportForm: React.FC = () => {
           </svg>
         </div>
         <h3 className="text-xl font-black uppercase tracking-tighter text-[#40e56c]">Report Uplinked</h3>
-        <p className="text-sm text-[#b0c6ff]/60 mt-2 leading-relaxed">
+        <p className="text-sm text-[#00C896]/60 mt-2 leading-relaxed">
           The hazard has been localized and broadcasted to regional enforcement units.
         </p>
         <button 
           onClick={() => { setSubmitted(false); setStep(1); setDesc(''); setPhoto(null); }}
-          className="mt-6 w-full py-4 bg-[#b0c6ff]/10 hover:bg-[#b0c6ff]/20 text-[#b0c6ff] rounded-xl text-[10px] font-black uppercase tracking-widest border border-[#b0c6ff]/20 transition-all"
+          className="mt-6 w-full py-4 bg-[#00C896]/10 hover:bg-[#00C896]/20 text-[#00C896] rounded-xl text-[10px] font-semibold uppercase tracking-widest border border-[#00C896]/20 transition-all"
         >
           Begin New Recon
         </button>
@@ -94,10 +94,10 @@ const ReportForm: React.FC = () => {
     <div className="space-y-6">
       {/* HUD Navigation / Steps */}
       <div className="flex justify-between items-center px-2">
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#b0c6ff]/40">Form Protocol 01-{step.toString().padStart(2, '0')}</span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#00C896]/40">Form Protocol 01-{step.toString().padStart(2, '0')}</span>
         <div className="flex gap-1">
           {[1, 2].map((s) => (
-            <div key={s} className={`w-6 h-1 rounded-full ${s === step ? 'bg-[#b0c6ff]' : 'bg-[#b0c6ff]/10'}`} />
+            <div key={s} className={`w-6 h-1 rounded-full ${s === step ? 'bg-[#00C896]' : 'bg-[#00C896]/10'}`} />
           ))}
         </div>
       </div>
@@ -116,19 +116,19 @@ const ReportForm: React.FC = () => {
                 <button
                   key={type}
                   onClick={() => setIssue(type)}
-                  className={`p-4 rounded-2xl text-left border transition-all ${
+                  className={`p-4 rounded-lg text-left border transition-all ${
                     issue === type 
-                      ? 'bg-[#b0c6ff] text-[#071325] border-transparent shadow-[0_4px_20px_rgba(176,198,255,0.4)]' 
-                      : 'bg-[#142032]/40 text-[#b0c6ff] border-[#b0c6ff]/10 hover:bg-[#b0c6ff]/5'
+                      ? 'bg-[#00C896] text-[#0A0E14] border-transparent shadow-[0_4px_20px_rgba(176,198,255,0.4)]' 
+                      : 'bg-[#0D1117]/40 text-[#00C896] border-[#00C896]/10 hover:bg-[#00C896]/5'
                   }`}
                 >
-                  <div className="text-[10px] font-black uppercase tracking-widest">{type}</div>
+                  <div className="text-[10px] font-semibold uppercase tracking-widest">{type}</div>
                 </button>
               ))}
             </div>
 
-            <div className="p-4 bg-[#142032]/40 rounded-2xl border border-[#b0c6ff]/10">
-              <label className="text-[10px] font-black uppercase tracking-widest text-[#b0c6ff]/40 mb-3 block">Danger Index (Severity)</label>
+            <div className="p-4 bg-[#0D1117]/40 rounded-lg border border-[#00C896]/10">
+              <label className="text-[10px] font-semibold uppercase tracking-widest text-[#00C896]/40 mb-3 block">Danger Index (Severity)</label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5].map((lvl) => (
                   <button
@@ -136,8 +136,8 @@ const ReportForm: React.FC = () => {
                     onClick={() => setSeverity(lvl)}
                     className={`flex-1 h-10 rounded-lg transition-all ${
                       severity >= lvl 
-                        ? (severity >= 4 ? 'bg-[#ff5545]' : 'bg-[#b0c6ff]') 
-                        : 'bg-[#b0c6ff]/5 border border-[#b0c6ff]/10'
+                        ? (severity >= 4 ? 'bg-[#ff5545]' : 'bg-[#00C896]') 
+                        : 'bg-[#00C896]/5 border border-[#00C896]/10'
                     }`}
                   />
                 ))}
@@ -146,7 +146,7 @@ const ReportForm: React.FC = () => {
 
             <button 
               onClick={() => setStep(2)}
-              className="w-full py-5 bg-[#b0c6ff] text-[#071325] rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl hover:scale-[1.02] active:scale-95 transition-all"
+              className="w-full py-5 bg-[#00C896] text-[#0A0E14] rounded-[1.5rem] text-[11px] font-semibold uppercase tracking-widest shadow-2xl hover:scale-[1.02] active:scale-95 transition-all"
             >
               Configure Details
             </button>
@@ -163,16 +163,16 @@ const ReportForm: React.FC = () => {
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               placeholder="Operational details (e.g. Left lane impassable)..."
-              className="w-full bg-[#142032]/40 border border-[#b0c6ff]/10 rounded-2xl p-4 text-sm text-[#d7e3fc] placeholder-[#b0c6ff]/20 min-h-[120px] focus:outline-none focus:border-[#b0c6ff]/40"
+              className="w-full bg-[#0D1117]/40 border border-[#00C896]/10 rounded-lg p-4 text-sm text-[#d7e3fc] placeholder-[#00C896]/20 min-h-[120px] focus:outline-none focus:border-[#00C896]/40"
             />
 
-            <div className="bg-[#142032]/40 rounded-2xl border border-[#b0c6ff]/10 p-4">
-              <label className="text-[10px] font-black uppercase tracking-widest text-[#b0c6ff]/40 mb-3 block">Attach Evidence (Photo)</label>
+            <div className="bg-[#0D1117]/40 rounded-lg border border-[#00C896]/10 p-4">
+              <label className="text-[10px] font-semibold uppercase tracking-widest text-[#00C896]/40 mb-3 block">Attach Evidence (Photo)</label>
               <input 
                 type="file" 
                 accept="image/jpeg, image/png, image/webp"
                 onChange={(e) => setPhoto(e.target.files?.[0] || null)}
-                className="text-xs text-[#b0c6ff] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#b0c6ff]/10 file:text-[#b0c6ff] hover:file:bg-[#b0c6ff]/20"
+                className="text-xs text-[#00C896] file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#00C896]/10 file:text-[#00C896] hover:file:bg-[#00C896]/20"
               />
               {photo && <p className="text-[10px] text-[#40e56c] mt-2">Attached: {photo.name}</p>}
             </div>
@@ -180,7 +180,7 @@ const ReportForm: React.FC = () => {
             <div className="flex gap-3">
               <button 
                 onClick={() => setStep(1)}
-                className="w-20 h-14 border border-[#b0c6ff]/10 rounded-2xl flex items-center justify-center text-[#b0c6ff] hover:bg-[#b0c6ff]/5"
+                className="w-20 h-14 border border-[#00C896]/10 rounded-lg flex items-center justify-center text-[#00C896] hover:bg-[#00C896]/5"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -189,7 +189,7 @@ const ReportForm: React.FC = () => {
               <button 
                 onClick={handleSubmit}
                 disabled={loading}
-                className="flex-1 py-5 bg-[#142032] text-[#b0c6ff] border border-[#b0c6ff]/40 rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl hover:bg-[#b0c6ff] hover:text-[#071325] transition-all"
+                className="flex-1 py-5 bg-[#0D1117] text-[#00C896] border border-[#00C896]/40 rounded-[1.5rem] text-[11px] font-semibold uppercase tracking-widest shadow-2xl hover:bg-[#00C896] hover:text-[#0A0E14] transition-all"
               >
                 {loading ? 'Transmitting Data...' : 'Broadcast Report'}
               </button>

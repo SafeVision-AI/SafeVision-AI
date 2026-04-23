@@ -22,7 +22,7 @@ import { useAppStore } from '@/lib/store';
 
 const navItems = [
   { icon: <MapPin size={20} />, label: 'Map', href: '/', color: 'text-blue-500' },
-  { icon: <BotMessageSquare size={20} />, label: 'AI Assistant', href: '/assistant', color: 'text-indigo-500' },
+  { icon: <BotMessageSquare size={20} />, label: 'AI Assistant', href: '/assistant', color: 'text-[#1A5C38] dark:text-[#00C896]' },
   { icon: <MapPinPlus size={20} />, label: 'Locator', href: '/locator', color: 'text-emerald-500' },
   { icon: <HeartPulse size={20} />, label: 'First Aid', href: '/first-aid', color: 'text-red-500' },
   { icon: <AlertTriangle size={20} />, label: 'Report Road Issue', href: '/report', color: 'text-orange-500' },
@@ -57,8 +57,8 @@ export function AppSidebar() {
         {!isDesktopSidebarCollapsed && (
           <div className="flex items-center gap-3">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="whitespace-nowrap">
-              <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none">SafeVision AI</h2>
-              <p className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mt-1">System Integrated</p>
+              <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none">SafeVixAI</h2>
+              <p className="text-[10px] font-bold text-emerald-600 dark:text-[#00C896] uppercase tracking-widest mt-1">System Integrated</p>
             </motion.div>
           </div>
         )}
@@ -75,7 +75,7 @@ export function AppSidebar() {
       <nav className="flex-1 overflow-y-auto p-4 space-y-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div>
           {!isDesktopSidebarCollapsed && (
-            <p className="text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase mb-3 px-2 whitespace-nowrap">Operations Console</p>
+            <p className="text-[10px] font-semibold tracking-[0.1em] text-slate-400 uppercase mb-3 px-2 whitespace-nowrap">Operations Console</p>
           )}
           <div className="flex flex-col gap-1 relative">
             {navItems.map((item) => {
@@ -118,7 +118,7 @@ export function AppSidebar() {
         {!isDesktopSidebarCollapsed && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div className="flex items-center justify-between px-2 mb-3">
-              <p className="text-[10px] font-black tracking-[0.2em] text-red-500 uppercase whitespace-nowrap">Emergency Dial</p>
+              <p className="text-[10px] font-semibold tracking-[0.1em] text-red-500 uppercase whitespace-nowrap">Emergency Dial</p>
               <div className="h-px flex-1 bg-red-500/20 ml-3"></div>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -132,8 +132,8 @@ export function AppSidebar() {
                   <div className="text-red-500 mb-1 group-hover:scale-110 transition-[transform,color] group-hover:text-red-600 dark:group-hover:text-red-400">
                     {dial.icon}
                   </div>
-                  <p className="text-[9px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap mb-0.5">{dial.label}</p>
-                  <p className="text-xs font-black text-slate-800 dark:text-[#e2e8f0] leading-none whitespace-nowrap group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{dial.number}</p>
+                  <p className="text-[9px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest whitespace-nowrap mb-0.5">{dial.label}</p>
+                  <p className="text-xs font-semibold text-slate-800 dark:text-[#e2e8f0] leading-none whitespace-nowrap group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">{dial.number}</p>
                 </a>
               ))}
             </div>
@@ -154,7 +154,7 @@ export function AppSidebar() {
               sos
             </span>
             {!isDesktopSidebarCollapsed && (
-              <span className="relative z-10 tracking-[0.2em] font-black uppercase text-[13px] whitespace-nowrap drop-shadow-sm">System SOS</span>
+              <span className="relative z-10 tracking-[0.1em] font-black uppercase text-[13px] whitespace-nowrap drop-shadow-sm">System SOS</span>
             )}
           </button>
         </Link>

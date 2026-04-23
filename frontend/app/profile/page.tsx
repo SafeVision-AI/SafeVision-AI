@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { 
   User, Shield, CheckCircle, 
-  Car,
+  Car, LogOut,
   CloudOff, ShieldAlert, Award,
   Heart, Star, Edit3, Save, X, Bell
 } from 'lucide-react';
@@ -15,6 +15,7 @@ import BottomNav from '@/components/dashboard/BottomNav';
 import TopSearch from '@/components/dashboard/TopSearch';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
+import QREmergencyCard from '@/components/profile/QREmergencyCard';
 
 export default function ProfilePage() {
   const { 
@@ -22,6 +23,9 @@ export default function ProfilePage() {
     setCrashDetectionEnabled,
     userProfile,
     setUserProfile,
+    clearAuth,
+    operatorName,
+    isAuthenticated,
   } = useAppStore();
 
   const [offlineMode, setOfflineMode] = useState(false);
@@ -72,7 +76,7 @@ export default function ProfilePage() {
     : 'NOT SET';
 
   return (
-    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
+    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#0A0E14] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
       
       {/* ── Unified Tactical Navigation Header ── */}
       <SystemHeader title="Operator Identity Matrix" showBack={false} />
@@ -92,7 +96,7 @@ export default function ProfilePage() {
               initial={{ opacity: 0, y: -12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              className="fixed top-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-full shadow-xl text-sm font-black uppercase tracking-widest"
+              className="fixed top-24 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-full shadow-xl text-sm font-semibold uppercase tracking-widest"
             >
               <CheckCircle size={16} />
               Profile Saved
@@ -105,14 +109,14 @@ export default function ProfilePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] font-space leading-none">Profile Matrix Sync</span>
+              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.1em] font-space leading-none">Profile Matrix Sync</span>
             </div>
 
             {/* Edit / Save / Cancel controls */}
             {!isEditing ? (
               <button
                 onClick={handleEdit}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-500/10 dark:hover:text-blue-400 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 text-[10px] font-semibold uppercase tracking-widest hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-[#1A5C38]/10 dark:hover:text-[#00C896] transition-all"
               >
                 <Edit3 size={12} />
                 Edit Profile
@@ -121,14 +125,14 @@ export default function ProfilePage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleCancel}
-                  className="flex items-center gap-1 px-3 py-2 rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-500 text-[10px] font-black uppercase tracking-widest hover:text-red-500 transition-all"
+                  className="flex items-center gap-1 px-3 py-2 rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-500 text-[10px] font-semibold uppercase tracking-widest hover:text-red-500 transition-all"
                 >
                   <X size={12} />
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
-                  className="flex items-center gap-1 px-4 py-2 rounded-full bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg"
+                  className="flex items-center gap-1 px-4 py-2 rounded-full bg-emerald-500 text-white text-[10px] font-semibold uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-lg"
                 >
                   <Save size={12} />
                   Save
@@ -148,7 +152,7 @@ export default function ProfilePage() {
                   <User size={40} className="text-slate-300 dark:text-white/20" />
                 )}
               </div>
-              <div className="absolute -bottom-2 -right-2 bg-emerald-500 w-10 h-10 rounded-2xl flex items-center justify-center border-4 border-white dark:border-[#071325] shadow-lg">
+              <div className="absolute -bottom-2 -right-2 bg-emerald-500 w-10 h-10 rounded-lg flex items-center justify-center border-4 border-white dark:border-[#0A0E14] shadow-lg">
                 <CheckCircle size={20} className="text-white" />
               </div>
             </div>
@@ -169,11 +173,11 @@ export default function ProfilePage() {
               )}
               <div className="flex items-center justify-center sm:justify-start gap-2">
                 <div className="px-2 py-1 bg-slate-100 dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/10">
-                   <span className="text-[9px] font-black text-slate-500 dark:text-emerald-500 uppercase tracking-widest leading-none">ID: {displayId}</span>
+                   <span className="text-[9px] font-semibold text-slate-500 dark:text-emerald-500 uppercase tracking-widest leading-none">ID: {displayId}</span>
                 </div>
                 <div className="px-2 py-1 bg-amber-500/10 rounded-lg border border-amber-500/20 flex items-center gap-1">
                    <Award size={10} className="text-amber-600 dark:text-amber-400" />
-                   <span className="text-[9px] font-black text-amber-600 dark:text-amber-400 uppercase tracking-widest leading-none">SafeVision AI</span>
+                   <span className="text-[9px] font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-widest leading-none">SafeVixAI</span>
                 </div>
               </div>
             </div>
@@ -183,7 +187,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 shadow-sm flex flex-col gap-4">
                <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Vessel</p>
+                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Active Vessel</p>
                   <Car size={16} className="text-emerald-500" />
                </div>
                <div className="flex flex-col">
@@ -206,7 +210,7 @@ export default function ProfilePage() {
             
             <div className="p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 shadow-sm flex flex-col gap-4">
                <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Bio Signature</p>
+                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Bio Signature</p>
                   <Heart size={16} className="text-red-500" />
                </div>
                <div className="flex flex-col">
@@ -230,8 +234,8 @@ export default function ProfilePage() {
             {/* Emergency Contact — full width */}
             <div className="sm:col-span-2 p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/10 shadow-sm flex flex-col gap-4">
                <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Emergency Contact</p>
-                  <Shield size={16} className="text-blue-500" />
+                  <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Emergency Contact</p>
+                  <Shield size={16} className="text-[#1A5C38] dark:text-[#00C896]" />
                </div>
                <div className="flex flex-col">
                   {isEditing ? (
@@ -240,7 +244,7 @@ export default function ProfilePage() {
                       value={editDraft.emergencyContact}
                       onChange={e => setEditDraft(d => ({ ...d, emergencyContact: e.target.value }))}
                       placeholder="+91 98765 43210"
-                      className="text-xl font-black text-slate-900 dark:text-white tracking-tighter bg-transparent border-b-2 border-blue-500/60 outline-none placeholder:text-slate-300 dark:placeholder:text-white/20"
+                      className="text-xl font-black text-slate-900 dark:text-white tracking-tighter bg-transparent border-b-2 border-[#1A5C38]/60 outline-none placeholder:text-slate-300 dark:placeholder:text-white/20"
                     />
                   ) : (
                     <span className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">
@@ -253,9 +257,12 @@ export default function ProfilePage() {
           </div>
         </section>
 
+        {/* ── Section: QR Emergency Card ── */}
+        <QREmergencyCard />
+
         {/* ── Section 2: Operational Protocols ── */}
         <section className="flex flex-col gap-6">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 font-space px-2">Mission Protocol</h3>
+          <h3 className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400 font-space px-2">Mission Protocol</h3>
           <div className="flex flex-col gap-3">
              {[
                { id: 'offline', icon: <CloudOff size={18} />, label: 'V8 Offline Mode', sub: 'Process locally, no network leakage', state: offlineMode, toggle: setOfflineMode },
@@ -264,11 +271,11 @@ export default function ProfilePage() {
              ].map(item => (
                <label key={item.id} className="group flex items-center justify-between p-6 rounded-[2rem] bg-white dark:bg-white/5 border border-slate-300 dark:border-white/5 shadow-sm hover:border-emerald-500/20 transition-all cursor-pointer">
                   <div className="flex items-center gap-5">
-                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${item.state ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-50 dark:bg-white/10 text-slate-400'}`}>
+                     <div className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors ${item.state ? 'bg-emerald-500/10 text-emerald-500' : 'bg-slate-50 dark:bg-white/10 text-slate-400'}`}>
                         {item.icon}
                      </div>
                      <div className="flex flex-col">
-                        <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">{item.label}</span>
+                        <span className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-tight">{item.label}</span>
                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.sub}</span>
                      </div>
                   </div>
@@ -283,19 +290,19 @@ export default function ProfilePage() {
 
         {/* ── Section 3: Achievements & Legacy ── */}
         <section className="flex flex-col gap-6">
-           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 font-space px-2">Tactical Awards</h3>
+           <h3 className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400 font-space px-2">Tactical Awards</h3>
            <div className="flex gap-4 overflow-x-auto pb-6 -mx-6 px-6 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent">
               {[
                 { title: 'Road Safety', score: 'Active User', bgColor: 'bg-emerald-500/10', iconColor: 'text-emerald-500' },
                 { title: 'First Responder', score: 'Trained', bgColor: 'bg-amber-500/10', iconColor: 'text-amber-500' },
-                { title: 'AI Master', score: 'SafeVision AI', bgColor: 'bg-indigo-500/10', iconColor: 'text-indigo-500' },
+                { title: 'AI Master', score: 'SafeVixAI', bgColor: 'bg-[#1A5C38]/10', iconColor: 'text-[#1A5C38] dark:text-[#00C896]' },
               ].map(badge => (
                 <div key={badge.title} className="flex-shrink-0 w-40 p-6 rounded-[2.5rem] bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 flex flex-col items-center gap-3">
-                   <div className={`p-4 rounded-3xl ${badge.bgColor}`}>
+                   <div className={`p-4 rounded-xl ${badge.bgColor}`}>
                       <Star size={24} className={badge.iconColor} />
                    </div>
                    <div className="text-center">
-                     <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none">{badge.title}</p>
+                     <p className="text-[10px] font-semibold text-slate-900 dark:text-white uppercase tracking-tight leading-none">{badge.title}</p>
                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-2">{badge.score}</p>
                    </div>
                 </div>
@@ -304,10 +311,20 @@ export default function ProfilePage() {
         </section>
 
         {/* Action Panel */}
-        <section className="flex flex-col items-center gap-6 pt-10">
+        <section className="flex flex-col items-center gap-4 pt-10">
+           {/* Sign Out — only if using real auth */}
+           {isAuthenticated && (
+             <button
+               onClick={() => { clearAuth(); }}
+               className="w-full h-14 rounded-full border-2 border-[#1A5C38]/30 bg-[#1A5C38]/10 hover:bg-[#1A5C38]/20 text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-600 dark:text-[#00C896] flex items-center justify-center gap-2 transition-all active:scale-95"
+             >
+               <LogOut size={14} />
+               Sign Out Operator
+             </button>
+           )}
            <button 
              onClick={handlePurge}
-             className={`h-14 px-10 rounded-full border-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all active:scale-95 ${
+             className={`h-14 px-10 rounded-full border-2 text-[10px] font-semibold uppercase tracking-[0.1em] transition-all active:scale-95 ${
                showPurgeConfirm
                  ? 'border-red-500 bg-red-500/10 text-red-500'
                  : 'border-slate-200 dark:border-white/10 text-slate-400 hover:text-red-500 hover:border-red-500/20'
@@ -315,7 +332,7 @@ export default function ProfilePage() {
            >
              {showPurgeConfirm ? 'CONFIRM PURGE?' : 'PURGE LOCAL SESSION'}
            </button>
-           <p className="text-[9px] font-black text-slate-300 dark:text-slate-500 uppercase tracking-[0.3em]">Sentinel V4.2 Real-time Security Layer</p>
+           <p className="text-[9px] font-semibold text-slate-300 dark:text-slate-500 uppercase tracking-[0.1em]">Sentinel V4.2 Real-time Security Layer</p>
         </section>
 
       </main>

@@ -17,7 +17,7 @@ export default function ProfileCard() {
               priority
             />
           </div>
-          <button className="absolute bottom-0 right-0 bg-emerald-500 p-2 rounded-full shadow-lg border-2 border-white dark:border-[#071325] active:scale-90 transition-all">
+          <button className="absolute bottom-0 right-0 bg-emerald-500 p-2 rounded-full shadow-lg border-2 border-white dark:border-[#0A0E14] active:scale-90 transition-all">
             <Zap size={14} className="text-white" />
           </button>
         </div>
@@ -28,17 +28,17 @@ export default function ProfileCard() {
         </div>
         
         <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="flex flex-col items-center gap-1 p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 shadow-sm">
+          <div className="flex flex-col items-center gap-1 p-3 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 shadow-sm">
             <Droplet size={14} className="text-red-500" />
-            <span className="text-[9px] font-black uppercase text-slate-400">O Negative</span>
+            <span className="text-[9px] font-semibold uppercase text-slate-400">O Negative</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 shadow-sm">
+          <div className="flex flex-col items-center gap-1 p-3 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 shadow-sm">
             <Car size={14} className="text-emerald-500" />
-            <span className="text-[9px] font-black uppercase text-slate-400">SV-2024-AI</span>
+            <span className="text-[9px] font-semibold uppercase text-slate-400">SV-2024-AI</span>
           </div>
-          <div className="flex flex-col items-center gap-1 p-3 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 shadow-sm">
+          <div className="flex flex-col items-center gap-1 p-3 rounded-lg bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5 shadow-sm">
             <PhoneCall size={14} className="text-slate-400" />
-            <span className="text-[9px] font-black uppercase text-slate-400">9876543210</span>
+            <span className="text-[9px] font-semibold uppercase text-slate-400">9876543210</span>
           </div>
         </div>
       </div>

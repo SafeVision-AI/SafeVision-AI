@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, Request
 
 from models.schemas import ChatRequest, ChatResponse
 from services.llm_service import LLMService
+from core.security import get_current_user
 
 
 router = APIRouter(prefix='/api/v1/chat', tags=['Chat'])
@@ -17,5 +18,6 @@ def get_llm_service(request: Request) -> LLMService:
 async def chat(
     payload: ChatRequest,
     llm_service: LLMService = Depends(get_llm_service),
+    current_user: dict = Depends(get_current_user),
 ) -> ChatResponse:
     return await llm_service.send_message(payload)

@@ -83,7 +83,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
+        sans: ['Inter', 'Inter Variable', '-apple-system', 'sans-serif'],
+        space: ['Space Grotesk', '-apple-system', 'sans-serif'],
+        mono: ['JetBrains Mono', 'SF Mono', 'ui-monospace', 'monospace'],
       },
       animation: {
         pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",

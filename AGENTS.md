@@ -21,7 +21,7 @@ Total infra cost: ₹0. All free/open-source.
 │  Port 3000         MapLibre GL, WebLLM, DuckDB-Wasm         │
 │                    Zustand state, Tailwind CSS 3             │
 └──────────────┬──────────────────────────┬───────────────────┘
-               │ REST/WS                  │ REST
+               │ REST/WS (JWT Bearer)      │ REST (JWT Bearer)
 ┌──────────────▼─────────┐  ┌─────────────▼──────────────────┐
 │  backend/              │  │  chatbot_service/              │
 │  FastAPI :8000         │  │  FastAPI :8010                  │
@@ -29,6 +29,7 @@ Total infra cost: ₹0. All free/open-source.
 │  Redis cache           │  │  ChromaDB RAG vectorstore       │
 │  DuckDB (challan SQL)  │  │  9 agent tools                  │
 │  Overpass/Nominatim    │  │  Redis conversation memory      │
+│  WebSocket /tracking   │  │  Prompt injection defense       │
 └────────────────────────┘  └────────────────────────────────┘
 ```
 
@@ -61,8 +62,8 @@ Verify: `GET http://localhost:8000/health` and `GET http://localhost:8010/health
 SafeVixAI/
 ├── backend/                 FastAPI :8000
 │   ├── main.py              App factory (create_app → lifespan → services)
-│   ├── api/v1/              7 route modules (emergency, chat, challan, roadwatch, geocode, routing, offline)
-│   ├── core/                config.py (pydantic-settings), database.py (async SQLAlchemy), redis_client.py
+│   ├── api/v1/              8 route modules (emergency, chat, challan, roadwatch, geocode, routing, offline, tracking)
+│   ├── core/                config.py (pydantic-settings), database.py (async SQLAlchemy), redis_client.py, security.py (JWT)
 │   ├── services/            Business logic (overpass, geocoding, challan_service, llm_service, authority_router)
 │   ├── models/              SQLAlchemy ORM + Pydantic schemas (schemas.py has ALL request/response types)
 │   ├── migrations/          Alembic (001_initial_schema.py — creates 6 tables with PostGIS)
@@ -81,16 +82,16 @@ SafeVixAI/
 │   └── data/                chroma_db/ (pre-built vectorstore — COMMITTED, never delete)
 │
 ├── frontend/                Next.js 15 PWA
-│   ├── app/                 10 routes: /, /assistant, /locator, /emergency, /challan, /report, /first-aid, /sos, /profile, /settings
-│   ├── components/          23 components + subdirs (chat/, dashboard/, maps/, report/, ui/)
-│   ├── lib/                 13 modules: api.ts, store.ts, offline-ai.ts, duckdb-challan.ts, geolocation.ts, etc.
+│   ├── app/                 12 routes: /, /assistant, /locator, /emergency, /challan, /report, /first-aid, /sos, /profile, /settings, /emergency-card/[userId], /tracking
+│   ├── components/          25+ components: AnalyticsProvider, ClientAppHooks, chat/, dashboard/, maps/, report/, ui/
+│   ├── lib/                 15 modules: api.ts, store.ts, offline-ai.ts, duckdb-challan.ts, geolocation.ts, offline-sos-queue.ts, crash-detection.ts, etc.
 │   └── public/              manifest.json, offline-data/ (GeoJSON, CSV for DuckDB-Wasm)
 │
 ├── scripts/                 Root-level data pipeline scripts
 │   ├── app/                 3 DB seeders (seed_emergency, seed_nhp_hospitals, seed_healthsites)
 │   └── data/                16 standalone fetchers/extractors (Overpass, Kaggle, PDF extraction, restore_data)
 │
-├── docs/                    17 markdown docs — START with docs/Agent.md
+├── docs/                    18+ markdown docs — START with docs/Agent.md (includes Offline_Architecture.md)
 ├── docker-compose.yml       5 services: postgres (PostGIS 16), redis 7, backend, chatbot, frontend
 └── SETUP.md                 Complete install guide with exact commands
 ```
@@ -140,6 +141,7 @@ SafeVixAI/
 | `OVERPASS_URLS` | No | Comma-separated; falls back to `https://overpass-api.de/api/interpreter` |
 | `OPENROUTESERVICE_API_KEY` | No | For routing; free tier available |
 | `DATA_GOV_API_KEY` | No | For government data endpoints |
+| `ADMIN_SECRET` | Yes | Protects admin-only endpoints; set in Render env vars |
 
 ### chatbot_service/.env
 | Variable | Required | Notes |
@@ -159,6 +161,8 @@ SafeVixAI/
 |----------|----------|-------|
 | `NEXT_PUBLIC_BACKEND_URL` | Yes | Default: `http://localhost:8000` |
 | `NEXT_PUBLIC_CHATBOT_URL` | Yes | Default: `http://localhost:8010` |
+| `NEXT_PUBLIC_POSTHOG_KEY` | No | PostHog analytics API key (Phase 5) |
+| `NEXT_PUBLIC_POSTHOG_HOST` | No | Default: `https://app.posthog.com` |
 
 ---
 
@@ -389,3 +393,7 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 | Assume chatbot port is 8001 | Actual port is **8010** (check `config.py`) |
 | Write async test in chatbot_service without `@pytest.mark.asyncio` | Chatbot uses `asyncio_mode = strict` (backend uses `auto`) |
 | Assume `HF_TOKEN` is needed for core chatbot | Only needed for Sarvam HF fallback, Shuka, BharatGen, Whisper — core flow uses Groq/Gemini/etc. |
+| Call `/api/v1/roads/report` or `/api/v1/chat` without Authorization header | Both endpoints require `Authorization: Bearer <token>` (JWT, Phase 5) |
+| Expect family tracking at a REST endpoint | Family tracking is a **WebSocket** at `ws://<host>/api/v1/tracking/{group_id}` |
+| Add images to user profile in localStorage | Blood group, emergency contacts never leave device — stored in **IndexedDB** only |
+| Assume offline SOS fires immediately | SOS is queued in IndexedDB if offline, auto-flushed on `online` event via `offline-sos-queue.ts` |

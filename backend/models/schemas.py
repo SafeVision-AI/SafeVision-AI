@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from datetime import date, datetime
 from typing import Literal
@@ -254,3 +254,34 @@ class ChallanResponse(BaseModel):
     section: str
     description: str
     state_override: str | None = None
+
+
+class EmergencyContact(BaseModel):
+    name: str
+    phone: str
+    relation: str | None = None
+
+
+class UserProfileCreate(BaseModel):
+    name: str
+    blood_group: str | None = None
+    emergency_contacts: list[EmergencyContact] = Field(default_factory=list)
+    allergies: str | None = None
+    vehicle_details: str | None = None
+    medical_notes: str | None = None
+
+
+class UserProfileUpdate(BaseModel):
+    name: str | None = None
+    blood_group: str | None = None
+    emergency_contacts: list[EmergencyContact] | None = None
+    allergies: str | None = None
+    vehicle_details: str | None = None
+    medical_notes: str | None = None
+
+
+class UserProfileResponse(UserProfileCreate):
+    id: UUID
+    created_at: datetime
+    updated_at: datetime
+

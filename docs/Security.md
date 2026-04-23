@@ -9,14 +9,10 @@ SafeVixAI handles sensitive user data (GPS location, blood group, emergency cont
 ## 1. Authentication & Authorization
 
 ### Current (Hackathon MVP)
-- Most endpoints are **public**  no auth required for emergency features
-- Road issue reports optionally associate a Supabase Auth `user_id`
-- Supabase anon key used for frontend DB access (read-only via RLS)
-- Supabase service role key used only on backend (never exposed to browser)
-
-### Supabase Row Level Security (RLS)
-*(Planned for V2 - Post Hackathon)*
-Row Level Security will be enabled on the database tables to ensure users can only access reports they have submitted. Currently, for the V1 Hackathon MVP, all data access relies on backend API filtering.
+- Most endpoints are **public** — no auth required for emergency features.
+- Database access is managed exclusively by the backend using SQLAlchemy with parameterized queries.
+- Admin endpoints (e.g., chatbot prompt reloading) are protected via a static `ADMIN_SECRET` header.
+- No Supabase Auth or Row Level Security (RLS) is used in the V1 MVP (Planned for V2).
 
 ---
 
@@ -115,20 +111,18 @@ crash_event = {
 
 ```bash
 # backend/.env  never commit this file
-DATABASE_URL=postgresql+asyncpg://...    # Supabase connection string
+DATABASE_URL=postgresql+asyncpg://...    # PostgreSQL connection string
 GROQ_API_KEY=gsk_...                     # Groq API key
 REDIS_URL=rediss://...                   # Upstash Redis TLS URL
-SUPABASE_SERVICE_ROLE_KEY=eyJ...        # Admin key  backend only
+ADMIN_SECRET=...                         # Admin validation token
 
 # frontend/.env.local  never commit this file
 NEXT_PUBLIC_API_URL=https://...         # Backend URL (public)
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...   # Anon key only (read-only)
 ```
 
 ### GitHub Actions Secrets
 - All secret values stored in **GitHub Secrets** (not in code)
 - Referenced in CI/CD via `${{ secrets.GROQ_API_KEY }}`
-- Service role key never used in GitHub Actions workflows
 
 ---
 

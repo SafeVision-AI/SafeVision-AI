@@ -35,7 +35,7 @@ const BottomNav = memo(function BottomNav() {
         {/* Active Indicator Glow */}
         <motion.div
           layoutId="active-indicator"
-          className="absolute w-12 h-12 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-2xl -z-10"
+          className="absolute w-12 h-12 bg-gradient-to-r from-emerald-500 to-[#00C896] rounded-full blur-2xl -z-10"
           animate={{
             left: `calc(${active * (100 / items.length)}% + ${100 / items.length / 2}%)`,
             translateX: "-50%",
@@ -61,7 +61,7 @@ const BottomNav = memo(function BottomNav() {
               {isActive && (
                 <motion.div
                   layoutId="active-pill"
-                  className="absolute inset-x-2 top-0.5 bottom-4 bg-blue-600 dark:bg-blue-500 rounded-2xl -z-10"
+                  className="absolute inset-x-2 top-0.5 bottom-4 bg-[#1A5C38] dark:bg-[#1A5C38] rounded-2xl -z-10"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}
@@ -70,7 +70,7 @@ const BottomNav = memo(function BottomNav() {
                 animate={{ scale: isActive ? 1.2 : 1 }}
                 className={`flex items-center justify-center w-9 h-9 relative z-10 transition-colors ${isActive
                   ? 'text-white'
-                  : 'text-slate-600 dark:text-slate-300 hover:text-blue-500 dark:hover:text-blue-400'
+                  : 'text-slate-600 dark:text-slate-300 hover:text-emerald-500 dark:hover:text-[#00C896]'
                   }`}
               >
                 {/* Dynamically Render Lucide Node or Material Symbol */}
@@ -87,7 +87,7 @@ const BottomNav = memo(function BottomNav() {
               </motion.div>
 
               {/* Persistent Text Label */}
-              <span className={`text-[9px] font-bold mt-1 tracking-wide ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-600 dark:text-slate-400'}`}>
+              <span className={`text-[9px] font-bold mt-1 tracking-wide ${isActive ? 'text-emerald-700 dark:text-[#00C896]' : 'text-slate-600 dark:text-slate-400'}`}>
                 {item.label}
               </span>
 

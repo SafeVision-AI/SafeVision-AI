@@ -130,19 +130,19 @@ export default function EmergencyProtocolsPage() {
 
   if (!mounted) {
     return (
-      <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col">
+      <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#0A0E14] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col">
         <SystemHeader title="Emergency Protocol Terminal" showBack={false} />
         <main className="flex-1 w-full max-w-7xl mx-auto pt-28 lg:pt-24 pb-44 px-5 sm:px-12 flex flex-col lg:grid lg:grid-cols-[1.2fr,2fr] lg:gap-14 lg:items-start animate-pulse">
           <aside className="lg:sticky lg:top-28 flex flex-col gap-8">
-            <div className="h-20 bg-slate-200 dark:bg-[#1a2133] rounded-2xl w-3/4"></div>
+            <div className="h-20 bg-slate-200 dark:bg-[#1a2133] rounded-lg w-3/4"></div>
             <div className="h-64 bg-slate-200 dark:bg-[#1a2133] rounded-[2.5rem] w-full"></div>
           </aside>
           <div className="flex flex-col gap-8 pt-8 lg:pt-0">
-            <div className="h-12 bg-slate-200 dark:bg-[#1a2133] rounded-2xl w-full"></div>
+            <div className="h-12 bg-slate-200 dark:bg-[#1a2133] rounded-lg w-full"></div>
             <div className="grid gap-4">
-              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-3xl w-full"></div>
-              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-3xl w-full"></div>
-              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-3xl w-full"></div>
+              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-xl w-full"></div>
+              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-xl w-full"></div>
+              <div className="h-24 bg-slate-200 dark:bg-[#1a2133] rounded-xl w-full"></div>
             </div>
           </div>
         </main>
@@ -152,7 +152,7 @@ export default function EmergencyProtocolsPage() {
   }
 
   return (
-    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500">
+    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#0A0E14] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500">
       
       {/* ── Unified Tactical Navigation Header ── */}
       <SystemHeader title="Emergency Protocol Terminal" showBack={false} />
@@ -173,11 +173,11 @@ export default function EmergencyProtocolsPage() {
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
-                <span className="text-[10px] font-black text-orange-600 dark:text-orange-400 uppercase tracking-[0.3em] font-space leading-none">Tactical Center</span>
+                <span className="text-[10px] font-semibold text-orange-600 dark:text-orange-400 uppercase tracking-[0.1em] font-space leading-none">Tactical Center</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] font-space leading-none">Satellite Lock</span>
+                <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.1em] font-space leading-none">Satellite Lock</span>
               </div>
             </div>
             <div className="flex flex-col">
@@ -205,25 +205,25 @@ export default function EmergencyProtocolsPage() {
 
               <div className="relative z-10 flex flex-col gap-6">
                 <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-xl">
+                  <div className="w-16 h-16 rounded-lg bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-xl">
                     <Shield size={32} className="text-white" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-100/70 mb-1 font-space">Emergency Override</span>
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-red-100/70 mb-1 font-space">Emergency Override</span>
                     <h2 className="text-2xl font-black text-white tracking-tighter uppercase font-space leading-none mb-2">Emergency SOS</h2>
                     <div className="flex items-center gap-2">
                        <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-                       <span className="text-[9px] font-black text-white uppercase tracking-widest opacity-90">Live Geoloc Sync Active</span>
+                       <span className="text-[9px] font-semibold text-white uppercase tracking-widest opacity-90">Live Geoloc Sync Active</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                   <a href="tel:112" className="group/btn relative w-full h-16 px-8 bg-white rounded-2xl flex items-center justify-center gap-3 shadow-xl overflow-hidden active:scale-95 transition-all ring-2 ring-white/30 animate-pulse">
-                     <span className="text-red-700 font-black text-sm tracking-[0.2em] uppercase font-space relative z-10">CALL 112 NOW</span>
+                   <a href="tel:112" className="group/btn relative w-full h-16 px-8 bg-white rounded-lg flex items-center justify-center gap-3 shadow-xl overflow-hidden active:scale-95 transition-all ring-2 ring-white/30 animate-pulse">
+                     <span className="text-red-700 font-black text-sm tracking-[0.1em] uppercase font-space relative z-10">CALL 112 NOW</span>
                      <ArrowRight size={18} className="text-red-700 relative z-10 transition-transform group-hover/btn:translate-x-1" />
                    </a>
-                   <div className="flex items-center justify-between px-2 text-[10px] font-black uppercase text-red-200/60 tracking-[0.2em]">
+                   <div className="flex items-center justify-between px-2 text-[10px] font-semibold uppercase text-red-200/60 tracking-[0.1em]">
                       <span>Armed & Ready</span>
                       <span>Secure Connection</span>
                    </div>
@@ -246,7 +246,7 @@ export default function EmergencyProtocolsPage() {
         {/* Module 2: Tactical Filter Bay */}
         <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
               <Activity size={14} className="text-red-500" />
               Filter by Category
             </h3>
@@ -261,7 +261,7 @@ export default function EmergencyProtocolsPage() {
                 <button 
                   key={cat} 
                   onClick={() => setActiveCategory(cat)} 
-                  className={`group relative flex-shrink-0 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-90 border-2 ${
+                  className={`group relative flex-shrink-0 px-6 py-3 rounded-lg text-[10px] font-semibold uppercase tracking-widest transition-all active:scale-90 border-2 ${
                     isActive 
                       ? (cat === 'All' ? 'text-white dark:text-slate-900 border-transparent bg-transparent shadow-lg' : 'text-slate-900 dark:text-slate-950 border-transparent bg-transparent shadow-lg')
                       : 'bg-white dark:bg-white/5 border-slate-100 dark:border-white/5 text-slate-500 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/10'
@@ -287,10 +287,10 @@ export default function EmergencyProtocolsPage() {
         {/* Module 3: Protocol Intelligence folders */}
         <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between px-2">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-space">{filtered.length} INTEL FOLDERS ACCESSED</span>
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest font-space">{filtered.length} INTEL FOLDERS ACCESSED</span>
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
                <BookOpen size={10} className="text-emerald-500" />
-               <span className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">OFFLINE READY</span>
+               <span className="text-[9px] font-semibold text-emerald-500 uppercase tracking-widest">OFFLINE READY</span>
             </div>
           </div>
 
@@ -306,18 +306,18 @@ export default function EmergencyProtocolsPage() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ delay: i * 0.05 }}
-                    className={`group relative rounded-2xl sm:rounded-3xl transition-all duration-500 border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm ${isExpanded ? 'bg-white dark:bg-[#0B1121] ring-1 ring-slate-200 dark:ring-white/10 shadow-2xl' : 'bg-white/60 dark:bg-black/20 hover:bg-white dark:hover:bg-white/5'}`}
+                    className={`group relative rounded-lg sm:rounded-xl transition-all duration-500 border border-slate-200 dark:border-white/5 overflow-hidden shadow-sm ${isExpanded ? 'bg-white dark:bg-[#0D1117] ring-1 ring-slate-200 dark:ring-white/10 shadow-2xl' : 'bg-white/60 dark:bg-black/20 hover:bg-white dark:hover:bg-white/5'}`}
                   >
                     {/* Header: Intel Brief */}
                     <button onClick={() => setExpandedId(isExpanded ? null : protocol.id)} className="w-full flex items-center p-5 sm:p-7 text-left gap-5 relative z-10 transition-colors">
-                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0 border transition-all" style={{ backgroundColor: protocol.glowColor, borderColor: `${protocol.accentColor}33`, color: protocol.accentColor }}>
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center shrink-0 border transition-all" style={{ backgroundColor: protocol.glowColor, borderColor: `${protocol.accentColor}33`, color: protocol.accentColor }}>
                         {protocol.icon}
                       </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md" style={{ backgroundColor: `${protocol.accentColor}22`, color: protocol.accentColor }}>{protocol.category}</span>
-                          {protocol.meta && <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{protocol.meta.level} PRIORITY</span>}
+                          <span className="text-[9px] font-semibold uppercase tracking-widest px-1.5 py-0.5 rounded-md" style={{ backgroundColor: `${protocol.accentColor}22`, color: protocol.accentColor }}>{protocol.category}</span>
+                          {protocol.meta && <span className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">{protocol.meta.level} PRIORITY</span>}
                         </div>
                         <h3 className="text-lg font-black dark:text-white uppercase font-space tracking-tight leading-none mb-1.5 truncate">{protocol.title}</h3>
                         <p className="text-xs font-bold text-slate-500 dark:text-slate-400 truncate opacity-80">{protocol.subtitle}</p>
@@ -349,7 +349,7 @@ export default function EmergencyProtocolsPage() {
                              
                              <div className="mt-6 flex flex-col gap-6">
                                <div className="flex items-center justify-between">
-                                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest font-space flex items-center gap-2">
+                                  <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest font-space flex items-center gap-2">
                                      <Cpu size={14} className="text-red-500/60" />
                                      Step-by-Step Tactical Guide
                                   </label>
@@ -359,7 +359,7 @@ export default function EmergencyProtocolsPage() {
                                <div className="space-y-4">
                                  {protocol.steps.map((step, i) => (
                                    <motion.div key={i} initial={{ x: -10, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: i * 0.1 }} className="flex gap-4 items-start group/step">
-                                      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-black transition-all" style={{ backgroundColor: protocol.glowColor, color: protocol.accentColor }}>{i + 1}</div>
+                                      <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-semibold transition-all" style={{ backgroundColor: protocol.glowColor, color: protocol.accentColor }}>{i + 1}</div>
                                       <div className="flex-1 pt-1.5 border-b border-slate-100 dark:border-white/5 pb-4 group-last/step:border-none">
                                          <p className="text-sm font-bold dark:text-slate-200 leading-relaxed font-mono tracking-tight">{step}</p>
                                       </div>
@@ -372,11 +372,11 @@ export default function EmergencyProtocolsPage() {
                                    initial={{ y: 20, opacity: 0 }}
                                    animate={{ y: 0, opacity: 1 }}
                                    href={`tel:${protocol.callNumber}`}
-                                   className="relative w-full h-14 rounded-2xl flex items-center justify-center gap-3 overflow-hidden shadow-xl"
+                                   className="relative w-full h-14 rounded-lg flex items-center justify-center gap-3 overflow-hidden shadow-xl"
                                    style={{ background: protocol.glowColor }}
                                  >
                                     <Phone size={20} style={{ color: protocol.accentColor }} />
-                                    <span className="font-black text-[11px] tracking-[0.2em] uppercase font-space" style={{ color: protocol.accentColor }}>Dispatch {protocol.callNumber}</span>
+                                    <span className="font-black text-[11px] tracking-[0.1em] uppercase font-space" style={{ color: protocol.accentColor }}>Dispatch {protocol.callNumber}</span>
                                  </motion.a>
                                )}
                              </div>
@@ -393,7 +393,7 @@ export default function EmergencyProtocolsPage() {
 
           <div className="mt-8 flex flex-col items-center gap-4 py-8">
              <div className="w-12 h-px bg-slate-200 dark:bg-white/10" />
-             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-space opacity-50">Sentinel V4.2 Protocol Feed</p>
+             <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.1em] font-space opacity-50">Sentinel V4.2 Protocol Feed</p>
           </div>
         </div>
       </main>

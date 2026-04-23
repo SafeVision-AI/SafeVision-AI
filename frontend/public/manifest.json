@@ -1,13 +1,13 @@
 {
-  "name": "SafeVision AI",
-  "short_name": "SafeVision",
-  "description": "AI-powered road safety, emergency locator, pothole detector, and traffic challan calculator for India.",
+  "name": "SafeVixAI — Tactical Road Safety",
+  "short_name": "SafeVixAI",
+  "description": "AI-powered tactical road safety command terminal for India. Emergency SOS, pothole detection, first aid, challan calculator, and AI assistant — works offline.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "theme_color": "#0B1121",
-  "background_color": "#0B1121",
+  "theme_color": "#0A0E14",
+  "background_color": "#0A0E14",
   "lang": "en-IN",
   "categories": ["navigation", "utilities", "lifestyle"],
   "icons": [
@@ -28,7 +28,7 @@
     {
       "name": "SOS Emergency",
       "short_name": "SOS",
-      "description": "Activate emergency SOS",
+      "description": "Activate emergency SOS dispatch",
       "url": "/sos",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     },
@@ -45,6 +45,13 @@
       "description": "AI-guided emergency response steps",
       "url": "/first-aid",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "AI Assistant",
+      "short_name": "Assistant",
+      "description": "SafeVixAI Sentinel — road safety AI",
+      "url": "/assistant",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ],
   "screenshots": [
@@ -52,7 +59,7 @@
       "src": "/screenshots/dashboard.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "label": "SafeVision AI Dashboard"
+      "label": "SafeVixAI Tactical Dashboard"
     }
   ],
   "related_applications": [],

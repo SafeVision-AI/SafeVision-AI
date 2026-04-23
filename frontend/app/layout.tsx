@@ -4,7 +4,8 @@ import './globals.css';
 import { ConnectivityProvider } from '@/components/ConnectivityProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { PageShell } from '@/components/PageShell';
-
+import { AnalyticsProvider } from '@/lib/analytics-provider';
+import { ClientAppHooks } from '@/components/ClientAppHooks';
 
 export const metadata: Metadata = {
   title: 'SafeVixAI - AI-Powered Road Safety',
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@300..700&display=swap"
           rel="stylesheet"
         />
         <link
@@ -70,12 +71,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-
-        <ThemeProvider>
-          <ConnectivityProvider>
-            <PageShell>{children}</PageShell>
-          </ConnectivityProvider>
-        </ThemeProvider>
+        <AnalyticsProvider>
+          <ThemeProvider>
+            <ConnectivityProvider>
+              <ClientAppHooks />
+              <PageShell>{children}</PageShell>
+            </ConnectivityProvider>
+          </ThemeProvider>
+        </AnalyticsProvider>
       </body>
     </html>
   );

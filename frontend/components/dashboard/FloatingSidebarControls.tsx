@@ -26,13 +26,13 @@ const DrivingScore = ({ score }: { score: number }) => {
     >
       {/* Label (Sliding out) */}
       <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
-        <div className="self-center bg-white/90 dark:bg-[#0B1121]/90 backdrop-blur-xl rounded-full px-4 py-1.5 border border-slate-200 dark:border-white/10 shadow-xl flex items-center gap-2">
+        <div className="self-center bg-white/90 dark:bg-[#0D1117]/90 backdrop-blur-xl rounded-full px-4 py-1.5 border border-slate-200 dark:border-white/10 shadow-xl flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-[#ff5545] animate-pulse shadow-[0_0_8px_rgba(255,85,69,0.8)]"></span>
-          <span className="text-[10px] font-black tracking-[0.2em] text-slate-700 dark:text-blue-400 uppercase font-space">
+          <span className="text-[10px] font-semibold tracking-[0.1em] text-slate-700 dark:text-[#00C896] uppercase font-space">
             Priority Vectors Detected
           </span>
         </div>
-        <p className="text-xs font-black tracking-widest font-space" style={{ color }}>{label}</p>
+        <p className="text-xs font-semibold tracking-widest font-space" style={{ color }}>{label}</p>
       </div>
 
       <div className="relative w-14 h-14 rounded-full bg-white/95 dark:bg-[#0a0f1a]/90 backdrop-blur-xl shadow-2xl ring-1 ring-white/40 dark:ring-white/10 flex items-center justify-center cursor-help transition-all duration-500 overflow-hidden">
@@ -104,7 +104,7 @@ const HUDButton = ({ icon, label, color = "#c5c6cd", href, onClick, isCustom }: 
     >
       {/* Side Label */}
       <div className="absolute right-full mr-4 top-1/2 -translate-y-1/2 opacity-0 group-hover/btn:opacity-100 transition-all duration-300 pointer-events-none translate-x-2 group-hover/btn:translate-x-0">
-        <span className="bg-white/95 dark:bg-[#0B1121]/90 backdrop-blur-xl px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-[10px] font-black tracking-[0.15em] text-slate-800 dark:text-blue-200 uppercase whitespace-nowrap shadow-2xl font-space">
+        <span className="bg-white/95 dark:bg-[#0D1117]/90 backdrop-blur-xl px-3 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 text-[10px] font-semibold tracking-[0.15em] text-slate-800 dark:text-blue-200 uppercase whitespace-nowrap shadow-2xl font-space">
           {label}
         </span>
       </div>

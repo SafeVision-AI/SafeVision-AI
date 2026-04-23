@@ -76,7 +76,7 @@ export default function EmergencyMapInner({
       currentLocation={currentLocation}
       viewportMode="fit"
       navigationPosition="top-right"
-      className="w-full h-full rounded-2xl overflow-hidden"
+      className="w-full h-full rounded-lg overflow-hidden"
     />
   );
 }

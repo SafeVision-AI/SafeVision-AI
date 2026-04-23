@@ -24,7 +24,7 @@ export default function HazardViewfinder({
   viewportId = 'RW-LIVE-VIEWPORT',
 }: HazardViewfinderProps) {
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-2xl border border-white/5 bg-[#030e20] shadow-2xl group">
+    <div className="relative h-full w-full overflow-hidden rounded-lg border border-white/5 bg-[#030e20] shadow-2xl group">
       <div className="absolute inset-0 z-0">
         {imageSrc ? (
           <Image alt="Hazard evidence" src={imageSrc} fill className="object-cover opacity-60 grayscale mix-blend-luminosity transition-all duration-700 group-hover:grayscale-0" unoptimized />
@@ -37,12 +37,12 @@ export default function HazardViewfinder({
               </motion.div>
             </div>
             <div className="flex flex-col items-center gap-2 text-center">
-              <span className="animate-pulse font-space text-[10px] font-black uppercase tracking-[0.4em] text-red-500/40">Camera uplink waiting</span>
+              <span className="animate-pulse font-space text-[10px] font-semibold uppercase tracking-[0.4em] text-red-500/40">Camera uplink waiting</span>
               <span className="font-mono text-[8px] font-bold uppercase tracking-widest text-slate-600">Add a real road photo for faster authority verification</span>
             </div>
           </div>
         )}
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#071325] via-transparent to-[#071325]/40" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0A0E14] via-transparent to-[#0A0E14]/40" />
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-between p-6">
@@ -50,7 +50,7 @@ export default function HazardViewfinder({
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2 rounded-lg border border-white/10 bg-black/60 px-3 py-1.5 backdrop-blur-md">
               <span className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="font-space text-[10px] font-black uppercase tracking-[0.2em] text-white">{statusLabel}</span>
+              <span className="font-space text-[10px] font-semibold uppercase tracking-[0.1em] text-white">{statusLabel}</span>
             </div>
             <span className="pl-1 font-mono text-[9px] font-bold uppercase tracking-tight text-slate-400">Vector: {locationLabel}</span>
           </div>
@@ -58,7 +58,7 @@ export default function HazardViewfinder({
           <div className="flex flex-col items-end gap-1">
             <div className="flex items-center gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 backdrop-blur-md">
               <Cpu size={12} className="text-emerald-400" />
-              <span className="font-space text-[10px] font-black uppercase tracking-widest text-emerald-400">AI Core {confidence}%</span>
+              <span className="font-space text-[10px] font-semibold uppercase tracking-widest text-emerald-400">AI Core {confidence}%</span>
             </div>
             <span className="font-mono text-[9px] font-bold uppercase tracking-tight text-slate-500">Signal: {signalLabel}</span>
           </div>
@@ -88,13 +88,13 @@ export default function HazardViewfinder({
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 rounded-md bg-red-600 px-3 py-1 shadow-lg shadow-red-600/20">
               <ShieldAlert size={12} className="text-white" />
-              <span className="font-space text-[10px] font-black uppercase tracking-widest text-white">Confirmed hazard</span>
+              <span className="font-space text-[10px] font-semibold uppercase tracking-widest text-white">Confirmed hazard</span>
             </div>
             <motion.div animate={{ opacity: [1, 0, 1] }} transition={{ repeat: Infinity, duration: 0.8 }} className="rounded-md border border-red-500/20 bg-red-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-red-500">
               {isDetecting ? 'Analyzing risk...' : 'Ready to dispatch'}
             </motion.div>
           </div>
-          <span className="pl-1 font-space text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 opacity-70">{viewportId}</span>
+          <span className="pl-1 font-space text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-400 opacity-70">{viewportId}</span>
         </div>
       </div>
 

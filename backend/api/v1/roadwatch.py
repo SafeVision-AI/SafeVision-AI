@@ -13,6 +13,7 @@ from models.schemas import (
 from services.roadwatch_service import RoadWatchService
 from services.exceptions import ServiceValidationError
 from services.roadwatch_service import ALL_ROAD_ISSUE_STATUSES
+from core.security import get_current_user
 
 
 router = APIRouter(prefix='/api/v1/roads', tags=['RoadWatch'])
@@ -79,6 +80,7 @@ async def submit_road_issue(
     photo: UploadFile | None = File(default=None),
     db: AsyncSession = Depends(get_db),
     roadwatch_service: RoadWatchService = Depends(get_roadwatch_service),
+    current_user: dict = Depends(get_current_user),
 ) -> RoadReportResponse:
     try:
         return await roadwatch_service.submit_report(

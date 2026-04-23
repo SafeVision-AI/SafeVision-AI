@@ -1200,8 +1200,8 @@ export function MapLibreCanvas({
       <div ref={mapNodeRef} className="absolute inset-0 h-full w-full overflow-hidden" />
       {status !== 'ready' ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-slate-950/18 backdrop-blur-[1px]">
-          <div className="rounded-2xl border border-white/10 bg-[#071325]/85 px-4 py-3 text-center shadow-2xl">
-            <div className="text-[10px] font-black uppercase tracking-[0.22em] text-blue-300">
+          <div className="rounded-lg border border-white/10 bg-[#0A0E14]/85 px-4 py-3 text-center shadow-2xl">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-blue-300">
               {status === 'error' ? 'Map Offline' : 'Initializing Map'}
             </div>
             <div className="mt-2 text-sm font-semibold text-slate-100">{statusMessage}</div>

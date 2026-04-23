@@ -16,9 +16,34 @@ const client = axios.create({
   timeout: 8_000,
 });
 
+// Dynamically inject JWT from persisted store on every request
+client.interceptors.request.use((config) => {
+  try {
+    const raw = localStorage.getItem('svai-storage');
+    const stored = raw ? JSON.parse(raw) : null;
+    const token = stored?.state?.authToken ?? 'mock-jwt-token-for-hackathon';
+    config.headers.Authorization = `Bearer ${token}`;
+  } catch {
+    config.headers.Authorization = 'Bearer mock-jwt-token-for-hackathon';
+  }
+  return config;
+});
+
 const chatbotClient = axios.create({
   baseURL: CHATBOT_URL,
   timeout: 15_000, // LLM responses can take longer
+});
+
+chatbotClient.interceptors.request.use((config) => {
+  try {
+    const raw = localStorage.getItem('svai-storage');
+    const stored = raw ? JSON.parse(raw) : null;
+    const token = stored?.state?.authToken ?? 'mock-jwt-token-for-hackathon';
+    config.headers.Authorization = `Bearer ${token}`;
+  } catch {
+    config.headers.Authorization = 'Bearer mock-jwt-token-for-hackathon';
+  }
+  return config;
 });
 
 export type EmergencyServiceCategory =

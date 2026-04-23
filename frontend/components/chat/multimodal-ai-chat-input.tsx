@@ -47,12 +47,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-blue-600 text-white hover:bg-blue-700 shadow-[0_4px_15px_rgba(37,99,235,0.3)] dark:shadow-[0_4px_15px_rgba(37,99,235,0.2)] active:scale-95 duration-150',
+        default: 'bg-[#1A5C38] text-white hover:bg-blue-700 shadow-[0_4px_15px_rgba(37,99,235,0.3)] dark:shadow-[0_4px_15px_rgba(37,99,235,0.2)] active:scale-95 duration-150',
         destructive: 'border border-red-500/20 bg-red-400/20 text-red-500 hover:bg-red-400/30',
         outline: 'border border-slate-300 dark:border-slate-700 bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300',
         secondary: 'bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-700',
         ghost: 'text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50',
-        link: 'text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline',
+        link: 'text-[#1A5C38] dark:text-[#00C896] underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-10 px-4 py-2',
@@ -202,7 +202,7 @@ function PureSendButton({
       data-testid="send-button"
       className={cn(
         "p-2 h-fit rounded-full transition-all duration-200 bg-transparent flex items-center justify-center disabled:opacity-100 disabled:cursor-not-allowed",
-        !isDisabled ? "!text-blue-600 dark:!text-white hover:bg-slate-200 dark:hover:bg-slate-700/50 scale-105" : "!text-slate-600 dark:!text-white hover:bg-transparent"
+        !isDisabled ? "!text-[#1A5C38] dark:text-[#00C896] dark:!text-white hover:bg-slate-200 dark:hover:bg-slate-700/50 scale-105" : "!text-slate-600 dark:!text-white hover:bg-transparent"
       )}
       onClick={(event) => {
         event.preventDefault();
@@ -444,7 +444,7 @@ export function PureMultimodalInput({
       />
 
       <div className={cn(
-        "flex flex-col w-full bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-2xl rounded-[32px] border border-slate-200/60 dark:border-white/5 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all p-1.5 shadow-xl dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]",
+        "flex flex-col w-full bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-2xl rounded-[32px] border border-slate-200/60 dark:border-white/5 focus-within:ring-2 focus-within:ring-[#1A5C38]/10 transition-all p-1.5 shadow-xl dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]",
       )}>
 
         {/* Attachments Preview row */}

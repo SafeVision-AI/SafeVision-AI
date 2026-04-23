@@ -66,7 +66,7 @@ const ChallanCalculator: React.FC = () => {
       
       {/* Violation Selection Grid */}
       <div className="space-y-4">
-        <label className="text-[10px] font-black uppercase tracking-widest text-[#b0c6ff]/40 px-2">Select Violation Type</label>
+        <label className="text-[10px] font-semibold uppercase tracking-widest text-[#00C896]/40 px-2">Select Violation Type</label>
         <div className="grid grid-cols-3 gap-3">
           {VIOLATIONS.map((v) => (
             <button
@@ -74,26 +74,26 @@ const ChallanCalculator: React.FC = () => {
               onClick={() => setViolationCode(v.code)}
               className={`flex flex-col items-center justify-center p-4 rounded-[1.5rem] border transition-all gap-2 ${
                 violationCode === v.code 
-                  ? 'bg-[#b0c6ff] text-[#071325] border-transparent shadow-[0_4px_20px_rgba(176,198,255,0.4)]' 
-                  : 'bg-[#142032]/40 text-[#b0c6ff] border-[#b0c6ff]/10 hover:bg-[#b0c6ff]/5'
+                  ? 'bg-[#00C896] text-[#0A0E14] border-transparent shadow-[0_4px_20px_rgba(176,198,255,0.4)]' 
+                  : 'bg-[#0D1117]/40 text-[#00C896] border-[#00C896]/10 hover:bg-[#00C896]/5'
               }`}
             >
               <div className="text-xl">{v.icon}</div>
-              <div className="text-[9px] font-black uppercase tracking-widest text-center">{v.label}</div>
+              <div className="text-[9px] font-semibold uppercase tracking-widest text-center">{v.label}</div>
             </button>
           ))}
         </div>
       </div>
 
       {/* Config Panel */}
-      <div className="bg-[#142032]/60 backdrop-blur-3xl p-6 rounded-[2rem] border border-[#b0c6ff]/5 space-y-6">
+      <div className="bg-[#0D1117]/60 backdrop-blur-3xl p-6 rounded-[2rem] border border-[#00C896]/5 space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-[9px] font-black uppercase tracking-widest text-[#b0c6ff]/40">Vehicle Class</label>
+            <label className="text-[9px] font-semibold uppercase tracking-widest text-[#00C896]/40">Vehicle Class</label>
             <select 
               value={vehicleClass} 
               onChange={(e) => setVehicleClass(e.target.value)}
-              className="w-full bg-[#071325]/40 border border-[#b0c6ff]/10 rounded-xl p-3 text-xs text-[#d7e3fc] outline-none"
+              className="w-full bg-[#0A0E14]/40 border border-[#00C896]/10 rounded-xl p-3 text-xs text-[#d7e3fc] outline-none"
             >
               <option value="2W">2-Wheeler</option>
               <option value="LMV">Car / SUV</option>
@@ -101,11 +101,11 @@ const ChallanCalculator: React.FC = () => {
             </select>
           </div>
           <div className="space-y-2">
-            <label className="text-[9px] font-black uppercase tracking-widest text-[#b0c6ff]/40">State/UT</label>
+            <label className="text-[9px] font-semibold uppercase tracking-widest text-[#00C896]/40">State/UT</label>
             <select 
               value={stateCode} 
               onChange={(e) => setStateCode(e.target.value)}
-              className="w-full bg-[#071325]/40 border border-[#b0c6ff]/10 rounded-xl p-3 text-xs text-[#d7e3fc] outline-none"
+              className="w-full bg-[#0A0E14]/40 border border-[#00C896]/10 rounded-xl p-3 text-xs text-[#d7e3fc] outline-none"
             >
               <option value="TN">Tamil Nadu</option>
               <option value="KA">Karnataka</option>
@@ -120,17 +120,17 @@ const ChallanCalculator: React.FC = () => {
           className={`w-full py-3 rounded-xl border transition-all flex items-center justify-center gap-3 ${
             isRepeat 
               ? 'bg-[#ff5545]/10 border-[#ff5545]/40 text-[#ff5545]' 
-              : 'bg-white/5 border-white/10 text-[#b0c6ff]/40'
+              : 'bg-white/5 border-white/10 text-[#00C896]/40'
           }`}
         >
           <div className={`w-3 h-3 rounded-full ${isRepeat ? 'bg-[#ff5545] animate-pulse' : 'bg-white/10'}`} />
-          <span className="text-[10px] font-black uppercase tracking-widest">Repeat Offender Status</span>
+          <span className="text-[10px] font-semibold uppercase tracking-widest">Repeat Offender Status</span>
         </button>
 
         <button 
           onClick={handleCalculate}
           disabled={loading}
-          className="w-full py-5 bg-[#b0c6ff] text-[#071325] rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl hover:scale-[1.02] active:scale-95 transition-all"
+          className="w-full py-5 bg-[#00C896] text-[#0A0E14] rounded-[1.5rem] text-[11px] font-semibold uppercase tracking-widest shadow-2xl hover:scale-[1.02] active:scale-95 transition-all"
         >
           {loading ? 'Processing Penalty Grid...' : 'Calculate Penalty'}
         </button>
@@ -142,17 +142,17 @@ const ChallanCalculator: React.FC = () => {
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-[#142032] border-2 border-[#b0c6ff]/20 p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative overflow-hidden"
+            className="bg-[#0D1117] border-2 border-[#00C896]/20 p-8 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.4)] relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#ff5545]/5 blur-[60px] rounded-full" />
             
             <div className="relative z-10">
               <div className="flex justify-between items-start mb-6">
                 <div>
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-[#ff5545] mb-1">Section {result.section} CMV Act</h4>
+                  <h4 className="text-[10px] font-semibold uppercase tracking-widest text-[#ff5545] mb-1">Section {result.section} CMV Act</h4>
                   <p className="text-sm font-bold text-[#d7e3fc] leading-tight">{result.description}</p>
                 </div>
-                <div className="bg-[#b0c6ff]/10 px-3 py-1 rounded-full border border-[#b0c6ff]/20 text-[9px] font-black text-[#b0c6ff]">
+                <div className="bg-[#00C896]/10 px-3 py-1 rounded-full border border-[#00C896]/20 text-[9px] font-semibold text-[#00C896]">
                   {result.source.toUpperCase()}
                 </div>
               </div>
@@ -162,15 +162,15 @@ const ChallanCalculator: React.FC = () => {
                   ₹{isRepeat ? (result.repeat_fine || result.base_fine * 3) : result.base_fine}
                 </span>
                 {isRepeat && (
-                  <span className="text-[10px] font-black text-[#ff5545] uppercase tracking-widest">Multiplied Penalty</span>
+                  <span className="text-[10px] font-semibold text-[#ff5545] uppercase tracking-widest">Multiplied Penalty</span>
                 )}
               </div>
 
               <div className="mt-8 pt-6 border-t border-white/5 flex gap-4">
-                <button className="flex-1 py-3 bg-[#b0c6ff]/10 hover:bg-[#b0c6ff]/20 rounded-xl text-[#b0c6ff] text-[9px] font-black uppercase tracking-widest border border-[#b0c6ff]/20">
+                <button className="flex-1 py-3 bg-[#00C896]/10 hover:bg-[#00C896]/20 rounded-xl text-[#00C896] text-[9px] font-semibold uppercase tracking-widest border border-[#00C896]/20">
                   Legal Advice
                 </button>
-                <button className="flex-1 py-3 bg-[#b0c6ff] text-[#071325] rounded-xl text-[9px] font-black uppercase tracking-widest">
+                <button className="flex-1 py-3 bg-[#00C896] text-[#0A0E14] rounded-xl text-[9px] font-semibold uppercase tracking-widest">
                   Pay Now
                 </button>
               </div>

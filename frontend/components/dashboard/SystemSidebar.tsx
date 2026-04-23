@@ -41,8 +41,8 @@ const SystemSidebar = memo(function SystemSidebar() {
   };
 
   const navItems = [
-    { icon: <MapPin size={24} />, label: 'Map', href: '/', color: 'text-blue-500' },
-    { icon: <BotMessageSquare size={24} />, label: 'AI Assistant', href: '/assistant', color: 'text-indigo-500' },
+    { icon: <MapPin size={24} />, label: 'Map', href: '/', color: 'text-[#1A5C38] dark:text-[#00C896]' },
+    { icon: <BotMessageSquare size={24} />, label: 'AI Assistant', href: '/assistant', color: 'text-[#1A5C38] dark:text-[#00C896]' },
     { icon: <MapPinPlus size={24} />, label: 'Locator', href: '/locator', color: 'text-emerald-500' },
     { icon: <HeartPulse size={24} />, label: 'First Aid', href: '/first-aid', color: 'text-red-500' },
     { icon: <AlertTriangle size={24} />, label: 'Report Road Issue', href: '/report', color: 'text-orange-500' },
@@ -87,14 +87,14 @@ const SystemSidebar = memo(function SystemSidebar() {
             <div className="p-6 flex items-center justify-between border-b border-slate-200 dark:border-white/5 bg-white/50 dark:bg-white/5 backdrop-blur-xl">
               <div className="flex items-center gap-3">
                 <div 
-                  className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-lg shadow-blue-600/20"
+                  className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1A5C38] to-[#0f3d28] flex items-center justify-center text-white shadow-lg shadow-[#1A5C38]/30"
                   aria-hidden="true"
                 >
                   <ShieldAlert size={24} />
                 </div>
                 <div>
-                  <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight font-space">SafeVision AI</h2>
-                  <p className="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">Protocol Active</p>
+                  <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight font-space">SafeVixAI</h2>
+                  <p className="text-[10px] font-bold text-emerald-600 dark:text-[#00C896] uppercase tracking-widest">Protocol Active</p>
                 </div>
               </div>
               <button
@@ -110,7 +110,7 @@ const SystemSidebar = memo(function SystemSidebar() {
             {/* Main Navigation Grid */}
             <div className="flex-1 overflow-y-auto p-6 space-y-8">
               <div>
-                <p className="text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase mb-4">Operations Console</p>
+                <p className="text-[10px] font-semibold tracking-[0.1em] text-slate-400 uppercase mb-4">Operations Console</p>
                 <motion.div 
                   variants={containerVariants}
                   initial="hidden"
@@ -122,9 +122,9 @@ const SystemSidebar = memo(function SystemSidebar() {
                       <Link
                         href={item.href}
                         onClick={() => setOpen(false)}
-                        className={`flex flex-col items-center justify-center gap-2 p-3 rounded-2xl border transition-all group shadow-sm hover:shadow-md h-24 ${
+                        className={`flex flex-col items-center justify-center gap-2 p-3 rounded-lg border transition-all group shadow-sm hover:shadow-md h-24 ${
                           pathname === item.href
-                            ? 'bg-blue-50 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20 ring-2 ring-blue-500/20'
+                            ? 'bg-emerald-50 dark:bg-[#1A5C38]/15 border-emerald-200 dark:border-[#1A5C38]/40 ring-2 ring-[#1A5C38]/20'
                             : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10'
                         }`}
                       >
@@ -133,7 +133,7 @@ const SystemSidebar = memo(function SystemSidebar() {
                         </div>
                         <span className={`text-[10px] font-bold text-center leading-tight ${
                           pathname === item.href
-                            ? 'text-blue-700 dark:text-blue-300'
+                            ? 'text-emerald-700 dark:text-[#00C896]'
                             : 'text-slate-700 dark:text-slate-300'
                         }`}>
                           {item.label}
@@ -147,7 +147,7 @@ const SystemSidebar = memo(function SystemSidebar() {
               {/* Quick Dial Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <p className="text-[10px] font-black tracking-[0.2em] text-red-500 uppercase">Emergency Quick Dial</p>
+                  <p className="text-[10px] font-semibold tracking-[0.1em] text-red-500 uppercase">Emergency Quick Dial</p>
                   <div className="h-px flex-1 bg-red-500/20 ml-4"></div>
                 </div>
 
@@ -167,8 +167,8 @@ const SystemSidebar = memo(function SystemSidebar() {
                           {dial.icon}
                         </div>
                         <div>
-                          <p className="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-tighter">{dial.label}</p>
-                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none">{dial.number}</p>
+                          <p className="text-[10px] font-semibold text-red-600 dark:text-red-400 uppercase tracking-tighter">{dial.label}</p>
+                          <p className="text-sm font-semibold text-slate-800 dark:text-white leading-none">{dial.number}</p>
                         </div>
                       </a>
                     </motion.div>
@@ -182,7 +182,7 @@ const SystemSidebar = memo(function SystemSidebar() {
               <Link 
                 href="/sos" 
                 onClick={() => setOpen(false)}
-                className="w-full flex items-center justify-center gap-3 py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-red-600/30 transition-all active:scale-95 group overflow-hidden relative"
+                className="w-full flex items-center justify-center gap-3 py-4 bg-red-600 hover:bg-red-700 text-white rounded-lg font-black text-lg shadow-xl shadow-red-600/30 transition-all active:scale-95 group overflow-hidden relative"
               >
                 <motion.div
                   animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
@@ -195,7 +195,7 @@ const SystemSidebar = memo(function SystemSidebar() {
                 <span className="relative z-10 tracking-widest uppercase">System SOS</span>
               </Link>
               <p className="text-center text-[10px] font-bold text-slate-500 mt-4 tracking-tighter">
-                SafeVision AI v2.4.0-Sentinel • Professional Responder Tier
+                SafeVixAI Sentinel • Professional Responder Tier
               </p>
             </div>
           </motion.div>

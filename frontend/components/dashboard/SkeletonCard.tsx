@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function SkeletonCard({ className = "" }: { className?: string }) {
   return (
-    <div className={`rounded-2xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 p-6 animate-pulse ${className}`}>
+    <div className={`rounded-lg border border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 p-6 animate-pulse ${className}`}>
       <div className="flex items-center gap-4 mb-4">
         <div className="w-10 h-10 rounded-xl bg-slate-200 dark:bg-white/10" />
         <div className="space-y-2">

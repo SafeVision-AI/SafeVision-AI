@@ -25,7 +25,7 @@ const MAP_FILTER_CHIPS: Array<{
 }> = [
   { label: 'All', value: 'all', icon: 'layers', color: 'text-slate-600 dark:text-slate-300', bg: 'bg-slate-500/10' },
   { label: 'Hospitals', value: 'hospital', icon: 'local_hospital', color: 'text-red-600 dark:text-red-400', bg: 'bg-red-500/10' },
-  { label: 'Police', value: 'police', icon: 'local_police', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10' },
+  { label: 'Police', value: 'police', icon: 'local_police', color: 'text-[#1A5C38] dark:text-[#00C896]', bg: 'bg-[#1A5C38]/10' },
   { label: 'Ambulance', value: 'ambulance', icon: 'emergency', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10' },
   { label: 'Fire', value: 'fire', icon: 'local_fire_department', color: 'text-orange-600 dark:text-orange-400', bg: 'bg-orange-500/10' },
   { label: 'Pharmacy', value: 'pharmacy', icon: 'medication', color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10' },
@@ -118,7 +118,7 @@ const TopSearch = memo(function TopSearch({
               {locationLabel}
             </span>
             {locationAccuracy ? (
-              <span className={`hidden min-[1320px]:inline text-[10px] font-black uppercase tracking-[0.18em] ${locationIsApproximate ? 'text-amber-500 dark:text-amber-300' : 'text-slate-400 dark:text-slate-500'}`}>
+              <span className={`hidden min-[1320px]:inline text-[10px] font-semibold uppercase tracking-[0.18em] ${locationIsApproximate ? 'text-amber-500 dark:text-amber-300' : 'text-slate-400 dark:text-slate-500'}`}>
                 {locationAccuracy}
               </span>
             ) : null}
@@ -130,7 +130,7 @@ const TopSearch = memo(function TopSearch({
           onSubmit={handleSearch}
           role="search"
           aria-label="Search"
-          className={`w-full sm:max-w-md md:max-w-none md:flex-1 lg:flex-none lg:w-full lg:max-w-xl pointer-events-auto flex items-center h-[52px] bg-white/95 dark:bg-[#1a2133]/95 backdrop-blur-2xl rounded-full px-4 transition-all duration-300 border ${isFocused ? 'border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/20' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]'}`}
+          className={`w-full sm:max-w-md md:max-w-none md:flex-1 lg:flex-none lg:w-full lg:max-w-xl pointer-events-auto flex items-center h-[52px] bg-white/95 dark:bg-[#1a2133]/95 backdrop-blur-2xl rounded-full px-4 transition-all duration-300 border ${isFocused ? 'border-[#1A5C38]/50 shadow-[0_0_20px_rgba(59,130,246,0.15)] ring-1 ring-[#1A5C38]/20' : 'border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]'}`}
         >
           
           {showBack && (
@@ -157,13 +157,13 @@ const TopSearch = memo(function TopSearch({
             className="flex-1 bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 px-2 text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-500 dark:placeholder:text-slate-400 font-medium text-base h-full w-full"
           />
 
-          <button type="button" className="p-2 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 hover:bg-blue-500/20 active:scale-95 transition-all ml-2">
+          <button type="button" className="p-2 rounded-full bg-[#1A5C38]/10 text-[#1A5C38] dark:text-[#00C896] hover:bg-[#1A5C38]/20 active:scale-95 transition-all ml-2">
             <Mic className="w-5 h-5" />
           </button>
           
           {/* Autocomplete Dropdown */}
           {isFocused && (searchQuery.length > 1 || results.length > 0) && (
-            <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white dark:bg-[#1a2133] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50">
+            <div className="absolute top-[calc(100%+8px)] left-0 w-full bg-white dark:bg-[#1a2133] rounded-lg shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50">
               {isSearching && results.length === 0 ? (
                 <div className="p-4 text-center text-sm text-slate-500">Searching...</div>
               ) : results.length > 0 ? (
@@ -194,21 +194,21 @@ const TopSearch = memo(function TopSearch({
             <div className="flex items-center h-full gap-1 bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-xl ring-1 ring-white/40 dark:ring-white/10 shadow-2xl rounded-full px-1.5">
               <button 
                 onClick={() => setTheme('light')}
-                className={`p-2 rounded-full transition-all ${theme === 'light' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                className={`p-2 rounded-full transition-all ${theme === 'light' ? 'bg-[#1A5C38]/15 text-[#1A5C38] dark:text-[#00C896] dark:bg-[#1A5C38]/20 dark:text-[#00C896]' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                 title="Light Mode"
               >
                 <Sun className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setTheme('dark')}
-                className={`p-2 rounded-full transition-all ${theme === 'dark' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                className={`p-2 rounded-full transition-all ${theme === 'dark' ? 'bg-[#1A5C38]/15 text-[#1A5C38] dark:text-[#00C896] dark:bg-[#1A5C38]/20 dark:text-[#00C896]' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                 title="Dark Mode"
               >
                 <Moon className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setTheme('system')}
-                className={`p-2 rounded-full transition-all ${theme === 'system' ? 'bg-blue-100 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
+                className={`p-2 rounded-full transition-all ${theme === 'system' ? 'bg-[#1A5C38]/15 text-[#1A5C38] dark:text-[#00C896] dark:bg-[#1A5C38]/20 dark:text-[#00C896]' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
                 title="System Theme"
               >
                 <Monitor className="w-5 h-5" />
@@ -240,7 +240,7 @@ const TopSearch = memo(function TopSearch({
                 {gpsError ? 'Enable Location' : gpsLocation ? 'Refresh Location' : 'Use My Location'}
               </span>
               {locationIsApproximate && locationAccuracy ? (
-                <span className="text-[10px] font-black uppercase tracking-[0.16em] text-amber-500 dark:text-amber-300">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-amber-500 dark:text-amber-300">
                   {locationAccuracy}
                 </span>
               ) : null}
@@ -251,19 +251,19 @@ const TopSearch = memo(function TopSearch({
               <button
                 key={chip.label}
                 onClick={() => setServiceCategory(chip.value)}
-                className={`flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-xl rounded-full shadow-lg ring-1 whitespace-nowrap active:scale-95 transition-transform hover:shadow-2xl ${isActive ? 'ring-2 ring-blue-500/30' : 'ring-white/40 dark:ring-white/10'}`}
+                className={`flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-[#1a2133]/90 backdrop-blur-xl rounded-full shadow-lg ring-1 whitespace-nowrap active:scale-95 transition-transform hover:shadow-2xl ${isActive ? 'ring-2 ring-[#1A5C38]/30' : 'ring-white/40 dark:ring-white/10'}`}
                 data-active={isActive}
                 aria-pressed={isActive}
               >
-                <div className={`${isActive ? 'bg-blue-500/15' : chip.bg} p-1 rounded-full flex items-center justify-center`}>
+                <div className={`${isActive ? 'bg-[#1A5C38]/80/15' : chip.bg} p-1 rounded-full flex items-center justify-center`}>
                   <span
-                    className={`material-symbols-outlined text-[16px] ${isActive ? 'text-blue-600 dark:text-blue-400' : chip.color}`}
+                    className={`material-symbols-outlined text-[16px] ${isActive ? 'text-[#1A5C38] dark:text-[#00C896]' : chip.color}`}
                     style={{ fontVariationSettings: "'FILL' 1" }}
                   >
                     {chip.icon}
                   </span>
                 </div>
-                <span className={`text-sm font-semibold ${isActive ? 'text-blue-700 dark:text-blue-300' : 'text-slate-800 dark:text-[#d7e3fc]'}`}>
+                <span className={`text-sm font-semibold ${isActive ? 'text-[#1A5C38] dark:text-blue-300' : 'text-slate-800 dark:text-[#d7e3fc]'}`}>
                   {chip.label}
                 </span>
               </button>

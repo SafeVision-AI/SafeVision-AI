@@ -172,14 +172,14 @@ export function ChatInterface() {
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-[#071325]">
+    <div className="flex flex-col h-full bg-slate-50 dark:bg-[#0A0E14]">
       {/* HEADER / MODE TOGGLE */}
       <div className="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-white/5 bg-white/80 dark:bg-white/5 backdrop-blur-xl">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center">
-            <Bot size={16} className="text-blue-600 dark:text-blue-400" />
+          <div className="w-8 h-8 rounded-xl bg-[#1A5C38]/10 flex items-center justify-center">
+            <Bot size={16} className="text-[#1A5C38] dark:text-[#00C896]" />
           </div>
-          <span className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tight">
+          <span className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-tight">
             SafeVixAI Chat
           </span>
           <ConnectivityBadge />
@@ -189,9 +189,9 @@ export function ChatInterface() {
         <div className="flex items-center bg-slate-100 dark:bg-white/5 rounded-full p-0.5 border border-slate-200 dark:border-white/10">
           <button
             onClick={() => setAiMode('online')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-widest transition-all ${
               aiMode === 'online'
-                ? 'bg-blue-600 text-white shadow-sm'
+                ? 'bg-[#1A5C38] text-white shadow-sm'
                 : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
@@ -200,9 +200,9 @@ export function ChatInterface() {
           </button>
           <button
             onClick={() => setAiMode('offline')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-widest transition-all ${
               aiMode === 'offline'
-                ? 'bg-indigo-600 text-white shadow-sm'
+                ? 'bg-[#1A5C38] text-white shadow-sm'
                 : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
             }`}
           >
@@ -226,7 +226,7 @@ export function ChatInterface() {
               >
                 <div
                   className={`w-7 h-7 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 ${
-                    isUser ? 'bg-blue-600 text-white' : 'bg-emerald-500/10 text-emerald-500'
+                    isUser ? 'bg-[#1A5C38] text-white' : 'bg-emerald-500/10 text-emerald-500'
                   }`}
                 >
                   {isUser ? <UserCircle size={14} /> : <Bot size={14} />}
@@ -235,8 +235,8 @@ export function ChatInterface() {
                 <div
                   className={`px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${
                     isUser
-                      ? 'bg-blue-600 text-white rounded-2xl rounded-tr-sm shadow-md'
-                      : 'bg-white dark:bg-white/5 text-slate-800 dark:text-[#d7e3fc] rounded-2xl rounded-tl-sm border border-slate-200 dark:border-white/10 shadow-sm'
+                      ? 'bg-[#1A5C38] text-white rounded-lg rounded-tr-sm shadow-md'
+                      : 'bg-white dark:bg-white/5 text-slate-800 dark:text-[#d7e3fc] rounded-lg rounded-tl-sm border border-slate-200 dark:border-white/10 shadow-sm'
                   }`}
                 >
                   {msg.content || (msg.streaming ? '' : '…')}
@@ -270,7 +270,7 @@ export function ChatInterface() {
             <div className="w-7 h-7 rounded-xl bg-emerald-500/10 flex items-center justify-center">
               <Bot size={14} className="text-emerald-500" />
             </div>
-            <div className="px-4 py-3 bg-white dark:bg-white/5 rounded-2xl rounded-tl-sm border border-slate-200 dark:border-white/10 flex gap-1.5">
+            <div className="px-4 py-3 bg-white dark:bg-white/5 rounded-lg rounded-tl-sm border border-slate-200 dark:border-white/10 flex gap-1.5">
               <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: '0ms' }} />
               <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: '150ms' }} />
               <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600 animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -295,7 +295,7 @@ export function ChatInterface() {
             }
             disabled={isLoading}
             aria-label="Chat message input"
-            className="flex-1 px-4 py-3 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500/50 transition-all"
+            className="flex-1 px-4 py-3 rounded-lg bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-sm text-slate-800 dark:text-[#d7e3fc] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1A5C38]/30 focus:border-[#1A5C38]/50 transition-all"
           />
           <button
             type="submit"
@@ -304,7 +304,7 @@ export function ChatInterface() {
             className={`w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-all active:scale-90 ${
               !input.trim() || isLoading
                 ? 'bg-slate-100 dark:bg-white/5 text-slate-300 dark:text-slate-600 cursor-not-allowed'
-                : 'bg-blue-600 text-white shadow-md shadow-blue-600/20 hover:bg-blue-700'
+                : 'bg-[#1A5C38] text-white shadow-md shadow-blue-600/20 hover:bg-blue-700'
             }`}
           >
             {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}

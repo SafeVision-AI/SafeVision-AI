@@ -42,7 +42,7 @@ export function SOSButton() {
             }}
           >
             <div className="text-center mb-6">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em]"
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.1em]"
                 style={{ color: 'var(--accent-red-deep)' }}>
                 Confirm SOS Trigger
               </h4>
@@ -55,7 +55,7 @@ export function SOSButton() {
             <div className="space-y-3">
               <button
                 onClick={triggerWhatsApp}
-                className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-95"
+                className="w-full py-4 rounded-lg text-[10px] font-semibold uppercase tracking-widest transition-all hover:brightness-110 active:scale-95"
                 style={{
                   backgroundColor: 'var(--accent-red)',
                   color: 'white',
@@ -66,7 +66,7 @@ export function SOSButton() {
               </button>
               <button
                 onClick={triggerSms}
-                className="w-full py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-95"
+                className="w-full py-4 rounded-lg text-[10px] font-semibold uppercase tracking-widest transition-all hover:brightness-110 active:scale-95"
                 style={{
                   backgroundColor: 'transparent',
                   border: '1px solid color-mix(in srgb, var(--accent-red) 20%, transparent)',
@@ -109,7 +109,7 @@ export function SOSButton() {
         >
           <AlertCircle size={36} strokeWidth={2.5} />
           <div
-            className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-black border-2"
+            className="absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[8px] font-semibold border-2"
             style={{
               backgroundColor: 'var(--bg-primary)',
               borderColor: 'var(--accent-red)',

@@ -82,7 +82,7 @@ export default function ChallanPage() {
   const finalFine = result ? (isRepeat && result.repeat_fine ? result.repeat_fine : result.base_fine) : 0;
 
   return (
-    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#071325] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
+    <div className="relative w-full min-h-[100dvh] bg-[#f8fafc] dark:bg-[#0A0E14] text-slate-800 dark:text-[#d7e3fc] overflow-x-hidden flex flex-col transition-colors duration-500 font-inter">
       
       {/* ── Unified Tactical Navigation Header ── */}
       <SystemHeader title="Challan Terminal" showBack={false} />
@@ -100,7 +100,7 @@ export default function ChallanPage() {
           <section className="flex flex-col gap-2">
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 w-fit">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] font-space leading-none">Terminal Active</span>
+              <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.1em] font-space leading-none">Terminal Active</span>
             </div>
             <h1 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white uppercase font-space leading-tight">
               Estimation<br />Terminal
@@ -117,7 +117,7 @@ export default function ChallanPage() {
             
             <div className="relative z-10 flex flex-col gap-6">
                <div className="flex flex-col gap-1">
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] font-space">Total Liability</p>
+                 <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.1em] font-space">Total Liability</p>
                  <motion.h2 
                    key={finalFine}
                    initial={{ opacity: 0, scale: 0.9 }}
@@ -132,7 +132,7 @@ export default function ChallanPage() {
                  <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-100 dark:border-white/5">
                     <Scale size={16} className="text-emerald-500" />
                     <div className="flex flex-col">
-                      <span className="text-[11px] font-black text-slate-900 dark:text-white tracking-tight leading-none uppercase">{activeViolation.mva}</span>
+                      <span className="text-[11px] font-semibold text-slate-900 dark:text-white tracking-tight leading-none uppercase">{activeViolation.mva}</span>
                       <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">{isRepeat ? 'Repeat Offence (2x)' : 'First Occurrence'}</span>
                     </div>
                  </div>
@@ -146,7 +146,7 @@ export default function ChallanPage() {
                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20"
                      >
                        <AlertTriangle size={12} className="text-red-500" />
-                       <span className="text-[10px] font-black text-red-600 dark:text-red-400 uppercase tracking-wider">{activeViolation.danger}</span>
+                       <span className="text-[10px] font-semibold text-red-600 dark:text-red-400 uppercase tracking-wider">{activeViolation.danger}</span>
                      </motion.div>
                    )}
                  </AnimatePresence>
@@ -158,9 +158,9 @@ export default function ChallanPage() {
                      setShowDetailToast(true);
                      setTimeout(() => setShowDetailToast(false), 3000);
                    }}
-                   className="w-full h-16 bg-slate-900 dark:bg-emerald-500 rounded-2xl flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all group/btn"
+                   className="w-full h-16 bg-slate-900 dark:bg-emerald-500 rounded-lg flex items-center justify-center gap-3 shadow-xl hover:scale-[1.02] active:scale-95 transition-all group/btn"
                  >
-                    <span className="text-white dark:text-slate-900 font-black text-sm tracking-[0.2em] uppercase font-space">DETAILED REPORT</span>
+                    <span className="text-white dark:text-slate-900 font-black text-sm tracking-[0.1em] uppercase font-space">DETAILED REPORT</span>
                     <ArrowRight size={18} className="text-white dark:text-slate-900 group-hover/btn:translate-x-1 transition-transform" />
                  </button>
                  <AnimatePresence>
@@ -181,13 +181,13 @@ export default function ChallanPage() {
 
           {/* Quick Meta */}
           <div className="grid grid-cols-2 gap-4">
-             <div className="p-4 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Max Penalty</p>
-                <p className="text-xs font-black text-slate-900 dark:text-white">₹{activeViolation.max}</p>
+             <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Max Penalty</p>
+                <p className="text-xs font-semibold text-slate-900 dark:text-white">₹{activeViolation.max}</p>
              </div>
-             <div className="p-4 rounded-3xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
-                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Act Sync</p>
-                <p className="text-xs font-black text-emerald-500">MVA_ACT_2019</p>
+             <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/5">
+                <p className="text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1">Act Sync</p>
+                <p className="text-xs font-semibold text-emerald-500">MVA_ACT_2019</p>
              </div>
           </div>
         </aside>
@@ -197,11 +197,11 @@ export default function ChallanPage() {
            {/* Section 1: Violation */}
            <section className="flex flex-col gap-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
                   <Activity size={14} className="text-emerald-500" />
                   01. Violation Protocol
                 </h3>
-                <div className="px-3 py-1 rounded-full bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-900 text-[9px] font-black uppercase tracking-widest">
+                <div className="px-3 py-1 rounded-full bg-slate-900 dark:bg-emerald-500 text-white dark:text-slate-900 text-[9px] font-semibold uppercase tracking-widest">
                   {jurisdiction.split(' ')[0]}
                 </div>
               </div>
@@ -210,10 +210,10 @@ export default function ChallanPage() {
                 <select 
                   value={violationId}
                   onChange={(e) => setChallanState({ violation: e.target.value })}
-                  className="w-full bg-transparent border-2 border-slate-200 dark:border-white/10 rounded-3xl p-6 text-lg font-black text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
+                  className="w-full bg-transparent border-2 border-slate-200 dark:border-white/10 rounded-xl p-6 text-lg font-black text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
                 >
                   {VIOLATIONS.map(v => (
-                    <option key={v.id} value={v.id} className="bg-white dark:bg-[#071325]">{v.label}</option>
+                    <option key={v.id} value={v.id} className="bg-white dark:bg-[#0A0E14]">{v.label}</option>
                   ))}
                 </select>
                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
@@ -224,7 +224,7 @@ export default function ChallanPage() {
 
            {/* Section 2: Vehicle Selection (The "Big" UI) */}
            <section className="flex flex-col gap-6">
-              <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400 font-space flex items-center gap-2">
                 <Car size={14} className="text-emerald-500" />
                 02. Vehicle Identification
               </h3>
@@ -240,11 +240,11 @@ export default function ChallanPage() {
                         : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/5 text-slate-400 hover:border-slate-400 dark:hover:border-white/10 hover:shadow-md'
                      }`}
                    >
-                     <div className={`p-4 rounded-2xl ${vehicleId === cls.id ? 'bg-white/30' : 'bg-slate-100 dark:bg-white/5'}`}>
+                     <div className={`p-4 rounded-lg ${vehicleId === cls.id ? 'bg-white/30' : 'bg-slate-100 dark:bg-white/5'}`}>
                        {cls.icon}
                      </div>
                      <div className="flex flex-col items-center">
-                       <span className={`text-xs font-black uppercase tracking-widest ${vehicleId === cls.id ? 'text-slate-900' : 'text-slate-900 dark:text-white'}`}>
+                       <span className={`text-xs font-semibold uppercase tracking-widest ${vehicleId === cls.id ? 'text-slate-900' : 'text-slate-900 dark:text-white'}`}>
                          {cls.title}
                        </span>
                        <span className={`text-[8px] font-bold uppercase mt-1 opacity-60 ${vehicleId === cls.id ? 'text-slate-900' : 'text-slate-400'}`}>
@@ -259,15 +259,15 @@ export default function ChallanPage() {
            {/* Section 3: Parameters & Jurisdiction */}
            <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="flex flex-col gap-4">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space">03. Jurisdiction</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400 font-space">03. Jurisdiction</h3>
                 <div className="relative">
                   <select 
                     value={jurisdiction}
                     onChange={(e) => setChallanState({ jurisdiction: e.target.value })}
-                    className="w-full bg-transparent border-2 border-slate-200 dark:border-white/10 rounded-2xl py-4 px-5 text-sm font-bold text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
+                    className="w-full bg-transparent border-2 border-slate-200 dark:border-white/10 rounded-lg py-4 px-5 text-sm font-bold text-slate-900 dark:text-white appearance-none focus:border-emerald-500 transition-all outline-none cursor-pointer"
                   >
                     {STATES.map(s => (
-                      <option key={s} value={s} className="bg-white dark:bg-[#071325]">{s}</option>
+                      <option key={s} value={s} className="bg-white dark:bg-[#0A0E14]">{s}</option>
                     ))}
                   </select>
                   <MapPin size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -275,16 +275,16 @@ export default function ChallanPage() {
               </div>
 
               <div className="flex flex-col gap-4">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-space">04. History</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 dark:text-slate-400 font-space">04. History</h3>
                 <button 
                   onClick={() => setChallanState({ isRepeat: !isRepeat })}
-                  className={`w-full h-[58px] rounded-2xl border-2 flex items-center justify-between px-6 transition-all ${
+                  className={`w-full h-[58px] rounded-lg border-2 flex items-center justify-between px-6 transition-all ${
                     isRepeat 
                     ? 'bg-red-500/10 border-red-500/20 text-red-600' 
                     : 'bg-white dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400'
                   }`}
                 >
-                  <span className="text-[10px] font-black uppercase tracking-widest">Repeat Offender?</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest">Repeat Offender?</span>
                   <div className={`w-10 h-5 rounded-full relative transition-colors ${isRepeat ? 'bg-red-500' : 'bg-slate-200 dark:bg-white/10'}`}>
                     <motion.div 
                       layout
@@ -304,7 +304,7 @@ export default function ChallanPage() {
                 <Zap size={20} className="text-emerald-500" />
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">AI Tactical Insight</p>
+                <p className="text-[10px] font-semibold text-emerald-500 uppercase tracking-widest">AI Tactical Insight</p>
                 <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed">
                   {result?.description || `Based on recent MVA amendments, high-risk offences like DUI (${activeViolation.mva}) have immediate license disqualification protocols active in ${jurisdiction.split(' ')[0]}.`}
                 </p>

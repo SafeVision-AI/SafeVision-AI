@@ -264,7 +264,7 @@ function EmptyState({
   const hasNearbyServicesInOtherFilters = activeFilter !== 'All' && searchMeta.count > 0;
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#1a2133]/40 backdrop-blur-xl p-6 text-center">
+    <div className="rounded-lg border border-slate-200 dark:border-white/5 bg-white/80 dark:bg-[#1a2133]/40 backdrop-blur-xl p-6 text-center">
       <h3 className="text-base font-black text-slate-900 dark:text-[#d7e3fc]">
         {locating ? 'Locating nearby services...' : 'No services found for this filter'}
       </h3>
@@ -308,8 +308,8 @@ function RouteStatusCard({
 
   if (routeError) {
     return (
-      <div className="rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-amber-900 shadow-sm dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">
-        <div className="text-[10px] font-black uppercase tracking-[0.24em] text-amber-600 dark:text-amber-300">
+      <div className="rounded-lg border border-amber-200 bg-amber-50/90 p-4 text-amber-900 shadow-sm dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">
+        <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-amber-600 dark:text-amber-300">
           Route Unavailable
         </div>
         <p className="mt-2 text-sm font-semibold">{routeError}</p>
@@ -319,11 +319,11 @@ function RouteStatusCard({
 
   if (loadingLabel) {
     return (
-      <div className="rounded-2xl border border-blue-200 bg-blue-50/90 p-4 shadow-sm dark:border-blue-500/20 dark:bg-blue-500/10">
-        <div className="flex items-center gap-3 text-blue-700 dark:text-blue-200">
+      <div className="rounded-lg border border-[#1A5C38]/20 bg-[#1A5C38]/8/90 p-4 shadow-sm dark:border-[#1A5C38]/20 dark:bg-[#1A5C38]/10">
+        <div className="flex items-center gap-3 text-[#1A5C38] dark:text-[#00C896]">
           <Loader2 size={16} className="animate-spin" />
           <div>
-            <div className="text-[10px] font-black uppercase tracking-[0.24em] text-blue-500 dark:text-blue-300">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#1A5C38] dark:text-[#00C896]">
               Building Route
             </div>
             <p className="mt-1 text-sm font-semibold">Calculating the clearest drive to {loadingLabel}.</p>
@@ -338,8 +338,8 @@ function RouteStatusCard({
   }
 
   return (
-    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/90 p-4 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10">
-      <div className="text-[10px] font-black uppercase tracking-[0.24em] text-emerald-600 dark:text-emerald-300">
+    <div className="rounded-lg border border-emerald-200 bg-emerald-50/90 p-4 shadow-sm dark:border-emerald-500/20 dark:bg-emerald-500/10">
+      <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-600 dark:text-emerald-300">
         {rerouting ? 'Rerouting' : 'Route Ready'}
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-2 text-sm font-semibold text-emerald-900 dark:text-emerald-50">
@@ -359,7 +359,7 @@ function RouteStatusCard({
       ) : null}
       {activeRoute.routes.length > 1 ? (
         <div className="mt-3">
-          <div className="mb-2 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700/70 dark:text-emerald-100/70">
+          <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-700/70 dark:text-emerald-100/70">
             Route Options
           </div>
           <div className="flex flex-wrap gap-2">
@@ -370,7 +370,7 @@ function RouteStatusCard({
                   key={routeOption.routeId}
                   type="button"
                   onClick={() => onSelectRoute(routeOption.routeId)}
-                  className={`rounded-full border px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.18em] transition ${
+                  className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] transition ${
                     isSelected
                       ? 'border-emerald-500 bg-emerald-600 text-white shadow-lg shadow-emerald-600/20'
                       : 'border-emerald-200 bg-white/80 text-emerald-800 hover:border-emerald-400 hover:bg-emerald-100 dark:border-emerald-300/15 dark:bg-white/5 dark:text-emerald-100 dark:hover:bg-emerald-500/10'
@@ -384,7 +384,7 @@ function RouteStatusCard({
         </div>
       ) : null}
       <div className="mt-4">
-        <div className="mb-2 text-[10px] font-black uppercase tracking-[0.22em] text-emerald-700/70 dark:text-emerald-100/70">
+        <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-700/70 dark:text-emerald-100/70">
           Step-by-Step
         </div>
         <ol className="space-y-2">
@@ -394,7 +394,7 @@ function RouteStatusCard({
               className="rounded-xl border border-emerald-200/70 bg-white/80 px-3 py-2 text-left dark:border-emerald-300/10 dark:bg-white/5"
             >
               <div className="flex items-start gap-3">
-                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-black text-white">
+                <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-semibold text-white">
                   {step.index}
                 </span>
                 <div className="min-w-0">
@@ -417,7 +417,7 @@ function RouteStatusCard({
           href={navigationHref}
           target="_blank"
           rel="noreferrer"
-          className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white/80 px-4 py-2 text-[11px] font-black uppercase tracking-[0.18em] text-emerald-800 transition hover:border-emerald-500 hover:bg-emerald-100 dark:border-emerald-300/15 dark:bg-white/5 dark:text-emerald-100 dark:hover:bg-emerald-500/10"
+          className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-300 bg-white/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-800 transition hover:border-emerald-500 hover:bg-emerald-100 dark:border-emerald-300/15 dark:bg-white/5 dark:text-emerald-100 dark:hover:bg-emerald-500/10"
         >
           <Navigation size={14} />
           Open External Navigation
@@ -487,7 +487,7 @@ function MobileLocator({
     : null;
 
   return (
-    <div className="min-h-dvh pb-48 bg-slate-50 dark:bg-[#0B1121] text-slate-900 dark:text-[#d7e3fc] font-['Inter'] selection:bg-blue-500/30 relative overflow-x-hidden w-full">
+    <div className="min-h-dvh pb-48 bg-slate-50 dark:bg-[#0D1117] text-slate-900 dark:text-[#d7e3fc] font-['Inter'] selection:bg-[#1A5C38]/80/30 relative overflow-x-hidden w-full">
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         {/* Subtle Grid Pattern */}
         <div
@@ -508,13 +508,13 @@ function MobileLocator({
           <h1 className="text-slate-900 dark:text-slate-100 font-black tracking-tight text-xl font-space uppercase">
             Emergency Locator
           </h1>
-          <p className="text-[11px] text-slate-500 dark:text-blue-400 font-bold opacity-80 mt-1 tracking-wider uppercase">
+          <p className="text-[11px] text-slate-500 dark:text-[#00C896] font-bold opacity-80 mt-1 tracking-wider uppercase">
             {address} - {coverageSummary}
           </p>
         </div>
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
+          <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">
             Live HUD
           </span>
         </div>
@@ -522,7 +522,7 @@ function MobileLocator({
 
       <main className="relative z-10 pt-4 pb-40 w-full">
         <section className="relative h-[440px] w-full px-4 border-b border-slate-200 dark:border-white/5 overflow-hidden">
-          <div className="relative h-full w-full rounded-2xl overflow-hidden bg-slate-200 dark:bg-[#030e20] border border-slate-200 dark:border-white/10 shadow-2xl">
+          <div className="relative h-full w-full rounded-lg overflow-hidden bg-slate-200 dark:bg-[#030e20] border border-slate-200 dark:border-white/10 shadow-2xl">
             <div className="absolute inset-0 z-0">
               <EmergencyMap
                 center={coords}
@@ -565,7 +565,7 @@ function MobileLocator({
         </section>
 
         <section className="mt-6 px-4 relative">
-          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-slate-50 dark:from-[#0B1121] to-transparent z-20 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-slate-50 dark:from-[#0D1117] to-transparent z-20 pointer-events-none" />
 
           <div className="flex overflow-x-auto gap-3 pb-4 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pr-12">
             {FILTER_CHIPS.map((chip) => (
@@ -574,7 +574,7 @@ function MobileLocator({
                 onClick={() => setActiveFilter(chip)}
                 aria-label={`Filter by ${chip}`}
                 className={`flex-none px-5 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 flex items-center gap-2 ${activeFilter === chip
-                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30 ring-1 ring-white/20'
+                    ? 'bg-[#1A5C38] text-white shadow-lg shadow-[#1A5C38]/30 ring-1 ring-white/20'
                     : 'bg-white dark:bg-[#1a2133]/60 backdrop-blur-md border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-400 shadow-sm'
                   }`}
               >
@@ -597,8 +597,8 @@ function MobileLocator({
             rerouting={rerouting}
           />
           {locationIsApproximate && currentLocationAccuracy ? (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-amber-900 shadow-sm dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">
-              <div className="text-[10px] font-black uppercase tracking-[0.24em] text-amber-600 dark:text-amber-300">
+            <div className="rounded-lg border border-amber-200 bg-amber-50/90 px-4 py-3 text-amber-900 shadow-sm dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-amber-600 dark:text-amber-300">
                 Approximate Location
               </div>
               <p className="mt-1 text-sm font-semibold">
@@ -621,8 +621,8 @@ function MobileLocator({
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
-                  className={`group relative rounded-2xl p-5 backdrop-blur-xl shadow-sm transition-all ${selectedServiceId === service.id
-                      ? 'border border-blue-300 bg-blue-50/90 dark:border-blue-500/40 dark:bg-[#1c2d4b]/70'
+                  className={`group relative rounded-lg p-5 backdrop-blur-xl shadow-sm transition-all ${selectedServiceId === service.id
+                      ? 'border border-[#1A5C38]/30 bg-[#1A5C38]/8/90 dark:border-[#1A5C38]/40 dark:bg-[#0D1117]/70'
                       : 'border border-slate-200 bg-white/80 dark:border-white/5 dark:bg-[#1a2133]/40 hover:bg-white dark:hover:bg-[#1f283d]/60'
                     }`}
                 >
@@ -646,8 +646,8 @@ function MobileLocator({
                         </div>
                       </div>
                     </div>
-                    <div className="bg-blue-50 dark:bg-blue-500/10 px-3 py-1 rounded-lg border border-blue-200 dark:border-blue-500/20">
-                      <span className="text-[10px] font-black text-blue-600 dark:text-blue-400 tracking-tight">{service.distance}</span>
+                    <div className="bg-[#1A5C38]/8 dark:bg-[#1A5C38]/10 px-3 py-1 rounded-lg border border-[#1A5C38]/20 dark:border-[#1A5C38]/20">
+                      <span className="text-[10px] font-semibold text-[#1A5C38] dark:text-[#00C896] tracking-tight">{service.distance}</span>
                     </div>
                   </div>
 
@@ -758,19 +758,19 @@ function DesktopLocator({
   }, []);
 
   return (
-    <div className="w-full h-dvh bg-slate-50 dark:bg-[#0B1121] text-slate-900 dark:text-[#dae6ff] font-['Inter'] relative overflow-hidden flex flex-col">
+    <div className="w-full h-dvh bg-slate-50 dark:bg-[#0D1117] text-slate-900 dark:text-[#dae6ff] font-['Inter'] relative overflow-hidden flex flex-col">
       <SystemHeader title="Emergency Resource Dispatch" showBack={false} />
 
       <main className="flex-1 flex w-full relative z-0 overflow-hidden lg:mt-0">
         <section className="flex-1 h-full relative overflow-hidden bg-slate-200 dark:bg-[#061327] border-r border-slate-200 dark:border-white/5">
           <div className="absolute top-20 left-6 right-6 z-20 flex justify-center">
-            <div className="flex gap-1 bg-white/90 dark:bg-[#071325]/80 backdrop-blur-2xl p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-2xl overflow-x-auto [scrollbar-width:none]">
+            <div className="flex gap-1 bg-white/90 dark:bg-[#0A0E14]/80 backdrop-blur-2xl p-1.5 rounded-lg border border-slate-200 dark:border-white/10 shadow-2xl overflow-x-auto [scrollbar-width:none]">
               {FILTER_CHIPS.map((chip) => (
                 <button
                   key={chip}
                   onClick={() => setActiveFilter(chip)}
                   className={`px-3 lg:px-5 py-2.5 rounded-xl font-black text-[8px] lg:text-[9px] uppercase tracking-widest transition-all whitespace-nowrap ${activeFilter === chip
-                      ? 'bg-blue-600 text-white shadow-xl'
+                      ? 'bg-[#1A5C38] text-white shadow-xl'
                       : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5'
                     }`}
                 >
@@ -819,24 +819,24 @@ function DesktopLocator({
             <div className="absolute inset-0 pointer-events-none bg-slate-900/5 dark:bg-black/20 mix-blend-color z-10" />
           </div>
 
-          <div className="absolute bottom-8 left-8 z-20 bg-white/90 dark:bg-[#0B1121]/90 backdrop-blur-md p-4 rounded-2xl border border-slate-200 dark:border-white/10 shadow-xl min-w-[180px] hidden lg:block">
+          <div className="absolute bottom-8 left-8 z-20 bg-white/90 dark:bg-[#0D1117]/90 backdrop-blur-md p-4 rounded-lg border border-slate-200 dark:border-white/10 shadow-xl min-w-[180px] hidden lg:block">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[10px] font-black tracking-widest text-slate-400 uppercase">Telemetry Active</span>
+              <span className="text-[10px] font-semibold tracking-widest text-slate-400 uppercase">Telemetry Active</span>
             </div>
-            <div className="text-sm font-black text-slate-800 dark:text-blue-200 tracking-tight">{address}</div>
+            <div className="text-sm font-semibold text-slate-800 dark:text-[#00C896] tracking-tight">{address}</div>
             <div className="mt-1 text-xs font-semibold text-slate-500 dark:text-slate-400">{coverageSummary}</div>
           </div>
         </section>
 
-        <section className="w-[300px] lg:w-[340px] xl:w-[360px] h-full bg-white dark:bg-[#0B1121] flex flex-col z-20 shadow-2xl overflow-hidden shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] dark:shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.5)] border-l border-slate-200 dark:border-white/5">
+        <section className="w-[300px] lg:w-[340px] xl:w-[360px] h-full bg-white dark:bg-[#0D1117] flex flex-col z-20 shadow-2xl overflow-hidden shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.1)] dark:shadow-[-10px_0_30px_-15px_rgba(0,0,0,0.5)] border-l border-slate-200 dark:border-white/5">
           <div className="p-6 lg:p-8 pb-4 shrink-0">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/20 shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-[#1A5C38] flex items-center justify-center shadow-lg shadow-[#1A5C38]/20 shrink-0">
                 <MapPin className="text-white w-5 h-5" />
               </div>
               <div className="overflow-hidden">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                <h2 className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#1A5C38] dark:text-[#00C896] whitespace-nowrap">
                   Locator Subsystem
                 </h2>
                 <h1 className="text-xl lg:text-2xl font-black tracking-tight text-slate-800 dark:text-white leading-none truncate">
@@ -860,8 +860,8 @@ function DesktopLocator({
                 rerouting={rerouting}
               />
               {locationIsApproximate && currentLocationAccuracy ? (
-                <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50/90 px-4 py-3 text-amber-900 shadow-sm dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">
-                  <div className="text-[10px] font-black uppercase tracking-[0.24em] text-amber-600 dark:text-amber-300">
+                <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50/90 px-4 py-3 text-amber-900 shadow-sm dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-amber-600 dark:text-amber-300">
                     Approximate Location
                   </div>
                   <p className="mt-1 text-sm font-semibold">
@@ -887,21 +887,21 @@ function DesktopLocator({
                     layout
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className={`group rounded-2xl p-5 lg:p-6 transition-all ${selectedServiceId === service.id
-                        ? 'border border-blue-300 bg-blue-50 dark:border-blue-500/40 dark:bg-[#1c2d4b]/70'
+                    className={`group rounded-lg p-5 lg:p-6 transition-all ${selectedServiceId === service.id
+                        ? 'border border-[#1A5C38]/30 bg-[#1A5C38]/8 dark:border-[#1A5C38]/40 dark:bg-[#0D1117]/70'
                         : 'border border-slate-200 bg-slate-50 hover:bg-slate-100 dark:border-white/5 dark:bg-[#152640]/40 dark:hover:bg-[#1a2c48]/60'
                       }`}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex gap-4 lg:gap-5">
                         <div
-                          className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl shrink-0 flex items-center justify-center bg-white dark:bg-[#030e20] shadow-sm border border-slate-100 dark:border-white/10"
+                          className="w-12 h-12 lg:w-14 lg:h-14 rounded-lg shrink-0 flex items-center justify-center bg-white dark:bg-[#030e20] shadow-sm border border-slate-100 dark:border-white/10"
                           style={{ color: service.accentColor }}
                         >
                           <ServiceIcon type={service.type} className="w-6 h-6 lg:w-7 lg:h-7" />
                         </div>
                         <div className="overflow-hidden">
-                          <span className="text-[8px] lg:text-[9px] font-black uppercase tracking-[0.2em] mb-1 block opacity-70" style={{ color: service.accentColor }}>
+                          <span className="text-[8px] lg:text-[9px] font-semibold uppercase tracking-[0.1em] mb-1 block opacity-70" style={{ color: service.accentColor }}>
                             {service.type}
                           </span>
                           <h3 className="text-base lg:text-xl font-bold text-slate-800 dark:text-[#dae6ff] truncate">{service.name}</h3>
@@ -927,7 +927,7 @@ function DesktopLocator({
                       <button
                         type="button"
                         onClick={() => onLocateService(service)}
-                        className="px-4 py-2.5 rounded-xl bg-blue-600 text-white font-bold text-[9px] lg:text-[10px] uppercase tracking-widest hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-70 flex items-center justify-center gap-2"
+                        className="px-4 py-2.5 rounded-xl bg-[#1A5C38] text-white font-bold text-[9px] lg:text-[10px] uppercase tracking-widest hover:bg-[#1A5C38]/80 disabled:cursor-not-allowed disabled:opacity-70 flex items-center justify-center gap-2"
                         disabled={routeLoadingId === service.id}
                       >
                         {routeLoadingId === service.id ? (
@@ -961,8 +961,8 @@ function DesktopLocator({
               { n: '100', l: 'POL' },
               { n: '101', l: 'FIRE' },
             ].map((dial) => (
-              <button key={dial.n} className="flex flex-col items-center justify-center py-3 lg:py-4 bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 hover:border-blue-500/50 transition-all group">
-                <span className="text-base lg:text-lg font-black text-slate-800 dark:text-white group-hover:text-blue-500">{dial.n}</span>
+              <button key={dial.n} className="flex flex-col items-center justify-center py-3 lg:py-4 bg-white dark:bg-white/5 rounded-xl border border-slate-200 dark:border-white/5 hover:border-[#1A5C38]/50 transition-all group">
+                <span className="text-base lg:text-lg font-black text-slate-800 dark:text-white group-hover:text-[#1A5C38] dark:text-[#00C896]">{dial.n}</span>
                 <span className="text-[7px] lg:text-[8px] font-bold text-slate-400 uppercase tracking-widest">{dial.l}</span>
               </button>
             ))}

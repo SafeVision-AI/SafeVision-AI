@@ -117,6 +117,13 @@ interface AppState {
     isRepeat: boolean;
   };
   setChallanState: (state: Partial<AppState['challanState']>) => void;
+
+  // Auth
+  isAuthenticated: boolean;
+  authToken: string | null;
+  operatorName: string;
+  setAuth: (token: string, name: string) => void;
+  clearAuth: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -193,6 +200,13 @@ export const useAppStore = create<AppState>()(
         isRepeat: false,
       },
       setChallanState: (state) => set((s) => ({ challanState: { ...s.challanState, ...state } })),
+
+      // Auth
+      isAuthenticated: false,
+      authToken: null,
+      operatorName: '',
+      setAuth: (token, name) => set({ isAuthenticated: true, authToken: token, operatorName: name }),
+      clearAuth: () => set({ isAuthenticated: false, authToken: null, operatorName: '' }),
     }),
     {
       name: 'svai-storage',
@@ -202,6 +216,9 @@ export const useAppStore = create<AppState>()(
         aiMode: state.aiMode,
         serviceCategory: state.serviceCategory,
         isDesktopSidebarCollapsed: state.isDesktopSidebarCollapsed,
+        isAuthenticated: state.isAuthenticated,
+        authToken: state.authToken,
+        operatorName: state.operatorName,
       }),
     }
   )
