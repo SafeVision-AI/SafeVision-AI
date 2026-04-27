@@ -1,23 +1,49 @@
 'use client';
 
-import { Shield, Heart, Car, Phone, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Shield, Heart, Car, Phone, AlertTriangle, CheckCircle2, Printer, Pill, FileText } from 'lucide-react';
 
 interface PageProps {
   params: Promise<{ userId: string }>;
-  searchParams: Promise<{ name?: string; blood?: string; vehicle?: string; contact?: string }>;
+  searchParams: Promise<{
+    name?: string;
+    blood?: string;
+    vehicle?: string;
+    contact?: string;
+    allergies?: string;
+    insurance?: string;
+    medical?: string;
+  }>;
 }
 
 export default async function EmergencyCardPage({ params, searchParams }: PageProps) {
   const { userId } = await params;
-  const { name = '', blood = '', vehicle = '', contact = '' } = await searchParams;
+  const {
+    name = '',
+    blood = '',
+    vehicle = '',
+    contact = '',
+    allergies = '',
+    insurance = '',
+    medical = '',
+  } = await searchParams;
 
   const hasData = !!(name || blood || contact);
 
   return (
     <div className="min-h-screen bg-[#0A0E14] flex items-center justify-center p-4 font-sans">
+      {/* Print styles */}
+      <style>{`
+        @media print {
+          body { background: white !important; }
+          .no-print { display: none !important; }
+          .print-card { background: white !important; color: black !important; border: 2px solid #333 !important; }
+          .print-card * { color: black !important; }
+        }
+      `}</style>
+
       {/* Scan grid background */}
       <div
-        className="fixed inset-0 opacity-[0.03]"
+        className="fixed inset-0 opacity-[0.03] no-print"
         style={{
           backgroundImage: 'radial-gradient(circle, #00C896 1px, transparent 1px)',
           backgroundSize: '28px 28px',
@@ -25,9 +51,20 @@ export default async function EmergencyCardPage({ params, searchParams }: PagePr
       />
 
       {/* Top green scan line animation */}
-      <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#00C896] to-transparent opacity-60 animate-pulse" />
+      <div className="fixed top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[#00C896] to-transparent opacity-60 animate-pulse no-print" />
 
       <div className="relative w-full max-w-sm mx-auto">
+
+        {/* Print + Share buttons */}
+        <div className="flex gap-2 justify-end mb-4 no-print">
+          <button
+            onClick={() => window.print()}
+            className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-all border border-white/10"
+          >
+            <Printer size={14} />
+            Print / Save
+          </button>
+        </div>
 
         {/* Header */}
         <div className="mb-6 text-center">
@@ -49,7 +86,7 @@ export default async function EmergencyCardPage({ params, searchParams }: PagePr
         </div>
 
         {/* Main Card */}
-        <div className="rounded-xl border border-white/10 bg-[#0D1117] overflow-hidden shadow-2xl shadow-black/60">
+        <div className="print-card rounded-xl border border-white/10 bg-[#0D1117] overflow-hidden shadow-2xl shadow-black/60">
 
           {/* Top accent */}
           <div className="h-1.5 bg-gradient-to-r from-[#1A5C38] via-[#00C896] to-[#1A5C38]" />
@@ -64,17 +101,17 @@ export default async function EmergencyCardPage({ params, searchParams }: PagePr
 
           {/* Person info */}
           <div className="px-6 pt-6 pb-4">
-            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Operator</p>
+            <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-1">Patient / Operator</p>
             <h1 className="text-3xl font-black text-white uppercase tracking-tight leading-none mb-1">
               {name || <span className="text-white/20">Unknown</span>}
             </h1>
             <p className="text-[10px] font-black text-[#00C896]/70 uppercase tracking-widest font-mono">
-              {userId}
+              ID: {userId}
             </p>
           </div>
 
           {/* Vitals Grid */}
-          <div className="grid grid-cols-2 gap-3 px-6 pb-6">
+          <div className="grid grid-cols-2 gap-3 px-6 pb-4">
 
             {/* Blood Group — largest, most critical */}
             <div className="col-span-2 p-5 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center gap-4">
@@ -116,9 +153,43 @@ export default async function EmergencyCardPage({ params, searchParams }: PagePr
             </div>
           </div>
 
+          {/* Allergies — full width */}
+          {allergies && (
+            <div className="mx-6 mb-4 p-4 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <Pill size={16} className="text-orange-400" />
+              </div>
+              <div>
+                <p className="text-[8px] font-black text-orange-400/70 uppercase tracking-widest">⚠️ Known Allergies</p>
+                <p className="text-sm font-bold text-orange-300 leading-tight mt-1">{allergies}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Insurance */}
+          {insurance && (
+            <div className="mx-6 mb-4 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <FileText size={16} className="text-blue-400" />
+              </div>
+              <div>
+                <p className="text-[8px] font-semibold text-blue-400/70 uppercase tracking-widest">Insurance Provider</p>
+                <p className="text-sm font-semibold text-white leading-tight mt-0.5">{insurance}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Medical Notes */}
+          {medical && (
+            <div className="mx-6 mb-4 p-4 rounded-lg bg-purple-500/10 border border-purple-500/20">
+              <p className="text-[8px] font-black text-purple-400/70 uppercase tracking-widest mb-1">Medical Notes</p>
+              <p className="text-xs font-medium text-purple-200 leading-relaxed">{medical}</p>
+            </div>
+          )}
+
           {/* Call SOS Contact CTA */}
           {contact && (
-            <div className="px-6 pb-6">
+            <div className="px-6 pb-4">
               <a
                 href={`tel:${contact.replace(/\s/g, '')}`}
                 className="flex items-center justify-center gap-2 w-full h-14 rounded-lg bg-[#1A5C38] hover:bg-[#145230] transition-all text-white font-black text-sm uppercase tracking-widest shadow-lg shadow-[#1A5C38]/30 active:scale-95"
@@ -165,7 +236,7 @@ export default async function EmergencyCardPage({ params, searchParams }: PagePr
 
         {/* Bottom note */}
         <p className="text-center text-[9px] font-bold text-slate-600 uppercase tracking-widest mt-6">
-          Scanned from SafeVixAI Emergency QR Card
+          Scanned from SafeVixAI Emergency QR Card · No login required
         </p>
       </div>
     </div>

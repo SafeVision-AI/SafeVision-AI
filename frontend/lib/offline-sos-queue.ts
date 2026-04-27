@@ -57,11 +57,12 @@ export async function enqueueSOS(data: Omit<SOSData, 'timestamp'>): Promise<void
   await db.add('sos-queue', sosEntry);
   console.log('📶 [Offline] SOS saved to local queue. Will sync when online.');
   
-  // Optionally try to trigger a Background Sync if ServiceWorker supports it
+  // Register Background Sync with the same tag the SW listens for
   if ('serviceWorker' in navigator && 'SyncManager' in window) {
     try {
       const registration = await navigator.serviceWorker.ready;
-      await (registration as any).sync.register('sync-sos');
+      await (registration as any).sync.register('sos-queue-flush');
+      console.log('📶 [Offline] Background sync registered: sos-queue-flush');
     } catch (err) {
       console.warn('Background sync registration failed:', err);
     }

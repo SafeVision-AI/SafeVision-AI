@@ -502,3 +502,122 @@ class EmergencyLocatorService:
                 break
         merged.sort(key=lambda item: (0 if item.has_trauma else 1, 0 if item.is_24hr else 1, item.distance_meters))
         return merged[:limit]
+
+    # ── Public helper used by MCP tool ────────────────────────────────────────
+    async def get_nearby_facilities(
+        self,
+        lat: float,
+        lon: float,
+        initial_radius: int = 5000,
+    ) -> list[EmergencyServiceItem]:
+        """Dynamic radius expansion: 5km → 15km → 25km.
+        Returns results with confidence metadata in source field.
+        Also queries Healthsites.io as a secondary source when Overpass returns < 5 results.
+        """
+        EXPANSION_STEPS = [initial_radius, 15000, 25000]
+        all_results: list[EmergencyServiceItem] = []
+
+        for radius in EXPANSION_STEPS:
+            try:
+                results = await self.overpass_service.search_services(
+                    lat=lat,
+                    lon=lon,
+                    radius=radius,
+                    categories=['hospital', 'police', 'ambulance', 'fire', 'pharmacy'],
+                    limit=20,
+                )
+                # Merge local catalog
+                local_items = self._search_local_catalog(
+                    lat=lat,
+                    lon=lon,
+                    categories=['hospital', 'police', 'ambulance', 'fire', 'pharmacy'],
+                    radius_meters=radius,
+                    limit=20,
+                )
+                all_results = self._merge_results(results, local_items, 25)
+                if len(all_results) >= 3:
+                    break
+            except ExternalServiceError:
+                break
+
+        # Secondary source: Healthsites.io — fills gaps Overpass misses
+        if len(all_results) < 5:
+            healthsites_items = await self._query_healthsites(lat=lat, lon=lon)
+            all_results = self._merge_results(all_results, healthsites_items, 25)
+
+        # Add confidence label to source field
+        count = len(all_results)
+        if count >= 5:
+            confidence = "high"
+        elif count >= 2:
+            confidence = "moderate"
+        elif count >= 1:
+            confidence = "low"
+        else:
+            confidence = "offline"
+
+        for item in all_results:
+            item.source = f"{item.source}|confidence:{confidence}"
+
+        return all_results
+
+    async def _query_healthsites(self, *, lat: float, lon: float) -> list[EmergencyServiceItem]:
+        """Query Healthsites.io API as a secondary emergency facility source.
+        Covers India with 50,000+ facilities not always in OSM.
+        """
+        import httpx
+
+        api_key = getattr(self.settings, 'healthsites_api_key', None)
+        if not api_key:
+            return []  # Skip gracefully if key not configured
+
+        try:
+            async with httpx.AsyncClient(timeout=8) as client:
+                resp = await client.get(
+                    "https://healthsites.io/api/v2/facilities/",
+                    params={
+                        "api-key": api_key,
+                        "format": "json",
+                        "country": "IND",
+                        "lat": lat,
+                        "lng": lon,
+                        "radius": 10,  # km
+                        "limit": 10,
+                    }
+                )
+                if not resp.is_success:
+                    return []
+                data = resp.json()
+
+            items: list[EmergencyServiceItem] = []
+            for facility in (data if isinstance(data, list) else data.get("results", [])):
+                attributes = facility.get("attributes", {})
+                geom = facility.get("geometry", {}).get("coordinates", [None, None])
+                flon, flat = geom[0], geom[1]
+                if flat is None or flon is None:
+                    continue
+
+                distance = self._distance_meters(lat, lon, float(flat), float(flon))
+                name = attributes.get("name") or "Health Facility"
+                amenity = (attributes.get("amenity") or "hospital").lower()
+
+                items.append(EmergencyServiceItem(
+                    id=f"healthsites-{facility.get('id', name)}",
+                    name=name,
+                    category="hospital" if "hospital" in amenity else "pharmacy",
+                    sub_category=attributes.get("healthcare"),
+                    phone=attributes.get("phone"),
+                    phone_emergency=None,
+                    lat=float(flat),
+                    lon=float(flon),
+                    distance_meters=distance,
+                    has_trauma="trauma" in name.lower(),
+                    has_icu="icu" in name.lower(),
+                    is_24hr=attributes.get("opening_hours") == "24/7",
+                    address=attributes.get("address"),
+                    source="healthsites.io",
+                ))
+            return sorted(items, key=lambda x: x.distance_meters)[:10]
+
+        except Exception:
+            return []  # Always fail gracefully — Overpass is primary

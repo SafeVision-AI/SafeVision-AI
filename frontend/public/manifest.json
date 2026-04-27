@@ -52,8 +52,24 @@
       "description": "SafeVixAI Sentinel — road safety AI",
       "url": "/assistant",
       "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "I Witnessed an Accident",
+      "short_name": "Bystander",
+      "description": "Bystander emergency mode — I just witnessed an accident",
+      "url": "/bystander",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ],
+  "share_target": {
+    "action": "/emergency",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
   "screenshots": [
     {
       "src": "/screenshots/dashboard.png",
