@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useAppStore } from '@/lib/store';
 import { generateSosWhatsAppLink, generateSosSmsLink } from '@/lib/sos-share';
+import { startFamilyTracking, beginLocationBroadcast, notifyContactsViaWhatsApp } from '@/lib/live-tracking';
 import TopSearch from '@/components/dashboard/TopSearch';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
@@ -22,7 +23,9 @@ export default function EmergencyPage() {
   const [isOnline, setIsOnline] = useState(true);
   const [waLink, setWaLink] = useState('');
   const [smsLink, setSmsLink] = useState('');
+  const [trackingUrl, setTrackingUrl] = useState<string | null>(null);
   const rafRef = useRef<number | null>(null);
+  const stopBroadcastRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     document.title = 'SOS Emergency | SafeVixAI';
@@ -99,19 +102,46 @@ export default function EmergencyPage() {
     setDispatchState('idle');
   };
 
-  // Fire backend SOS call on activation
+  // Fire backend SOS call on activation + start family tracking
   useEffect(() => {
     if (!activated) return;
-    if (!isOnline || !coords) return; // offline ? user uses share links below
+    if (!isOnline || !coords) return;
 
     const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
     setDispatchState('dispatching');
+
+    // 1. Hit emergency SOS endpoint
     fetch(`${API_URL}/api/v1/emergency/sos?lat=${coords.lat}&lon=${coords.lng}`)
-      .then(r => {
-        setDispatchState(r.ok ? 'dispatched' : 'failed');
-      })
+      .then(r => setDispatchState(r.ok ? 'dispatched' : 'failed'))
       .catch(() => setDispatchState('failed'));
-  }, [activated, coords, isOnline]);
+
+    // 2. Start live family tracking session
+    if (userProfile?.name) {
+      startFamilyTracking({
+        userName: userProfile.name,
+        bloodGroup: userProfile.bloodGroup || undefined,
+        vehicleNumber: userProfile.vehicleNumber || undefined,
+        latitude: coords.lat,
+        longitude: coords.lng,
+      }).then((session) => {
+        setTrackingUrl(session.tracking_url);
+        // 3. Begin continuous GPS broadcast
+        stopBroadcastRef.current = beginLocationBroadcast(session.session_id);
+        // 4. Notify emergency contacts via WhatsApp
+        const contacts = userProfile.emergencyContact
+          ? [userProfile.emergencyContact]
+          : [];
+        if (contacts.length > 0) {
+          notifyContactsViaWhatsApp(contacts, userProfile.name, session.tracking_url);
+        }
+      }).catch(() => {
+        // Tracking failed silently — SOS still works
+      });
+    }
+
+    // Cleanup broadcast on unmount
+    return () => stopBroadcastRef.current?.();
+  }, [activated, coords, isOnline, userProfile]);
 
   useEffect(() => {
     const gpsLoc = coords ? { lat: coords.lat, lon: coords.lng, accuracy: 10, timestamp: Date.now() } : null;
@@ -198,6 +228,23 @@ export default function EmergencyPage() {
                 <button onClick={cancelDispatch} className="mt-4 px-5 py-2 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white rounded-full font-bold uppercase text-[10px] tracking-wider hover:bg-slate-300 dark:hover:bg-white/20 transition-colors">
                   Cancel Dispatch
                 </button>
+                {/* Live Tracking Link */}
+                {trackingUrl && (
+                  <div className="mt-4 w-full bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/40 rounded-xl p-3">
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 mb-1">
+                      📍 Family Live Tracking Active
+                    </p>
+                    <p className="text-[10px] text-emerald-800 dark:text-emerald-300 font-semibold break-all">
+                      {trackingUrl}
+                    </p>
+                    <button
+                      onClick={() => navigator.clipboard?.writeText(trackingUrl)}
+                      className="mt-2 text-[9px] font-bold text-emerald-700 dark:text-emerald-400 underline"
+                    >
+                      Copy Link
+                    </button>
+                  </div>
+                )}
               </motion.div>
             ) : (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
