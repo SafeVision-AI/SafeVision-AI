@@ -1,6 +1,5 @@
-'use client';
-
-import { Shield, Heart, Car, Phone, AlertTriangle, CheckCircle2, Printer, Pill, FileText } from 'lucide-react';
+import { Shield, Heart, Car, Phone, AlertTriangle, CheckCircle2, Pill, FileText } from 'lucide-react';
+import { PrintButton } from './PrintButton';
 
 interface PageProps {
   params: Promise<{ userId: string }>;
@@ -14,6 +13,7 @@ interface PageProps {
     medical?: string;
   }>;
 }
+
 
 export default async function EmergencyCardPage({ params, searchParams }: PageProps) {
   const { userId } = await params;
@@ -57,14 +57,9 @@ export default async function EmergencyCardPage({ params, searchParams }: PagePr
 
         {/* Print + Share buttons */}
         <div className="flex gap-2 justify-end mb-4 no-print">
-          <button
-            onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-bold uppercase tracking-widest rounded-lg transition-all border border-white/10"
-          >
-            <Printer size={14} />
-            Print / Save
-          </button>
+          <PrintButton />
         </div>
+
 
         {/* Header */}
         <div className="mb-6 text-center">

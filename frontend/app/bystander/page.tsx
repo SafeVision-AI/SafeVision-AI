@@ -45,7 +45,7 @@ export default function BystanderModePage() {
   const [accidentReported, setAccidentReported] = useState(false);
   const [mapsUrl, setMapsUrl] = useState<string>('');
   const [nearestHospital, setNearestHospital] = useState<{ name: string; distance: string } | null>(null);
-  const gpsRef = useRef<GeolocationWatchId | null>(null);
+  const gpsRef = useRef<number | null>(null);
 
   // ── GPS capture ──────────────────────────────────────────────────────────────
   const startGPS = useCallback(() => {
