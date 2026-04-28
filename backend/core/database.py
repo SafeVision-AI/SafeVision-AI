@@ -40,6 +40,10 @@ async def get_db() -> AsyncIterator[AsyncSession]:
         yield session
 
 
+# Alias used by live_tracking and other routers
+get_async_session = get_db
+
+
 async def check_database() -> bool:
     try:
         async with engine.connect() as connection:
