@@ -1,5 +1,10 @@
 import logging
+
 from mcp.server.fastmcp import FastMCP
+from mcp.server.sse import SseServerTransport
+from starlette.applications import Starlette
+from starlette.requests import Request
+from starlette.routing import Mount, Route
 
 logger = logging.getLogger("safevixai.mcp")
 
@@ -45,13 +50,13 @@ async def get_emergency_services(lat: float, lon: float, radius: int = 5000) -> 
 
         if not result:
             return (
-                f"⚠️ No emergency services found within 25km. Coverage: VERY LOW.\n"
-                f"You may be in a remote area. Call 112 for national dispatch."
+                "⚠️ No emergency services found within 25km. Coverage: VERY LOW.\n"
+                "You may be in a remote area. Call 112 for national dispatch."
             )
 
         output = [
             f"Found {len(result)} services within {used_radius/1000:.0f}km | Coverage: {coverage.upper()}",
-            f"Showing top 10:"
+            "Showing top 10:"
         ]
         for r in result[:10]:
             trauma = " [TRAUMA]" if r.has_trauma else ""
@@ -138,7 +143,7 @@ async def calculate_challan(vehicle_type: str, offense_type: str, previous_offen
 
     repeat_note = ""
     if previous_offenses > 0:
-        repeat_note = f"\n⚠️ REPEAT OFFENSE — Penalty doubled/tripled as per MV Amendment 2019"
+        repeat_note = "\n⚠️ REPEAT OFFENSE — Penalty doubled/tripled as per MV Amendment 2019"
 
     return (
         f"🚦 Traffic Challan Estimate\n"
@@ -257,7 +262,6 @@ async def calculate_safe_route(
         avoid_accidents: Whether to flag accident blackspot areas (default True)
     """
     import httpx
-    import math
 
     try:
         async with httpx.AsyncClient(timeout=15) as client:
@@ -302,7 +306,7 @@ async def calculate_safe_route(
             f"\nTurn-by-turn (first 5 steps):\n"
             + "\n".join(instructions or ["Direct route — no turns data"])
             + safety_note
-            + f"\n\n✅ Source: OSRM (OpenStreetMap)"
+            + "\n\n✅ Source: OSRM (OpenStreetMap)"
         )
 
     except Exception as e:
@@ -529,5 +533,27 @@ async def get_location_from_what3words(words: str) -> str:
         )
 
 
-# Export the SSE app directly so it can be mounted by FastAPI
-sse_app = mcp.sse_app()
+
+# ── SSE ASGI app — mounted by FastAPI at /mcp ────────────────────────────────
+# FastMCP has no public .sse_app() in this version; build it manually using the
+# same pattern that FastMCP.run_sse_async() uses internally.
+_sse_transport = SseServerTransport("/mcp/messages/")
+
+
+async def _handle_sse(request: Request) -> None:
+    async with _sse_transport.connect_sse(
+        request.scope, request.receive, request._send
+    ) as streams:
+        await mcp._mcp_server.run(
+            streams[0],
+            streams[1],
+            mcp._mcp_server.create_initialization_options(),
+        )
+
+
+sse_app = Starlette(
+    routes=[
+        Route("/sse", endpoint=_handle_sse),
+        Mount("/messages/", app=_sse_transport.handle_post_message),
+    ]
+)
