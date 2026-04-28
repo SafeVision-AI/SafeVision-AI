@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { subscribeToTracking, LiveLocation } from '@/lib/live-tracking';
 import dynamic from 'next/dynamic';
 
@@ -11,11 +11,11 @@ const EmergencyMap = dynamic(
 );
 
 interface PageProps {
-  params: { session_id: string };
+  params: Promise<{ session_id: string }>;
 }
 
 export default function FamilyTrackingPage({ params }: PageProps) {
-  const { session_id } = params;
+  const { session_id } = use(params);
   const [location, setLocation] = useState<LiveLocation | null>(null);
   const [expired, setExpired] = useState(false);
   const [loading, setLoading] = useState(true);
