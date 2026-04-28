@@ -5,7 +5,6 @@ Revises: 9999_enable_rls
 Create Date: 2026-04-27 00:00:00.000000
 """
 from alembic import op
-import sqlalchemy as sa
 
 revision = '10000_live_tracking'
 down_revision = '9999_enable_rls'
