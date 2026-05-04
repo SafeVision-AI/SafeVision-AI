@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.safevixai.twa",
+      "sha256_cert_fingerprints": [
+        "PLACEHOLDER:REPLACE_WITH_ACTUAL_SHA256_FINGERPRINT_AFTER_SIGNING"
+      ]
+    }
+  }
+]

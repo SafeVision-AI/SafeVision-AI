@@ -10,6 +10,7 @@
   "background_color": "#0A0E14",
   "lang": "en-IN",
   "categories": ["navigation", "utilities", "lifestyle"],
+
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -24,52 +25,41 @@
       "purpose": "any maskable"
     }
   ],
+
   "shortcuts": [
     {
-      "name": "SOS Emergency",
+      "name": "Emergency SOS",
       "short_name": "SOS",
-      "description": "Activate emergency SOS dispatch",
-      "url": "/sos",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "description": "Activate emergency SOS and find nearest hospital",
+      "url": "/sos?source=shortcut",
+      "icons": [{ "src": "/icons/shortcut-sos.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
-      "name": "Emergency Locator",
-      "short_name": "Locator",
-      "description": "Find nearest hospitals and police",
-      "url": "/locator",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "name": "Find Hospital",
+      "short_name": "Hospital",
+      "description": "Find nearest hospital, police, ambulance",
+      "url": "/locator?source=shortcut",
+      "icons": [{ "src": "/icons/shortcut-hospital.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
-      "name": "First Aid Guide",
-      "short_name": "First Aid",
-      "description": "AI-guided emergency response steps",
-      "url": "/first-aid",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "AI Assistant",
-      "short_name": "Assistant",
-      "description": "SafeVixAI Sentinel — road safety AI",
-      "url": "/assistant",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "I Witnessed an Accident",
-      "short_name": "Bystander",
-      "description": "Bystander emergency mode — I just witnessed an accident",
-      "url": "/bystander",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+      "name": "Report Road Issue",
+      "short_name": "Report",
+      "description": "Report pothole, damaged road, or hazard",
+      "url": "/report?source=shortcut",
+      "icons": [{ "src": "/icons/shortcut-report.png", "sizes": "96x96", "type": "image/png" }]
     }
   ],
+
   "share_target": {
-    "action": "/emergency",
+    "action": "/share-receive",
     "method": "GET",
     "params": {
       "title": "title",
       "text": "text",
-      "url": "url"
+      "url": "link"
     }
   },
+
   "screenshots": [
     {
       "src": "/screenshots/dashboard.png",
@@ -78,6 +68,7 @@
       "label": "SafeVixAI Tactical Dashboard"
     }
   ],
+
   "related_applications": [],
   "prefer_related_applications": false
 }

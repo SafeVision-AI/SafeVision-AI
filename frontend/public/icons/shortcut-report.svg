@@ -1,0 +1,6 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'>
+<circle cx='48' cy='48' r='44' fill='#D97706'/>
+<path d='M48 24L22 68h52L48 24z' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>
+<line x1='48' y1='42' x2='48' y2='54' stroke='white' stroke-width='3.5' stroke-linecap='round'/>
+<circle cx='48' cy='60' r='2' fill='white'/>
+</svg>
