@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Shield, Loader2, MapPin, ExternalLink } from 'lucide-react';
 
@@ -18,7 +18,25 @@ import { Shield, Loader2, MapPin, ExternalLink } from 'lucide-react';
  *   - Plain text with GPS: "Meeting at 13.0827,80.2707"
  *   - What3Words: "///word.word.word" (redirect to locator for manual entry)
  */
-export default function ShareReceivePage() {
+
+// ── Loading Fallback ──────────────────────────────────────────────────────────
+
+function ShareReceiveLoading() {
+  return (
+    <div className="min-h-[100dvh] bg-[#0A0E14] flex items-center justify-center p-6">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 size={32} className="text-[#00C896] animate-spin" />
+        <p className="text-sm font-bold text-white uppercase tracking-wider">
+          Initializing Share Target...
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Inner Component (uses useSearchParams) ────────────────────────────────────
+
+function ShareReceiveInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'parsing' | 'redirecting' | 'no-gps'>('parsing');
@@ -152,5 +170,15 @@ export default function ShareReceivePage() {
         )}
       </div>
     </div>
+  );
+}
+
+// ── Page Export with Suspense Boundary ─────────────────────────────────────────
+
+export default function ShareReceivePage() {
+  return (
+    <Suspense fallback={<ShareReceiveLoading />}>
+      <ShareReceiveInner />
+    </Suspense>
   );
 }
