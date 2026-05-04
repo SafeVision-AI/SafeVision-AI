@@ -6,11 +6,7 @@ from fastapi.testclient import TestClient
 # to ensure it mounts properly into our FastAPI instance.
 
 
-@pytest.mark.xfail(
-    reason="SSE streams forever — TestClient blocks; needs async httpx with cancel",
-    strict=False,
-    run=False,
-)
+@pytest.mark.skip(reason="SSE streams forever — TestClient blocks; needs async httpx with cancel")
 def test_mcp_server_mounted(app):
     """Test that the MCP SSE app is correctly mounted to the main FastAPI app."""
     with TestClient(app, raise_server_exceptions=False) as client:
@@ -22,11 +18,7 @@ def test_mcp_server_mounted(app):
                 assert "text/event-stream" in response.headers.get("content-type", "")
 
 
-@pytest.mark.xfail(
-    reason="SSE message endpoint needs active SSE session; standalone POST returns 422",
-    strict=False,
-    run=False,
-)
+@pytest.mark.skip(reason="SSE message endpoint needs active SSE session; standalone POST returns 422")
 def test_mcp_server_messages_endpoint(app):
     """Test that the MCP messages POST endpoint exists."""
     with TestClient(app, raise_server_exceptions=False) as client:
@@ -61,10 +53,6 @@ async def test_mcp_calculate_challan_tool(mock_challan_class):
     assert "185" in result
 
 
-@pytest.mark.xfail(
-    reason="report_road_issue uses get_async_session generator; mock setup is environment-specific",
-    strict=False,
-)
 @pytest.mark.asyncio
 async def test_mcp_report_road_issue_tool():
     """Unit test for the MCP report_road_issue tool logic."""
