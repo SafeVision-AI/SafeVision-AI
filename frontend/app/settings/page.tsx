@@ -13,6 +13,12 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
+import {
+  getPreferredNavApp,
+  setPreferredNavApp,
+  NAV_APPS,
+  type NavApp,
+} from '@/lib/navigation-launch';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
 import BottomNav from '@/components/dashboard/BottomNav';
@@ -45,6 +51,12 @@ export default function SettingsPage() {
   const [sosVibration, setSosVibration] = useState(true);
   const [autoOffline, setAutoOffline] = useState(true);
   const [analyticsOptIn, setAnalyticsOptIn] = useState(false);
+  const [navApp, setNavApp] = useState<NavApp>('google');
+
+  // Load persisted nav preference on mount
+  useEffect(() => {
+    setNavApp(getPreferredNavApp());
+  }, []);
 
   const [toastConfig, setToastConfig] = useState<{ show: boolean; message: string; type: 'success' | 'info' | 'error' }>({
     show: false, message: '', type: 'info',
@@ -211,6 +223,42 @@ export default function SettingsPage() {
             <ToggleRow icon={<Vibrate size={20} />} iconBg="bg-purple-500/10" iconColor="text-purple-500"
               label="SOS Vibration" sub="Haptic Feedback on Emergency Trigger"
               checked={sosVibration} onChange={setSosVibration} />
+          </Card>
+        </Section>
+
+        {/* ── NAVIGATION APP ── */}
+        <Section title="Navigation">
+          <Card>
+            <div className="p-5">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-11 h-11 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                  <Map size={20} className="text-blue-500" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white uppercase tracking-tight">Preferred Navigation App</p>
+                  <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-0.5">Used for &ldquo;Get Directions&rdquo; in Locator</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {NAV_APPS.map((app) => {
+                  const isActive = mounted && navApp === app.key;
+                  return (
+                    <button
+                      key={app.key}
+                      onClick={() => { setNavApp(app.key); setPreferredNavApp(app.key); showToast(`Navigation set to ${app.label}`, 'success'); }}
+                      className={`flex flex-col items-center gap-3 p-4 rounded-xl border transition-all ${
+                        isActive
+                          ? 'border-blue-500 bg-blue-500/8 text-blue-500 dark:border-blue-400/40 dark:bg-blue-500/15 dark:text-blue-400 shadow-sm'
+                          : 'border-slate-200 dark:border-white/8 bg-slate-50 dark:bg-white/3 text-slate-400 hover:border-blue-500/30 hover:text-slate-600'
+                      }`}
+                    >
+                      <span className="text-2xl">{app.emoji}</span>
+                      <span className="text-[10px] font-semibold uppercase tracking-widest leading-none">{app.label.replace('Google ', '')}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </Card>
         </Section>
 

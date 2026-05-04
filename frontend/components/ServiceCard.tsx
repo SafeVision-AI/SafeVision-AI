@@ -1,7 +1,17 @@
 'use client';
 
-
+import { useState } from 'react';
 import { NearbyService } from '@/lib/store';
+import {
+  openBestNavApp,
+  openNavApp,
+  getPreferredNavApp,
+  setPreferredNavApp,
+  NAV_APPS,
+  type NavApp,
+} from '@/lib/navigation-launch';
+
+// ── Accent colors per category ────────────────────────────────────────────────
 
 const ACCENT_COLORS: Record<NearbyService['category'], string> = {
   hospital:  'var(--accent-red)',
@@ -39,8 +49,15 @@ function formatDistance(metres: number): string {
 export function ServiceCard({ service, className = '' }: Props) {
   const color = ACCENT_COLORS[service.category];
   const label = CATEGORY_LABELS[service.category];
+  const [showNavChoice, setShowNavChoice] = useState(false);
 
-  const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${service.lat},${service.lon}`;
+  const dest = { lat: service.lat, lon: service.lon, name: service.name };
+
+  const handleNavSelect = (app: NavApp) => {
+    setPreferredNavApp(app);
+    openNavApp(app, dest);
+    setShowNavChoice(false);
+  };
 
   return (
     <div className={`service-card ${className}`} role="article" aria-label={service.name}>
@@ -79,15 +96,58 @@ export function ServiceCard({ service, className = '' }: Props) {
               📞 Call
             </a>
           )}
-          <a
-            href={mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+
+          {/* Primary: open in preferred nav app */}
+          <button
+            onClick={() => openBestNavApp(dest)}
             className="btn btn-outline-blue"
             aria-label={`Get directions to ${service.name}`}
           >
-            🗺 Directions
-          </a>
+            🗺️ Directions
+          </button>
+
+          {/* Secondary: nav app chooser dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowNavChoice(!showNavChoice)}
+              className="btn btn-outline-blue"
+              aria-label="Choose navigation app"
+              style={{ padding: '0.25rem 0.5rem', minWidth: 'auto' }}
+              title={`Using: ${NAV_APPS.find(a => a.key === getPreferredNavApp())?.label || 'Google Maps'}`}
+            >
+              ⌄
+            </button>
+
+            {/* Dropdown */}
+            {showNavChoice && (
+              <div
+                className="absolute right-0 bottom-full mb-2 z-50 min-w-[160px] rounded-lg overflow-hidden shadow-2xl border"
+                style={{
+                  backgroundColor: 'var(--bg-secondary, #0D1117)',
+                  borderColor: 'var(--border-color, rgba(255,255,255,0.08))',
+                }}
+              >
+                {NAV_APPS.map((app) => {
+                  const isActive = getPreferredNavApp() === app.key;
+                  return (
+                    <button
+                      key={app.key}
+                      onClick={() => handleNavSelect(app.key)}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-left text-xs font-bold uppercase tracking-wider transition-colors"
+                      style={{
+                        color: isActive ? 'var(--accent-green, #00C896)' : 'var(--text-primary, #d7e3fc)',
+                        backgroundColor: isActive ? 'rgba(0,200,150,0.08)' : 'transparent',
+                      }}
+                    >
+                      <span className="text-base">{app.emoji}</span>
+                      {app.label}
+                      {isActive && <span className="ml-auto text-[10px] opacity-60">✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
