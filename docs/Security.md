@@ -45,11 +45,16 @@ app.add_middleware(
 - Violation codes: validated against whitelist pattern `^MVA_[A-Z0-9_]+$`
 
 ### Rate Limiting
-```python
-# Protect expensive AI endpoints from abuse
-# Implemented via Redis sliding window
 
-RATE_LIMITS = {
+> **Status: Planned — Not yet implemented**
+>
+> Rate limiting via `slowapi` is planned for the following endpoints. Currently no rate limiting is enforced.
+
+```python
+# PLANNED — Install slowapi and add these limits:
+# pip install slowapi
+
+PLANNED_RATE_LIMITS = {
     "/api/v1/chat/message": "30/minute",      # LLM calls
     "/api/v1/roads/report": "10/minute",       # Prevent spam reports
     "/api/v1/geocode/search": "60/minute",     # Nominatim rate limit compliance
@@ -72,7 +77,7 @@ RATE_LIMITS = {
 | Vehicle number | No | Browser IndexedDB only | Only included in WhatsApp message |
 | Chat messages (online) | Yes | Redis (24hr TTL) | Session-only, auto-deleted |
 | Chat messages (offline) | No | Never leaves device | WebLLM runs fully locally |
-| Crash detection events | Anonymised lat/lon only | PostgreSQL crash_events | No user ID, no timestamp precision |
+| Crash detection events | Planned | PostgreSQL crash_events (V2) | Anonymised lat/lon only, no user ID (not yet implemented) |
 | Photos (road reports) | Yes | Local/Render Disk | User-submitted evidence (Supabase Storage in V2) |
 
 ### Anonymized Crash Heatmap
@@ -129,7 +134,8 @@ NEXT_PUBLIC_API_URL=https://...         # Backend URL (public)
 ## 6. Content Security
 
 ### Photo Upload Safety
-- Filetype validated by MIME type AND file extension
+- Filetype validated by MIME type AND magic bytes (file signature validation)
+- Maximum upload size: 10MB enforced via `python-multipart`
 - *(Planned V2)* Image resized server-side before storing (prevents polyglot attacks)
 - *(Planned V2)* Supabase Storage serves from CDN  isolated from application server
 - *(Planned V2)* Virus scanning: TODO for production
@@ -177,4 +183,4 @@ For production deployment (post-hackathon), the following would be added:
 
 ---
 
-*Document version: 1.0 | IIT Madras Road Safety Hackathon 2026*
+*Document version: 1.1 | IIT Madras Road Safety Hackathon 2026 | Updated: May 2026*

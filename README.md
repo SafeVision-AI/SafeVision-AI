@@ -41,6 +41,20 @@ uvicorn main:app --reload --port 8000
 
 Verify: http://localhost:8000/health
 
+### Chatbot Service
+
+```bash
+cd chatbot_service
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+# source .venv/bin/activate     # Linux/Mac
+pip install -r requirements.txt
+cp .env.example .env            # Fill in your LLM keys
+uvicorn main:app --reload --port 8010
+```
+
+Verify: http://localhost:8010/health
+
 ### Frontend
 
 ```bash

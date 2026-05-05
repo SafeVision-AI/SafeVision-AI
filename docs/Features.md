@@ -35,11 +35,12 @@
 
 ### F1.6  Crash Detection
 - DeviceMotion API at ~60Hz
-- Threshold: 2.5G (24.5 m/s) change between consecutive readings
-- Speed check: if GPS speed < 10 kmph  ignore (phone drop, not crash)
-- 30-second cooldown between detections
-- 10-second "Are you okay? Cancel" countdown with progress circle
-- If no cancel: auto-sends SOS WhatsApp + opens emergency page
+- Thresholds: Minor 6G, Moderate 15G, Severe 30G (multi-tier)
+- Speed gate: GPS speed must be > 15 km/h (prevents phone-drop false positives)
+- Duration gate: high-G must last < 500ms (crash is instantaneous, drop is prolonged)
+- Confirmation: waits 2s for GPS speed drop corroboration
+- 20-second "Are you okay? Cancel" countdown with progress circle + haptic vibration
+- If no cancel: auto-sends SOS + starts family tracking + opens emergency page
 
 ### F1.7  Offline Emergency Map (25 Cities)
 - `india-emergency.geojson` cached by Service Worker on first load
@@ -181,4 +182,47 @@
 
 ---
 
-*Document version: 1.0 | IIT Madras Road Safety Hackathon 2026*
+## Module 6: V2 Features (Built)
+
+### F6.1  Bystander Mode
+- Route: `/bystander` — witnesses an accident and wants to help
+- Flow: GPS auto-captured → calls 108/112 → shows first-aid steps → marks location on map
+- No login required — accessible via QR code scan
+- Turns every bystander into a trained first responder
+
+### F6.2  Family Live Tracking
+- Route: `/track/[sessionId]` — family opens tracking link in browser
+- Backend: `live_tracking` table in Supabase with Realtime subscriptions
+- Victim's GPS updates every 5 seconds via `lib/live-tracking.ts`
+- Family sees: live map, speed, battery %, blood group, vehicle number
+- Auto-expires after 4 hours for privacy
+
+### F6.3  Share/Receive Location
+- Route: `/share-receive` — deep link for sharing exact location
+- Uses `lib/deep-link.ts` + `lib/share.ts` (Web Share API)
+- Works cross-platform without app install
+
+### F6.4  MCP Server Integration
+- Backend: `api/v1/mcp_server.py` (24KB) — exposes tools for external AI agents
+- Allows MCP-compatible agents to query emergency services, submit reports, calculate fines
+- Enables future integrations with Claude, GPT, and other agent frameworks
+
+### F6.5  Waze-Style Traffic Feed
+- Backend: `api/v1/waze_feed.py` — community-reported hazards and traffic data
+- Toast notification: "Pothole reported 200m ahead"
+- Integrates with Road Reporter module
+
+### F6.6  Turn-by-Turn Navigation
+- `lib/navigation-launch.ts` — multi-app navigation launcher
+- Supports: Google Maps, Apple Maps, Waze, OSRM web
+- Auto-selects best available navigation app on user's device
+
+### F6.7  Enhanced Chatbot Tools
+- `DrugInfoTool` — Open FDA medical/drug information
+- `GeocodingTool` — Photon/BigDataCloud zero-key geocoding
+- `OpenMeteoTool` — Free weather with visibility/precipitation data
+- `What3WordsTool` — 3-meter precision location for emergency dispatch
+
+---
+
+*Document version: 1.1 | IIT Madras Road Safety Hackathon 2026 | Updated: May 2026*

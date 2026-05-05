@@ -62,7 +62,7 @@ Verify: `GET http://localhost:8000/health` and `GET http://localhost:8010/health
 SafeVixAI/
 ├── backend/                 FastAPI :8000
 │   ├── main.py              App factory (create_app → lifespan → services)
-│   ├── api/v1/              8 route modules (emergency, chat, challan, roadwatch, geocode, routing, offline, tracking)
+│   ├── api/v1/              14 route modules (emergency, chat, challan, roadwatch, geocode, routing, offline, tracking, auth, live_tracking, mcp_server, user, waze_feed)
 │   ├── core/                config.py (pydantic-settings), database.py (async SQLAlchemy), redis_client.py, security.py (JWT)
 │   ├── services/            Business logic (overpass, geocoding, challan_service, llm_service, authority_router)
 │   ├── models/              SQLAlchemy ORM + Pydantic schemas (schemas.py has ALL request/response types)
@@ -74,17 +74,17 @@ SafeVixAI/
 ├── chatbot_service/         FastAPI :8010 — Agentic RAG Chatbot
 │   ├── main.py              App factory (create_app → lifespan → ChatEngine)
 │   ├── agent/               ChatEngine graph, IntentDetector, SafetyChecker, ContextAssembler
-│   ├── providers/           11 LLM providers + ProviderRouter (auto-fallback chain)
+│   ├── providers/           9 LLM providers + TemplateProvider + ProviderRouter (auto-fallback chain)
 │   ├── rag/                 LocalVectorStore (ChromaDB), Retriever, document_loader, embeddings
-│   ├── tools/               9 tools: SOS, Challan, LegalSearch, FirstAid, Weather, RoadInfra, etc.
+│   ├── tools/               13 tools: SOS, Challan, LegalSearch, FirstAid, Weather, OpenMeteo, RoadInfra, RoadIssues, SubmitReport, Geocoding, DrugInfo, What3Words, Emergency
 │   ├── memory/              Redis conversation memory with session TTL
 │   ├── services/            IndicSeamlessService (Indian language speech)
 │   └── data/                chroma_db/ (pre-built vectorstore — COMMITTED, never delete)
 │
 ├── frontend/                Next.js 15 PWA
-│   ├── app/                 12 routes: /, /assistant, /locator, /emergency, /challan, /report, /first-aid, /sos, /profile, /settings, /emergency-card/[userId], /tracking
-│   ├── components/          25+ components: AnalyticsProvider, ClientAppHooks, chat/, dashboard/, maps/, report/, ui/
-│   ├── lib/                 15 modules: api.ts, store.ts, offline-ai.ts, duckdb-challan.ts, geolocation.ts, offline-sos-queue.ts, crash-detection.ts, etc.
+│   ├── app/                 17 routes: /, /assistant, /bystander, /challan, /emergency, /emergency-card/[userId], /first-aid, /locator, /login, /profile, /report, /settings, /share-receive, /sos, /track, /tracking
+│   ├── components/          30+ components: AppSidebar, ChatInterface, ClientAppHooks, GlobalSOS, SOSButton, PotholeDetector, + chat/, dashboard/, maps/, profile/, report/, ui/ subdirs
+│   ├── lib/                 28 modules: api.ts, store.ts, offline-ai.ts, duckdb-challan.ts, geolocation.ts, offline-sos-queue.ts, crash-detection.ts, live-tracking.ts, deep-link.ts, navigation-launch.ts, routing.ts, share.ts, emergency-numbers.ts, traffic-layer.ts, safe-spaces-layer.ts, etc.
 │   └── public/              manifest.json, offline-data/ (GeoJSON, CSV for DuckDB-Wasm)
 │
 ├── scripts/                 Root-level data pipeline scripts
@@ -176,13 +176,18 @@ User message
   → IntentDetector.detect()            # Classify: legal, emergency, challan, first_aid, weather, report, general
   → ContextAssembler.assemble()        # Call relevant tools + retrieve RAG chunks
   │   ├── SosTool                      # Nearby emergency services via backend API
+  │   ├── EmergencyTool                # Emergency service lookup
   │   ├── ChallanTool                  # Fine calculation via backend API
   │   ├── LegalSearchTool              # ChromaDB vector search (Motor Vehicles Act, MoRTH)
   │   ├── FirstAidTool                 # Static JSON first-aid protocols
   │   ├── WeatherTool                  # OpenWeather API
+  │   ├── OpenMeteoTool                # Open-Meteo weather (visibility, precipitation)
   │   ├── RoadInfrastructureTool       # Road contractor/budget data
   │   ├── RoadIssuesTool               # Community-reported road issues
-  │   └── SubmitReportTool             # Submit road damage reports
+  │   ├── SubmitReportTool             # Submit road damage reports
+  │   ├── GeocodingTool                # Photon/BigDataCloud geocoding
+  │   ├── DrugInfoTool                 # Open FDA drug/medical information
+  │   └── What3WordsTool               # What3Words location resolution
   → ProviderRouter.generate()          # LLM call with auto-fallback
   → ConversationMemoryStore.append()   # Redis session persistence
   → ChatResponse
@@ -190,9 +195,9 @@ User message
 
 ### LLM Provider Routing
 
-**Fallback chain** (tried in order when a provider fails):
+**Fallback chain** (9 real providers tried in order when one fails):
 ```
-Groq → Cerebras → Gemini → GitHub Models → NVIDIA NIM → OpenRouter → Mistral → Together → Template
+Groq → Cerebras → Gemini → GitHub Models → NVIDIA NIM → OpenRouter → Mistral → Together → Template (deterministic fallback)
 ```
 
 **Indian language auto-routing** (separate path, not in the chain):
@@ -397,3 +402,6 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 | Expect family tracking at a REST endpoint | Family tracking is a **WebSocket** at `ws://<host>/api/v1/tracking/{group_id}` |
 | Add images to user profile in localStorage | Blood group, emergency contacts never leave device — stored in **IndexedDB** only |
 | Assume offline SOS fires immediately | SOS is queued in IndexedDB if offline, auto-flushed on `online` event via `offline-sos-queue.ts` |
+| Ignore `/bystander` route | Bystander Mode is a V2 feature — witness reports, GPS capture, first-aid guidance for passersby |
+| Miss the MCP server endpoint | `backend/api/v1/mcp_server.py` (24KB) exposes MCP tools for external agent integration |
+| Forget Waze feed | `backend/api/v1/waze_feed.py` provides community traffic/hazard data feed |

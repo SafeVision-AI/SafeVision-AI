@@ -164,7 +164,7 @@ gantt
 **Key files:**
 - `frontend/lib/edge-ai.ts`
 - `frontend/lib/duckdb-challan.ts`
-- `frontend/lib/offline-store.ts`
+- `frontend/lib/offline-sos-queue.ts`
 - `frontend/public/offline-data/`
 
 ---
@@ -173,16 +173,39 @@ gantt
 
 **Goal:** Live demo URLs working, submission ready.
 
-- [ ] Deploy FastAPI to Render.com (render.yaml)
-- [ ] Set all backend env vars in Render dashboard
-- [ ] Deploy Next.js to Vercel
-- [ ] Set all frontend env vars in Vercel dashboard
+- [x] Deploy FastAPI to Render.com (render.yaml)
+- [x] Set all backend env vars in Render dashboard
+- [x] Deploy Next.js to Vercel
+- [x] Set all frontend env vars in Vercel dashboard
 - [ ] Test full E2E flow on live URLs
 - [ ] Test offline mode on mobile (Chrome + Firefox)
 - [ ] Test on low-end Android device
 - [ ] Lighthouse audit - target PWA score > 90
 - [ ] Record demo video
 - [ ] Final submission
+
+---
+
+## Phase 7 - V2 Features (Post-MVP, In Progress)
+
+**Goal:** Win the hackathon with wow-factor features.
+
+- [x] Bystander Mode (`/bystander`) — witness accident assistance with first-aid guidance
+- [x] Family Live Tracking (`/track`, `lib/live-tracking.ts`) — Supabase Realtime GPS sharing
+- [x] Share/Receive Location (`/share-receive`, `lib/deep-link.ts`) — deep link location sharing
+- [x] QR Emergency Card (`/emergency-card/[userId]`) — scannable emergency profile
+- [x] MCP Server integration (`backend/api/v1/mcp_server.py`) — external agent tools
+- [x] Waze-style Traffic Feed (`backend/api/v1/waze_feed.py`) — community hazard data
+- [x] Crash Detection engine (`lib/crash-detection.ts`) — DeviceMotion + GPS speed drop
+- [x] Offline SOS Queue (`lib/offline-sos-queue.ts`) — IndexedDB + online event auto-flush
+- [x] Turn-by-turn Navigation (`lib/navigation-launch.ts`) — multi-app navigation launcher
+- [x] What3Words + OpenCage tools (`chatbot_service/tools/what3words.py`, `geocoding.py`)
+- [x] Open-Meteo weather integration (`chatbot_service/tools/open_meteo.py`)
+- [x] Drug Info tool (`chatbot_service/tools/drug_info.py`) — Open FDA medical data
+- [/] Rate limiting on expensive endpoints (slowapi — planned)
+- [/] SOS incident persistence to database
+- [ ] Supabase RLS policies
+- [ ] Full JWT auth on chat/report endpoints
 
 ---
 
@@ -197,4 +220,4 @@ gantt
 
 ---
 
-*Last updated: April 18, 2026*
+*Last updated: May 5, 2026*

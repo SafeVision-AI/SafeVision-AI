@@ -521,7 +521,7 @@ Section 5 — STORAGE MATRIX:
 Section 6 — SYSTEM LINKS:
   - Edit Profile → /profile (chevron)
   - Emergency Protocols → /emergency (chevron)
-  - Build Info: "IIT Madras Hackathon 2024" + version number
+  - Build Info: "IIT Madras Hackathon 2026" + version number
 
 Section 7 — SIGN OUT (conditional, only when authenticated):
   Full-width red outlined button: "SIGN OUT OPERATOR — {name}"

@@ -61,6 +61,7 @@ frontend/
 │   ├── layout.tsx            ← Root layout (fonts, providers, theme)
 │   ├── globals.css           ← Design tokens + CSS variables + Tailwind config
 │   ├── assistant/page.tsx    ← AI Chat Assistant (SSE streaming)
+│   ├── bystander/page.tsx    ← Bystander Mode (witness accident assistance)
 │   ├── locator/page.tsx      ← Emergency Service Locator + Map
 │   ├── first-aid/page.tsx    ← First Aid Guide + AI Vision
 │   ├── report/page.tsx       ← Road Hazard Reporter
@@ -70,8 +71,12 @@ frontend/
 │   ├── profile/page.tsx      ← Operator Identity Matrix (+ QR Emergency Card)
 │   ├── login/page.tsx        ← Operator Authentication (OTP flow)
 │   ├── emergency-card/[userId]/page.tsx ← Public QR Emergency Card (no login)
-│   └── settings/page.tsx     ← System Settings
+│   ├── settings/page.tsx     ← System Settings
+│   ├── share-receive/page.tsx ← Share/Receive location via deep link
+│   ├── track/page.tsx        ← Family live tracking viewer (Supabase Realtime)
+│   └── tracking/page.tsx     ← GPS tracking management
 ├── components/
+│   ├── AppSidebar.tsx        ← Desktop sidebar navigation (192px, full-height)
 │   ├── dashboard/
 │   │   ├── BottomNav.tsx     ← Mobile bottom nav (5-tab, animated pill)
 │   │   ├── SystemHeader.tsx  ← Desktop header (search, theme, connectivity, SECURE badge)
@@ -90,11 +95,20 @@ frontend/
 │   │   └── MapLibreCanvas.tsx ← Main map component (dynamic import, SSR disabled)
 │   ├── report/
 │   │   └── HazardViewfinder.tsx ← Camera viewport for AI road scan
+│   ├── ui/                   ← shadcn/ui primitive components
 │   ├── GlobalSOS.tsx         ← Floating SOS button (all pages except map/sos)
+│   ├── SOSButton.tsx         ← SOS dispatch button with pulse animation
 │   ├── ChatInterface.tsx     ← Chat UI (online/offline toggle)
 │   ├── ClientAppHooks.tsx    ← Global sensor listeners (crash detection, offline sync)
 │   ├── PageShell.tsx         ← Layout wrapper with GlobalSOS
-│   └── ...                   ← Feature-specific components
+│   ├── PotholeDetector.tsx   ← In-browser YOLO pothole detection
+│   ├── ServiceCard.tsx       ← Emergency service result card
+│   ├── VoiceInput.tsx        ← Web Speech API voice input
+│   ├── ConnectivityBadge.tsx ← Online/Offline status indicator
+│   ├── EmergencyMap.tsx      ← Emergency map wrapper (dynamic)
+│   ├── EmergencyNumbers.tsx  ← 112/102/100 quick dial grid
+│   ├── DrivingScoreBar.tsx   ← Driving safety score display
+│   └── ...                   ← Additional feature-specific components
 └── lib/
     ├── store.ts              ← Zustand global state (GPS, services, AI mode, auth)
     ├── api.ts                ← Backend API client (JWT Bearer token injected)
@@ -102,9 +116,28 @@ frontend/
     ├── sos-share.ts          ← SOS link generators
     ├── offline-sos-queue.ts  ← IndexedDB queue for offline SOS dispatch
     ├── crash-detection.ts    ← DeviceMotionEvent crash detection engine
+    ├── live-tracking.ts      ← Family live tracking via Supabase Realtime
+    ├── deep-link.ts          ← App deep linking (share/receive)
+    ├── navigation-launch.ts  ← Turn-by-turn navigation launcher
+    ├── routing.ts            ← Route calculation (OSRM)
+    ├── share.ts              ← Web Share API utilities
+    ├── emergency-numbers.ts  ← Emergency number database
     ├── analytics-provider.tsx ← PostHog analytics wrapper
     ├── offline-ai.ts         ← WebLLM Phi-3 offline AI
-    └── duckdb-challan.ts     ← DuckDB-Wasm offline challan calculator
+    ├── duckdb-challan.ts     ← DuckDB-Wasm offline challan calculator
+    ├── traffic-layer.ts      ← Traffic data map layer
+    ├── safe-spaces-layer.ts  ← Safe spaces map layer
+    ├── edge-ai.ts            ← Edge AI model utilities
+    ├── location-tracker.ts   ← Background location tracking
+    ├── location-utils.ts     ← Location calculation utilities
+    ├── reverse-geocode.ts    ← Reverse geocoding
+    ├── geocoding.ts          ← Forward geocoding (Photon/BigDataCloud)
+    ├── map-defaults.ts       ← Map default settings (center, zoom)
+    ├── maps-fallback.ts      ← Map tile fallback logic
+    ├── offline-rag.ts        ← Offline RAG search
+    ├── india-locations.ts    ← India city/state data
+    ├── user-profile.ts       ← User profile management
+    └── utils.ts              ← Shared utility functions
 ```
 
 ## Navigation Architecture
@@ -147,6 +180,8 @@ frontend/
 | `@mlc-ai/web-llm` | - | Offline AI (browser-based LLM) |
 | `@turf/turf` | - | Geospatial utilities |
 | `qrcode.react` | - | QR code generation for Emergency Card |
+| `posthog-js` | - | Product analytics |
+| `@supabase/supabase-js` | - | Supabase Realtime for live tracking |
 
 ## Instructions for building new pages
 1. Import the shared layout components: `SystemHeader`, `TopSearch`, `SystemSidebar`, `BottomNav`

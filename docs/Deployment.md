@@ -157,6 +157,12 @@ The `render.yaml` at the project root configures automatic deployment.
    - `GROQ_API_KEY`
    - `SUPABASE_URL`
    - `SUPABASE_SERVICE_ROLE_KEY`
+   - `CORS_ORIGINS` (set to your Vercel frontend URL)
+   - `CHATBOT_SERVICE_URL` (set to your chatbot Render URL)
+   - `ADMIN_SECRET` (generate a random 32-char string)
+   - `LOCAL_UPLOAD_BASE_URL` (your backend URL + `/uploads`)
+   - `OPENROUTESERVICE_API_KEY` (optional, for routing)
+   - `OPENWEATHER_API_KEY` (optional, for weather)
 
 ### Manual Setup (Alternative)
 
@@ -194,10 +200,16 @@ Render.com → New → Web Service:
 
 Set environment variables:
 - `DEFAULT_LLM_PROVIDER`, `DEFAULT_LLM_MODEL`
-- All LLM provider API keys (GROQ, GEMINI, SARVAM, etc.)
+- All LLM provider API keys (GROQ, GEMINI, SARVAM, CEREBRAS, OPENROUTER, MISTRAL, TOGETHER, NVIDIA_NIM, GITHUB_TOKEN)
 - `MAIN_BACKEND_BASE_URL` = your Render backend URL
 - `REDIS_URL` = Upstash Redis URL
 - `CHROMA_PERSIST_DIR` = `./data/chroma_db`
+- `CORS_ORIGINS` = your Vercel frontend URL
+- `ADMIN_SECRET` = same as backend or generate separate
+- `W3W_API_KEY` = What3Words API key (for SOS geolocation)
+- `OPENCAGE_API_KEY` = OpenCage geocoding key (fallback)
+- `OPENWEATHER_API_KEY` = OpenWeather key (for weather tool)
+- `HF_TOKEN` = HuggingFace token (for Sarvam HF fallback)
 
 > **Note:** `chatbot_service/data/chroma_db/` is committed to git, so Render gets the vectorstore automatically on deploy. No build-time vectorstore creation needed.
 
@@ -353,4 +365,4 @@ curl "http://localhost:8000/api/v1/challan/calculate?violation_code=MVA_185"
 
 ---
 
-*Document version: 1.0 | IIT Madras Road Safety Hackathon 2026*
+*Document version: 1.1 | IIT Madras Road Safety Hackathon 2026 | Updated: May 2026*
