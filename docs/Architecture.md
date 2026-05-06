@@ -28,7 +28,7 @@ graph TD
 
     CS --> CS1[ChatEngine - Agentic RAG]
     CS --> CS2[11-Provider LLM Fallback Chain]
-    CS --> CS3[9 Agent Tools]
+    CS --> CS3[13 Agent Tools]
     CS --> CS4[Sarvam AI - Indian Language Routing]
     CS --> CS5[ChromaDB RAG Vectorstore]
 
@@ -72,7 +72,7 @@ flowchart TD
     B -->|NO| D[WebLLM Phi-3 Mini - Runs on device]
 
     CS --> CS1[IntentDetector - classify query]
-    CS --> CS2[ContextAssembler - call 9 agent tools]
+    CS --> CS2[ContextAssembler - call 13 agent tools]
     CS --> CS3[ChromaDB RAG - top 5 law/medical chunks]
     CS --> CS4[ProviderRouter - 11 LLM fallback chain]
     CS4 --> CS5{Indian language?}
@@ -212,7 +212,7 @@ SafeVixAI/
 ├── backend/              FastAPI Python 3.11 — port 8000
 ├── chatbot_service/      FastAPI Agentic RAG Chatbot — port 8010
 ├── frontend/             Next.js 15 + React 19 TypeScript PWA — port 3000
-├── docs/                 Technical documentation (17 files)
+├── docs/                 Technical documentation (18 files)
 ├── chatbot_docs/         Chatbot-specific documentation (15 files)
 ├── notebooks/            5 Colab notebooks (YOLO, ChromaDB, Accidents, Roads, Risk)
 ├── scripts/              Root-level data pipeline scripts

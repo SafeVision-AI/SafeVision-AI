@@ -20,6 +20,16 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
+      - key: JWT_SECRET_KEY
+        sync: false
+      - key: AUTH_OPERATOR_EMAIL
+        sync: false
+      - key: AUTH_OPERATOR_PASSWORD_HASH
+        sync: false
+      - key: AUTH_OPERATOR_NAME
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
       - key: CORS_ORIGINS
         sync: false
       - key: CHATBOT_SERVICE_URL
@@ -38,7 +48,7 @@ services:
     name: safevixai-chatbot
     env: python
     rootDir: chatbot_service
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements-render.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1 --timeout-keep-alive 75
     healthCheckPath: /health
     envVars:
@@ -53,6 +63,8 @@ services:
       - key: GROQ_API_KEY
         sync: false
       - key: GOOGLE_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_MODEL
         value: gemini-1.5-flash

@@ -7,6 +7,7 @@ import {
   Navigation, Heart, Activity, ArrowRight, Mic, MicOff,
   Loader2, ShieldAlert, ChevronRight, X, Map
 } from 'lucide-react';
+import { fetchNearbyServices, submitReport } from '@/lib/api';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface GpsPos { lat: number; lon: number }
@@ -82,33 +83,28 @@ export default function BystanderModePage() {
 
   async function reportAccidentToBackend(coords: GpsPos) {
     try {
-      const base = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
-      await fetch(`${base}/api/v1/road-watch/report`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          issue_type: 'accident',
-          severity: 4,
-          lat: coords.lat,
-          lon: coords.lon,
-          description: '[Bystander Mode] Road accident witnessed and auto-reported via SafeVixAI',
-        }),
+      await submitReport({
+        issue_type: 'accident',
+        severity: 4,
+        lat: coords.lat,
+        lon: coords.lon,
+        description: '[Bystander Mode] Road accident witnessed and auto-reported via SafeVixAI',
       });
       setAccidentReported(true);
 
       // Also fetch nearest hospital for the bystander to share with ambulance dispatch
-      const resp = await fetch(
-        `${base}/api/v1/emergency/nearby?lat=${coords.lat}&lon=${coords.lon}&categories=hospital&limit=1`
-      );
-      if (resp.ok) {
-        const data = await resp.json();
-        const first = data?.services?.[0];
-        if (first) {
-          setNearestHospital({
-            name: first.name,
-            distance: `${(first.distance_meters / 1000).toFixed(1)} km`,
-          });
-        }
+      const data = await fetchNearbyServices({
+        lat: coords.lat,
+        lon: coords.lon,
+        categories: 'hospital',
+        limit: 1,
+      });
+      const first = data.services[0];
+      if (first) {
+        setNearestHospital({
+          name: first.name,
+          distance: `${(first.distanceMeters / 1000).toFixed(1)} km`,
+        });
       }
     } catch { /* silent — network may be weak */ }
   }

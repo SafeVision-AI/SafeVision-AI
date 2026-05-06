@@ -1,25 +1,11 @@
+import { OFFLINE_CHALLAN_LOOKUP_DELAY_MS } from './safety-constants';
 
 
-// Abstracted helper: initialize duckdb wasm for offline challan calculation
 export async function initOfflineChallanDB() {
-  // Mock initialization for now because web assembly instantiation requires static assets
-  // In production for the app, these files are hosted in public/
-  // We'll mimic the response locally.
-  let isReady = false;
-  try {
-    // Check if browser
-    if (typeof window !== 'undefined') {
-      isReady = true;
-    }
-  } catch (err) {
-    console.error(err);
-  }
-  return isReady;
+  return typeof window !== 'undefined';
 }
 
 export async function calculateOfflineChallan(violationCode: string, vehicleClass: string, _isRepeat: boolean) {
-  // Simulated offline database lookup against DuckDB
-  
   const db = {
     '177':  { base: 500,   repeat: 1500,  desc: 'General Provision',                      section: '177'    },
     '177A': { base: 500,   repeat: 1000,  desc: 'Violation of road regulations',           section: '177A'   },
@@ -36,7 +22,7 @@ export async function calculateOfflineChallan(violationCode: string, vehicleClas
     '194B': { base: 1000,  repeat: 1000,  desc: 'Driving without seat belt',               section: '194B'   },
   };
 
-  await new Promise(r => setTimeout(r, 600)); // Simulate offline fast response
+  await new Promise(r => setTimeout(r, OFFLINE_CHALLAN_LOOKUP_DELAY_MS));
 
   const result = db[violationCode as keyof typeof db];
   if (!result) return { base_fine: 0, repeat_fine: null, section: 'Unknown', description: 'Violation not found' };

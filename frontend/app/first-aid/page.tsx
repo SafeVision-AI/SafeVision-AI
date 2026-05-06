@@ -12,6 +12,7 @@ import TopSearch from '@/components/dashboard/TopSearch';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import BottomNav from '@/components/dashboard/BottomNav';
 import SystemSidebar from '@/components/dashboard/SystemSidebar';
+import { logClientError } from '@/lib/client-logger';
 
 interface Message {
   id: string;
@@ -62,7 +63,7 @@ const CameraViewport = ({ onError }: { onError: (err: string | null) => void }) 
         }
         onError(null);
       } catch (err) {
-        console.error("Camera access denied:", err);
+        logClientError('Camera access denied:', err);
         setError("Camera Access Denied");
         onError("Camera Access Denied");
       }

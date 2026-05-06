@@ -188,6 +188,12 @@ class TemplateProvider:
             lines.append("⚖️ Legal reference (Motor Vehicles Act):")
         elif request.intent == "road_issue":
             lines.append("🛣️ Road issue guidance:")
+        elif request.intent == "road_weather":
+            lines.append("Road-weather guidance:")
+        elif request.intent == "safe_route":
+            lines.append("Safe-route guidance:")
+        elif request.intent == "road_infrastructure":
+            lines.append("Road authority and infrastructure guidance:")
 
         if request.tool_summaries:
             lines.extend(request.tool_summaries[:3])

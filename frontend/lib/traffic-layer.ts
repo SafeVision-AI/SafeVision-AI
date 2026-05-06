@@ -1,21 +1,21 @@
 import type maplibregl from 'maplibre-gl';
+import { logClientWarning } from './client-logger';
 
 const TOMTOM_KEY = process.env.NEXT_PUBLIC_TOMTOM_KEY;
 
 export function addTrafficLayer(map: maplibregl.Map): void {
   if (!TOMTOM_KEY) {
-    console.warn('[Traffic] NEXT_PUBLIC_TOMTOM_KEY not set — traffic layer disabled');
+    logClientWarning('[Traffic] NEXT_PUBLIC_TOMTOM_KEY not set; traffic layer disabled');
     return;
   }
 
-  // Traffic flow tiles — color-codes roads by congestion level
   map.addSource('tomtom-traffic-flow', {
     type: 'raster',
     tiles: [
       `https://api.tomtom.com/traffic/map/4/tile/flow/relative/{z}/{x}/{y}.png?key=${TOMTOM_KEY}`,
     ],
     tileSize: 256,
-    attribution: '© TomTom Traffic',
+    attribution: 'TomTom Traffic',
   });
 
   map.addLayer({
@@ -25,7 +25,6 @@ export function addTrafficLayer(map: maplibregl.Map): void {
     paint: { 'raster-opacity': 0.7 },
   });
 
-  // Traffic incidents tiles — shows accident/closure icons
   map.addSource('tomtom-incidents', {
     type: 'raster',
     tiles: [

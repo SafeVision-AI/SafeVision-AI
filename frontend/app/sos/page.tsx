@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useAppStore } from '@/lib/store';
+import { triggerSos } from '@/lib/api';
+import { enqueueSOS } from '@/lib/offline-sos-queue';
 import { generateSosWhatsAppLink, generateSosSmsLink } from '@/lib/sos-share';
 import { startFamilyTracking, beginLocationBroadcast, notifyContactsViaWhatsApp } from '@/lib/live-tracking';
 import TopSearch from '@/components/dashboard/TopSearch';
@@ -105,15 +107,29 @@ export default function EmergencyPage() {
   // Fire backend SOS call on activation + start family tracking
   useEffect(() => {
     if (!activated) return;
-    if (!isOnline || !coords) return;
+    if (!coords) {
+      setDispatchState('failed');
+      return;
+    }
 
-    const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+    let cancelled = false;
     setDispatchState('dispatching');
 
-    // 1. Hit emergency SOS endpoint
-    fetch(`${API_URL}/api/v1/emergency/sos?lat=${coords.lat}&lon=${coords.lng}`)
-      .then(r => setDispatchState(r.ok ? 'dispatched' : 'failed'))
-      .catch(() => setDispatchState('failed'));
+    const dispatchSos = async () => {
+      try {
+        if (isOnline) {
+          await triggerSos({ lat: coords.lat, lon: coords.lng });
+        } else {
+          await enqueueSOS({ lat: coords.lat, lon: coords.lng });
+        }
+        if (!cancelled) setDispatchState('dispatched');
+      } catch {
+        await enqueueSOS({ lat: coords.lat, lon: coords.lng }).catch(() => undefined);
+        if (!cancelled) setDispatchState('failed');
+      }
+    };
+
+    dispatchSos();
 
     // 2. Start live family tracking session
     if (userProfile?.name) {
@@ -139,8 +155,10 @@ export default function EmergencyPage() {
       });
     }
 
-    // Cleanup broadcast on unmount
-    return () => stopBroadcastRef.current?.();
+    return () => {
+      cancelled = true;
+      stopBroadcastRef.current?.();
+    };
   }, [activated, coords, isOnline, userProfile]);
 
   useEffect(() => {

@@ -45,7 +45,7 @@ SafeVixAI/
     agent/                   ChatEngine, IntentDetector, SafetyChecker, ContextAssembler
     providers/               11 LLM providers + ProviderRouter (auto-fallback chain)
     rag/                     LocalVectorStore (ChromaDB), Retriever, document_loader
-    tools/                   9 tools: SOS, Challan, Legal, FirstAid, Weather, RoadInfra, etc.
+    tools/                   13 tools: SOS, Emergency, Challan, Legal, FirstAid, Weather, OpenMeteo, RoadInfra, RoadIssues, SubmitReport, Geocoding, DrugInfo, What3Words
     memory/                  Redis conversation memory with session TTL
     services/                IndicSeamlessService (Indian language speech)
     data/chroma_db/          Pre-built vectorstore (COMMITTED — Render needs it)
@@ -163,7 +163,7 @@ SafeVixAI/
     TechStack.md             All technologies with versions and purposes
     Architecture.md          System diagrams and data flow
     Database.md              All 7 tables with column definitions + SQL
-    API.md                   All 17 endpoints with request/response examples
+    API.md                   All 30 endpoints with request/response examples
     UIUX.md                  Design system, colors, components spec
     Security.md              Auth, privacy, API security
     Deployment.md            Step-by-step setup and deployment

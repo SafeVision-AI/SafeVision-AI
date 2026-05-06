@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/lib/store';
+import { logClientError } from '@/lib/client-logger';
+import { publicApiWebSocketUrl } from '@/lib/public-env';
+import { GROUP_TRACKING_BROADCAST_INTERVAL_MS } from '@/lib/safety-constants';
 import { EmergencyMap } from '@/components/EmergencyMap';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import { Loader2, Users, MapPin, Navigation } from 'lucide-react';
@@ -14,7 +17,7 @@ interface FamilyMember {
 }
 
 export default function TrackingPage() {
-  const { gpsLocation, userProfile } = useAppStore();
+  const { gpsLocation, userProfile, authToken } = useAppStore();
   const [groupId, setGroupId] = useState('');
   const [userId, setUserId] = useState(userProfile?.name || '');
   const [connected, setConnected] = useState(false);
@@ -33,21 +36,11 @@ export default function TrackingPage() {
 
   const connectToTracking = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!groupId || !userId) return;
+    if (!groupId || !userId || !authToken) return;
 
-    let wsUrl = '';
-    const envApiUrl = process.env.NEXT_PUBLIC_API_URL;
-    if (envApiUrl) {
-      // e.g. "https://api.safevix.ai" -> "wss://api.safevix.ai/api/v1/tracking/..."
-      const url = new URL(envApiUrl);
-      const wsProtocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
-      wsUrl = `${wsProtocol}//${url.host}/api/v1/tracking/${groupId}`;
-    } else {
-      // Fallback for local development if not set
-      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const host = window.location.hostname === 'localhost' ? 'localhost:8000' : window.location.host;
-      wsUrl = `${wsProtocol}//${host}/api/v1/tracking/${groupId}`;
-    }
+    const wsUrl = publicApiWebSocketUrl(
+      `/api/v1/tracking/${groupId}?${new URLSearchParams({ token: authToken })}`,
+    );
     
     const ws = new WebSocket(wsUrl);
 
@@ -66,7 +59,7 @@ export default function TrackingPage() {
             ws.send(JSON.stringify(payload));
           });
         }
-      }, 3000); // Poll every 3 seconds
+      }, GROUP_TRACKING_BROADCAST_INTERVAL_MS);
     };
 
     ws.onmessage = (event) => {
@@ -84,7 +77,7 @@ export default function TrackingPage() {
           }));
         }
       } catch (err) {
-        console.error('Invalid WS message', err);
+        logClientError('Invalid WS message', err);
       }
     };
 

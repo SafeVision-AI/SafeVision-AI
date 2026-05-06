@@ -17,12 +17,17 @@ import logging
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from core.config import get_settings
+from core.database import get_db
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/feeds", tags=["feeds"])
+router = APIRouter(prefix="/api/v1/feeds", tags=["feeds"])
 
 
 # ── CIFS Type Mapping ──────────────────────────────────────────────────────────
@@ -85,7 +90,7 @@ def _format_timestamp(iso_str: str | None) -> str:
 
 
 @router.get("/waze", response_class=JSONResponse)
-async def get_waze_cifs_feed() -> dict[str, Any]:
+async def get_waze_cifs_feed(db: AsyncSession = Depends(get_db)) -> dict[str, Any]:
     """
     CIFS Feed — Waze polls this every 2 minutes.
 
@@ -95,34 +100,30 @@ async def get_waze_cifs_feed() -> dict[str, Any]:
     From Waze docs: "Road closures and supported hazard types submitted to Waze
     will also appear on Google Maps." — ONE integration, TWO platforms.
     """
-    try:
-        from core.config import settings
-
-        if not settings.SUPABASE_URL or not settings.SUPABASE_KEY:
-            return _empty_feed("Supabase not configured")
-
-        from supabase import create_client
-
-        supabase = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
-
-        # Fetch verified reports from last 24 hours
-        cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat()
-
-        result = (
-            supabase.table("road_reports")
-            .select("id,issue_type,description,lat,lon,road_name,city,created_at,status,severity")
-            .gte("created_at", cutoff)
-            .in_("status", ["verified", "confirmed"])
-            .order("created_at", desc=True)
-            .limit(200)
-            .execute()
-        )
-
-        reports = result.data or []
-
-    except Exception as exc:
-        logger.warning("CIFS feed — Supabase unavailable: %s", exc)
-        reports = []
+    settings = get_settings()
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+    result = await db.execute(
+        text("""
+            SELECT
+                uuid::text AS id,
+                issue_type,
+                description,
+                ST_Y(location::geometry) AS lat,
+                ST_X(location::geometry) AS lon,
+                road_name,
+                location_address,
+                created_at,
+                status,
+                severity
+            FROM road_issues
+            WHERE created_at >= :cutoff
+              AND status IN ('verified', 'confirmed', 'acknowledged', 'in_progress')
+            ORDER BY created_at DESC
+            LIMIT 200
+        """),
+        {"cutoff": cutoff},
+    )
+    reports = [dict(row._mapping) for row in result.fetchall()]
 
     # Build CIFS incidents array
     incidents: list[dict[str, Any]] = []
@@ -135,11 +136,16 @@ async def get_waze_cifs_feed() -> dict[str, Any]:
             continue
 
         # Calculate end time based on severity
-        severity = (r.get("severity") or "medium").lower()
+        try:
+            severity_value = int(r.get("severity") or 2)
+        except (TypeError, ValueError):
+            severity_value = 2
+        severity = {4: "critical", 3: "high", 2: "medium", 1: "low"}.get(severity_value, "medium")
         ttl_hours = {"critical": 72, "high": 48, "medium": 24, "low": 12}.get(severity, 24)
 
         try:
-            start_dt = datetime.fromisoformat(r["created_at"].replace("Z", "+00:00"))
+            created_at = r["created_at"]
+            start_dt = created_at if isinstance(created_at, datetime) else datetime.fromisoformat(str(created_at).replace("Z", "+00:00"))
             end_dt = start_dt + timedelta(hours=ttl_hours)
         except (ValueError, KeyError):
             start_dt = now
@@ -158,9 +164,9 @@ async def get_waze_cifs_feed() -> dict[str, Any]:
             "starttime": _format_timestamp(r.get("created_at")),
             "endtime": end_dt.strftime("%m/%d/%Y %H:%M:%S"),
             "street": r.get("road_name") or "",
-            "city": r.get("city") or "",
+            "city": r.get("location_address") or "",
             "country": "IN",
-            "reference": f"https://safevixai.vercel.app/report/{r['id']}",
+            "reference": f"{(settings.frontend_url or 'https://safevixai.vercel.app').rstrip('/')}/report/{r['id']}",
         }
 
         incidents.append(incident)

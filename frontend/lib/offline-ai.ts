@@ -16,6 +16,8 @@
 
 'use client';
 
+import { logClientError, logClientWarning } from './client-logger';
+
 // ── Types ─────────────────────────────────────────────────────────────────
 
 export type OfflineAIStatus =
@@ -146,7 +148,7 @@ export async function getOfflineAI(
     onProgress?.({ status: 'ready', percent: 100, message: 'Gemma 4 ready — full offline AI active' });
     return { type: 'transformers' };
   } catch (err) {
-    console.error('[offline-ai] Gemma 4 load failed:', err);
+    logClientError('[offline-ai] Gemma 4 load failed:', err);
     _status = 'error';
     onProgress?.({ status: 'error', percent: 0, message: 'Offline AI unavailable — using cached answers' });
     return { type: 'fallback' };
@@ -167,7 +169,7 @@ export async function askOfflineAI(
       const response = await _systemSession.prompt(prompt);
       return response;
     } catch (err) {
-      console.warn('[offline-ai] system AI error, falling back:', err);
+      logClientWarning('[offline-ai] system AI error, falling back:', err);
     }
   }
 
@@ -202,7 +204,7 @@ export async function askOfflineAI(
       }
       return String(output ?? 'No response generated.');
     } catch (err) {
-      console.warn('[offline-ai] Transformers.js error:', err);
+      logClientWarning('[offline-ai] Transformers.js error:', err);
     }
   }
 

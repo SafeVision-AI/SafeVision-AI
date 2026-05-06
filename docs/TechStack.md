@@ -18,7 +18,7 @@ Cache            Redis via Upstash                   Free (10K cmds/day)
 Maps             MapLibre GL (vector tiles)          Free (no API key)
 POI Data         Overpass API (OSM)                  Free (fair use)
 Geocoding        Nominatim (OSM)                     Free (1 req/sec)
-Embeddings       sentence-transformers/all-MiniLM    Free (local CPU)
+Embeddings       LocalHashEmbeddingFunction          Free (CPU, zero ML dep)
 Edge SQL         DuckDB-Wasm (browser)               Free (device compute)
 Edge Vector      HNSWlib.js (browser)                Free (device compute)
 Edge Vision      Transformers.js + YOLOv8n ONNX      Free (device compute)
@@ -96,7 +96,7 @@ Total                                                ₹ 0
 | **pypdf** | 4.3.1 | Legacy PDF utility |
 | **LangChain** | 0.3.1 | Legacy memory format support |
 | **ChromaDB** | 0.5.3 | Legacy API connector |
-| **sentence-transformers** | 3.0.1 | Legacy embeddings format support |
+| **sentence-transformers** | 3.0.1 | Legacy config compatibility (runtime uses hash-based LocalHashEmbeddingFunction) |
 
 ---
 
@@ -112,7 +112,7 @@ A **separate FastAPI service** with its own Python environment & heavy ML depend
 | **transformers** | 4.44.2 | Hugging Face model loading |
 | **datasets** | 3.0.0 | Dataset loaders |
 | **ChromaDB** | 0.5.3 | Local vector store for RAG |
-| **sentence-transformers** | 3.0.1 | `all-MiniLM` embeddings |
+| **LocalHashEmbeddingFunction** | custom | Hash-based 384-dim embeddings (SHA-256, zero ML dep) |
 | **LangChain** | 0.3.1 | Document loading and tools |
 | **langchain-community / openai / google-genai** | Various | LLM Provider Wrappers |
 | **groq / openai / mistralai** | Various | Official Provider SDKs |
@@ -149,7 +149,7 @@ A **separate FastAPI service** with its own Python environment & heavy ML depend
 | `Groq llama3-70b-8192` | 70B | Cloud | Groq API | Online chatbot — max intelligence |
 | `Phi-3-mini-4k-instruct-q4f16_1-MLC` | 3.8B | ~2.2GB | WebGPU | Offline chatbot — primary |
 | `gemma-2b-it-q4f16_1-MLC` | 2B | ~1.4GB | WebAssembly | Offline chatbot — CPU fallback |
-| `sentence-transformers/all-MiniLM-L6-v2` | 22M | ~90MB | Server CPU | Server-side embeddings for ChromaDB |
+| `LocalHashEmbeddingFunction` | N/A | 0 MB | Server CPU | Hash-based 384-dim embeddings for ChromaDB |
 | `Xenova/all-MiniLM-L6-v2` | 22M | ~25MB | Browser Wasm | Browser-side embeddings for offline RAG |
 | `Xenova/yolov8n` | ~6M | ~15MB | Browser Wasm | In-browser pothole detection from photos |
 | `ai4bharat/indic-seamless` | Large | ~7GB | Server GPU/CPU | Indian language speech (ASR/TTS) |

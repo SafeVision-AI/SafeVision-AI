@@ -174,10 +174,16 @@ class FakeRoadIssuesTool:
 
 
 class FakeSubmitReportTool:
+    def __init__(self, base_url: str | None = None) -> None:
+        self.base_url = base_url
+
     def build_guidance(self, *, issue_type: str, lat: float | None, lon: float | None) -> dict:
         return {
             'summary': f'Report guidance for {issue_type} at {lat},{lon}.',
         }
+
+    async def aclose(self) -> None:
+        return None
 
 
 class FakeSpeechService:

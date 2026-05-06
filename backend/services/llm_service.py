@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import asyncio
+import logging
 from uuid import uuid4
 
 import httpx
 
 from core.config import Settings
 from models.schemas import ChatRequest, ChatResponse
+
+logger = logging.getLogger("safevixai.llm_service")
 
 
 class LLMService:
@@ -27,11 +31,32 @@ class LLMService:
         payload = request.model_dump(exclude_none=True)
         session_id = request.session_id or str(uuid4())
         try:
-            response = await self._client.post('/chat', json=payload)
+            response = await asyncio.wait_for(
+                self._client.post('/chat', json=payload),
+                timeout=self.settings.chatbot_request_timeout_seconds,
+            )
             response.raise_for_status()
             data = response.json()
             return ChatResponse.model_validate(data)
+        except TimeoutError:
+            logger.warning(
+                "Chatbot service timed out after %.1fs for session %s",
+                self.settings.chatbot_request_timeout_seconds,
+                session_id,
+            )
+            return self._fallback_response(request, session_id=session_id)
+        except httpx.HTTPStatusError as exc:
+            logger.warning(
+                "Chatbot service returned HTTP %s for session %s",
+                exc.response.status_code,
+                session_id,
+            )
+            return self._fallback_response(request, session_id=session_id)
+        except httpx.RequestError:
+            logger.exception("Chatbot service request failed for session %s", session_id)
+            return self._fallback_response(request, session_id=session_id)
         except Exception:
+            logger.exception("Chatbot response validation failed for session %s", session_id)
             return self._fallback_response(request, session_id=session_id)
 
     def _fallback_response(self, request: ChatRequest, *, session_id: str) -> ChatResponse:

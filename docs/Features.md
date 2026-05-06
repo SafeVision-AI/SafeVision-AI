@@ -76,7 +76,7 @@
 - Indian languages auto-routed to **Sarvam AI** (30B general, 105B legal)
 - Retriever: ChromaDB MMR search, top-5 chunks
 - Knowledge base: MV Act 1988 + MV Amendment Act 2019 + WHO Trauma Care Guidelines
-- Embeddings: `sentence-transformers/all-MiniLM-L6-v2` (local CPU, free)
+- Embeddings: Hash-based 384-dim vectors (`LocalHashEmbeddingFunction`) with ChromaDB cosine similarity
 
 ### F2.3  Offline Chatbot (WebLLM)
 - Primary model: `Phi-3-mini-4k-instruct-q4f16_1-MLC` (3.8B, ~2.2GB, WebGPU)
@@ -207,10 +207,13 @@
 - Allows MCP-compatible agents to query emergency services, submit reports, calculate fines
 - Enables future integrations with Claude, GPT, and other agent frameworks
 
-### F6.5  Waze-Style Traffic Feed
-- Backend: `api/v1/waze_feed.py` — community-reported hazards and traffic data
-- Toast notification: "Pothole reported 200m ahead"
-- Integrates with Road Reporter module
+### F6.5 — Waze CIFS Feed + OSM Contribution
+- Backend: `api/v1/waze_feed.py` (193 lines) — **full CIFS spec compliance** (Closure and Incident Feed Specification)
+- Waze polls this endpoint every 2 minutes → reports appear as live hazard pins in **both Waze AND Google Maps**
+- Maps RoadWatch issue types to CIFS types/subtypes (HAZARD_ON_ROAD, ACCIDENT, ROAD_CLOSED, CONSTRUCTION)
+- Backend: `services/osm_contributor.py` (288 lines) — pushes verified reports to OpenStreetMap via API v0.6
+- OSM contribution flow: open changeset → create hazard node with tags → close changeset
+- Auto-attribution: `created_by=SafeVixAI RoadWatch v1.0`
 
 ### F6.6  Turn-by-Turn Navigation
 - `lib/navigation-launch.ts` — multi-app navigation launcher

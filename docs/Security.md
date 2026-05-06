@@ -8,11 +8,12 @@ SafeVixAI handles sensitive user data (GPS location, blood group, emergency cont
 
 ## 1. Authentication & Authorization
 
-### Current (Hackathon MVP)
-- Most endpoints are **public** — no auth required for emergency features.
-- Database access is managed exclusively by the backend using SQLAlchemy with parameterized queries.
-- Admin endpoints (e.g., chatbot prompt reloading) are protected via a static `ADMIN_SECRET` header.
-- No Supabase Auth or Row Level Security (RLS) is used in the V1 MVP (Planned for V2).
+### Current Implementation
+- **JWT Authentication**: Email/OTP flow in `backend/api/v1/auth.py`. JWT tokens issued and validated via `core/security.py`.
+- **Bearer token injection**: Frontend API client (`lib/api.ts`) attaches Bearer token from Zustand store (in-memory only — NOT persisted to localStorage).
+- **Admin endpoints**: Protected via `ADMIN_SECRET` header (chatbot RAG rebuild, index management).
+- **Error boundary**: `frontend/app/error.tsx` catches all unhandled errors — prevents white screen crashes.
+- **Environment validation**: `frontend/lib/public-env.ts` throws at import time if any `NEXT_PUBLIC_*` URL is missing.
 
 ---
 
@@ -20,22 +21,15 @@ SafeVixAI handles sensitive user data (GPS location, blood group, emergency cont
 
 ### CORS Configuration
 ```python
-# main.py  Restrict to known origins in production
-from fastapi.middleware.cors import CORSMiddleware
+# backend/core/config.py — CORS is environment-driven with fail-fast in production
+# If ENVIRONMENT=production and CORS_ORIGINS="*", the app raises RuntimeError at startup.
+# Same guard exists in chatbot_service/config.py.
 
-ALLOWED_ORIGINS = [
-    "https://safevixai.vercel.app",
-    "http://localhost:3000",  # dev only
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type", "Authorization"],
-)
+# Production CORS_ORIGINS env var example:
+# CORS_ORIGINS=https://safevixai.vercel.app,https://safevixai-backup.vercel.app
 ```
+
+**Key enforcement:** Both backend and chatbot services **raise RuntimeError** on startup if `CORS_ORIGINS` is set to `*` in production mode. This is a hard fail-fast, not a warning.
 
 ### Input Validation
 - All request parameters validated via **Pydantic** schemas
@@ -46,21 +40,23 @@ app.add_middleware(
 
 ### Rate Limiting
 
-> **Status: Planned — Not yet implemented**
->
-> Rate limiting via `slowapi` is planned for the following endpoints. Currently no rate limiting is enforced.
+> **Status: ✅ Implemented** via `slowapi` (IP-based)
+
+Rate limiting is enforced in production using `slowapi` with IP-based key extraction:
 
 ```python
-# PLANNED — Install slowapi and add these limits:
-# pip install slowapi
+# backend/core/limiter.py
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+limiter = Limiter(key_func=get_remote_address)
 
-PLANNED_RATE_LIMITS = {
-    "/api/v1/chat/message": "30/minute",      # LLM calls
-    "/api/v1/roads/report": "10/minute",       # Prevent spam reports
-    "/api/v1/geocode/search": "60/minute",     # Nominatim rate limit compliance
-    "/api/v1/emergency/nearby": "120/minute",  # Allow frequent location updates
-}
+# Active limits (decorator-based on route handlers):
+# chat.py:       @limiter.limit("5/minute")    — LLM calls
+# emergency.py:  @limiter.limit("10/minute")   — emergency service lookups
+# roadwatch.py:  @limiter.limit("8/minute")    — road issue reports
 ```
+
+The limiter middleware is registered in `backend/main.py` via `app.state.limiter` with `_rate_limit_exceeded_handler` for clean 429 responses.
 
 ---
 
@@ -155,10 +151,11 @@ def apply_safety_check(message: str, response: str) -> str:
 ```
 
 ### Prompt Injection Defense
-- System prompt is immutable  user cannot override it
-- Intent detection runs before RAG to prevent jailbreak attempts
-- Groq model temperature set to 0.3 (low creativity, high factual grounding)
-- RAG context explicitly instructed: "Answer ONLY from the provided text"
+- **12-pattern guard**: `chatbot_service/providers/base.py` checks every user message against 12 prohibited injection patterns ("ignore previous instructions", "you are now", "system prompt", etc.) BEFORE sending to any LLM.
+- **SafetyChecker**: `chatbot_service/agent/safety_checker.py` blocks harmful queries ("how to fake an accident", "how to escape after hit and run", etc.) with a firm refusal + 112 redirect.
+- Intent detection runs before RAG to classify and scope the query.
+- LLM provider timeout: `asyncio.wait_for()` enforced on every provider call via `ProviderRouter._generate_with_timeout()` — prevents infinite hangs.
+- RAG context explicitly instructed: "Answer ONLY from the provided text."
 
 ---
 

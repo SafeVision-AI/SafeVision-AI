@@ -111,8 +111,8 @@ All script folders follow the same `app/` vs `data/` split:
 
 | Folder | `app/` | `data/` |
 |---|---|---|
-| `scripts/` | 2 files (DB seeders) | 15 files (fetchers, extractors, verifiers) |
-| `backend/scripts/` | 11 files (DB/Redis/PostGIS loaders) | 5 files (pure data transforms) |
+| `scripts/` | 3 files (DB seeders) | 15 files (fetchers, extractors, verifiers) |
+| `backend/scripts/` | 10 files (DB/Redis/PostGIS loaders) | 7 files (pure data transforms) |
 | `chatbot_service/scripts/` | 1 file (DB wrapper) | 6 files (Pro Overpass fetchers) |
 
 > **`data/`** scripts run standalone with no database. **`app/`** scripts require a live backend stack.
@@ -135,6 +135,20 @@ Read `docs/Agent.md` first — it gives a complete overview of the entire applic
 
 ---
 
+## Security Hardening
+
+| Layer | Protection | File |
+|---|---|---|
+| CORS | Fail-fast `RuntimeError` if wildcard `*` in production | `backend/core/config.py`, `chatbot_service/config.py` |
+| Auth | JWT Bearer tokens (in-memory only, never persisted) | `backend/api/v1/auth.py`, `frontend/lib/store.ts` |
+| LLM Safety | 12-pattern prompt injection guard + SafetyChecker | `chatbot_service/providers/base.py`, `agent/safety_checker.py` |
+| LLM Timeout | `asyncio.wait_for()` on every provider call | `chatbot_service/providers/router.py` |
+| Error Boundary | Global React error boundary prevents white-screen crashes | `frontend/app/error.tsx` |
+| Env Validation | Frontend throws at import if any `NEXT_PUBLIC_*` URL is missing | `frontend/lib/public-env.ts` |
+| Theme | External script (no `dangerouslySetInnerHTML`) | `frontend/public/theme-init.js` |
+
+---
+
 ## Documentation
 
 | File | Contents |
@@ -144,11 +158,11 @@ Read `docs/Agent.md` first — it gives a complete overview of the entire applic
 | [docs/Features.md](docs/Features.md) | Every feature with technical details |
 | [docs/Architecture.md](docs/Architecture.md) | System diagrams and data flows |
 | [docs/Database.md](docs/Database.md) | All 7 tables with column definitions |
-| [docs/API.md](docs/API.md) | All 17 endpoints with request/response examples |
+| [docs/API.md](docs/API.md) | All 30 endpoints with request/response examples |
 | [docs/TechStack.md](docs/TechStack.md) | All technologies with versions and purposes |
 | [docs/UIUX.md](docs/UIUX.md) | Design system, colors, component specs |
 | [docs/AI_Instructions.md](docs/AI_Instructions.md) | How each AI layer works |
-| [docs/Security.md](docs/Security.md) | Auth, privacy, API security |
+| [docs/Security.md](docs/Security.md) | Auth, privacy, API security, rate limiting |
 | [docs/Deployment.md](docs/Deployment.md) | Step-by-step deployment guide |
 | [Hugging Face Hub](https://huggingface.co/datasets/SafeVixAI/SafeVixAI-Dataset-Hub) | **Intelligence Layer** (Models, Data, Notebooks) |
 | [SETUP.md](SETUP.md) | Full installation and run guide |

@@ -1,30 +1,22 @@
 import axios from 'axios';
 import { getAddressFromGPS } from './reverse-geocode';
+import { PUBLIC_API_BASE_URL, PUBLIC_CHATBOT_BASE_URL } from './public-env';
+import { useAppStore } from './store';
 
-const BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000').replace(/\/+$/, '');
+const BASE_URL = PUBLIC_API_BASE_URL;
 
 // Chatbot service runs on a separate port/service
-const CHATBOT_URL = (process.env.NEXT_PUBLIC_CHATBOT_URL ?? 'http://localhost:8010').replace(/\/+$/, '');
-
-// Warn in production when chatbot URL is not configured
-if (typeof window !== 'undefined' && !process.env.NEXT_PUBLIC_CHATBOT_URL && process.env.NODE_ENV === 'production') {
-  console.error('[SafeVixAI] NEXT_PUBLIC_CHATBOT_URL is not set — chatbot features will fail. Set this in your Render/Vercel environment variables.');
-}
+const CHATBOT_URL = PUBLIC_CHATBOT_BASE_URL;
 
 const client = axios.create({
   baseURL: BASE_URL,
   timeout: 8_000,
 });
 
-// Dynamically inject JWT from persisted store on every request
 client.interceptors.request.use((config) => {
-  try {
-    const raw = localStorage.getItem('svai-storage');
-    const stored = raw ? JSON.parse(raw) : null;
-    const token = stored?.state?.authToken ?? 'mock-jwt-token-for-hackathon';
+  const token = useAppStore.getState().authToken;
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  } catch {
-    config.headers.Authorization = 'Bearer mock-jwt-token-for-hackathon';
   }
   return config;
 });
@@ -35,13 +27,9 @@ const chatbotClient = axios.create({
 });
 
 chatbotClient.interceptors.request.use((config) => {
-  try {
-    const raw = localStorage.getItem('svai-storage');
-    const stored = raw ? JSON.parse(raw) : null;
-    const token = stored?.state?.authToken ?? 'mock-jwt-token-for-hackathon';
+  const token = useAppStore.getState().authToken;
+  if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  } catch {
-    config.headers.Authorization = 'Bearer mock-jwt-token-for-hackathon';
   }
   return config;
 });
@@ -640,6 +628,17 @@ export async function fetchSosPayload(params: {
   lon: number;
 }): Promise<SosResponse> {
   const { data } = await client.get('/api/v1/emergency/sos', { params });
+  return {
+    ...normalizeEmergencyResponse(data),
+    numbers: data.numbers ?? {},
+  };
+}
+
+export async function triggerSos(params: {
+  lat: number;
+  lon: number;
+}): Promise<SosResponse> {
+  const { data } = await client.post('/api/v1/emergency/sos', null, { params });
   return {
     ...normalizeEmergencyResponse(data),
     numbers: data.numbers ?? {},

@@ -8,15 +8,11 @@ import {
   CheckCircle2, Zap, Lock, Mail, ChevronRight,
   Wifi, WifiOff
 } from 'lucide-react';
+import { PUBLIC_API_BASE_URL } from '@/lib/public-env';
 import { useAppStore } from '@/lib/store';
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000').replace(/\/+$/, '');
-
-// Demo credential quick-fills for hackathon presentation
-const DEMO_CREDS = [
-  { label: 'Demo Operator', email: 'demo@safevixai.app', password: 'SafeVixAI@2024', color: 'text-[#00C896]' },
-  { label: 'IITM Evaluator', email: 'iitm@safevixai.app', password: 'iitm2024', color: 'text-amber-400' },
-];
+const API_URL = PUBLIC_API_BASE_URL;
+const DEMO_CREDS: Array<{ label: string; email: string; password: string; color: string }> = [];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -81,15 +77,8 @@ export default function LoginPage() {
     }
   };
 
-  // Demo mode bypass — uses the hardcoded mock token
   const handleDemoMode = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setAuth('mock-jwt-token-for-hackathon', 'Demo Operator');
-      setUserProfile({ name: 'Demo Operator', bloodGroup: 'O+', vehicleNumber: 'TN01AB1234', emergencyContact: '+91 98765 43210' });
-      setSuccess('Demo Mode Active — Entering Command Center');
-      setTimeout(() => router.replace('/'), 1000);
-    }, 600);
+    setError('Demo bypass is disabled. Use the configured operator login.');
   };
 
   const fillCreds = (c: typeof DEMO_CREDS[0]) => {

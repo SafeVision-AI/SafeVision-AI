@@ -2,6 +2,7 @@
 
 import React, { memo, useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Search, Mic, Sun, Moon, Monitor, Menu, ShieldCheck, User } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
@@ -21,6 +22,7 @@ const SystemHeader = memo(function SystemHeader({
 }: SystemHeaderProps) {
   const [mounted, setMounted] = useState(false);
   const [isOnline, setIsOnline] = useState(isOnlineInitial);
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
   const setSystemSidebarOpen = useAppStore((state) => state.setSystemSidebarOpen);
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
@@ -45,9 +47,9 @@ const SystemHeader = memo(function SystemHeader({
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      // TODO: implement search navigation
-    }
+    const query = searchQuery.trim();
+    if (!query) return;
+    router.push(`/assistant?q=${encodeURIComponent(query)}`);
   };
 
   return (

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAppStore } from '@/lib/store';
 import { calculateChallan } from '@/lib/api';
+import { logClientError } from '@/lib/client-logger';
 
 /**
  * ChallanCalculator — High-Fidelity Fine Specialist
@@ -55,7 +56,7 @@ const ChallanCalculator: React.FC = () => {
         });
       }
     } catch (err) {
-      console.error('Calculation failed:', err);
+      logClientError('Calculation failed:', err);
     } finally {
       setLoading(false);
     }

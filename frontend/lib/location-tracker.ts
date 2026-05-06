@@ -1,4 +1,5 @@
 import type maplibregl from 'maplibre-gl';
+import { logClientError } from './client-logger';
 
 interface TrackerOptions {
   onUpdate?: (pos: GeolocationPosition) => void;
@@ -54,7 +55,7 @@ export function startLocationTracking(map: maplibregl.Map, options: TrackerOptio
       options.onUpdate?.(pos);
     },
     (err) => {
-      console.error('[LocationTracker] Error:', err);
+      logClientError('[LocationTracker] Error:', err);
       options.onError?.(err);
     },
     { enableHighAccuracy: true, maximumAge: 5000, timeout: 10000 }

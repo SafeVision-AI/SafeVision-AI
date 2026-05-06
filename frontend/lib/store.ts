@@ -210,15 +210,12 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'svai-storage',
-      // Only persist user profile and preferences
+      // Auth tokens are intentionally kept in memory so XSS cannot replay a persisted bearer token.
       partialize: (state) => ({
         userProfile: state.userProfile,
         aiMode: state.aiMode,
         serviceCategory: state.serviceCategory,
         isDesktopSidebarCollapsed: state.isDesktopSidebarCollapsed,
-        isAuthenticated: state.isAuthenticated,
-        authToken: state.authToken,
-        operatorName: state.operatorName,
       }),
     }
   )

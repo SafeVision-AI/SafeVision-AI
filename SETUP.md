@@ -77,13 +77,13 @@ pip install -r requirements.txt
 - **ChromaDB** — vector store for RAG
 - **SQLAlchemy + asyncpg** — async database ORM
 - **GeoAlchemy2** — PostGIS geometry support
-- **sentence-transformers** — embeddings (runs locally)
+- **sentence-transformers** - embeddings config (runtime uses hash-based `LocalHashEmbeddingFunction`)
 - **DuckDB** — SQL engine for offline challan calculator
 - **Redis (hiredis)** — cache client
 - **httpx** — async HTTP for Overpass/Nominatim
 - **Pydantic** — request/response validation
 
-> ⏱️ First install takes 3–5 minutes (sentence-transformers is large).
+> ⚠ First install takes 3-5 minutes (torch/torchaudio are large).
 
 Verify:
 ```bash

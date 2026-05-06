@@ -1,10 +1,22 @@
 // frontend/lib/live-tracking.ts
+import { useAppStore } from './store';
+import { PUBLIC_API_BASE_URL } from './public-env';
+import { LIVE_TRACKING_POLL_INTERVAL_MS } from './safety-constants';
 // Enterprise Family Tracking — Supabase Realtime + REST API
 // Two modes:
 //   1. VICTIM  → startFamilyTracking() → GPS polling → PUT /api/v1/live-tracking/update
 //   2. FAMILY  → subscribeToTracking() → GET /api/v1/live-tracking/session/:id (poll)
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE = PUBLIC_API_BASE_URL;
+
+type NavigatorWithBattery = Navigator & {
+  getBattery?: () => Promise<{ level: number }>;
+};
+
+function authHeaders(): HeadersInit {
+  const token = useAppStore.getState().authToken;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 export interface TrackingSession {
   session_id: string;
@@ -42,7 +54,7 @@ export async function startFamilyTracking(params: {
 }): Promise<TrackingSession> {
   const res = await fetch(`${API_BASE}/api/v1/live-tracking/start`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({
       user_name: params.userName,
       blood_group: params.bloodGroup,
@@ -71,7 +83,7 @@ export function beginLocationBroadcast(sessionId: string): () => void {
         const battery = await getBatteryLevel();
         await fetch(`${API_BASE}/api/v1/live-tracking/update`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', ...authHeaders() },
           body: JSON.stringify({
             session_id: sessionId,
             latitude: pos.coords.latitude,
@@ -88,7 +100,7 @@ export function beginLocationBroadcast(sessionId: string): () => void {
   };
 
   push(); // Immediate first push
-  const interval = setInterval(push, 5000); // Poll every 5 seconds
+  const interval = setInterval(push, LIVE_TRACKING_POLL_INTERVAL_MS);
 
   return () => {
     active = false;
@@ -102,6 +114,7 @@ export function beginLocationBroadcast(sessionId: string): () => void {
 export async function stopFamilyTracking(sessionId: string): Promise<void> {
   await fetch(`${API_BASE}/api/v1/live-tracking/session/${sessionId}`, {
     method: 'DELETE',
+    headers: authHeaders(),
   }).catch(() => {});
 }
 
@@ -132,16 +145,18 @@ export function notifyContactsViaWhatsApp(
  */
 export function subscribeToTracking(
   sessionId: string,
+  token: string,
   onUpdate: (location: LiveLocation) => void,
   onExpired: () => void,
-  intervalMs = 5000
+  intervalMs = LIVE_TRACKING_POLL_INTERVAL_MS
 ): () => void {
   let active = true;
 
   const poll = async () => {
     if (!active) return;
     try {
-      const res = await fetch(`${API_BASE}/api/v1/live-tracking/session/${sessionId}`);
+      const params = new URLSearchParams({ token });
+      const res = await fetch(`${API_BASE}/api/v1/live-tracking/session/${sessionId}?${params}`);
       if (res.status === 404) {
         onExpired();
         active = false;
@@ -174,8 +189,7 @@ export function subscribeToTracking(
 
 async function getBatteryLevel(): Promise<number | undefined> {
   try {
-    // @ts-ignore — Battery API not in all TS defs
-    const battery = await navigator.getBattery?.();
+    const battery = await (navigator as NavigatorWithBattery).getBattery?.();
     return battery ? Math.round(battery.level * 100) : undefined;
   } catch {
     return undefined;

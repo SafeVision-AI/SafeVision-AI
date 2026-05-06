@@ -2,11 +2,13 @@
 // Uses Google Maps Gemini Grounding ONLY when Supabase returns 0 results
 // Never use for main map rendering — use MapLibre for that
 
+import { logClientError, logClientWarning } from './client-logger';
+
 const DEMO_KEY = process.env.NEXT_PUBLIC_GMAPS_DEMO_KEY;
 
 export async function findEmergencyFallback(query: string, lat: number, lon: number) {
   if (!DEMO_KEY) {
-    console.warn('Google Maps Demo Key not configured. Fallback unavailable.');
+    logClientWarning('Google Maps Demo Key not configured. Fallback unavailable.');
     return [];
   }
   
@@ -29,7 +31,7 @@ export async function findEmergencyFallback(query: string, lat: number, lon: num
       source: 'google_fallback'
     }));
   } catch (error) {
-    console.error('Failed to fetch from Google Maps fallback:', error);
+    logClientError('Failed to fetch from Google Maps fallback:', error);
     return [];
   }
 }

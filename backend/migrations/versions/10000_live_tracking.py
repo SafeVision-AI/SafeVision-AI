@@ -35,10 +35,11 @@ def upgrade() -> None:
     # Enable RLS
     op.execute("ALTER TABLE live_tracking ENABLE ROW LEVEL SECURITY;")
 
-    # Public read - anyone with a session_id link can view (no login needed)
+    # Direct Supabase reads are restricted; family access goes through the signed API link.
     op.execute("""
-        CREATE POLICY "Anyone can read active tracking sessions"
+        CREATE POLICY "Authenticated users can read active tracking sessions"
         ON live_tracking FOR SELECT
+        TO authenticated
         USING (is_active = true AND expires_at > NOW());
     """)
 
@@ -62,7 +63,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.execute('DROP POLICY IF EXISTS "Anyone can read active tracking sessions" ON live_tracking;')
+    op.execute('DROP POLICY IF EXISTS "Authenticated users can read active tracking sessions" ON live_tracking;')
     op.execute('DROP POLICY IF EXISTS "Authenticated users can create tracking sessions" ON live_tracking;')
     op.execute('DROP POLICY IF EXISTS "Users can update their own tracking sessions" ON live_tracking;')
     op.execute("DROP TABLE IF EXISTS live_tracking;")

@@ -56,6 +56,8 @@ def create_app() -> FastAPI:
         geocode_client = GeocodingClient(opencage_key=settings.opencage_api_key)
         drug_info_tool = DrugInfoTool()
         
+        submit_report_tool = SubmitReportTool(settings.main_backend_base_url)
+
         context_assembler = ContextAssembler(
             retriever=retriever,
             sos_tool=SosTool(backend_client, w3w_tool, geocode_client),
@@ -64,7 +66,7 @@ def create_app() -> FastAPI:
             first_aid_tool=FirstAidTool(settings),
             road_infra_tool=RoadInfrastructureTool(backend_client),
             road_issues_tool=RoadIssuesTool(backend_client),
-            submit_report_tool=SubmitReportTool(),
+            submit_report_tool=submit_report_tool,
             weather_tool=weather_tool,
             drug_info_tool=drug_info_tool,
         )
@@ -89,9 +91,20 @@ def create_app() -> FastAPI:
             await w3w_tool.aclose()
             await geocode_client.aclose()
             await drug_info_tool.aclose()
+            await submit_report_tool.aclose()
             await memory_store.close()
 
-    app = FastAPI(title=settings.service_name, version='1.0.0', lifespan=lifespan)
+    docs_url = None if settings.environment == 'production' else '/docs'
+    redoc_url = None if settings.environment == 'production' else '/redoc'
+    openapi_url = None if settings.environment == 'production' else '/openapi.json'
+    app = FastAPI(
+        title=settings.service_name,
+        version='1.0.0',
+        lifespan=lifespan,
+        docs_url=docs_url,
+        redoc_url=redoc_url,
+        openapi_url=openapi_url,
+    )
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -125,12 +138,12 @@ def create_app() -> FastAPI:
                 'Multi-provider LLM fallback chain (Groq, Gemini, HuggingFace). '
                 'Covers emergency response, MV Act legal queries, first aid, road reporting and more.'
             ),
-            'docs': '/docs',
+            'docs': docs_url,
             'health': '/health',
             'endpoints': {
                 'chat':          'POST /api/v1/chat/',
                 'chat_stream':   'POST /api/v1/chat/stream',
-                'chat_history':  'GET  /api/v1/chat/history/{session_id}',
+                'chat_history':  'GET  /api/v1/chat/history/{session_id} (admin)',
                 'chat_health':   'GET  /api/v1/chat/health',
                 'speech_status': 'GET  /speech/status',
                 'rebuild_index': 'POST /admin/rebuild-index',

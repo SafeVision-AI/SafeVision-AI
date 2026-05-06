@@ -3,6 +3,47 @@ services:
     name: safevixai-chatbot
     env: python
     rootDir: chatbot_service
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements-render.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: REDIS_URL
+        sync: false
+      - key: MAIN_BACKEND_BASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-1.5-flash
+      - key: CEREBRAS_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: MISTRAL_API_KEY
+        sync: false
+      - key: TOGETHER_API_KEY
+        sync: false
+      - key: SARVAM_API_KEY
+        sync: false
+      - key: HF_TOKEN
+        sync: false
+      - key: NVIDIA_NIM_API_KEY
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: W3W_API_KEY
+        sync: false
+      - key: OPENCAGE_API_KEY
+        sync: false
+      - key: ADMIN_SECRET
+        sync: false

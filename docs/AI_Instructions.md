@@ -9,7 +9,7 @@ SafeVixAI uses AI at **five distinct layers** — each with a specific purpose a
 ## AI Layer 1: Online LLM — 11-Provider Agentic RAG (Server-Side)
 
 ### What It Does
-Answers user questions about traffic laws, first aid, and emergency services using an **agentic RAG pipeline** running on the separate chatbot service (port 8010). Every answer is grounded in actual documents + 9 agent tools — not model training data.
+Answers user questions about traffic laws, first aid, and emergency services using an **agentic RAG pipeline** running on the separate chatbot service (port 8010). Every answer is grounded in actual documents + 13 agent tools — not model training data.
 
 ### 11-Provider Fallback Chain
 Instead of relying on a single LLM, the chatbot cascades through 11 providers for zero downtime:
@@ -79,19 +79,23 @@ SYSTEM_PROMPT = (
    Tamil Nadu has not set a state-specific override, so the national amount applies."
 ```
 
-### 9 Agent Tools
+### 13 Agent Tools
 
-| Tool | Function | Data Source |
-|------|----------|-------------|
-| **SosTool** | Find nearest emergency services | Backend API → PostGIS + Overpass |
-| **ChallanTool** | Calculate traffic fines | Backend API → DuckDB SQL |
-| **LegalSearchTool** | Search MV Act, traffic regulations | ChromaDB vector search |
-| **FirstAidTool** | WHO-based first-aid protocols | Static JSON data |
-| **WeatherTool** | Current weather conditions | OpenWeather API |
-| **RoadInfrastructureTool** | Contractor, budget, engineer info | Backend API → data.gov.in |
-| **RoadIssuesTool** | Community-reported road issues | Backend API → PostGIS |
-| **SubmitReportTool** | Submit road damage reports | Backend API → PostgreSQL |
-| **EmergencyTool** | Find nearby emergency services directly | Backend API → PostGIS + Overpass |
+| Tool | File | Data Source |
+|------|------|-------------|
+| **SosTool** | `sos_tool.py` | Backend API → PostGIS + Overpass |
+| **EmergencyTool** | `emergency_tool.py` | Backend API → PostGIS + Overpass |
+| **ChallanTool** | `challan_tool.py` | Backend API → DuckDB SQL |
+| **LegalSearchTool** | `legal_search_tool.py` | ChromaDB vector search |
+| **FirstAidTool** | `first_aid_tool.py` | Static JSON data |
+| **WeatherTool** | `weather_tool.py` | OpenWeather API |
+| **OpenMeteoTool** | `open_meteo.py` | Open-Meteo API (visibility, precipitation) |
+| **RoadInfrastructureTool** | `road_infra_tool.py` | Backend API → data.gov.in |
+| **RoadIssuesTool** | `road_issues_tool.py` | Backend API → PostGIS |
+| **SubmitReportTool** | `submit_report_tool.py` | Backend API → PostgreSQL |
+| **GeocodingTool** | `geocoding.py` | Photon/BigDataCloud (zero-key) |
+| **DrugInfoTool** | `drug_info.py` | Open FDA drug/medical info |
+| **What3WordsTool** | `what3words.py` | What3Words API (3m precision) |
 
 ---
 
@@ -154,19 +158,20 @@ The offline LLM **cannot** search for hospitals in real-time — it only has acc
 The IntentDetector uses keyword matching and regex patterns — **not** a separate LLM call. This keeps intent classification instant (<1ms) with zero API cost.
 
 ```python
-# agent/intent_detector.py
+# agent/intent_detector.py — ACTUAL implementation (9 intent classes)
+# Uses keyword matching + regex — NOT a separate LLM call (<1ms)
 
-INTENTS = {
-    "FIND_HOSPITAL": ["hospital", "trauma", "medical", "doctor", "clinic"],
-    "FIND_POLICE": ["police", "FIR", "station", "law enforcement"],
-    "FIND_AMBULANCE": ["ambulance", "102", "medical transport"],
-    "FIND_TOW": ["towing", "breakdown", "vehicle recovery", "puncture"],
-    "FIRST_AID_INFO": ["bleeding", "unconscious", "fracture", "burn", "CPR"],
-    "CHALLAN_QUERY": ["fine", "challan", "penalty", "drunk driving", "MVA"],
-    "ROAD_REPORT": ["pothole", "broken road", "reporting", "complain"],
-    "LEGAL_INFO": ["speed limit", "traffic rules", "Section", "allowed"],
-    "OTHER": []  # Default fallback
-}
+INTENT_CLASSES = (
+    'emergency',           # accident, ambulance, hospital, police, sos, crash, injured
+    'first_aid',           # bleeding, burn, fracture, cpr, choking, unconscious
+    'challan',             # challan, fine, helmet, seatbelt, drunk driving, licence
+    'legal',               # motor vehicles act, mv act, section, legal, rights, mva
+    'road_weather',        # weather, rain, flood, fog, visibility, storm, monsoon
+    'safe_route',          # route, navigate, directions, safest way, safe route
+    'road_infrastructure', # road authority, pwd, nhai, pmgsy, contractor, maintenance
+    'road_issue',          # pothole, road hazard, debris, bad road, damaged road
+    'general',             # fallback — default for all other queries
+)
 ```
 
 ### Why Intent-First?
@@ -231,7 +236,6 @@ const detections = await detector(imageElement, { threshold: 0.3 })
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 
 # Load all PDFs
@@ -242,17 +246,28 @@ docs = [doc for loader in loaders for doc in loader.load()]
 splitter = RecursiveCharacterTextSplitter(chunk_size=1000, overlap=150)
 chunks = splitter.split_documents(docs)
 
-# Generate embeddings (runs locally on CPU, no API cost)
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-
 # Store in ChromaDB (persists to disk)
 vectorstore = Chroma.from_documents(
     chunks,
-    embeddings,
+    embedding_function,
     persist_directory="data/chroma_db",
     collection_name="safevixai_docs"
 )
 ```
+
+### Server-Side Embeddings
+
+The chatbot service uses a **hash-based embedding function** (`LocalHashEmbeddingFunction`) — NOT a neural model:
+
+```python
+# rag/embeddings.py — deterministic 384-dim vectors via SHA-256 token hashing
+# Zero ML dependency, compatible with ChromaDB cosine similarity
+# Config references all-MiniLM-L6-v2 for future neural upgrade
+```
+
+| Model | Params | Size | Runtime | Use Case |
+|---|---|---|---|---|
+| `LocalHashEmbeddingFunction` | N/A | 0 MB | CPU | Server-side embeddings for ChromaDB |
 
 ### ⚠ ChromaDB Persistence Rules
 - `chatbot_service/data/chroma_db/` — **COMMITTED** to git (Render needs it at cold start)

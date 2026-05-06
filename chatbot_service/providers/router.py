@@ -11,6 +11,8 @@ Auto-routing rules (in priority order):
 
 from __future__ import annotations
 
+import asyncio
+import logging
 import re
 
 from config import Settings
@@ -30,6 +32,8 @@ from providers.sarvam_provider import (
 )
 from providers.together_provider import TogetherProvider
 
+
+logger = logging.getLogger("safevixai.chatbot.providers")
 
 # ── Language detection (lightweight — no NLTK dependency) ─────────────────
 # Script ranges for Indian languages
@@ -108,6 +112,7 @@ class ProviderRouter:
             'template': TemplateProvider(),
         }
         self.default_provider = settings.default_llm_provider
+        self.provider_timeout_seconds = max(0.001, float(settings.http_timeout_seconds))
 
         # Fallback chain — tried in order when provider fails
         self._fallback_chain = [
@@ -165,10 +170,10 @@ class ProviderRouter:
             detected_lang = detect_lang(request.message or '')
 
         primary = self._select_provider_name(request, detected_lang=detected_lang)
-        provider = self.providers.get(primary, self.providers['groq'])
+        provider = self.providers.get(primary) or self.providers.get('groq') or self.providers['template']
 
         try:
-            result = await provider.generate(request)
+            result = await self._generate_with_timeout(provider, request)
             # Attach routing metadata
             result.provider_used = primary  # type: ignore[attr-defined]
             result.detected_lang = detected_lang  # type: ignore[attr-defined]
@@ -186,13 +191,33 @@ class ProviderRouter:
                     continue
                 try:
                     fallback = self.providers[fallback_name]
-                    result = await fallback.generate(request)
+                    result = await self._generate_with_timeout(fallback, request)
                     result.provider_used = fallback_name  # type: ignore[attr-defined]
                     result.fallback_from = primary  # type: ignore[attr-defined]
                     return result
-                except Exception:
+                except Exception as fallback_err:
+                    logger.warning(
+                        "LLM fallback provider %s failed: %s",
+                        fallback_name,
+                        fallback_err,
+                    )
                     continue
 
             raise RuntimeError(
                 f"All providers exhausted. Primary error: {primary_err}"
             ) from primary_err
+
+    async def _generate_with_timeout(
+        self,
+        provider: TemplateProvider,
+        request: ProviderRequest,
+    ) -> ProviderResult:
+        try:
+            return await asyncio.wait_for(
+                provider.generate(request),
+                timeout=self.provider_timeout_seconds,
+            )
+        except TimeoutError as exc:
+            raise TimeoutError(
+                f"{provider.name} timed out after {self.provider_timeout_seconds:.1f}s"
+            ) from exc

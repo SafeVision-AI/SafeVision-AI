@@ -4,12 +4,13 @@ from datetime import date, datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 EmergencyCategory = Literal['hospital', 'police', 'ambulance', 'fire', 'towing', 'pharmacy', 'puncture', 'showroom']
 RoadIssueStatus = Literal['open', 'acknowledged', 'in_progress', 'resolved', 'rejected']
 RouteProfile = Literal['driving-car', 'cycling-regular', 'foot-walking']
+BloodGroup = Literal['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']
 
 
 class HealthResponse(BaseModel):
@@ -161,9 +162,9 @@ class RoadReportResponse(BaseModel):
 
 
 class RoutePoint(BaseModel):
-    lat: float
-    lon: float
-    label: str | None = None
+    lat: float = Field(ge=-90, le=90)
+    lon: float = Field(ge=-180, le=180)
+    label: str | None = Field(default=None, max_length=120)
 
 
 class RouteBounds(BaseModel):
@@ -257,31 +258,44 @@ class ChallanResponse(BaseModel):
 
 
 class EmergencyContact(BaseModel):
-    name: str
-    phone: str
-    relation: str | None = None
+    name: str = Field(min_length=1, max_length=80)
+    phone: str = Field(min_length=7, max_length=20, pattern=r'^\+?[0-9][0-9\s-]{5,18}[0-9]$')
+    relation: str | None = Field(default=None, max_length=40)
 
 
 class UserProfileCreate(BaseModel):
-    name: str
-    blood_group: str | None = None
-    emergency_contacts: list[EmergencyContact] = Field(default_factory=list)
-    allergies: str | None = None
-    vehicle_details: str | None = None
-    medical_notes: str | None = None
+    name: str = Field(min_length=1, max_length=80)
+    blood_group: BloodGroup | None = None
+    emergency_contacts: list[EmergencyContact] = Field(default_factory=list, max_length=5)
+    allergies: str | None = Field(default=None, max_length=500)
+    vehicle_details: str | None = Field(default=None, max_length=120)
+    medical_notes: str | None = Field(default=None, max_length=1000)
+
+    @field_validator('blood_group', mode='before')
+    @classmethod
+    def normalize_blood_group(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = value.strip().upper().replace(' POSITIVE', '+').replace(' NEGATIVE', '-')
+        normalized = normalized.replace('POSITIVE', '+').replace('NEGATIVE', '-').replace(' ', '')
+        return normalized
 
 
 class UserProfileUpdate(BaseModel):
-    name: str | None = None
-    blood_group: str | None = None
-    emergency_contacts: list[EmergencyContact] | None = None
-    allergies: str | None = None
-    vehicle_details: str | None = None
-    medical_notes: str | None = None
+    name: str | None = Field(default=None, min_length=1, max_length=80)
+    blood_group: BloodGroup | None = None
+    emergency_contacts: list[EmergencyContact] | None = Field(default=None, max_length=5)
+    allergies: str | None = Field(default=None, max_length=500)
+    vehicle_details: str | None = Field(default=None, max_length=120)
+    medical_notes: str | None = Field(default=None, max_length=1000)
+
+    @field_validator('blood_group', mode='before')
+    @classmethod
+    def normalize_blood_group(cls, value: str | None) -> str | None:
+        return UserProfileCreate.normalize_blood_group(value)
 
 
 class UserProfileResponse(UserProfileCreate):
     id: UUID
     created_at: datetime
     updated_at: datetime
-

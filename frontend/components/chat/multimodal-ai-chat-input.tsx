@@ -16,6 +16,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Loader2 as LoaderIcon, X as XIcon, Mic, Send } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
+import { logClientError } from '@/lib/client-logger';
 
 const clsx = (...args: unknown[]) => args.filter(Boolean).join(' ');
 
@@ -207,7 +208,7 @@ function PureSendButton({
       onClick={(event) => {
         event.preventDefault();
         if (!isDisabled) {
-          try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { console.error('Vibration failed:', e); }
+          try { if (navigator?.vibrate) navigator.vibrate(50); } catch (e) { logClientError('Vibration failed:', e); }
           submitForm();
         }
       }}
@@ -356,7 +357,7 @@ export function PureMultimodalInput({
           };
           resolve(mockAttachment);
         } catch (error) {
-          console.error('Failed to create object URL for preview:', error);
+          logClientError('Failed to create object URL for preview:', error);
           resolve(undefined);
         } finally {
           setUploadQueue(currentQueue => currentQueue.filter(name => name !== file.name));

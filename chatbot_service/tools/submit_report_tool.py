@@ -53,14 +53,15 @@ class SubmitReportTool:
         if not self._base_url:
             return self._guidance(issue_type, lat, lon)
 
+        severity_value = self._normalize_severity(severity)
         payload: dict = {
             'issue_type': issue_type,
-            'severity': severity,
+            'severity': str(severity_value),
             'description': description or f'Reported via chat assistant: {issue_type}',
         }
         if lat is not None and lon is not None:
-            payload['latitude'] = lat
-            payload['longitude'] = lon
+            payload['lat'] = str(lat)
+            payload['lon'] = str(lon)
 
         # Guard: truncate description if it somehow contains an oversized encoded blob
         if len(payload.get('description', '')) > _MAX_B64_PHOTO_LEN:
@@ -69,14 +70,18 @@ class SubmitReportTool:
         try:
             resp = await self._get_client().post(
                 f'{self._base_url}/api/v1/roads/report',
-                json=payload,
+                data=payload,
             )
             resp.raise_for_status()
             data = resp.json()
             return {
                 'submitted': True,
-                'report_id': data.get('id') or data.get('report_id'),
-                'message': f"Report submitted successfully! Track it with ID: {data.get('id', 'N/A')}",
+                'report_id': data.get('uuid') or data.get('id') or data.get('report_id'),
+                'complaint_ref': data.get('complaint_ref'),
+                'message': (
+                    'Report submitted successfully. '
+                    f"Complaint reference: {data.get('complaint_ref') or data.get('uuid', 'N/A')}"
+                ),
                 'issue_type': issue_type,
             }
         except httpx.HTTPStatusError as exc:
@@ -109,3 +114,21 @@ class SubmitReportTool:
             'Open the Report tab in the app to attach a photo and set severity.'
         )
         return {'submitted': False, 'summary': msg, 'issue_type': issue_type}
+
+    @staticmethod
+    def _normalize_severity(value: str | int) -> int:
+        if isinstance(value, int):
+            return min(5, max(1, value))
+        normalized = value.strip().lower()
+        mapping = {
+            'low': 1,
+            'minor': 1,
+            'medium': 2,
+            'moderate': 2,
+            'high': 4,
+            'critical': 5,
+            'severe': 5,
+        }
+        if normalized.isdigit():
+            return min(5, max(1, int(normalized)))
+        return mapping.get(normalized, 2)

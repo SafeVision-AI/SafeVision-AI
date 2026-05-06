@@ -1,5 +1,6 @@
 import { GpsLocation, UserProfile } from './store';
 import { getAddressFromGPS } from './reverse-geocode';
+import { AMBULANCE_NUMBER, EMERGENCY_NUMBER, W3W_LOOKUP_TIMEOUT_MS } from './safety-constants';
 
 /**
  * Convert GPS coords to What3Words address (free API).
@@ -7,15 +8,13 @@ import { getAddressFromGPS } from './reverse-geocode';
  */
 async function getWhat3Words(lat: number, lon: number): Promise<string | null> {
   try {
-    const apiKey = process.env.NEXT_PUBLIC_W3W_API_KEY;
-    if (!apiKey) return null;
     const res = await fetch(
-      `https://api.what3words.com/v3/convert-to-3wa?coordinates=${lat}%2C${lon}&language=en&format=json&key=${apiKey}`,
-      { signal: AbortSignal.timeout(3000) }
+      `/api/w3w?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`,
+      { signal: AbortSignal.timeout(W3W_LOOKUP_TIMEOUT_MS) }
     );
     if (!res.ok) return null;
     const data = await res.json();
-    return data?.words ? `///${data.words}` : null;
+    return typeof data?.words === 'string' ? `///${data.words}` : null;
   } catch {
     return null;
   }
@@ -55,7 +54,7 @@ I need immediate assistance!
 🚗 Vehicle: ${profile?.vehicleNumber || 'Not Specified'}
 
 Please send help to these coordinates immediately.
-☎️ Emergency: 112 | Ambulance: 108`;
+☎️ Emergency: ${EMERGENCY_NUMBER} | Ambulance: ${AMBULANCE_NUMBER}`;
 
   return base + encodeURIComponent(message);
 }
@@ -78,7 +77,7 @@ I need immediate assistance!
 🚗 Vehicle: ${profile?.vehicleNumber || 'Not Specified'}
 
 Please send help to these coordinates immediately.
-☎️ Emergency: 112 | Ambulance: 108`;
+☎️ Emergency: ${EMERGENCY_NUMBER} | Ambulance: ${AMBULANCE_NUMBER}`;
 
   return base + encodeURIComponent(message);
 }
@@ -87,7 +86,6 @@ Please send help to these coordinates immediately.
  * Generates a standard SMS (tel:) link for emergency broadcasting.
  */
 export function generateSosSmsLink(profile: UserProfile | null, location: GpsLocation | null): string {
-  const phone = '112';
   const message = `SOS! I need help. Location: ${location ? `https://maps.google.com/?q=${location.lat},${location.lon}` : 'Unknown'}. Name: ${profile?.name || 'User'}. Blood: ${profile?.bloodGroup || '?'}.`;
-  return `sms:${phone}?body=${encodeURIComponent(message)}`;
+  return `sms:${EMERGENCY_NUMBER}?body=${encodeURIComponent(message)}`;
 }

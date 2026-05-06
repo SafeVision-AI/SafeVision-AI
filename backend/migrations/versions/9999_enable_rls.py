@@ -20,7 +20,6 @@ def upgrade() -> None:
         'road_issues',
         'road_infrastructure',
         'emergency_services',
-        'challans'
     ]
     
     for table in tables:
@@ -73,7 +72,6 @@ def downgrade() -> None:
         'road_issues',
         'road_infrastructure',
         'emergency_services',
-        'challans'
     ]
     
     op.execute('DROP POLICY IF EXISTS "Users can insert their own profile" ON user_profiles;')

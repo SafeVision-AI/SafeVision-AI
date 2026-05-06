@@ -6,11 +6,12 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Path, Request
 from fastapi.responses import StreamingResponse
 
 from agent.graph import ChatEngine
 from agent.state import ChatRequest, ChatResponse
+from config import get_settings
 
 
 router = APIRouter(prefix='/api/v1/chat', tags=['Chat'])
@@ -99,9 +100,13 @@ async def chat_stream(
 
 @router.get('/history/{session_id}')
 async def get_history(
-    session_id: str,
+    session_id: str = Path(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9_.:-]+$"),
+    x_admin_secret: str | None = Header(default=None),
     engine: ChatEngine = Depends(get_engine),
 ) -> dict:
+    settings = get_settings()
+    if not settings.admin_secret or x_admin_secret != settings.admin_secret:
+        raise HTTPException(status_code=403, detail='Chat history access requires admin authorization')
     return {'session_id': session_id, 'messages': await engine.get_history(session_id)}
 
 

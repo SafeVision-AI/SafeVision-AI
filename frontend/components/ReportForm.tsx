@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import toast from 'react-hot-toast';
 import { useAppStore } from '@/lib/store';
 import { submitReport } from '@/lib/api';
+import { enqueueRoadReport } from '@/lib/offline-sos-queue';
 
 const MAX_UPLOAD_BYTES = Number(process.env.NEXT_PUBLIC_MAX_UPLOAD_BYTES || 5242880);
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -26,6 +27,11 @@ const ReportForm: React.FC = () => {
   const { gpsLocation, connectivity } = useAppStore();
 
   const handleSubmit = async () => {
+    if (!gpsLocation) {
+      toast.error('Location is required before broadcasting a road report.');
+      return;
+    }
+
     if (photo) {
       if (photo.size > MAX_UPLOAD_BYTES) {
         toast.error('Photo must be less than 5MB');
@@ -39,26 +45,37 @@ const ReportForm: React.FC = () => {
 
     setLoading(true);
     const payload = {
-      type: issue,
+      issue_type: issue,
       severity,
       description: desc,
-      lat: gpsLocation?.lat || 0,
-      lon: gpsLocation?.lon || 0
+      lat: gpsLocation.lat,
+      lon: gpsLocation.lon,
+      photo: photo ?? undefined
     };
+
+    const enqueue = () => enqueueRoadReport({
+      issue_type: payload.issue_type,
+      severity: payload.severity,
+      description: payload.description,
+      lat: payload.lat,
+      lon: payload.lon,
+      photo: photo ?? undefined,
+      photoName: photo?.name,
+    });
 
     try {
       if (connectivity === 'online') {
         await submitReport(payload);
       } else {
         // Save to offline queue in localStorage — synced when connectivity returns
-        const existing = JSON.parse(localStorage.getItem('safevixai_offline_queue') ?? '[]');
-        existing.push({ ...payload, savedAt: new Date().toISOString() });
-        localStorage.setItem('safevixai_offline_queue', JSON.stringify(existing));
-        await new Promise(r => setTimeout(r, 500)); // brief UX delay
+        await enqueue();
+        toast.success('Report saved offline and will sync automatically.');
       }
       setSubmitted(true);
-    } catch (err) {
-      toast.error('Failed to submit report. Please try again.');
+    } catch {
+      await enqueue();
+      toast.success('Network failed. Report saved offline and will retry.');
+      setSubmitted(true);
     } finally {
       setLoading(false);
     }

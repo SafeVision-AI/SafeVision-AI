@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, Reques
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
+from core.security import get_current_user
 from models.schemas import (
     AuthorityPreviewResponse,
     RoadInfrastructureResponse,
@@ -13,7 +14,7 @@ from models.schemas import (
 from services.roadwatch_service import RoadWatchService
 from services.exceptions import ServiceValidationError
 from services.roadwatch_service import ALL_ROAD_ISSUE_STATUSES
-from core.security import get_current_user
+from core.limiter import limiter
 
 
 router = APIRouter(prefix='/api/v1/roads', tags=['RoadWatch'])
@@ -71,7 +72,9 @@ async def get_road_infrastructure(
 
 
 @router.post('/report', response_model=RoadReportResponse)
+@limiter.limit("8/minute")
 async def submit_road_issue(
+    request: Request,
     lat: float = Form(..., ge=-90, le=90),
     lon: float = Form(..., ge=-180, le=180),
     issue_type: str = Form(..., min_length=2, max_length=64),
@@ -80,8 +83,8 @@ async def submit_road_issue(
     photo: UploadFile | None = File(default=None),
     db: AsyncSession = Depends(get_db),
     roadwatch_service: RoadWatchService = Depends(get_roadwatch_service),
-    current_user: dict = Depends(get_current_user),
 ) -> RoadReportResponse:
+    """Accept a rate-limited public RoadWatch report with strict form/file validation."""
     try:
         return await roadwatch_service.submit_report(
             db=db,
@@ -143,4 +146,3 @@ async def verify_road_report(
         "osm_contribution": osm_result,
         "waze_feed": "included_in_next_poll",
     }
-

@@ -27,7 +27,7 @@ Total infra cost: ₹0. All free/open-source.
 │  FastAPI :8000         │  │  FastAPI :8010                  │
 │  PostgreSQL + PostGIS  │◄─┤  11-provider LLM fallback      │
 │  Redis cache           │  │  ChromaDB RAG vectorstore       │
-│  DuckDB (challan SQL)  │  │  9 agent tools                  │
+│  DuckDB (challan SQL)  │  │  13 agent tools                 │
 │  Overpass/Nominatim    │  │  Redis conversation memory      │
 │  WebSocket /tracking   │  │  Prompt injection defense       │
 └────────────────────────┘  └────────────────────────────────┘
@@ -62,9 +62,9 @@ Verify: `GET http://localhost:8000/health` and `GET http://localhost:8010/health
 SafeVixAI/
 ├── backend/                 FastAPI :8000
 │   ├── main.py              App factory (create_app → lifespan → services)
-│   ├── api/v1/              14 route modules (emergency, chat, challan, roadwatch, geocode, routing, offline, tracking, auth, live_tracking, mcp_server, user, waze_feed)
-│   ├── core/                config.py (pydantic-settings), database.py (async SQLAlchemy), redis_client.py, security.py (JWT)
-│   ├── services/            Business logic (overpass, geocoding, challan_service, llm_service, authority_router)
+│   ├── api/v1/              13 route modules (auth, challan, chat, emergency, geocode, live_tracking, mcp_server, offline, roadwatch, routing, tracking, user, waze_feed)
+│   ├── core/                config.py (pydantic-settings), database.py (async SQLAlchemy), redis_client.py, security.py (JWT), limiter.py (slowapi rate limiting)
+│   ├── services/            14 service modules (authority_router, challan_service, emergency_locator, exceptions, geocoding_service, llm_service, local_emergency_catalog, osm_contributor, overpass_service, roadwatch_service, routing_service, safe_routing, safe_spaces)
 │   ├── models/              SQLAlchemy ORM + Pydantic schemas (schemas.py has ALL request/response types)
 │   ├── migrations/          Alembic (001_initial_schema.py — creates 6 tables with PostGIS)
 │   ├── scripts/app/         DB seeders (need live Postgres)
@@ -73,19 +73,20 @@ SafeVixAI/
 │
 ├── chatbot_service/         FastAPI :8010 — Agentic RAG Chatbot
 │   ├── main.py              App factory (create_app → lifespan → ChatEngine)
-│   ├── agent/               ChatEngine graph, IntentDetector, SafetyChecker, ContextAssembler
+│   ├── agent/               ChatEngine graph, IntentDetector (9 intent classes), SafetyChecker, ContextAssembler
 │   ├── providers/           9 LLM providers + TemplateProvider + ProviderRouter (auto-fallback chain)
 │   ├── rag/                 LocalVectorStore (ChromaDB), Retriever, document_loader, embeddings
-│   ├── tools/               13 tools: SOS, Challan, LegalSearch, FirstAid, Weather, OpenMeteo, RoadInfra, RoadIssues, SubmitReport, Geocoding, DrugInfo, What3Words, Emergency
+│   ├── tools/               13 agent tools: SOS, Challan, LegalSearch, FirstAid, Weather, OpenMeteo, RoadInfra, RoadIssues, SubmitReport, Geocoding, DrugInfo, What3Words, Emergency
 │   ├── memory/              Redis conversation memory with session TTL
-│   ├── services/            IndicSeamlessService (Indian language speech)
+│   ├── services/            speech_translation.py (IndicSeamlessService — Indian language ASR/TTS)
 │   └── data/                chroma_db/ (pre-built vectorstore — COMMITTED, never delete)
 │
 ├── frontend/                Next.js 15 PWA
-│   ├── app/                 17 routes: /, /assistant, /bystander, /challan, /emergency, /emergency-card/[userId], /first-aid, /locator, /login, /profile, /report, /settings, /share-receive, /sos, /track, /tracking
-│   ├── components/          30+ components: AppSidebar, ChatInterface, ClientAppHooks, GlobalSOS, SOSButton, PotholeDetector, + chat/, dashboard/, maps/, profile/, report/, ui/ subdirs
-│   ├── lib/                 28 modules: api.ts, store.ts, offline-ai.ts, duckdb-challan.ts, geolocation.ts, offline-sos-queue.ts, crash-detection.ts, live-tracking.ts, deep-link.ts, navigation-launch.ts, routing.ts, share.ts, emergency-numbers.ts, traffic-layer.ts, safe-spaces-layer.ts, etc.
-│   └── public/              manifest.json, offline-data/ (GeoJSON, CSV for DuckDB-Wasm)
+│   ├── app/                 17 routes + error.tsx (global error boundary)
+│   │                        /, /assistant, /bystander, /challan, /emergency, /emergency-card/[userId], /first-aid, /locator, /login, /profile, /report, /settings, /share-receive, /sos, /track, /tracking
+│   ├── components/          44 components across 6 subdirs: AppSidebar, ChatInterface, ClientAppHooks, GlobalSOS, SOSButton, PotholeDetector, EnterpriseClientAppHooks, + chat/, dashboard/, maps/, profile/, report/, ui/
+│   ├── lib/                 28+ modules: api.ts, store.ts, public-env.ts, safety-constants.ts, offline-ai.ts, duckdb-challan.ts, geolocation.ts, offline-sos-queue.ts, crash-detection.ts, live-tracking.ts, client-logger.ts, etc.
+│   └── public/              manifest.json, theme-init.js, icons/ (8 PWA sizes), offline-data/ (GeoJSON, CSV for DuckDB-Wasm)
 │
 ├── scripts/                 Root-level data pipeline scripts
 │   ├── app/                 3 DB seeders (seed_emergency, seed_nhp_hospitals, seed_healthsites)
@@ -150,7 +151,7 @@ SafeVixAI/
 | `DEFAULT_LLM_MODEL` | Yes | Model ID for the chosen provider |
 | `HF_TOKEN` | No | HuggingFace token — used as Sarvam fallback + Shuka/BharatGen/Whisper via HF Inference API. Not needed for core chatbot flow |
 | `CHROMA_PERSIST_DIR` | No | Default: `./data/chroma_db` |
-| `EMBEDDING_MODEL` | No | Default: `sentence-transformers/all-MiniLM-L6-v2` |
+| `EMBEDDING_MODEL` | No | Config hint: `sentence-transformers/all-MiniLM-L6-v2` — runtime uses `LocalHashEmbeddingFunction` |
 | `REDIS_URL` | No | Falls back to in-memory store |
 | `MAIN_BACKEND_BASE_URL` | Yes | Default: `http://localhost:8000` |
 | `OPENWEATHER_API_KEY` | No | For weather tool in agent |
@@ -173,22 +174,22 @@ The chatbot is an **agentic RAG system** with this execution flow:
 ```
 User message
   → SafetyChecker.evaluate()          # Block harmful queries
-  → IntentDetector.detect()            # Classify: legal, emergency, challan, first_aid, weather, report, general
+  → IntentDetector.detect()            # Classify into 9 intents: emergency, first_aid, challan, legal, road_weather, safe_route, road_infrastructure, road_issue, general
   → ContextAssembler.assemble()        # Call relevant tools + retrieve RAG chunks
-  │   ├── SosTool                      # Nearby emergency services via backend API
-  │   ├── EmergencyTool                # Emergency service lookup
-  │   ├── ChallanTool                  # Fine calculation via backend API
-  │   ├── LegalSearchTool              # ChromaDB vector search (Motor Vehicles Act, MoRTH)
-  │   ├── FirstAidTool                 # Static JSON first-aid protocols
-  │   ├── WeatherTool                  # OpenWeather API
-  │   ├── OpenMeteoTool                # Open-Meteo weather (visibility, precipitation)
-  │   ├── RoadInfrastructureTool       # Road contractor/budget data
-  │   ├── RoadIssuesTool               # Community-reported road issues
-  │   ├── SubmitReportTool             # Submit road damage reports
-  │   ├── GeocodingTool                # Photon/BigDataCloud geocoding
-  │   ├── DrugInfoTool                 # Open FDA drug/medical information
-  │   └── What3WordsTool               # What3Words location resolution
-  → ProviderRouter.generate()          # LLM call with auto-fallback
+  │   ├── SosTool (sos_tool.py)                # Nearby emergency services via backend API
+  │   ├── EmergencyTool (emergency_tool.py)     # Emergency service lookup
+  │   ├── ChallanTool (challan_tool.py)         # Fine calculation via backend API
+  │   ├── LegalSearchTool (legal_search_tool.py)# ChromaDB vector search (Motor Vehicles Act, MoRTH)
+  │   ├── FirstAidTool (first_aid_tool.py)      # Static JSON first-aid protocols
+  │   ├── WeatherTool (weather_tool.py)         # OpenWeather API
+  │   ├── OpenMeteoTool (open_meteo.py)         # Open-Meteo weather (visibility, precipitation)
+  │   ├── RoadInfrastructureTool (road_infra_tool.py) # Road contractor/budget data
+  │   ├── RoadIssuesTool (road_issues_tool.py)  # Community-reported road issues
+  │   ├── SubmitReportTool (submit_report_tool.py) # Submit road damage reports
+  │   ├── GeocodingTool (geocoding.py)          # Photon/BigDataCloud geocoding
+  │   ├── DrugInfoTool (drug_info.py)           # Open FDA drug/medical information
+  │   └── What3WordsTool (what3words.py)        # What3Words location resolution
+  → ProviderRouter.generate()          # LLM call with asyncio.wait_for() timeout + auto-fallback chain
   → ConversationMemoryStore.append()   # Redis session persistence
   → ChatResponse
 ```
@@ -334,7 +335,7 @@ Both use the same `violations_seed.csv` and `state_overrides.csv` source data.
 - **Separate Python app** — its own `.venv`, `.env`, `requirements.txt`
 - **Heavy dependencies:** `torch`, `torchaudio`, `transformers`, `datasets` (for speech)
 - **Config:** Vanilla `dataclass` + `os.getenv()` in `config.py` — NOT pydantic-settings (despite `pydantic-settings` being in requirements.txt, it's unused here)
-- **Embedding model:** `all-MiniLM-L6-v2` (384 dims) loaded at startup
+- **Embedding model:** Hash-based 384-dim vectors (LocalHashEmbeddingFunction) with ChromaDB cosine similarity; config references `all-MiniLM-L6-v2` for future upgrade
 - **ChromaDB path:** `chatbot_service/data/chroma_db/` — this is committed (Render needs it)
 - **Port:** 8010 (not 8001 as some docs may say — trust `config.py`)
 

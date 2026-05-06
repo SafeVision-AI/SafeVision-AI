@@ -3,6 +3,7 @@
 import { use, useEffect, useRef, useState } from 'react';
 import { subscribeToTracking, LiveLocation } from '@/lib/live-tracking';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 
 // Load map without SSR (Leaflet requires browser)
 const EmergencyMap = dynamic(
@@ -16,6 +17,8 @@ interface PageProps {
 
 export default function FamilyTrackingPage({ params }: PageProps) {
   const { session_id } = use(params);
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token') || '';
   const [location, setLocation] = useState<LiveLocation | null>(null);
   const [expired, setExpired] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -23,10 +26,15 @@ export default function FamilyTrackingPage({ params }: PageProps) {
   const stopRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    if (!session_id) return;
+    if (!session_id || !token) {
+      setExpired(true);
+      setLoading(false);
+      return;
+    }
 
     stopRef.current = subscribeToTracking(
       session_id,
+      token,
       (loc) => {
         setLocation(loc);
         setLastUpdated(new Date());
@@ -40,7 +48,7 @@ export default function FamilyTrackingPage({ params }: PageProps) {
     );
 
     return () => stopRef.current?.();
-  }, [session_id]);
+  }, [session_id, token]);
 
   const formatTime = (d: Date) =>
     d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });

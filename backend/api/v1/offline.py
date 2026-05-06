@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Path, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_db
@@ -17,7 +17,7 @@ def get_emergency_service(request: Request) -> EmergencyLocatorService:
 
 @router.get('/bundle/{city}')
 async def get_offline_bundle(
-    city: str,
+    city: str = Path(min_length=2, max_length=64, pattern=r'^[A-Za-z][A-Za-z\s-]*$'),
     db: AsyncSession = Depends(get_db),
     emergency_service: EmergencyLocatorService = Depends(get_emergency_service),
 ) -> dict:

@@ -6,6 +6,8 @@ import { useGeolocation } from '@/lib/geolocation';
 import { ConnectivityBadge } from './ConnectivityBadge';
 import { Send, Wifi, WifiOff, Loader2, Bot, UserCircle, Mic } from 'lucide-react';
 import { getOfflineAI, askOfflineAI } from '@/lib/offline-ai';
+import { logClientError } from '@/lib/client-logger';
+import { PUBLIC_CHATBOT_BASE_URL } from '@/lib/public-env';
 
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Message {
@@ -16,10 +18,7 @@ interface Message {
   streaming?: boolean;
 }
 
-const CHATBOT_URL =
-  process.env.NEXT_PUBLIC_CHATBOT_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  'http://localhost:8010';
+const CHATBOT_URL = PUBLIC_CHATBOT_BASE_URL;
 
 // ── Helper: call backend SSE stream ───────────────────────────────────────
 async function* streamChat(
@@ -142,7 +141,7 @@ export function ChatInterface() {
           );
         }
       } catch (err) {
-        console.error('Chat error:', err);
+        logClientError('Chat error:', err);
         setMessages((prev) =>
           prev.map((m) =>
             m.id === assistantId

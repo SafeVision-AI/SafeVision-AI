@@ -108,6 +108,8 @@ def get_settings() -> Settings:
         session_ttl_seconds=int(os.getenv('SESSION_TTL_SECONDS', '86400')),
         admin_secret=os.getenv('ADMIN_SECRET') or None,
     )
+    if settings.environment == 'production' and '*' in settings.cors_origins:
+        raise RuntimeError('CORS_ORIGINS must list explicit origins when ENVIRONMENT=production')
     settings.chroma_persist_dir.mkdir(parents=True, exist_ok=True)
     settings.rag_data_dir.mkdir(parents=True, exist_ok=True)
     return settings
@@ -117,9 +119,21 @@ import sys
 
 _settings = get_settings()
 _active_keys = [
-    k for k in ["GROQ_API_KEY", "GOOGLE_API_KEY", "OPENROUTER_API_KEY", "HF_TOKEN", "MISTRAL_API_KEY", "SARVAM_API_KEY", "NVIDIA_NIM_API_KEY", "CEREBRAS_API_KEY"]
+    k for k in [
+        "GROQ_API_KEY",
+        "GEMINI_API_KEY",
+        "GOOGLE_API_KEY",
+        "OPENROUTER_API_KEY",
+        "HF_TOKEN",
+        "GITHUB_TOKEN",
+        "MISTRAL_API_KEY",
+        "SARVAM_API_KEY",
+        "NVIDIA_NIM_API_KEY",
+        "CEREBRAS_API_KEY",
+        "TOGETHER_API_KEY",
+    ]
     if os.getenv(k)
 ]
 if not _active_keys and 'pytest' not in sys.modules and not os.getenv('GITHUB_ACTIONS'):
-    raise RuntimeError("FATAL: No real LLM provider configured. Set at least one API key (e.g. GROQ_API_KEY, GOOGLE_API_KEY).")
+    raise RuntimeError("FATAL: No real LLM provider configured. Set at least one API key (e.g. GROQ_API_KEY, GEMINI_API_KEY).")
 logging.getLogger(__name__).info(f"Active LLM keys found: {len(_active_keys)}")

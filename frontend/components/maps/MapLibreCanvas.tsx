@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 import { addTrafficLayer, toggleTrafficLayer } from '@/lib/traffic-layer';
 import { addSafeSpacesLayer } from '@/lib/safe-spaces-layer';
 import { startLocationTracking } from '@/lib/location-tracker';
+import { logClientError } from '@/lib/client-logger';
 
 const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
 const OPENFREEMAP_STYLE_URL =
@@ -1178,7 +1179,7 @@ export function MapLibreCanvas({
       // Only add the layer if it doesn't already exist (prevents duplicate on re-render)
       if (!mapRef.current.getLayer('safe-spaces-circles')) {
         addSafeSpacesLayer(mapRef.current, currentLocation.lat, currentLocation.lon).catch((err) => {
-          console.error(err);
+          logClientError('Failed to add safe spaces layer', err);
           setStatus('error');
           setStatusMessage('Failed to load safe spaces overlay. Please try again later.');
         });

@@ -12,6 +12,7 @@ if str(BACKEND_ROOT) not in sys.path:
 
 
 from core.database import get_db  # noqa: E402
+from core.security import create_access_token  # noqa: E402
 from main import create_app  # noqa: E402
 
 
@@ -28,3 +29,9 @@ def app():
 
     application.dependency_overrides[get_db] = override_db
     return application
+
+
+@pytest.fixture
+def auth_headers():
+    token = create_access_token({'sub': 'test-user', 'role': 'operator'})
+    return {'Authorization': f'Bearer {token}'}

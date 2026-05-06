@@ -257,6 +257,82 @@ Returns GeoJSON bundle of emergency services for a specific city (for offline pr
 
 ---
 
+### Routing (`/api/v1/routing`)
+
+#### `GET /api/v1/routing/preview`
+Get route preview between two points via OSRM.
+
+**Query Params:** `from_lat`, `from_lon`, `to_lat`, `to_lon`
+
+#### `GET /api/v1/routing/safe-route`
+Get route with safety scoring (avoids accident blackspots).
+
+**Query Params:** `from_lat`, `from_lon`, `to_lat`, `to_lon`
+
+---
+
+### Auth (`/api/v1/auth`)
+
+#### `POST /api/v1/auth/login`
+Authenticate user and return JWT bearer token.
+
+#### `GET /api/v1/auth/verify`
+Verify an existing JWT token.
+
+---
+
+### User (`/api/v1/user`)
+
+#### `POST /api/v1/user/`
+Create user profile.
+
+#### `GET /api/v1/user/{user_id}`
+Get user profile by ID.
+
+#### `PUT /api/v1/user/{user_id}`
+Update user profile.
+
+---
+
+### Live Tracking (`/api/v1/live-tracking`)
+
+#### `POST /api/v1/live-tracking/start`
+Start a new GPS tracking session.
+
+#### `PUT /api/v1/live-tracking/update`
+Update GPS position in a tracking session.
+
+#### `GET /api/v1/live-tracking/session/{session_id}`
+Get tracking session details.
+
+#### `DELETE /api/v1/live-tracking/session/{session_id}`
+End a tracking session.
+
+---
+
+### Tracking (`/api/v1/tracking`)
+
+#### `WebSocket /api/v1/tracking/{group_id}`
+Real-time GPS position sharing via WebSocket.
+
+---
+
+### Waze Feed (`/api/v1/waze-feed`)
+
+#### `GET /api/v1/waze-feed/waze`
+Returns CIFS-compliant JSON feed of community-reported road hazards for Waze integration.
+
+---
+
+### Emergency Safe Spaces (`/api/v1/emergency/safe-spaces`)
+
+#### `GET /api/v1/emergency/safe-spaces`
+Returns nearby women's safety resources (police stations, helplines, safe spaces).
+
+**Query Params:** `lat`, `lon`, `radius`
+
+---
+
 ## Error Responses
 
 | Status | Meaning |
@@ -265,13 +341,23 @@ Returns GeoJSON bundle of emergency services for a specific city (for offline pr
 | 400 | Bad request (invalid params) |
 | 404 | Resource not found (e.g., violation_code not in DB) |
 | 422 | Validation error (e.g., lat out of range -90 to 90) |
-| 429 | Rate limited (Nominatim 1 req/sec) |
+| 429 | Rate limited (slowapi: 5/min chat, 10/min emergency, 8/min roadwatch) |
 | 500 | Internal server error |
-| 503 | LLM service unavailable (All 11 providers down  use offline fallback) |
+| 503 | LLM service unavailable (All 11 providers down — use offline fallback) |
 
 ---
 
-## Rate Limits (Free Tier Constraints)
+## Rate Limits
+
+### Server-Side (slowapi — IP-based)
+
+| Endpoint | Limit |
+|---|---|
+| `POST /api/v1/chat/` | 5/minute |
+| `GET /api/v1/emergency/nearby` | 10/minute |
+| `POST /api/v1/roads/report` | 8/minute |
+
+### External Service Constraints
 
 | Service | Limit | Our Handling |
 |---|---|---|
@@ -282,4 +368,4 @@ Returns GeoJSON bundle of emergency services for a specific city (for offline pr
 
 ---
 
-*Document version: 1.0 | IIT Madras Road Safety Hackathon 2026*
+*Document version: 2.0 | IIT Madras Road Safety Hackathon 2026*

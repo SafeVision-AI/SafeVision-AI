@@ -553,6 +553,19 @@ Vehicle number (16px/600 monospace)
 Footer: "Powered by SafeVixAI — India Road Safety AI"
 ```
 
+### Error Boundary (`/error.tsx`)
+```
+Global error boundary — catches all unhandled errors.
+Full-screen: bg #0A0E14, centered card max-w-xl
+AlertTriangle icon (red pill bg, 24px)
+"SYSTEM RECOVERY" overline (11px/600/uppercase/red-200)
+"SafeVixAI hit a recoverable error" (24px/900/tracking-tight)
+"The current screen failed to render safely..." (14px/400/slate-300)
+Error digest monospace (if available)
+Two buttons: "Retry" (red bg) + "Home" (ghost border)
+Footer: "Your emergency shortcuts remain available from the home screen"
+```
+
 ---
 
 ## 8. CSS Variables (full set)

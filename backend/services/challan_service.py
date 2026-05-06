@@ -8,6 +8,8 @@ from core.config import Settings
 from models.challan import ChallanRule, StateChallanOverride
 from models.schemas import ChallanQuery, ChallanResponse
 from services.exceptions import ServiceValidationError
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 VEHICLE_CLASS_ALIASES = {
@@ -25,6 +27,48 @@ VEHICLE_CLASS_ALIASES = {
     'BUS': 'bus',
     'COMM': 'bus',
     'COMMERCIAL': 'bus',
+}
+
+INDIAN_STATE_CODE_ALIASES = {
+    'ANDHRAPRADESH': 'AP',
+    'ARUNACHALPRADESH': 'AR',
+    'ASSAM': 'AS',
+    'BIHAR': 'BR',
+    'CHHATTISGARH': 'CG',
+    'GOA': 'GA',
+    'GUJARAT': 'GJ',
+    'HARYANA': 'HR',
+    'HIMACHALPRADESH': 'HP',
+    'JHARKHAND': 'JH',
+    'KARNATAKA': 'KA',
+    'KERALA': 'KL',
+    'MADHYAPRADESH': 'MP',
+    'MAHARASHTRA': 'MH',
+    'MANIPUR': 'MN',
+    'MEGHALAYA': 'ML',
+    'MIZORAM': 'MZ',
+    'NAGALAND': 'NL',
+    'ODISHA': 'OD',
+    'ORISSA': 'OD',
+    'PUNJAB': 'PB',
+    'RAJASTHAN': 'RJ',
+    'SIKKIM': 'SK',
+    'TAMILNADU': 'TN',
+    'TELANGANA': 'TS',
+    'TRIPURA': 'TR',
+    'UTTARPRADESH': 'UP',
+    'UTTARAKHAND': 'UK',
+    'WESTBENGAL': 'WB',
+    'ANDAMANANDNICOBARISLANDS': 'AN',
+    'CHANDIGARH': 'CH',
+    'DADRAANDNAGARHAVELIANDDAMANANDDIU': 'DN',
+    'DELHI': 'DL',
+    'NATIONALCAPITALTERRITORYOFDELHI': 'DL',
+    'JAMMUANDKASHMIR': 'JK',
+    'LADAKH': 'LA',
+    'LAKSHADWEEP': 'LD',
+    'PUDUCHERRY': 'PY',
+    'PONDICHERRY': 'PY',
 }
 
 DEFAULT_RULES: tuple[ChallanRule, ...] = (
@@ -145,6 +189,74 @@ class ChallanService:
             amount_due=amount_due,
             section=rule.section,
             description=rule.description,
+            state_override=override_note,
+        )
+
+    async def calculate_with_db(self, query: ChallanQuery, *, db: AsyncSession) -> ChallanResponse:
+        violation_code = self._normalize_violation_code(query.violation_code)
+        vehicle_class = self._normalize_vehicle_class(query.vehicle_class)
+        state_code = self._normalize_state_code(query.state_code)
+
+        try:
+            result = await db.execute(
+                text("""
+                    SELECT violation_code, vehicle_class, section, description, base_fine, repeat_fine
+                    FROM traffic_violations
+                    WHERE is_active = true
+                      AND (violation_code = :violation_code OR :violation_code = ANY(aliases))
+                      AND (vehicle_class = :vehicle_class OR vehicle_class = 'default')
+                    ORDER BY CASE WHEN vehicle_class = :vehicle_class THEN 0 ELSE 1 END
+                    LIMIT 1
+                """),
+                {"violation_code": violation_code, "vehicle_class": vehicle_class},
+            )
+            row = result.mappings().first()
+        except Exception:
+            return self.calculate(query)
+
+        if row is None:
+            return self.calculate(query)
+
+        base_fine = int(row["base_fine"])
+        repeat_fine = int(row["repeat_fine"]) if row["repeat_fine"] is not None else None
+        section = str(row["section"])
+        description = str(row["description"])
+        override_note = None
+
+        override_result = await db.execute(
+            text("""
+                SELECT base_fine, repeat_fine, section, description, note
+                FROM state_fine_overrides
+                WHERE state_code = :state_code
+                  AND violation_code = :violation_code
+                  AND (vehicle_class = :vehicle_class OR vehicle_class IS NULL OR vehicle_class = 'default')
+                ORDER BY CASE WHEN vehicle_class = :vehicle_class THEN 0 ELSE 1 END
+                LIMIT 1
+            """),
+            {
+                "state_code": state_code,
+                "violation_code": row["violation_code"],
+                "vehicle_class": vehicle_class,
+            },
+        )
+        override = override_result.mappings().first()
+        if override is not None:
+            base_fine = int(override["base_fine"])
+            repeat_fine = int(override["repeat_fine"]) if override["repeat_fine"] is not None else repeat_fine
+            section = str(override["section"] or section)
+            description = str(override["description"] or description)
+            override_note = override["note"] or f'{state_code} override applied'
+
+        amount_due = repeat_fine if query.is_repeat and repeat_fine is not None else base_fine
+        return ChallanResponse(
+            violation_code=str(row["violation_code"]),
+            vehicle_class=vehicle_class,
+            state_code=state_code,
+            base_fine=base_fine,
+            repeat_fine=repeat_fine,
+            amount_due=amount_due,
+            section=section,
+            description=description,
             state_override=override_note,
         )
 
@@ -308,6 +420,8 @@ class ChallanService:
                 cleaned = inside
         if len(cleaned) > 2:
             compact = re.sub(r'[^A-Z]', '', cleaned)
+            if compact in INDIAN_STATE_CODE_ALIASES:
+                return INDIAN_STATE_CODE_ALIASES[compact]
             if len(compact) >= 2:
                 cleaned = compact[:2]
         return cleaned

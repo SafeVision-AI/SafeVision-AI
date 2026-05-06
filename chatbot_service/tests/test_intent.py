@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from agent.intent_detector import IntentDetector
+from agent.intent_detector import INTENT_CLASSES, IntentDetector
 
 
 def test_intent_detector_routes_emergency_queries():
@@ -11,3 +11,23 @@ def test_intent_detector_routes_emergency_queries():
 def test_intent_detector_routes_challan_queries():
     detector = IntentDetector()
     assert detector.detect('What is the fine under section 185 in TN?') == 'challan'
+
+
+def test_intent_detector_covers_all_supported_classes():
+    detector = IntentDetector()
+
+    examples = {
+        'emergency': 'SOS, police and ambulance needed after crash',
+        'first_aid': 'First aid for bleeding wound',
+        'challan': 'Helmet fine amount in Chennai',
+        'legal': 'Explain MV Act inspection rights',
+        'road_issue': 'Report road hazard debris on the flyover',
+        'road_weather': 'Is fog or rain making the highway unsafe?',
+        'safe_route': 'Find the safest route to the office',
+        'road_infrastructure': 'Who maintains this PMGSY road authority?',
+        'general': 'How should I prepare for a long road trip?',
+    }
+
+    assert tuple(examples) == INTENT_CLASSES
+    for expected, message in examples.items():
+        assert detector.detect(message) == expected

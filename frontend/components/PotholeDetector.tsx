@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { logClientError } from '@/lib/client-logger';
 
 /**
  * PotholeDetector — High-Fidelity Tactical HUD Camera
@@ -27,7 +28,7 @@ const PotholeDetector: React.FC = () => {
           setHasCamera(true);
         }
       } catch (err) {
-        console.error('Camera access denied or unavailable', err);
+        logClientError('Camera access denied or unavailable', err);
       }
     }
     setupCamera();

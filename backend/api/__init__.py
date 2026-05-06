@@ -1,1 +1,1 @@
-﻿# API package — exposes versioned router groups
+# API package - exposes versioned router groups

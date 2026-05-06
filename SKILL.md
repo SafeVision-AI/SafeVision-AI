@@ -59,6 +59,7 @@ frontend/
 ├── app/
 │   ├── page.tsx              ← Dashboard / Map Home
 │   ├── layout.tsx            ← Root layout (fonts, providers, theme)
+│   ├── error.tsx             ← Global error boundary (catches unhandled errors)
 │   ├── globals.css           ← Design tokens + CSS variables + Tailwind config
 │   ├── assistant/page.tsx    ← AI Chat Assistant (SSE streaming)
 │   ├── bystander/page.tsx    ← Bystander Mode (witness accident assistance)
@@ -77,41 +78,41 @@ frontend/
 │   └── tracking/page.tsx     ← GPS tracking management
 ├── components/
 │   ├── AppSidebar.tsx        ← Desktop sidebar navigation (192px, full-height)
-│   ├── dashboard/
-│   │   ├── BottomNav.tsx     ← Mobile bottom nav (5-tab, animated pill)
-│   │   ├── SystemHeader.tsx  ← Desktop header (search, theme, connectivity, SECURE badge)
-│   │   ├── SystemSidebar.tsx ← Mobile slide-out nav (grid + emergency quick dial)
-│   │   ├── TopSearch.tsx     ← Mobile search bar + filter chips
-│   │   ├── FloatingSidebarControls.tsx ← Map HUD (driving score, relocate, SOS)
-│   │   ├── ProfileCard.tsx   ← Reusable avatar + vitals card
-│   │   ├── SkeletonCard.tsx  ← Loading skeleton
-│   │   ├── Toast.tsx         ← Notification toast component
-│   │   └── RecentAlertsOverlay.tsx ← Road alert pills overlay
-│   ├── profile/
-│   │   └── QREmergencyCard.tsx ← QR code for emergency identification
-│   ├── chat/
-│   │   └── multimodal-ai-chat-input.tsx ← AI chat input with voice
-│   ├── maps/
-│   │   └── MapLibreCanvas.tsx ← Main map component (dynamic import, SSR disabled)
-│   ├── report/
-│   │   └── HazardViewfinder.tsx ← Camera viewport for AI road scan
-│   ├── ui/                   ← shadcn/ui primitive components
-│   ├── GlobalSOS.tsx         ← Floating SOS button (all pages except map/sos)
-│   ├── SOSButton.tsx         ← SOS dispatch button with pulse animation
+│   ├── AuthorityCard.tsx     ← Road authority info card
+│   ├── ChallanCalculator.tsx ← Challan computation component
 │   ├── ChatInterface.tsx     ← Chat UI (online/offline toggle)
 │   ├── ClientAppHooks.tsx    ← Global sensor listeners (crash detection, offline sync)
+│   ├── ConnectivityBadge.tsx ← Online/Offline status indicator
+│   ├── ConnectivityProvider.tsx ← Network state context provider
+│   ├── DrivingScoreBar.tsx   ← Driving safety score display
+│   ├── EmergencyMap.tsx      ← Emergency map wrapper (dynamic)
+│   ├── EmergencyMapInner.tsx ← Map rendering internals
+│   ├── EmergencyNumbers.tsx  ← 112/102/100 quick dial grid
+│   ├── EnterpriseClientAppHooks.tsx ← Enterprise-grade sensor hooks
+│   ├── FirstAidCard.tsx      ← First aid scenario card
+│   ├── GlobalSOS.tsx         ← Floating SOS button (all pages except map/sos)
+│   ├── ModelLoader.tsx       ← AI model loading indicator
+│   ├── NetworkMonitor.tsx    ← Network connectivity monitor
 │   ├── PageShell.tsx         ← Layout wrapper with GlobalSOS
 │   ├── PotholeDetector.tsx   ← In-browser YOLO pothole detection
+│   ├── ReportForm.tsx        ← Road report submission form
 │   ├── ServiceCard.tsx       ← Emergency service result card
+│   ├── SOSButton.tsx         ← SOS dispatch button with pulse animation
+│   ├── ThemeProvider.tsx     ← Theme context provider
+│   ├── ViolationsList.tsx    ← Traffic violations list
 │   ├── VoiceInput.tsx        ← Web Speech API voice input
-│   ├── ConnectivityBadge.tsx ← Online/Offline status indicator
-│   ├── EmergencyMap.tsx      ← Emergency map wrapper (dynamic)
-│   ├── EmergencyNumbers.tsx  ← 112/102/100 quick dial grid
-│   ├── DrivingScoreBar.tsx   ← Driving safety score display
-│   └── ...                   ← Additional feature-specific components
+│   ├── dashboard/            ← 15 dashboard components (BottomNav, SystemHeader, SystemSidebar, TopSearch, ProfileCard, FloatingSidebarControls, Toast, SkeletonCard, etc.)
+│   ├── chat/                 ← multimodal-ai-chat-input.tsx
+│   ├── maps/                 ← MapLibreCanvas.tsx (dynamic import, SSR disabled)
+│   ├── profile/              ← QREmergencyCard.tsx
+│   ├── report/               ← HazardViewfinder.tsx (camera viewport)
+│   └── ui/                   ← shadcn/ui primitive components
 └── lib/
     ├── store.ts              ← Zustand global state (GPS, services, AI mode, auth)
     ├── api.ts                ← Backend API client (JWT Bearer token injected)
+    ├── public-env.ts         ← Validated NEXT_PUBLIC env vars (fail-fast if missing)
+    ├── safety-constants.ts   ← Crash/SOS/tracking constants (thresholds, timeouts)
+    ├── client-logger.ts      ← Client-side error logging utility
     ├── geolocation.ts        ← GPS utilities
     ├── sos-share.ts          ← SOS link generators
     ├── offline-sos-queue.ts  ← IndexedDB queue for offline SOS dispatch
@@ -152,10 +153,12 @@ frontend/
 4. All pages use `pb-44` on `<main>` to clear the floating BottomNav
 5. Fixed header: `z-50`, `backdrop-blur`, content starts at `pt-28 lg:pt-24`
 6. Map components use `dynamic(() => import(...), { ssr: false })` to avoid hydration issues
-7. Theme: dark-mode-first, `data-theme` attribute set via blocking script in layout
+7. Theme: dark-mode-first, `data-theme` attribute set via blocking `theme-init.js` script in `public/` (loaded via `<Script strategy="beforeInteractive" />` — no dangerouslySetInnerHTML)
 8. Emergency numbers: 112 (universal), 102 (ambulance), 100 (police), 101 (fire), 1033 (NHAI)
 9. **No login button in header** — login is only accessible via `/login` URL
 10. CSS variables defined in `:root` of `globals.css` — always use these, not hardcoded hex
+11. **Global error boundary** (`app/error.tsx`) catches all unhandled errors — never shows white screen
+12. **Environment validation** — all `NEXT_PUBLIC_*` URLs validated via `lib/public-env.ts` — missing vars throw at import time
 
 ## CSS Variables (Quick Reference)
 ```css

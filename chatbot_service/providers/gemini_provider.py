@@ -27,9 +27,9 @@ class GeminiProvider(HttpProvider):
         return self._client
 
     async def generate(self, request: ProviderRequest) -> ProviderResult:
-        api_key = os.getenv("GEMINI_API_KEY", "").strip()
+        api_key = (os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or "").strip()
         if not api_key:
-            raise RuntimeError("GeminiProvider: Missing env var 'GEMINI_API_KEY'")
+            raise RuntimeError("GeminiProvider: Missing env var 'GEMINI_API_KEY' or 'GOOGLE_API_KEY'")
 
         model = os.getenv("GEMINI_MODEL", "gemini-1.5-flash").strip()
 

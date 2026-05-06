@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     environment: str = 'development'
     api_v1_prefix: str = '/api/v1'
     cors_origins_env: str = Field(default='*', validation_alias='CORS_ORIGINS')
+    frontend_url: str | None = Field(default=None, validation_alias='FRONTEND_URL')
     admin_secret: str | None = None
 
     database_url: str = 'postgresql+asyncpg://postgres:postgres@localhost:5432/safevixai'
@@ -151,10 +152,24 @@ class Settings(BaseSettings):
             return 'http://localhost:8010'
         return normalized.rstrip('/')
 
+    @field_validator('frontend_url', mode='before')
+    @classmethod
+    def normalize_frontend_url(cls, value: Any) -> str | None:
+        if value is None:
+            return None
+        if not isinstance(value, str):
+            raise ValueError('frontend_url must be a string')
+        normalized = value.strip()
+        if not normalized:
+            return None
+        return normalized.rstrip('/')
+
 
 @lru_cache
 def get_settings() -> Settings:
     settings = Settings()
+    if settings.environment == 'production' and settings.cors_origins_env.strip() == '*':
+        raise RuntimeError('CORS_ORIGINS must list explicit origins when ENVIRONMENT=production')
     try:
         settings.data_dir.mkdir(parents=True, exist_ok=True)
         settings.upload_dir.mkdir(parents=True, exist_ok=True)

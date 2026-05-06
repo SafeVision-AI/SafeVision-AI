@@ -1,11 +1,12 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { ConnectivityProvider } from '@/components/ConnectivityProvider';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { PageShell } from '@/components/PageShell';
 import { AnalyticsProvider } from '@/lib/analytics-provider';
-import { ClientAppHooks } from '@/components/ClientAppHooks';
+import { EnterpriseClientAppHooks } from '@/components/EnterpriseClientAppHooks';
 
 export const metadata: Metadata = {
   title: 'SafeVixAI - AI-Powered Road Safety',
@@ -52,29 +53,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
           rel="stylesheet"
         />
-        {/* Blocking script to apply theme before first paint and prevent flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(){
-                try {
-                  var t = localStorage.getItem('svai-theme') || 'system';
-                  var e = t === 'system'
-                    ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
-                    : t;
-                  document.documentElement.setAttribute('data-theme', e);
-                  document.documentElement.classList.add(e);
-                } catch(e){}
-              })()
-            `,
-          }}
-        />
+        <Script src="/theme-init.js" strategy="beforeInteractive" />
       </head>
       <body>
         <AnalyticsProvider>
           <ThemeProvider>
             <ConnectivityProvider>
-              <ClientAppHooks />
+              <EnterpriseClientAppHooks />
               <PageShell>{children}</PageShell>
             </ConnectivityProvider>
           </ThemeProvider>

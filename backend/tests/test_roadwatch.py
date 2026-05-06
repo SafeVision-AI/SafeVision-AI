@@ -132,7 +132,6 @@ def test_submit_report_endpoint(app):
                 'severity': '4',
                 'description': 'Large pothole near signal',
             },
-            headers={'Authorization': 'Bearer mock-jwt-token-for-hackathon'},
         )
 
     assert response.status_code == 200

@@ -15,11 +15,10 @@ import SystemSidebar from '@/components/dashboard/SystemSidebar';
 import SystemHeader from '@/components/dashboard/SystemHeader';
 import PureMultimodalInput, { Attachment } from '@/components/chat/multimodal-ai-chat-input';
 import { useGeolocation } from '@/lib/geolocation';
+import { logClientError } from '@/lib/client-logger';
+import { PUBLIC_CHATBOT_BASE_URL } from '@/lib/public-env';
 
-const CHATBOT_URL =
-  process.env.NEXT_PUBLIC_CHATBOT_URL ||
-  process.env.NEXT_PUBLIC_API_URL ||
-  'http://localhost:8010';
+const CHATBOT_URL = PUBLIC_CHATBOT_BASE_URL;
 
 async function* streamChat(
   message: string,
@@ -176,7 +175,7 @@ export default function ChatPage() {
         }
       }
     } catch (err) {
-      console.error('Chat error:', err);
+      logClientError('Chat error:', err);
       setMessages(prev =>
         prev.map(m =>
           m.id === assistantId

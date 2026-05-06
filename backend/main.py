@@ -65,7 +65,17 @@ def create_app() -> FastAPI:
             await overpass_service.aclose()
             await cache.close()
 
-    app = FastAPI(title=settings.app_name, version=settings.version, lifespan=lifespan)
+    docs_url = None if settings.environment == 'production' else '/docs'
+    redoc_url = None if settings.environment == 'production' else '/redoc'
+    openapi_url = None if settings.environment == 'production' else '/openapi.json'
+    app = FastAPI(
+        title=settings.app_name,
+        version=settings.version,
+        lifespan=lifespan,
+        docs_url=docs_url,
+        redoc_url=redoc_url,
+        openapi_url=openapi_url,
+    )
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
     app.add_middleware(
@@ -88,11 +98,11 @@ def create_app() -> FastAPI:
                 'Real-time emergency locator, road issue reporting, '
                 'challan calculator, and smart routing.'
             ),
-            'docs': '/docs',
+            'docs': docs_url,
             'health': '/health',
             'endpoints': {
                 'emergency_nearby':    'GET  /api/v1/emergency/nearby?lat=&lon=',
-                'emergency_sos':       'GET  /api/v1/emergency/sos?lat=&lon=',
+                'emergency_sos':       'POST /api/v1/emergency/sos?lat=&lon=',
                 'emergency_numbers':   'GET  /api/v1/emergency/numbers',
                 'challan_calculate':   'POST /api/v1/challan/calculate',
                 'road_issues':         'GET  /api/v1/roads/issues?lat=&lon=',

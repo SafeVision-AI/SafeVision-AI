@@ -1,3 +1,5 @@
+import { CRASH_DEBOUNCE_MS, CRASH_THRESHOLD_G, STANDARD_GRAVITY_MS2 } from './safety-constants';
+
 /**
  * SafeVixAI Crash Detection (Web/PWA)
  * 
@@ -5,10 +7,7 @@
  * Standard gravity is ~9.81 m/s^2. A moderate crash is > 10G (~98 m/s^2).
  */
 
-// Thresholds for Crash Detection
-const CRASH_THRESHOLD_G = 15; 
-const GRAVITY_MS2 = 9.81;
-const CRASH_THRESHOLD_MS2 = CRASH_THRESHOLD_G * GRAVITY_MS2;
+const CRASH_THRESHOLD_MS2 = CRASH_THRESHOLD_G * STANDARD_GRAVITY_MS2;
 
 // To avoid double-triggering
 let isCrashDetected = false;
@@ -33,14 +32,12 @@ function handleDeviceMotion(event: DeviceMotionEvent) {
   const magnitude = Math.sqrt(x * x + y * y + z * z);
 
   if (magnitude >= CRASH_THRESHOLD_MS2) {
-    console.warn(`💥 CRASH DETECTED! G-Force: ${(magnitude / GRAVITY_MS2).toFixed(1)}G`);
     isCrashDetected = true;
     listeners.forEach((callback) => callback(magnitude));
 
-    // Reset detection after 1 minute to allow subsequent events
     setTimeout(() => {
       isCrashDetected = false;
-    }, 60000);
+    }, CRASH_DEBOUNCE_MS);
   }
 }
 
@@ -59,17 +56,12 @@ export async function startCrashDetection(onCrashDetected: CrashCallback) {
       const permissionState = await (DeviceMotionEvent as any).requestPermission();
       if (permissionState === 'granted') {
         window.addEventListener('devicemotion', handleDeviceMotion, true);
-        console.log('✅ Crash Detection active (Sensors running).');
-      } else {
-        console.error('Crash Detection permission denied.');
       }
-    } catch (err) {
-      console.error('Error requesting device motion permission:', err);
+    } catch {
+      return;
     }
   } else {
-    // Android or standard web browsers
     window.addEventListener('devicemotion', handleDeviceMotion, true);
-    console.log('✅ Crash Detection active (Sensors running).');
   }
 }
 
@@ -82,19 +74,13 @@ export function stopCrashDetection(onCrashDetected: CrashCallback) {
   }
 }
 
-/**
- * MOCK function specifically for Hackathon judging.
- * Safely simulates a massive G-force spike.
- */
 export function simulateCrashDemo() {
-  console.log('🚨 MOCK CRASH DEMO INITIATED');
   if (isCrashDetected) return;
   
   isCrashDetected = true;
-  listeners.forEach((callback) => callback(CRASH_THRESHOLD_MS2 + 10)); // Trigger with slightly above threshold
+  listeners.forEach((callback) => callback(CRASH_THRESHOLD_MS2 + 10));
 
-  // Reset demo lock after 60s
   setTimeout(() => {
     isCrashDetected = false;
-  }, 60000);
+  }, CRASH_DEBOUNCE_MS);
 }

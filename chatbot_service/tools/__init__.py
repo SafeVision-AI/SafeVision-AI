@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import logging
+
 import httpx
 
 from config import Settings
+
+logger = logging.getLogger("safevixai.chatbot.tools")
 
 
 class BackendToolClient:
@@ -21,7 +25,14 @@ class BackendToolClient:
             response = await self._client.get(path, params=params)
             response.raise_for_status()
             return response.json()
-        except Exception:
+        except httpx.HTTPStatusError as exc:
+            logger.warning("Backend GET %s failed with HTTP %s", path, exc.response.status_code)
+            return None
+        except httpx.RequestError:
+            logger.exception("Backend GET %s request failed", path)
+            return None
+        except ValueError:
+            logger.exception("Backend GET %s returned invalid JSON", path)
             return None
 
     async def post(self, path: str, *, payload: dict | None = None) -> dict | None:
@@ -29,7 +40,14 @@ class BackendToolClient:
             response = await self._client.post(path, json=payload)
             response.raise_for_status()
             return response.json()
-        except Exception:
+        except httpx.HTTPStatusError as exc:
+            logger.warning("Backend POST %s failed with HTTP %s", path, exc.response.status_code)
+            return None
+        except httpx.RequestError:
+            logger.exception("Backend POST %s request failed", path)
+            return None
+        except ValueError:
+            logger.exception("Backend POST %s returned invalid JSON", path)
             return None
 
     async def aclose(self) -> None:
@@ -66,4 +84,3 @@ __all__ = [
     'WeatherTool',
     'What3WordsTool',
 ]
-
